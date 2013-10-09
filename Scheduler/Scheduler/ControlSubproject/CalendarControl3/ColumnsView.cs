@@ -10,7 +10,7 @@ using System.Drawing.Drawing2D;
 
 namespace CalendarControl3
 {
-    public partial class UserControl1 : UserControl
+    public partial class ColumnsView : UserControl
     {
         /// <summary>
         /// Нужно подобрать некое умолчательное минимальное значение, которое нормально для восприятия. В идеале - вынести в настройки.
@@ -74,7 +74,7 @@ namespace CalendarControl3
         /// </summary>
         ITable2ControlInterface table;
 
-        public UserControl1()
+        public ColumnsView()
         {
             InitializeComponent();
 
@@ -85,7 +85,7 @@ namespace CalendarControl3
 
         }
 
-        public UserControl1(ITable2ControlInterface inputTable)
+        public ColumnsView(ITable2ControlInterface inputTable)
         {
             InitializeComponent();
 

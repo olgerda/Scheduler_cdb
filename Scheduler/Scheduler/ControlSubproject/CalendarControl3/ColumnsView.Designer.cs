@@ -1,6 +1,6 @@
 ﻿namespace CalendarControl3
 {
-    partial class UserControl1
+    partial class ColumnsView
     {
         /// <summary>
         /// Required designer variable.
