@@ -13,8 +13,8 @@ namespace CalendarControl3
             /*
              * TEST
              */
-            var testtable = new TestTable(0);
-            testtable.descriptions.Add(0, "0");
+            var testtable = new TestTable(200);
+            //testtable.descriptions.Add(100, "100");
             testtable.descriptions.Add(1000, "1000");
             testtable.descriptions.Add(1600, "1600");
             testtable.descriptions.Add(200,"200");
@@ -152,6 +152,12 @@ namespace CalendarControl3
         public object GetObject()
         {
             return obj;
+        }
+
+
+        public ulong GetID()
+        {
+            throw new NotImplementedException();
         }
     }
 

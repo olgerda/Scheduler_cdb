@@ -48,7 +48,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataRepresentation.cs" />
     <Compile Include="DbConnect.cs" />
+    <Compile Include="DBobjects.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +77,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="ControlSubproject\CalendarControl3\CalendarControl3.csproj">
+      <Project>{C14311FB-8AA9-4536-9476-B41E50BBD4CD}</Project>
+      <Name>CalendarControl3</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

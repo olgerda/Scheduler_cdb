@@ -5,6 +5,7 @@ using System.Text;
 
 namespace CalendarControl3
 {
+
     /// <summary>
     /// Интерфейс таблицы, по которой может быть построен контрол с отображением сущностей по столбцам со свободным расположением по вертикали.
     /// </summary>
@@ -63,6 +64,8 @@ namespace CalendarControl3
         /// </summary>
         /// <returns></returns>
         object GetObject();
+
+        ulong GetID();
     }
 
 }

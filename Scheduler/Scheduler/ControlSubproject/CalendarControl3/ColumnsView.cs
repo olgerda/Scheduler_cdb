@@ -74,25 +74,38 @@ namespace CalendarControl3
         /// </summary>
         ITable2ControlInterface table;
 
+        public ITable2ControlInterface Table
+        {
+            get { return table; }
+            set
+            {
+                if (value == null) return;
+                table = value;
+                MakeTableFromInput();
+                Refresh();
+            }
+        }
+
         public ColumnsView()
         {
             InitializeComponent();
-
+            
+            
             //designtime TEST
-            table = TESTCASE.GetTestTable();
-            MakeTableFromInput();
+             table = TESTCASE.GetTestTable();
+             MakeTableFromInput();
             //designtime TEST
 
         }
 
-        public ColumnsView(ITable2ControlInterface inputTable)
-        {
-            InitializeComponent();
-
-            table = inputTable;
-
-            MakeTableFromInput();
-        }
+//         public ColumnsView(ITable2ControlInterface inputTable)
+//         {
+//             InitializeComponent();
+// 
+//             table = inputTable;
+// 
+//             //MakeTableFromInput();
+//         }
 
         void MakeTableFromInput()
         {
@@ -122,12 +135,13 @@ namespace CalendarControl3
 
             hScrollBar1.Minimum = 0;
             hScrollBar1.Value = 0;
-            hScrollBar1.Maximum = table.GetColumnCount() - 1;
+            hScrollBar1.Maximum = table.GetColumnCount() > 0 ? table.GetColumnCount() - 1 : 0;
             hScrollBar1.LargeChange = columnsOnControl;
 
 
             //toolTip.ShowAlways = true;
         }
+
         /// <summary>
         /// Есть острое желание порисовать.
         /// </summary>
@@ -157,6 +171,7 @@ namespace CalendarControl3
                 for (int i = hScrollBar1.Value; i < hScrollBar1.Value + columnsOnControl; i++)
                 //for (int i = hScrollBar1.Value - hScrollBar1.Minimum; i < hScrollBar1.Value; i++)
                 {
+                    if (i > columns.Count - 1) break;
                     PaintColumn(e.Graphics, columns[i], currentLeft, oneColumnWidth, tableBottom);
                     drawPoint = new PointF(currentLeft + 1f, tableTop - drawFont.Height - 1f);
                     e.Graphics.DrawString(columns[i].GetName(), drawFont, drawBrush, drawPoint);
@@ -204,6 +219,16 @@ namespace CalendarControl3
 //                 }
             }
         }
+
+        protected override void OnResize(EventArgs e)
+        {
+            
+            base.OnResize(e);
+            MakeTableFromInput();
+            Refresh();
+        }
+
+
 // 
 //         int CompareByInt(IDescription2ControlInterface x, IDescription2ControlInterface y)
 //         {
@@ -245,7 +270,7 @@ namespace CalendarControl3
         void PaintEntity(Graphics g, IEntity2ControlInterface entity, int leftside, int width)
         {
             //нарисуем сглаженный прямоугольник
-            Rectangle entRect = new Rectangle(leftside, tableTop + ScaleLevelsToControl(entity.TopLevel()), width, ScaleLevelsToControl(entity.BottomLevel() - entity.TopLevel()));
+            Rectangle entRect = new Rectangle(leftside, tableTop + ScaleLevelsToControl(entity.TopLevel()), width, ScaleLevelsToControl(entity.BottomLevel()) - ScaleLevelsToControl(entity.TopLevel()));
             GraphicsPath entShape = GetBarShape(entRect, 10); //10 - магическое число, смотрится хорошо
             g.FillPath(Brushes.LightYellow, entShape);
             g.DrawPath(new Pen(Brushes.DarkGreen, 2f), entShape);
@@ -254,8 +279,12 @@ namespace CalendarControl3
             //напишем в нём текст
             Font drawFont = new Font("Arial", 10);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
-            PointF drawPoint = new PointF(leftside + 5.0f, tableTop + ScaleLevelsToControl(entity.TopLevel()) + 5.0f);
-            g.DrawString(entity.StringToShow(), drawFont, drawBrush, drawPoint);
+            //PointF drawPoint = new PointF(leftside + 5.0f, tableTop + ScaleLevelsToControl(entity.TopLevel()) + 5.0f);
+            RectangleF strRect = new RectangleF((float)entRect.X + 2f, (float)entRect.Y + 2f, entRect.Width - 4f, entRect.Height- 4f);
+            //g.DrawString()
+            StringFormat format = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap);
+            format.Alignment = StringAlignment.Center;
+            g.DrawString(entity.StringToShow(), drawFont, drawBrush, strRect, format);//, drawPoint);
         }
 
         /// <summary>
@@ -326,7 +355,7 @@ namespace CalendarControl3
             
             int delta = bottomLevel - topLevel;
             double dotsPerPixel = (double)delta / (tableBottom - tableTop);
-            return (int)Math.Floor((click.Y - tableTop) * dotsPerPixel);
+            return topLevel + (int)Math.Floor((click.Y - tableTop) * dotsPerPixel);
         }
 
         /// <summary>
@@ -369,11 +398,11 @@ namespace CalendarControl3
 
         private void MouseClickHandler(object sender, MouseEventArgs e)
         {
-            IEntity2ControlInterface clicked = GetEntityOnClick(e.Location);
+            
             
             if (e.Button == MouseButtons.Right)
             { //покажем подсказку по этому месту
-                
+                IEntity2ControlInterface clicked = GetEntityOnClick(e.Location);
                 if (clicked != null)
                 {
                     if (tt == null)
@@ -385,6 +414,15 @@ namespace CalendarControl3
                     tt.Show(clicked.StringToShow(), this);
                     
                 }
+            }
+        }
+
+        private void MouseEnterHandler(object sender, EventArgs e)
+        {
+            if (tt != null)
+            {
+                tt.Dispose();
+                tt = null;
             }
         }
 

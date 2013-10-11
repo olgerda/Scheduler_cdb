@@ -37,17 +37,19 @@
             this.hScrollBar1.LargeChange = 5;
             this.hScrollBar1.Location = new System.Drawing.Point(0, 507);
             this.hScrollBar1.Name = "hScrollBar1";
-            this.hScrollBar1.Size = new System.Drawing.Size(391, 17);
+            this.hScrollBar1.Size = new System.Drawing.Size(568, 17);
             this.hScrollBar1.TabIndex = 0;
             this.hScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.HScrollHandler);
             // 
-            // UserControl1
+            // ColumnsView
             // 
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.hScrollBar1);
-            this.Name = "UserControl1";
-            this.Size = new System.Drawing.Size(391, 524);
+            this.Name = "ColumnsView";
+            this.Size = new System.Drawing.Size(568, 524);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClickHandler);
+            this.MouseEnter += new System.EventHandler(this.MouseEnterHandler);
             this.ResumeLayout(false);
 
         }

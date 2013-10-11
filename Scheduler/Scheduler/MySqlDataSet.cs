@@ -33,12 +33,18 @@ namespace Scheduler
             mainDataSet = new DataSet("kvartetDataSet");
             viewDataSet = new DataSet("kvartetViewSet");
 
+
             PullTables();
 
         }
-
+        /*
+         * Способ Fill хорошо работает на малых данных, но, возможно, потребует больших ресурсов на больших, надо тестировать.
+         * Судя по принципу работы DataSet - память зажирать будет капитально. DataSet очень удобно для разработки - к нему прям льньком можно from select и т.д. делать. 
+         * Потом надо эти линьки переделать в обычные запросы на SQL и захардкодить. Таким образом, думаю, получится избежать неограниченного потребления памяти.
+         */
         private void PullTables()
         {
+            
             tableAdapters = new Dictionary<string, MySqlDataAdapter>();
             string selectTablesQuery = "select TABLE_NAME, table_type from information_schema.tables where TABLE_SCHEMA='kvartet'";// AND TABLE_TYPE='BASE TABLE'";
             //string selectViewsQuery = "select TABLE_NAME from information_schema.tables where TABLE_SCHEMA='kvartet' AND TABLE_TYPE='VIEW'";
@@ -63,11 +69,13 @@ namespace Scheduler
                     tablesNames.Add(curTableOrView);
                     //curDataAdapter.Fill(mainDataSet, curTableOrView);
 
-                    tableAdapters.Add(curTableOrView, curDataAdapter);
+                tableAdapters.Add(curTableOrView, curDataAdapter);
+                //dummy.Dispose();//уничтожать нельзя, каким-то раком привязывается к адаптеру
             }
             reader.Close();
             sCmd.Connection.Close();
             sCmd.Connection.Dispose();
+
             foreach (var s in tablesNames)
             {
                 tableAdapters[s].Fill(mainDataSet, s);
