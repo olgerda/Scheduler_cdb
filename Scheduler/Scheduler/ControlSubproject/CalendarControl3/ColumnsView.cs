@@ -228,6 +228,15 @@ namespace CalendarControl3
             Refresh();
         }
 
+        /// <summary>
+        /// Forces full repaint with recalculating table. Probably will removed and changed for event-based model of redriving.
+        /// </summary>
+        public void TotalRepaint()
+        {
+            MakeTableFromInput();
+            Refresh();
+        }
+
 
 // 
 //         int CompareByInt(IDescription2ControlInterface x, IDescription2ControlInterface y)
@@ -383,7 +392,7 @@ namespace CalendarControl3
             return hScrollBar1.Value + relativeNumber;
         }
 
-        IEntity2ControlInterface GetEntityOnClick(Point click)
+        public IEntity2ControlInterface GetEntityOnClick(Point click)
         {
             int level = GetValue(click);
             int columnNumber = GetAbsoluteColumnNumber(click);
@@ -393,6 +402,14 @@ namespace CalendarControl3
                 if (entity.TopLevel() < level && level < entity.BottomLevel()) return entity;  
             }
             return null;
+        }
+
+        public string GetColumnNameOnClick(Point click)
+        {
+            int level = GetValue(click);
+            int columnNumber = GetAbsoluteColumnNumber(click);
+            if (level < 0 || columnNumber < 0) return null;
+            return table.GetColumns()[columnNumber].GetName();
         }
 #endregion
 

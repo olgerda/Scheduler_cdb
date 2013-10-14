@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 
 
 //TEST
@@ -33,7 +34,12 @@ namespace Scheduler
 		/// Флаг, указывающий, была ли дата изменена путем ввода строки в dataPicker (true) или выбором даты в календаре (false)
 		/// </summary>
 		bool changedByHand = false;
-        
+
+        /// <summary>
+        /// Таблица, хранящая в себе посещения на текущую дату
+        /// </summary>
+        TableOfEntities receptionEntitiesTable;
+
         /*
          * DESIGN TIME. Переписать после отработки функционала на серию запросов к БД напрямую. Будет медлненнее, но не будет зажираться в память целая копия всех таблиц...
          */
@@ -52,6 +58,15 @@ namespace Scheduler
             /*
              * TEST
              */
+
+            
+
+            FirstLoad(database);
+            CalendarControl3.ColumnsView ctrl = new CalendarControl3.ColumnsView();
+            ctrl.Dock = DockStyle.Fill;
+            mainView.Panel1.Controls.Add(ctrl);
+            ctrl.Table = receptionEntitiesTable;
+            ctrl.MouseClick += new MouseEventHandler(ctrl_MouseClick);
 //             datasets = new MySqlDataSet();
 //             DataTable receptionsTable = datasets.ViewDataSet.Tables["reception_view"];
 //             var receWptions = from receptionEntity in receptionsTable.AsEnumerable() 
@@ -59,7 +74,7 @@ namespace Scheduler
 //                              select receptionEntity;
 //             var dummy = from r in receptions
 //                         select r.Field<TimeSpan>("startTime");
-            TESTCASE();
+//            TESTCASE();
             /*
              * /TEST
              */
@@ -71,6 +86,66 @@ namespace Scheduler
 			//
 		}
 
+
+
+        /*
+         * WORKZONE
+         */
+        void ctrl_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) return;
+            var ent = (Entity)((CalendarControl3.ColumnsView)sender).GetEntityOnClick(e.Location);
+            var column = (ColumnOfEntities)receptionEntitiesTable.GetColumns().Find(x => x.GetEntities().Contains(ent));
+            if (ent == default(Entity))
+                CreateNewEntity();
+            else
+            {
+                EditEntity(ref ent);
+            }
+        }
+
+        void EditEntity(ref Entity entToEdit)
+        {
+            MessageBox.Show("EditEntity form not implemented yet...");
+            EditReception f = new EditReception(ref entToEdit);
+            f.conn = Program.curDB;
+            this.Enabled = false;
+            f.ShowDialog();
+            
+            this.Enabled = true;
+        }
+
+        void CreateNewEntity()
+        {
+            MessageBox.Show("CreateEntity form not implemented yet...");
+        }
+
+        /*
+         * /WORKZONE
+         */
+
+        void FirstLoad(DbConnect database)
+        {
+            receptionEntitiesTable = new TableOfEntities();
+            receptionEntitiesTable.workTime = new TimeInterval(new DateTime(1, 1, 1, 8, 0, 0), new DateTime(1, 1, 1, 18, 0, 0));
+            var listOfEntities = database.SelectFromDate(schedule_date);
+            List<ColumnOfEntities> listOfColumns = new List<ColumnOfEntities>();
+            foreach (var ent in listOfEntities)
+            {
+                var column = listOfColumns.Find(x => x.GetName() == ent.cabinet.Name);
+                if (column == null) 
+                {
+                    column = new Scheduler.ColumnOfEntities(ent.cabinet.Name);
+                    listOfColumns.Add(column);
+                }
+                column.AddEntity(ent);
+            }
+
+            foreach (var col in listOfColumns)
+                receptionEntitiesTable.columns.Add(col);
+        }
+
+        /*DEBUG*/
         void TESTCASE()
         {
             TableOfEntities testtbl = new TableOfEntities();
@@ -99,6 +174,7 @@ namespace Scheduler
             mainView.Panel1.Controls.Add(ctrl);
             ctrl.Table = testtbl;
         }
+        /*DEBUG*/
 
 		void MonthCalendarDateChanged(object sender, DateRangeEventArgs e)
 		{

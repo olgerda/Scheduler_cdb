@@ -8,6 +8,10 @@ using MySql.Data.MySqlClient;
 
 namespace Scheduler
 {
+
+    /*
+     * FOR TESTING PURPOSES! May not properly work with large amount of data!
+     */
     public class MySqlDataSet
     {
         MySqlConnection connection;

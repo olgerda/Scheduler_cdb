@@ -36,12 +36,15 @@ namespace CalendarControl3
         /// </summary>
         /// <returns></returns>
         List<IColumn2ControlInterface> GetColumns();
+
+        //event EventHandler Changed;
     }
 
     public interface IColumn2ControlInterface
     {
         string GetName();
         List<IEntity2ControlInterface> GetEntities();
+        //event EventHandler Changed;
     }
 
     public interface IEntity2ControlInterface
@@ -66,6 +69,8 @@ namespace CalendarControl3
         object GetObject();
 
         ulong GetID();
+        
+        //event EventHandler Changed;
     }
 
 }

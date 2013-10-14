@@ -51,6 +51,12 @@
     <Compile Include="DataRepresentation.cs" />
     <Compile Include="DbConnect.cs" />
     <Compile Include="DBobjects.cs" />
+    <Compile Include="EditReception.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditReception.Designer.cs">
+      <DependentUpon>EditReception.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +73,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="EditReception.resx">
+      <DependentUpon>EditReception.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

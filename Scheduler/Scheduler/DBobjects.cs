@@ -12,11 +12,12 @@ namespace Scheduler
     {
         private FIO name;
 
-        public ClientCard(FIO newName, ulong TelNumber = 0, string newComment = "")
+        public ClientCard(FIO newName, ulong TelNumber = 0, string newComment = "", bool inRed = false)
         {
             name = newName;
             telNumber = TelNumber;
             comment = newComment;
+            inRedList = inRed;
         }
 
         public FIO Name
@@ -27,6 +28,7 @@ namespace Scheduler
 
         public ulong telNumber;
         public string comment;
+        public bool inRedList;
 
         public override string ToString()
         {
@@ -290,7 +292,7 @@ namespace Scheduler
 
             for (int i = 0; i < boolList.Count; i++)
             {
-                if (boolList[i]) result.Add(allSpecs[i]);
+                if (boolList[i]) result.Add(allSpecs[i+1]);
             }
             return result;
         }
