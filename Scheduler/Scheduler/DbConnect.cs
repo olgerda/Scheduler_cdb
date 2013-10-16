@@ -287,15 +287,33 @@ namespace Scheduler
             CloseConnection();
             return result;
         }
-// 
-//         public Dictionary<int, ClientCard> LoadClients()
-//         {
-//             Dictionary<int, ClientCard> result = new Dictionary<int, ClientCard>();
-// 
-// 
-// 
-//             return result;
-//         }
+
+        public Dictionary<int, ClientCard> LoadClients()
+        {
+            Dictionary<int, ClientCard> result = new Dictionary<int, ClientCard>();
+
+            OpenConnection();
+            using (MySqlCommand cmd = new MySqlCommand("SELECT c.id as id, c.TelNumber as TelNumber, c.inRedList as inRedList, c.Comment as Comment, f.Name as Name, f.Surname as Surname, f.Patronimyc as Patronimyc FROM clients c, FIO f where f.id=c.id_FIO", connection))
+            {
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        result.Add(dr.GetUInt16("id"),
+                            new ClientCard(
+                                new FIO(dr.GetString("Name"), dr.GetString("Surname"), dr.GetString("Patronimyc")), 
+                                dr.GetUInt64("TelNumber"), 
+                                dr.GetString("Comment"), 
+                                dr.GetBoolean("inRedList")                                
+                                )
+                                );
+                    }
+                }
+            }
+            CloseConnection();
+
+            return result;
+        }
 
         /// <summary>
         /// Функция реализует создание резервной копии базы данных. Файл резервной копии располагается в корне диска C:

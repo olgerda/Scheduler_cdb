@@ -12,12 +12,13 @@ namespace Scheduler
     {
         private FIO name;
 
-        public ClientCard(FIO newName, ulong TelNumber = 0, string newComment = "", bool inRed = false)
+        public ClientCard(FIO newName, ulong TelNumber = 0, string newComment = "", bool inRed = false, ulong Id = 0)
         {
             name = newName;
             telNumber = TelNumber;
             comment = newComment;
             inRedList = inRed;
+            id = Id;
         }
 
         public FIO Name
@@ -26,13 +27,14 @@ namespace Scheduler
             set { name = value; }
         }
 
+        public ulong id;
         public ulong telNumber;
         public string comment;
         public bool inRedList;
 
         public override string ToString()
         {
-            return name.ToString();
+            return name.ToString() + " Телефон: " + telNumber.ToString();
         }
 
         public override bool Equals(object obj)
@@ -53,11 +55,13 @@ namespace Scheduler
     /// </summary>
     public class SpecialistCard
     {
+        public ulong id;
         private FIO name;
         private List<Specialization> specializations;
 
-        public SpecialistCard(FIO name)
+        public SpecialistCard(FIO name, ulong Id = 0)
         {
+            id = Id;
             this.name = name;
             specializations = new List<Specialization>();
         }
@@ -182,10 +186,12 @@ namespace Scheduler
     /// </summary>
     public class CabinetCard
     {
+        public uint id;
         private string name;
 
-        public CabinetCard(string name)
+        public CabinetCard(string name, uint Id = 0)
         {
+            id = Id;
             if (String.IsNullOrWhiteSpace(name))
                 name = "default cab";
                 
@@ -222,26 +228,67 @@ namespace Scheduler
     /// </summary>
     public class FIO
     {
+        public ulong id;
         public string surname;
         public string name;
         public string patronymic;
 
-        public FIO(string Name, string Surname, string Patronimyc)
+        public FIO(string Name, string Surname, string Patronimyc, ulong Id = 0)
         {
-            name = Name;
-            surname = Surname;
-            patronymic = Patronimyc;
+            id = Id;
+            name = Name.Trim();
+            surname = Surname.Trim();
+            patronymic = Patronimyc.Trim();
+        }
+
+        /// <summary>
+        /// Фамилия Имя Отчество с разделителем запятой
+        /// </summary>
+        /// <param name="fullname"></param>
+        public FIO(string fullname, ulong Id = 0)
+        {
+            id = Id;
+            string[] fio = fullname.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
+            switch (fio.Length)
+            {
+                case 1:
+                    surname = fio[0].Trim();
+                    name = "НЕ ЗАДАНО";
+                    patronymic = "НЕ ЗАДАНО";
+                    break;
+                case 2:
+                    surname = fio[0].Trim();
+                    name = fio[1].Trim();
+                    patronymic = "НЕ ЗАДАНО";
+                    break;
+                case 3:
+                    surname = fio[0].Trim();
+                    name = fio[1].Trim();
+                    patronymic = fio[2].Trim();
+                    break;
+                default:
+                    surname = "НЕ ЗАДАНО";
+                    name = "НЕ ЗАДАНО";
+                    patronymic = "НЕ ЗАДАНО";
+                    break;
+            }
+
         }
 
         public override string ToString()
         {
-            return surname + " " + name + " " + patronymic + ".";
+            return surname + "," + name + "," + patronymic;
         }
 
         public override bool Equals(object obj)
         {
             FIO fio = obj as FIO;
-            if (fio == null) return false;
+            if (fio == null)
+            {
+                string tmp = obj as string;
+                if (tmp == null) return false;
+                fio = new FIO(tmp);
+            }
             return name == fio.name && surname == fio.surname && patronymic == fio.patronymic;
         }
 
@@ -249,6 +296,8 @@ namespace Scheduler
         {
             return name.GetHashCode() ^ surname.GetHashCode() ^ patronymic.GetHashCode();
         }
+
+
     }
 
     /// <summary>
@@ -256,10 +305,12 @@ namespace Scheduler
     /// </summary>
     public class Specialization
     {
+        public ulong id;
         private string title;
 
-        public Specialization(string specTitle)
+        public Specialization(string specTitle, ulong Id = 0)
         {
+            id = Id;
             if (String.IsNullOrWhiteSpace(specTitle))
                 title = "bad name";
             else
@@ -368,6 +419,11 @@ namespace Scheduler
 
                 return nulDate;
             }
+        }
+
+        public DateTime Date
+        {
+            get { return startDate.Date;}
         }
 
         public DateTime StartDate

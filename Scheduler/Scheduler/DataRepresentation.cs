@@ -125,7 +125,10 @@ namespace Scheduler
         
         public string StringToShow()
         {
-            return date.Interval() + "\r\n" + specialist + "\r\n" + specialization + "\r\n" + client;
+            if (this.client.comment.StartsWith("АРЕНДА"))
+                return date.Interval() + "\r\n" + specialist + "\r\n" + "АРЕНДА";
+            else
+                return date.Interval() + "\r\n" + specialist + "\r\n" + specialization + "\r\n" + client;
         }
 
         public int TopLevel()

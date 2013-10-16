@@ -92,8 +92,8 @@ namespace CalendarControl3
             
             
             //designtime TEST
-             table = TESTCASE.GetTestTable();
-             MakeTableFromInput();
+             //table = TESTCASE.GetTestTable();
+             //MakeTableFromInput();
             //designtime TEST
 
         }
@@ -396,7 +396,7 @@ namespace CalendarControl3
         {
             int level = GetValue(click);
             int columnNumber = GetAbsoluteColumnNumber(click);
-            if (level < 0 || columnNumber < 0) return null;
+            if (level < 0 || columnNumber < 0 || table.GetColumnCount() < 1) return null;
             foreach (var entity in table.GetColumns()[columnNumber].GetEntities())
             {
                 if (entity.TopLevel() < level && level < entity.BottomLevel()) return entity;  

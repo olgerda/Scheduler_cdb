@@ -48,6 +48,30 @@ namespace Scheduler
          * 
          */
 
+        /// <summary>
+        /// Рабочее время. Используется для масштабного отображения и проверок границ.
+        /// </summary>
+        public static TimeInterval workDay = new TimeInterval(new DateTime(1, 1, 1, 8, 0, 0), new DateTime(1, 1, 1, 20, 0, 0));
+        /// <summary>
+        /// Период, который будет отображаться на сетке расписания. Влияет только на отображение.
+        /// </summary>
+        public static TimeSpan workDelta = new TimeSpan(2, 0, 0);
+
+        private static List<DateTime> GetWorkTimeList
+        {
+            get 
+            {
+                List<DateTime> result = new List<DateTime>();
+                DateTime curTime = workDay.StartDate;
+                while (curTime < workDay.EndDate)
+                {
+                    result.Add(curTime);
+                    curTime.Add(workDelta);
+                }
+                return result;
+            }
+        }
+
 		public MainForm(DbConnect database)
 		{
 			//
@@ -100,19 +124,19 @@ namespace Scheduler
                 CreateNewEntity();
             else
             {
-                EditEntity(ref ent);
+                EditEntity(ref ent, column);
+                var a = 1 == 1;
             }
         }
 
-        void EditEntity(ref Entity entToEdit)
+        void EditEntity(ref Entity entToEdit, ColumnOfEntities column)
         {
-            MessageBox.Show("EditEntity form not implemented yet...");
-            EditReception f = new EditReception(ref entToEdit);
+            MessageBox.Show("Under construction!");
+            EditReception f = new EditReception();
             f.conn = Program.curDB;
-            this.Enabled = false;
+            f.EditedEntity = entToEdit;
             f.ShowDialog();
-            
-            this.Enabled = true;
+            entToEdit = f.EditedEntity;
         }
 
         void CreateNewEntity()
@@ -128,7 +152,8 @@ namespace Scheduler
         {
             receptionEntitiesTable = new TableOfEntities();
             receptionEntitiesTable.workTime = new TimeInterval(new DateTime(1, 1, 1, 8, 0, 0), new DateTime(1, 1, 1, 18, 0, 0));
-            var listOfEntities = database.SelectFromDate(schedule_date);
+            //var listOfEntities = database.SelectFromDate(schedule_date);
+            var listOfEntities = database.SelectFromDate(new DateTime(2013, 10, 14));
             List<ColumnOfEntities> listOfColumns = new List<ColumnOfEntities>();
             foreach (var ent in listOfEntities)
             {
