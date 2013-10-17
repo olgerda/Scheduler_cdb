@@ -191,11 +191,11 @@ namespace Scheduler
             date = date.Date;
             List<Entity> result = new List<Entity>();
             
-            Dictionary<int, ClientCard> clientsList = new Dictionary<int, ClientCard>();
+            List<ClientCard> clientsList = LoadClients();
             
-            Dictionary<int, CabinetCard> cabinetList = LoadCabinetList();
-            Dictionary<int, Specialization> specializationsList = LoadSpecializations();
-            Dictionary<int, SpecialistCard> specialistList = LoadSpecialists(specializationsList);
+            List<CabinetCard> cabinetList = LoadCabinetList();
+            List<Specialization> specializationsList = LoadSpecializations();
+            List<SpecialistCard> specialistList = LoadSpecialists(specializationsList);
             
             OpenConnection();
             using (MySqlCommand mSqlCmd = new MySqlCommand("select * from reception_view r where r.receptionDate='" + date.ToString("yyyy-MM-dd") + "'", connection))
@@ -216,8 +216,8 @@ namespace Scheduler
                         Entity curEntity = new Entity(dr.GetUInt64("id"), tInterval,
                             new ClientCard(new FIO(dr.GetString("CName"), dr.GetString("CSurname"), dr.GetString("CPatronimyc")), dr.GetUInt64("TelNumber"), dr.GetString("Comment"), dr.GetBoolean("inRedList")),
                             spec,
-                            specializationsList.FirstOrDefault(x => x.Value.Title == dr.GetString("Specialization")).Value,
-                            cabinetList.FirstOrDefault(x=>x.Value.Name == dr.GetString("CabName")).Value
+                            specializationsList.Find(x => x.Title == dr.GetString("Specialization")),
+                            cabinetList.Find(x=>x.Name == dr.GetString("CabName"))
                             );
                         result.Add(curEntity);
                     }
@@ -227,9 +227,9 @@ namespace Scheduler
             return result;
         }
 
-        public Dictionary<int, Specialization> LoadSpecializations()
+        public List<Specialization> LoadSpecializations()
         {
-            Dictionary<int, Specialization> result = new Dictionary<int, Specialization>();
+            List<Specialization> result = new List<Specialization>();
             OpenConnection();
             using (MySqlCommand cmd = new MySqlCommand("SELECT id, Specialization FROM specializations", connection))
             {
@@ -237,7 +237,7 @@ namespace Scheduler
                 {
                     while (dr.Read())
                     {
-                        result.Add(dr.GetByte("id"), new Specialization(dr.GetString("Specialization")));
+                        result.Add(new Specialization(dr.GetString("Specialization"), dr.GetByte("id")));
                     }
                 }
             }
@@ -246,9 +246,9 @@ namespace Scheduler
         }
 
  
-         public Dictionary<int, SpecialistCard> LoadSpecialists(Dictionary<int,Specialization> allSpecs)
+         public List<SpecialistCard> LoadSpecialists(List<Specialization> allSpecs)
          {
-            Dictionary<int, SpecialistCard> result = new Dictionary<int, SpecialistCard>();
+            List<SpecialistCard> result = new List<SpecialistCard>();
             OpenConnection();
             using (MySqlCommand cmd = new MySqlCommand("SELECT s.id as id, s.SpecializationList as SpecializationList, f.Name as Name, f.Surname as Surname, f.Patronimyc as Patronimyc FROM specialist s, FIO f where f.id=s.id_FIO", connection))
             {
@@ -256,10 +256,11 @@ namespace Scheduler
                 {
                     while (dr.Read())
                     {
-                        result.Add(dr.GetUInt16("id"), 
+                        result.Add( 
                             new SpecialistCard(
                                 new FIO(dr.GetString("Name"), dr.GetString("Surname"), dr.GetString("Patronimyc")), 
-                                Specialization.GetSpecializationsFromULong(dr.GetUInt64("SpecializationList"), allSpecs)
+                                Specialization.GetSpecializationsFromULong(dr.GetUInt64("SpecializationList"), allSpecs),
+                                dr.GetUInt16("id")
                                 )
                                 );
                     }
@@ -269,9 +270,9 @@ namespace Scheduler
             return result;
         }
 
-        public Dictionary<int, CabinetCard> LoadCabinetList()
+        public List<CabinetCard> LoadCabinetList()
         {
-            Dictionary<int, CabinetCard> result = new Dictionary<int, CabinetCard>();
+            List<CabinetCard> result = new List<CabinetCard>();
 
             OpenConnection();
             using (MySqlCommand cmd = new MySqlCommand("SELECT id, Name FROM cabinets", connection))
@@ -280,7 +281,7 @@ namespace Scheduler
                 {
                     while (dr.Read())
                     {
-                        result.Add(dr.GetUInt16("id"), new CabinetCard(dr.GetString("Name")));
+                        result.Add(new CabinetCard(dr.GetString("Name"), dr.GetUInt16("id")));
                     }
                 }
             }
@@ -288,9 +289,9 @@ namespace Scheduler
             return result;
         }
 
-        public Dictionary<int, ClientCard> LoadClients()
+        public List<ClientCard> LoadClients()
         {
-            Dictionary<int, ClientCard> result = new Dictionary<int, ClientCard>();
+            List<ClientCard> result = new List<ClientCard>();
 
             OpenConnection();
             using (MySqlCommand cmd = new MySqlCommand("SELECT c.id as id, c.TelNumber as TelNumber, c.inRedList as inRedList, c.Comment as Comment, f.Name as Name, f.Surname as Surname, f.Patronimyc as Patronimyc FROM clients c, FIO f where f.id=c.id_FIO", connection))
@@ -299,12 +300,12 @@ namespace Scheduler
                 {
                     while (dr.Read())
                     {
-                        result.Add(dr.GetUInt16("id"),
+                        result.Add(
                             new ClientCard(
                                 new FIO(dr.GetString("Name"), dr.GetString("Surname"), dr.GetString("Patronimyc")), 
                                 dr.GetUInt64("TelNumber"), 
-                                dr.GetString("Comment"), 
-                                dr.GetBoolean("inRedList")                                
+                                dr.GetString("Comment"),
+                                dr.GetBoolean("inRedList"), dr.GetUInt16("id")
                                 )
                                 );
                     }

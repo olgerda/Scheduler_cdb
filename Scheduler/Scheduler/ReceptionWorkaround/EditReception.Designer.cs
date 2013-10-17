@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.btnAcceptChanges = new System.Windows.Forms.Button();
+            this.btnReturn = new System.Windows.Forms.Button();
             this.chkRent = new System.Windows.Forms.CheckBox();
             this.grpCabinet = new System.Windows.Forms.GroupBox();
             this.cmbbxCabinet = new System.Windows.Forms.ComboBox();
@@ -39,7 +41,9 @@
             this.grpSpecialization = new System.Windows.Forms.GroupBox();
             this.cmbbxSpecialization = new System.Windows.Forms.ComboBox();
             this.grpClient = new System.Windows.Forms.GroupBox();
+            this.chkClientinRedBox = new System.Windows.Forms.CheckBox();
             this.grpClientFIO = new System.Windows.Forms.GroupBox();
+            this.cmbbxClientFIO = new System.Windows.Forms.ComboBox();
             this.grpClientTelephone = new System.Windows.Forms.GroupBox();
             this.txtClientTelephone = new System.Windows.Forms.MaskedTextBox();
             this.grpClientComment = new System.Windows.Forms.GroupBox();
@@ -50,10 +54,7 @@
             this.timePickerEnd = new System.Windows.Forms.DateTimePicker();
             this.timePickerStart = new System.Windows.Forms.DateTimePicker();
             this.datePicker = new System.Windows.Forms.DateTimePicker();
-            this.cmbbxClientFIO = new System.Windows.Forms.ComboBox();
-            this.btnReturn = new System.Windows.Forms.Button();
-            this.btnAcceptChanges = new System.Windows.Forms.Button();
-            this.chkClientinRedBox = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -90,6 +91,26 @@
             this.splitContainer1.Size = new System.Drawing.Size(793, 317);
             this.splitContainer1.SplitterDistance = 150;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // btnAcceptChanges
+            // 
+            this.btnAcceptChanges.Location = new System.Drawing.Point(404, 287);
+            this.btnAcceptChanges.Name = "btnAcceptChanges";
+            this.btnAcceptChanges.Size = new System.Drawing.Size(143, 23);
+            this.btnAcceptChanges.TabIndex = 18;
+            this.btnAcceptChanges.Text = "Подтвердить изменения";
+            this.btnAcceptChanges.UseVisualStyleBackColor = true;
+            this.btnAcceptChanges.Click += new System.EventHandler(this.btnAcceptChanges_Click);
+            // 
+            // btnReturn
+            // 
+            this.btnReturn.Location = new System.Drawing.Point(553, 287);
+            this.btnReturn.Name = "btnReturn";
+            this.btnReturn.Size = new System.Drawing.Size(75, 23);
+            this.btnReturn.TabIndex = 17;
+            this.btnReturn.Text = "Вернуться";
+            this.btnReturn.UseVisualStyleBackColor = true;
+            this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
             // 
             // chkRent
             // 
@@ -182,6 +203,7 @@
             // 
             // grpClient
             // 
+            this.grpClient.Controls.Add(this.button1);
             this.grpClient.Controls.Add(this.chkClientinRedBox);
             this.grpClient.Controls.Add(this.grpClientFIO);
             this.grpClient.Controls.Add(this.grpClientTelephone);
@@ -194,6 +216,17 @@
             this.grpClient.TabStop = false;
             this.grpClient.Text = "Клиент";
             // 
+            // chkClientinRedBox
+            // 
+            this.chkClientinRedBox.AutoSize = true;
+            this.chkClientinRedBox.Enabled = false;
+            this.chkClientinRedBox.Location = new System.Drawing.Point(9, 110);
+            this.chkClientinRedBox.Name = "chkClientinRedBox";
+            this.chkClientinRedBox.Size = new System.Drawing.Size(119, 17);
+            this.chkClientinRedBox.TabIndex = 16;
+            this.chkClientinRedBox.Text = "В красном списке";
+            this.chkClientinRedBox.UseVisualStyleBackColor = true;
+            // 
             // grpClientFIO
             // 
             this.grpClientFIO.Controls.Add(this.cmbbxClientFIO);
@@ -203,6 +236,17 @@
             this.grpClientFIO.TabIndex = 15;
             this.grpClientFIO.TabStop = false;
             this.grpClientFIO.Text = "ФИО";
+            // 
+            // cmbbxClientFIO
+            // 
+            this.cmbbxClientFIO.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cmbbxClientFIO.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbbxClientFIO.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmbbxClientFIO.Location = new System.Drawing.Point(3, 16);
+            this.cmbbxClientFIO.Name = "cmbbxClientFIO";
+            this.cmbbxClientFIO.Size = new System.Drawing.Size(398, 21);
+            this.cmbbxClientFIO.TabIndex = 0;
+            this.cmbbxClientFIO.SelectedIndexChanged += new System.EventHandler(this.ClientFIOChangeHandler);
             // 
             // grpClientTelephone
             // 
@@ -223,13 +267,14 @@
             this.txtClientTelephone.Size = new System.Drawing.Size(133, 20);
             this.txtClientTelephone.TabIndex = 0;
             this.txtClientTelephone.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
+            this.txtClientTelephone.TextChanged += new System.EventHandler(this.TelephoneNumberChangeHandler);
             // 
             // grpClientComment
             // 
             this.grpClientComment.Controls.Add(this.txtClientComment);
-            this.grpClientComment.Location = new System.Drawing.Point(151, 64);
+            this.grpClientComment.Location = new System.Drawing.Point(148, 64);
             this.grpClientComment.Name = "grpClientComment";
-            this.grpClientComment.Size = new System.Drawing.Size(262, 102);
+            this.grpClientComment.Size = new System.Drawing.Size(262, 63);
             this.grpClientComment.TabIndex = 14;
             this.grpClientComment.TabStop = false;
             this.grpClientComment.Text = "Комментарий";
@@ -241,7 +286,7 @@
             this.txtClientComment.Multiline = true;
             this.txtClientComment.Name = "txtClientComment";
             this.txtClientComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtClientComment.Size = new System.Drawing.Size(256, 83);
+            this.txtClientComment.Size = new System.Drawing.Size(256, 44);
             this.txtClientComment.TabIndex = 0;
             // 
             // btnShowClientCard
@@ -305,47 +350,14 @@
             this.datePicker.TabIndex = 1;
             this.datePicker.ValueChanged += new System.EventHandler(this.BoxDateChangedHandler);
             // 
-            // cmbbxClientFIO
+            // button1
             // 
-            this.cmbbxClientFIO.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cmbbxClientFIO.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cmbbxClientFIO.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmbbxClientFIO.Location = new System.Drawing.Point(3, 16);
-            this.cmbbxClientFIO.Name = "cmbbxClientFIO";
-            this.cmbbxClientFIO.Size = new System.Drawing.Size(398, 21);
-            this.cmbbxClientFIO.TabIndex = 0;
-            this.cmbbxClientFIO.SelectedIndexChanged += new System.EventHandler(this.ClientFIOChangeHandler);
-            // 
-            // btnReturn
-            // 
-            this.btnReturn.Location = new System.Drawing.Point(553, 287);
-            this.btnReturn.Name = "btnReturn";
-            this.btnReturn.Size = new System.Drawing.Size(75, 23);
-            this.btnReturn.TabIndex = 17;
-            this.btnReturn.Text = "Вернуться";
-            this.btnReturn.UseVisualStyleBackColor = true;
-            this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
-            // 
-            // btnAcceptChanges
-            // 
-            this.btnAcceptChanges.Location = new System.Drawing.Point(404, 287);
-            this.btnAcceptChanges.Name = "btnAcceptChanges";
-            this.btnAcceptChanges.Size = new System.Drawing.Size(143, 23);
-            this.btnAcceptChanges.TabIndex = 18;
-            this.btnAcceptChanges.Text = "Подтвердить изменения";
-            this.btnAcceptChanges.UseVisualStyleBackColor = true;
-            this.btnAcceptChanges.Click += new System.EventHandler(this.btnAcceptChanges_Click);
-            // 
-            // chkClientinRedBox
-            // 
-            this.chkClientinRedBox.AutoSize = true;
-            this.chkClientinRedBox.Enabled = false;
-            this.chkClientinRedBox.Location = new System.Drawing.Point(9, 110);
-            this.chkClientinRedBox.Name = "chkClientinRedBox";
-            this.chkClientinRedBox.Size = new System.Drawing.Size(119, 17);
-            this.chkClientinRedBox.TabIndex = 16;
-            this.chkClientinRedBox.Text = "В красном списке";
-            this.chkClientinRedBox.UseVisualStyleBackColor = true;
+            this.button1.Location = new System.Drawing.Point(274, 130);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(136, 36);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Создать новую карточку клиента";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // EditReception
             // 
@@ -403,5 +415,6 @@
         private System.Windows.Forms.Button btnAcceptChanges;
         private System.Windows.Forms.Button btnReturn;
         private System.Windows.Forms.CheckBox chkClientinRedBox;
+        private System.Windows.Forms.Button button1;
     }
 }

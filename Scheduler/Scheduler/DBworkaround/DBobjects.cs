@@ -66,14 +66,16 @@ namespace Scheduler
             specializations = new List<Specialization>();
         }
 
-        public SpecialistCard(FIO name, Specialization spec)
+        public SpecialistCard(FIO name, Specialization spec, ulong Id = 0)
         {
+            id = Id;
             this.name = name;
             specializations = new List<Specialization>() {spec};
         }
 
-        public SpecialistCard(FIO name, List<Specialization> specs)
+        public SpecialistCard(FIO name, List<Specialization> specs, ulong Id = 0)
         {
+            id = Id;
             this.name = name;
             specializations = new List<Specialization>(specs);
         }
@@ -204,7 +206,7 @@ namespace Scheduler
             set { name = value; }
         }
 
-        public bool available = true;
+        //public bool available = true;
 
         public override string ToString()
         {
@@ -305,10 +307,10 @@ namespace Scheduler
     /// </summary>
     public class Specialization
     {
-        public ulong id;
+        public byte id;
         private string title;
 
-        public Specialization(string specTitle, ulong Id = 0)
+        public Specialization(string specTitle, byte Id = 0)
         {
             id = Id;
             if (String.IsNullOrWhiteSpace(specTitle))
@@ -333,7 +335,7 @@ namespace Scheduler
         /// </summary>
         /// <param name="source">Число, на основе которого формировать список.</param>
         /// <param name="allSpecs">Словарь всех специализаций, где ключём служит позиция в UInt64.</param>
-        static public List<Specialization> GetSpecializationsFromULong(UInt64 source, Dictionary<int,Specialization> allSpecs)
+        static public List<Specialization> GetSpecializationsFromULong(UInt64 source, List<Specialization> allSpecs)
         {
             List<Specialization> result = new List<Specialization>();
             List<bool> boolList = BitConverter.GetBytes(source).Select(b => b == 1).ToList();
@@ -353,7 +355,7 @@ namespace Scheduler
         /// </summary>
         /// <param name="source">Список специализаций.</param>
         /// <param name="allSpecs">Словарь всех специализаций, где ключём служит позиция в UInt64.</param>
-        static public UInt64 GetULongFromSpecializations(List<Specialization> source, Dictionary<int, Specialization> allSpecs)
+        static public UInt64 GetULongFromSpecializations(List<Specialization> source, List<Specialization> allSpecs)
         {
             ulong result;
 
@@ -366,7 +368,7 @@ namespace Scheduler
 
             foreach (var spec in source)
             {
-                byteArray[allSpecs.FirstOrDefault(v => v.Value.Equals(spec)).Key] = 1;
+                byteArray[allSpecs.FirstOrDefault(v => v.Equals(spec)).id] = 1;
             }
 
             result = BitConverter.ToUInt64(byteArray, 0);

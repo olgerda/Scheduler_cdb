@@ -22,10 +22,10 @@ namespace Scheduler
 
         private List<string> errorlist;
 
-        private Dictionary<int, SpecialistCard> specialistList;
-        private Dictionary<int, Specialization> specializationList;
-        private Dictionary<int, ClientCard> clientList;
-        private Dictionary<int, CabinetCard> cabinetList;
+        private List<SpecialistCard> specialistList;
+        private List<Specialization> specializationList;
+        private List<ClientCard> clientList;
+        private List<CabinetCard> cabinetList;
 
         public EditReception()
         {
@@ -78,7 +78,7 @@ namespace Scheduler
 
             if (chkRent.Checked && !toReturn.client.comment.StartsWith("АРЕНДА"))
             {
-                ClientCard cli = clientList.FirstOrDefault(x => x.Value.comment.StartsWith("АРЕНДА")).Value;
+                ClientCard cli = clientList.FirstOrDefault(x => x.comment.StartsWith("АРЕНДА"));
                 if (cli == default(ClientCard)) cli = new ClientCard(new FIO(""), newComment:"АРЕНДА");
                 toReturn.client = cli;
             }
@@ -86,17 +86,17 @@ namespace Scheduler
             {
                 if (toReturn.client.Name.ToString() != cmbbxClientFIO.Text)
                 { //Имя другое - клиент другой.
-                    ClientCard cli = clientList.FirstOrDefault(x => x.Value.Name.ToString() == cmbbxClientFIO.Text).Value;
+                    ClientCard cli = clientList.FirstOrDefault(x => x.Name.ToString() == cmbbxClientFIO.Text);
                     
                     toReturn.client = cli;
                 }
             }
 
             if (toReturn.cabinet.Name != cmbbxCabinet.Text)
-                toReturn.cabinet = cabinetList.FirstOrDefault(x => x.Value.Name == cmbbxCabinet.Text).Value;
+                toReturn.cabinet = cabinetList.Find(x => x.Name == cmbbxCabinet.Text);
             if (toReturn.specialist.Name.ToString() != cmbbxSpecialist.Text)
             {
-                toReturn.specialist = specialistList.FirstOrDefault(x => x.Value.Name.ToString() == cmbbxSpecialist.Text).Value;
+                toReturn.specialist = specialistList.Find(x => x.Name.ToString() == cmbbxSpecialist.Text);
             }
             /*
              * 
@@ -137,10 +137,10 @@ namespace Scheduler
 
             cmbbxCabinet.Text = toReturn.cabinet.Name;
 
-            cmbbxCabinet.DataSource = cabinetList.Select(x=> x.Value).ToList(); cmbbxCabinet.DisplayMember = "Name";
-            cmbbxSpecialist.DataSource = specialistList.Select(x => x.Value).ToList(); cmbbxSpecialist.DisplayMember = "Name";
-            cmbbxSpecialization.DataSource = specializationList.Select(x => x.Value).ToList(); cmbbxSpecialization.DisplayMember = "Title";
-            cmbbxClientFIO.DataSource = clientList.Select(x => x.Value).ToList(); cmbbxClientFIO.DisplayMember = "Name";
+            cmbbxCabinet.DataSource = cabinetList; cmbbxCabinet.DisplayMember = "Name";
+            cmbbxSpecialist.DataSource = specialistList; cmbbxSpecialist.DisplayMember = "Name";
+            cmbbxSpecialization.DataSource = specializationList; cmbbxSpecialization.DisplayMember = "Title";
+            cmbbxClientFIO.DataSource = clientList; cmbbxClientFIO.DisplayMember = "Name";
 
         }
 
@@ -245,7 +245,23 @@ namespace Scheduler
 
         private void ClientFIOChangeHandler(object sender, EventArgs e)
         {
-            ClientCard cli = clientList.ElementAtOrDefault(cmbbxClientFIO.SelectedIndex).Value;
+            ClientCard cli = clientList.ElementAtOrDefault(cmbbxClientFIO.SelectedIndex);
+        }
+
+
+        //private ulong _telNimberOld = 0;
+        private void TelephoneNumberChangeHandler(object sender, EventArgs e)
+        {
+            List<ClientCard> cliList;
+
+            if (txtClientTelephone.Text.Length == 0)
+                cliList = clientList;
+            else
+            {
+                cliList = clientList.Where(x => x.telNumber.ToString().StartsWith(txtClientTelephone.Text)).ToList();
+            }
+
+            cmbbxClientFIO.DataSource = cliList;
         }
     }
 }

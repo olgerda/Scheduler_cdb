@@ -28,7 +28,8 @@ CREATE TABLE `cabinets` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `Name` mediumtext COLLATE utf8_bin NOT NULL,
   `Availability` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -38,7 +39,7 @@ CREATE TABLE `cabinets` (
 
 LOCK TABLES `cabinets` WRITE;
 /*!40000 ALTER TABLE `cabinets` DISABLE KEYS */;
-INSERT INTO `cabinets` VALUES (1,'ПервыйКабинет',1),(2,'ВторойКабинет',1),(3,'ТретийКабинет',0),(4,'ЧетвёртыйКабинет',1),(5,'111',1),(6,'123',1),(7,'122',1);
+INSERT INTO `cabinets` VALUES (1,'ПервыйКабинет',1),(2,'ВторойКабинет',1),(3,'ТретийКабинет',0),(4,'ЧетвёртыйКабинет',1),(5,'111',1),(6,'123',1),(7,'333',1);
 /*!40000 ALTER TABLE `cabinets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -51,13 +52,13 @@ DROP TABLE IF EXISTS `clients`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `clients` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `id_FIO` smallint(5) unsigned NOT NULL,
+  `id_FIO` int(10) unsigned NOT NULL,
   `Comment` mediumtext COLLATE utf8_bin NOT NULL,
   `TelNumber` bigint(10) unsigned NOT NULL,
   `inRedList` tinyint(3) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `id_FIO` (`id_FIO`),
-  CONSTRAINT `clients_ibfk_1` FOREIGN KEY (`id_FIO`) REFERENCES `fio` (`id`)
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `id_FIO` (`id_FIO`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -102,7 +103,8 @@ CREATE TABLE `fio` (
   `Name` tinytext CHARACTER SET utf8 NOT NULL,
   `Surname` tinytext CHARACTER SET utf8 NOT NULL,
   `Patronimyc` tinytext CHARACTER SET utf8 NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -140,7 +142,8 @@ SET character_set_client = utf8;
   `CabName` tinyint NOT NULL,
   `startTime` tinyint NOT NULL,
   `endTime` tinyint NOT NULL,
-  `receptionDate` tinyint NOT NULL
+  `receptionDate` tinyint NOT NULL,
+  `id` tinyint NOT NULL
 ) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
@@ -152,7 +155,7 @@ DROP TABLE IF EXISTS `receptioncards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `receptioncards` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL,
   `Client` smallint(5) unsigned NOT NULL,
   `Specialist` smallint(5) unsigned NOT NULL,
   `Specialization` tinyint(3) unsigned NOT NULL,
@@ -161,6 +164,7 @@ CREATE TABLE `receptioncards` (
   `endTime` time NOT NULL DEFAULT '12:00:00',
   `receptionDate` date NOT NULL DEFAULT '2013-10-07',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `Client` (`Client`),
   KEY `Specialist` (`Specialist`),
   KEY `Specialization` (`Specialization`),
@@ -169,7 +173,7 @@ CREATE TABLE `receptioncards` (
   CONSTRAINT `receptioncards_ibfk_2` FOREIGN KEY (`Specialist`) REFERENCES `specialist` (`id`),
   CONSTRAINT `receptioncards_ibfk_3` FOREIGN KEY (`Specialization`) REFERENCES `specializations` (`id`),
   CONSTRAINT `receptioncards_ibfk_4` FOREIGN KEY (`Cabinet`) REFERENCES `cabinets` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +182,7 @@ CREATE TABLE `receptioncards` (
 
 LOCK TABLES `receptioncards` WRITE;
 /*!40000 ALTER TABLE `receptioncards` DISABLE KEYS */;
-INSERT INTO `receptioncards` VALUES (1,1,1,1,1,'10:00:00','12:00:00','2013-10-07'),(2,2,2,2,2,'12:12:00','13:30:00','2013-12-02');
+INSERT INTO `receptioncards` VALUES (1,1,1,1,1,'10:00:00','12:00:00','2013-10-14'),(2,2,2,2,2,'12:12:00','13:30:00','2013-10-14');
 /*!40000 ALTER TABLE `receptioncards` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,7 +196,7 @@ DROP TABLE IF EXISTS `specialist`;
 CREATE TABLE `specialist` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `id_FIO` smallint(5) unsigned NOT NULL,
-  `SpecializationList` bit(64) NOT NULL DEFAULT b'0' COMMENT 'Contain bitfield of length 64 that represent numbers of tabl',
+  `SpecializationList` bigint(20) unsigned zerofill NOT NULL COMMENT 'Contain bigint that represent set of 0..63 specs handled by specialists.',
   PRIMARY KEY (`id`),
   KEY `id_FIO` (`id_FIO`),
   CONSTRAINT `specialist_ibfk_1` FOREIGN KEY (`id_FIO`) REFERENCES `fio` (`id`)
@@ -205,7 +209,7 @@ CREATE TABLE `specialist` (
 
 LOCK TABLES `specialist` WRITE;
 /*!40000 ALTER TABLE `specialist` DISABLE KEYS */;
-INSERT INTO `specialist` VALUES (1,1,'\0\0\0\0\0\0\0'),(2,2,'\0\0\0\0\0\0\0'),(3,3,'\0\0\0\0\0\0\0'),(4,4,'\0\0\0\0\0\0\0'),(5,5,'\0\0\0\0\0\0\0'),(6,6,'\0\0\0\0\0\0\0');
+INSERT INTO `specialist` VALUES (1,1,00000000000000000001),(2,2,00000000000000000002),(3,3,00000000000000000004),(4,4,00000000000000000008),(5,5,00000000000000000003),(6,6,00000000000000000007);
 /*!40000 ALTER TABLE `specialist` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -286,7 +290,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`kvartetAdmin`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `reception_view` AS select `cls`.`CName` AS `CName`,`cls`.`CSurname` AS `CSurname`,`cls`.`CPatronimyc` AS `CPatronimyc`,`cls`.`cl_id` AS `cl_id`,`cls`.`Comment` AS `Comment`,`cls`.`TelNumber` AS `TelNumber`,`cls`.`inRedList` AS `inRedList`,`sps`.`SName` AS `SName`,`sps`.`SSurname` AS `SSurname`,`sps`.`SPatronimyc` AS `SPatronimyc`,`sps`.`spec_id` AS `spec_id`,`specializations`.`Specialization` AS `Specialization`,`cabinets`.`Name` AS `CabName`,`r`.`startTime` AS `startTime`,`r`.`endTime` AS `endTime`,`r`.`receptionDate` AS `receptionDate` from ((((`clients_view` `cls` join `specs_view` `sps`) join `receptioncards` `r`) join `specializations`) join `cabinets`) where ((`cls`.`cl_id` = `r`.`Client`) and (`sps`.`spec_id` = `r`.`Specialist`) and (`specializations`.`id` = `r`.`Specialization`) and (`cabinets`.`id` = `r`.`Cabinet`)) */;
+/*!50001 VIEW `reception_view` AS select `cls`.`CName` AS `CName`,`cls`.`CSurname` AS `CSurname`,`cls`.`CPatronimyc` AS `CPatronimyc`,`cls`.`cl_id` AS `cl_id`,`cls`.`Comment` AS `Comment`,`cls`.`TelNumber` AS `TelNumber`,`cls`.`inRedList` AS `inRedList`,`sps`.`SName` AS `SName`,`sps`.`SSurname` AS `SSurname`,`sps`.`SPatronimyc` AS `SPatronimyc`,`sps`.`spec_id` AS `spec_id`,`specializations`.`Specialization` AS `Specialization`,`cabinets`.`Name` AS `CabName`,`r`.`startTime` AS `startTime`,`r`.`endTime` AS `endTime`,`r`.`receptionDate` AS `receptionDate`,`r`.`id` AS `id` from ((((`clients_view` `cls` join `specs_view` `sps`) join `receptioncards` `r`) join `specializations`) join `cabinets`) where ((`cls`.`cl_id` = `r`.`Client`) and (`sps`.`spec_id` = `r`.`Specialist`) and (`specializations`.`id` = `r`.`Specialization`) and (`cabinets`.`id` = `r`.`Cabinet`)) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -319,4 +323,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-09 17:34:46
+-- Dump completed on 2013-10-17 11:59:14
