@@ -14,7 +14,7 @@ namespace Scheduler
         TableOfEntities table;
         CalendarControl3.ColumnsView ctrl;
 
-        public DbConnect conn;
+        public MySqlDataSet datasets;
 
         private Entity toReturn;
 
@@ -27,7 +27,7 @@ namespace Scheduler
         private List<ClientCard> clientList;
         private List<CabinetCard> cabinetList;
 
-        public EditReception()
+        public EditReception(MySqlDataSet data)
         {
             InitializeComponent();
 
@@ -35,12 +35,15 @@ namespace Scheduler
             programmaticalyClosing = false;
 
             errorlist = new List<string>();
+
+            datasets = data;
             
 
         }
 
         private void LoadEntity(Entity curEntity)
         {
+            if (curEntity == null) return;
             toReturn = curEntity;
             InitializeLists();
             InitializeControls();
@@ -49,8 +52,8 @@ namespace Scheduler
             ctrl = new CalendarControl3.ColumnsView();
             ctrl.Table = table;
             table.workTime = Scheduler.MainForm.workDay;
-            if (conn == null) return;
-            List<Entity> toDayEntities = conn.SelectFromDate(datePicker.Value).FindAll(x => x.cabinet.Name == toReturn.cabinet.Name && x.date.StartDate.Date == toReturn.date.StartDate.Date);
+
+            List<Entity> toDayEntities = datasets.SelectEntityByDate(toReturn.date.Date).FindAll(x => x.cabinet.Name == toReturn.cabinet.Name);
             ColumnOfEntities column = new ColumnOfEntities(toReturn.cabinet.Name);
             column.AddEntities(toDayEntities);
             table.columns.Add(column);
@@ -146,10 +149,10 @@ namespace Scheduler
 
         void InitializeLists()
         {
-            specializationList = conn.LoadSpecializations();
-            specialistList = conn.LoadSpecialists(specializationList);
-            cabinetList = conn.LoadCabinetList();
-            clientList = conn.LoadClients();
+            specializationList = datasets.SelectAllSpecializations();
+            specialistList = datasets.SelectAllSpecialists();
+            clientList = datasets.SelectAllClients();
+            cabinetList = datasets.SelectAllCabinets();
         }
 
         /// <summary>
@@ -165,7 +168,7 @@ namespace Scheduler
             /*
              * 
              */
-            var entries = conn.SelectFromDate(datePicker.Value);
+            var entries = datasets.SelectEntityByDate(datePicker.Value);
             TimeInterval now = new TimeInterval(datePicker.Value.Date.Add(timePickerStart.Value.TimeOfDay), datePicker.Value.Date.Add(timePickerEnd.Value.TimeOfDay));
             foreach (var e in entries)
             {

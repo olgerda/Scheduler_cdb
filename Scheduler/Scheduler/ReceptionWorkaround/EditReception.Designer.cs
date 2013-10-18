@@ -41,6 +41,7 @@
             this.grpSpecialization = new System.Windows.Forms.GroupBox();
             this.cmbbxSpecialization = new System.Windows.Forms.ComboBox();
             this.grpClient = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.chkClientinRedBox = new System.Windows.Forms.CheckBox();
             this.grpClientFIO = new System.Windows.Forms.GroupBox();
             this.cmbbxClientFIO = new System.Windows.Forms.ComboBox();
@@ -54,7 +55,6 @@
             this.timePickerEnd = new System.Windows.Forms.DateTimePicker();
             this.timePickerStart = new System.Windows.Forms.DateTimePicker();
             this.datePicker = new System.Windows.Forms.DateTimePicker();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -89,7 +89,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.grpClient);
             this.splitContainer1.Panel2.Controls.Add(this.grpDateTimePickers);
             this.splitContainer1.Size = new System.Drawing.Size(793, 317);
-            this.splitContainer1.SplitterDistance = 150;
+            this.splitContainer1.SplitterDistance = 156;
             this.splitContainer1.TabIndex = 0;
             // 
             // btnAcceptChanges
@@ -215,6 +215,15 @@
             this.grpClient.TabIndex = 3;
             this.grpClient.TabStop = false;
             this.grpClient.Text = "Клиент";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(274, 130);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(136, 36);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Создать новую карточку клиента";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // chkClientinRedBox
             // 
@@ -349,15 +358,6 @@
             this.datePicker.Size = new System.Drawing.Size(186, 20);
             this.datePicker.TabIndex = 1;
             this.datePicker.ValueChanged += new System.EventHandler(this.BoxDateChangedHandler);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(274, 130);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(136, 36);
-            this.button1.TabIndex = 17;
-            this.button1.Text = "Создать новую карточку клиента";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // EditReception
             // 

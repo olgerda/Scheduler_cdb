@@ -12,7 +12,7 @@ namespace Scheduler
     {
         private FIO name;
 
-        public ClientCard(FIO newName, ulong TelNumber = 0, string newComment = "", bool inRed = false, ulong Id = 0)
+        public ClientCard(FIO newName, ulong TelNumber = 0, string newComment = "", bool inRed = false, UInt16 Id = 0)
         {
             name = newName;
             telNumber = TelNumber;
@@ -27,7 +27,7 @@ namespace Scheduler
             set { name = value; }
         }
 
-        public ulong id;
+        public UInt16 id;
         public ulong telNumber;
         public string comment;
         public bool inRedList;
@@ -55,25 +55,25 @@ namespace Scheduler
     /// </summary>
     public class SpecialistCard
     {
-        public ulong id;
+        public UInt16 id;
         private FIO name;
         private List<Specialization> specializations;
 
-        public SpecialistCard(FIO name, ulong Id = 0)
+        public SpecialistCard(FIO name, UInt16 Id = 0)
         {
             id = Id;
             this.name = name;
             specializations = new List<Specialization>();
         }
 
-        public SpecialistCard(FIO name, Specialization spec, ulong Id = 0)
+        public SpecialistCard(FIO name, Specialization spec, UInt16 Id = 0)
         {
             id = Id;
             this.name = name;
             specializations = new List<Specialization>() {spec};
         }
 
-        public SpecialistCard(FIO name, List<Specialization> specs, ulong Id = 0)
+        public SpecialistCard(FIO name, List<Specialization> specs, UInt16 Id = 0)
         {
             id = Id;
             this.name = name;
@@ -188,10 +188,10 @@ namespace Scheduler
     /// </summary>
     public class CabinetCard
     {
-        public uint id;
+        public UInt16 id;
         private string name;
 
-        public CabinetCard(string name, uint Id = 0)
+        public CabinetCard(string name, UInt16 Id = 0)
         {
             id = Id;
             if (String.IsNullOrWhiteSpace(name))
@@ -230,12 +230,12 @@ namespace Scheduler
     /// </summary>
     public class FIO
     {
-        public ulong id;
+        public UInt16 id;
         public string surname;
         public string name;
         public string patronymic;
 
-        public FIO(string Name, string Surname, string Patronimyc, ulong Id = 0)
+        public FIO(string Name, string Surname, string Patronimyc, UInt16 Id = 0)
         {
             id = Id;
             name = Name.Trim();
@@ -247,7 +247,7 @@ namespace Scheduler
         /// Фамилия Имя Отчество с разделителем запятой
         /// </summary>
         /// <param name="fullname"></param>
-        public FIO(string fullname, ulong Id = 0)
+        public FIO(string fullname, UInt16 Id = 0)
         {
             id = Id;
             string[] fio = fullname.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
@@ -338,14 +338,10 @@ namespace Scheduler
         static public List<Specialization> GetSpecializationsFromULong(UInt64 source, List<Specialization> allSpecs)
         {
             List<Specialization> result = new List<Specialization>();
-            List<bool> boolList = BitConverter.GetBytes(source).Select(b => b == 1).ToList();
 
-            //Такое фундаментальное ограничение будет до тех пор, пока в БД специальности у одного специалиста представлены ulong (64 бита).
-            if (boolList.Count > 64) throw new Exception("There cannot be more that 64 specializations at the moment!"); 
-
-            for (int i = 0; i < boolList.Count; i++)
+            for (int i = 0; i < 64; i++)
             {
-                if (boolList[i]) result.Add(allSpecs[i+1]);
+                if ( (source & ( 1UL << i)) != 0) result.Add(allSpecs[i]);
             }
             return result;
         }
@@ -357,21 +353,21 @@ namespace Scheduler
         /// <param name="allSpecs">Словарь всех специализаций, где ключём служит позиция в UInt64.</param>
         static public UInt64 GetULongFromSpecializations(List<Specialization> source, List<Specialization> allSpecs)
         {
-            ulong result;
+            ulong result = 0;
 
             //Такое фундаментальное ограничение будет до тех пор, пока в БД специальности у одного специалиста представлены ulong (64 бита).
-            byte[] byteArray = new byte[64];
-            for (int i = 0; i < 64;i++ )
-            {
-                byteArray[i] = 0;
-            }
+//             byte[] byteArray = new byte[64];
+//             for (int i = 0; i < 64;i++ )
+//             {
+//                 byteArray[i] = 0;
+//             }
 
             foreach (var spec in source)
             {
-                byteArray[allSpecs.FirstOrDefault(v => v.Equals(spec)).id] = 1;
+                result |= 1UL << allSpecs.Find(v => v.id == spec.id).id;
             }
 
-            result = BitConverter.ToUInt64(byteArray, 0);
+            //result = BitConverter.ToUInt64(byteArray, 0);
 
             return result;
         }

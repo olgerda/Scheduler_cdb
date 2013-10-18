@@ -16,7 +16,7 @@ namespace Scheduler
 	/// </summary>
 	internal sealed class Program
 	{
-		public static DbConnect curDB = new DbConnect();
+		//public static DbConnect curDB = new DbConnect();
 		/// <summary>
 		/// Program entry point.
 		/// </summary>
@@ -25,7 +25,7 @@ namespace Scheduler
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm(curDB));
+			Application.Run(new MainForm(/*curDB*/));
 		}
 		
 	}

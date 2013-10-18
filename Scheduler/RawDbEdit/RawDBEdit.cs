@@ -25,7 +25,7 @@ namespace RawDbEdit
 
         private void initToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mySqlDataSet = new MySqlDataSet();
+            mySqlDataSet = new MySqlDataSet(initViews: true);
             ds = mySqlDataSet.MainDataSet;
             InitializeTabs();
         }

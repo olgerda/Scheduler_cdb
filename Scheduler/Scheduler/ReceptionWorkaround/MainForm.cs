@@ -42,6 +42,8 @@ namespace Scheduler
 
         /*
          * DESIGN TIME. Переписать после отработки функционала на серию запросов к БД напрямую. Будет медлненнее, но не будет зажираться в память целая копия всех таблиц...
+         * Или так оставить. Надо протестировать на большом объёме данных.
+         * Сейчас нет никакой проверки на успешность соединения с БД. Если соединения нет - какой-то подвисон.
          */
         MySqlDataSet datasets;
         /*
@@ -72,20 +74,20 @@ namespace Scheduler
             }
         }
 
-		public MainForm(DbConnect database)
+		public MainForm(/*DbConnect database*/)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
 
+            datasets = new MySqlDataSet();
+
             /*
              * TEST
              */
 
-            
-
-            FirstLoad(database);
+            FirstLoad();
             CalendarControl3.ColumnsView ctrl = new CalendarControl3.ColumnsView();
             ctrl.Dock = DockStyle.Fill;
             mainView.Panel1.Controls.Add(ctrl);
@@ -125,15 +127,14 @@ namespace Scheduler
             else
             {
                 EditEntity(ref ent, column);
-                var a = 1 == 1;
             }
         }
 
         void EditEntity(ref Entity entToEdit, ColumnOfEntities column)
         {
             MessageBox.Show("Under construction!");
-            EditReception f = new EditReception();
-            f.conn = Program.curDB;
+            EditReception f = new EditReception(datasets);
+            
             f.EditedEntity = entToEdit;
             f.ShowDialog();
             entToEdit = f.EditedEntity;
@@ -148,12 +149,12 @@ namespace Scheduler
          * /WORKZONE
          */
 
-        void FirstLoad(DbConnect database)
+        void FirstLoad()
         {
             receptionEntitiesTable = new TableOfEntities();
             receptionEntitiesTable.workTime = new TimeInterval(new DateTime(1, 1, 1, 8, 0, 0), new DateTime(1, 1, 1, 18, 0, 0));
             //var listOfEntities = database.SelectFromDate(schedule_date);
-            var listOfEntities = database.SelectFromDate(new DateTime(2013, 10, 14));
+            var listOfEntities = datasets.SelectEntityByDate(new DateTime(2013, 10, 14));
             List<ColumnOfEntities> listOfColumns = new List<ColumnOfEntities>();
             foreach (var ent in listOfEntities)
             {
