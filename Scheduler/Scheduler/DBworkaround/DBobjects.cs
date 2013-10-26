@@ -10,9 +10,9 @@ namespace Scheduler
     /// </summary>
     public class ClientCard
     {
-        private FIO name;
+        private string name;
 
-        public ClientCard(FIO newName, ulong TelNumber = 0, string newComment = "", bool inRed = false, UInt16 Id = 0)
+        public ClientCard(string newName, List<string> TelNumber = null, string newComment = "", bool inRed = false, UInt16 Id = 0)
         {
             name = newName;
             telNumber = TelNumber;
@@ -21,27 +21,41 @@ namespace Scheduler
             id = Id;
         }
 
-        public FIO Name
+        public string Name
         {
             get { return name; }
             set { name = value; }
         }
 
         public UInt16 id;
-        public ulong telNumber;
+        private List<string> telNumber;
+
+        public List<string> TelNumbers
+        {
+            get
+            {
+                if (telNumber == null) telNumber = new List<string>() { "+0(000)0000000" };
+                return telNumber;
+            }
+            set
+            {
+                telNumber = value;
+            }
+        }
+
         public string comment;
         public bool inRedList;
 
         public override string ToString()
         {
-            return name.ToString() + " Телефон: " + telNumber.ToString();
+            return name.ToString() + " Телефон: " + TelNumbers[0];
         }
 
         public override bool Equals(object obj)
         {
             ClientCard clnt = obj as ClientCard;
             if (clnt == null) return false;
-            return name == clnt.name && telNumber == clnt.telNumber;
+            return name == clnt.name && TelNumbers[0] == clnt.TelNumbers[0];
         }
 
         public override int GetHashCode()
@@ -56,57 +70,47 @@ namespace Scheduler
     public class SpecialistCard
     {
         public UInt16 id;
-        private FIO name;
-        private List<Specialization> specializations;
+        private string name;
+        private List<string> specializations;
 
-        public SpecialistCard(FIO name, UInt16 Id = 0)
+        public SpecialistCard(string name, UInt16 Id = 0)
         {
             id = Id;
             this.name = name;
-            specializations = new List<Specialization>();
+            specializations = new List<string>();
         }
 
-        public SpecialistCard(FIO name, Specialization spec, UInt16 Id = 0)
+        public SpecialistCard(string name, string spec, UInt16 Id = 0)
         {
             id = Id;
             this.name = name;
-            specializations = new List<Specialization>() {spec};
+            specializations = new List<string>() { spec };
         }
 
-        public SpecialistCard(FIO name, List<Specialization> specs, UInt16 Id = 0)
+        public SpecialistCard(string name, List<string> specs, UInt16 Id = 0)
         {
             id = Id;
             this.name = name;
-            specializations = new List<Specialization>(specs);
+            specializations = new List<string>(specs);
         }
 
-        public void AddSpecialization(Specialization spec)
+        public void AddSpecialization(string spec)
         {
             specializations.Add(spec);
         }
 
-        public void AddSpecialization(string title)
-        {
-            specializations.Add(new Specialization(title));
-        }
-
-        public void RemoveSpecialization(Specialization spec)
+        public void RemoveSpecialization(string spec)
         {
             specializations.Remove(spec);
         }
 
-        public void RemoveSpecialization(string title)
-        {
-            specializations.Remove(new Specialization(title));
-        }
-
-        public List<Specialization> Specializations
+        public List<string> Specializations
         {
             get { return specializations; }
             set { specializations = value; }
         }
 
-        public FIO Name
+        public string Name
         {
             get { return name; }
             set
@@ -151,10 +155,10 @@ namespace Scheduler
         public TimeInterval date;
         public ClientCard client;
         public SpecialistCard specialist;
-        public Specialization specialization;
+        public string specialization;
         public CabinetCard cabinet;
 
-        public ReceptionCard(ulong Id = 0, TimeInterval Date = null, ClientCard Client = null, SpecialistCard Specialist = null, Specialization Specialization = null, CabinetCard Cabinet = null)
+        public ReceptionCard(ulong Id = 0, TimeInterval Date = null, ClientCard Client = null, SpecialistCard Specialist = null, string Specialization = null, CabinetCard Cabinet = null)
         {
             id = Id;
             date = Date;
@@ -225,6 +229,8 @@ namespace Scheduler
         }
     }
 
+    #region Класс FIO - необходимость использования - под вопросом. Убрал покуда.
+    /*
     /// <summary>
     /// Класс реализует сущность ФИО в простейшем виде. Служит для упрощения и структуризации.
     /// </summary>
@@ -301,7 +307,11 @@ namespace Scheduler
 
 
     }
+    */
 
+    #endregion
+    #region Класс Specialization - необходимость использования - под вопросом. Убрал покуда. Функционал перенесён в таблицу многие-ко-многим БД
+    /*
     /// <summary>
     /// Класс реализует дополнительный функционал, который может быть использован при хранении названия специальности в базе.
     /// </summary>
@@ -335,42 +345,42 @@ namespace Scheduler
         /// </summary>
         /// <param name="source">Число, на основе которого формировать список.</param>
         /// <param name="allSpecs">Словарь всех специализаций, где ключём служит позиция в UInt64.</param>
-        static public List<Specialization> GetSpecializationsFromULong(UInt64 source, List<Specialization> allSpecs)
-        {
-            List<Specialization> result = new List<Specialization>();
-
-            for (int i = 0; i < 64; i++)
-            {
-                if ( (source & ( 1UL << i)) != 0) result.Add(allSpecs[i]);
-            }
-            return result;
-        }
+//         static public List<Specialization> GetSpecializationsFromULong(UInt64 source, List<Specialization> allSpecs)
+//         {
+//             List<Specialization> result = new List<Specialization>();
+// 
+//             for (int i = 0; i < 64; i++)
+//             {
+//                 if ( (source & ( 1UL << i)) != 0) result.Add(allSpecs[i]);
+//             }
+//             return result;
+//         }
 
         /// <summary>
         /// Сформировать 64-битное число без знака на основе списка специализаций.
         /// </summary>
         /// <param name="source">Список специализаций.</param>
         /// <param name="allSpecs">Словарь всех специализаций, где ключём служит позиция в UInt64.</param>
-        static public UInt64 GetULongFromSpecializations(List<Specialization> source, List<Specialization> allSpecs)
-        {
-            ulong result = 0;
-
-            //Такое фундаментальное ограничение будет до тех пор, пока в БД специальности у одного специалиста представлены ulong (64 бита).
-//             byte[] byteArray = new byte[64];
-//             for (int i = 0; i < 64;i++ )
+//         static public UInt64 GetULongFromSpecializations(List<Specialization> source, List<Specialization> allSpecs)
+//         {
+//             ulong result = 0;
+// 
+//             //Такое фундаментальное ограничение будет до тех пор, пока в БД специальности у одного специалиста представлены ulong (64 бита).
+// //             byte[] byteArray = new byte[64];
+// //             for (int i = 0; i < 64;i++ )
+// //             {
+// //                 byteArray[i] = 0;
+// //             }
+// 
+//             foreach (var spec in source)
 //             {
-//                 byteArray[i] = 0;
+//                 result |= 1UL << allSpecs.Find(v => v.id == spec.id).id;
 //             }
-
-            foreach (var spec in source)
-            {
-                result |= 1UL << allSpecs.Find(v => v.id == spec.id).id;
-            }
-
-            //result = BitConverter.ToUInt64(byteArray, 0);
-
-            return result;
-        }
+// 
+//             //result = BitConverter.ToUInt64(byteArray, 0);
+// 
+//             return result;
+//         }
 
         public override string ToString()
         {
@@ -391,7 +401,8 @@ namespace Scheduler
             return title.GetHashCode();
         }
     }
-
+    */
+    #endregion
     /// <summary>
     /// Класс представляет временной интервал между двумя датами.
     /// </summary>

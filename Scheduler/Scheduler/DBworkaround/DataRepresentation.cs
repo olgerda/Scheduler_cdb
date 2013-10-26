@@ -117,7 +117,7 @@ namespace Scheduler
 
     public class Entity : ReceptionCard, CalendarControl3.IEntity2ControlInterface
     {
-        public Entity(ulong Id = 0, TimeInterval Date = null, ClientCard Client = null, SpecialistCard Specialist = null, Specialization Specialization = null, CabinetCard Cabinet = null)
+        public Entity(ulong Id = 0, TimeInterval Date = null, ClientCard Client = null, SpecialistCard Specialist = null, string Specialization = null, CabinetCard Cabinet = null)
             : base(Id, Date, Client, Specialist, Specialization, Cabinet)
         {
 

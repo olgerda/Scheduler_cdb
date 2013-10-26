@@ -191,82 +191,82 @@ namespace Scheduler
             date = date.Date;
             List<Entity> result = new List<Entity>();
             
-            List<ClientCard> clientsList = LoadClients();
-            
-            List<CabinetCard> cabinetList = LoadCabinetList();
-            List<Specialization> specializationsList = LoadSpecializations();
-            List<SpecialistCard> specialistList = LoadSpecialists(specializationsList);
-            
-            OpenConnection();
-            using (MySqlCommand mSqlCmd = new MySqlCommand("select * from reception_view r where r.receptionDate='" + date.ToString("yyyy-MM-dd") + "'", connection))
-            {
-                using (MySqlDataReader dr = mSqlCmd.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        TimeSpan startT = dr.GetTimeSpan("startTime"); //CHECK!
-                        TimeSpan endT = dr.GetTimeSpan("endTime");
-                        TimeInterval tInterval = new TimeInterval(date.Add(startT), date.Add(endT));
-
-                        
-                        int specId = dr.GetInt32("spec_id");
-                        int clntId = dr.GetInt32("cl_id");
-                        SpecialistCard spec = specialistList[specId];
-
-                        Entity curEntity = new Entity(dr.GetUInt64("id"), tInterval,
-                            new ClientCard(new FIO(dr.GetString("CName"), dr.GetString("CSurname"), dr.GetString("CPatronimyc")), dr.GetUInt64("TelNumber"), dr.GetString("Comment"), dr.GetBoolean("inRedList")),
-                            spec,
-                            specializationsList.Find(x => x.Title == dr.GetString("Specialization")),
-                            cabinetList.Find(x=>x.Name == dr.GetString("CabName"))
-                            );
-                        result.Add(curEntity);
-                    }
-                }
-            }
-            CloseConnection();
+//             List<ClientCard> clientsList = LoadClients();
+//             
+//             List<CabinetCard> cabinetList = LoadCabinetList();
+//             List<Specialization> specializationsList = LoadSpecializations();
+//             List<SpecialistCard> specialistList = LoadSpecialists(specializationsList);
+//             
+//             OpenConnection();
+//             using (MySqlCommand mSqlCmd = new MySqlCommand("select * from reception_view r where r.receptionDate='" + date.ToString("yyyy-MM-dd") + "'", connection))
+//             {
+//                 using (MySqlDataReader dr = mSqlCmd.ExecuteReader())
+//                 {
+//                     while (dr.Read())
+//                     {
+//                         TimeSpan startT = dr.GetTimeSpan("startTime"); //CHECK!
+//                         TimeSpan endT = dr.GetTimeSpan("endTime");
+//                         TimeInterval tInterval = new TimeInterval(date.Add(startT), date.Add(endT));
+// 
+//                         
+//                         int specId = dr.GetInt32("spec_id");
+//                         int clntId = dr.GetInt32("cl_id");
+//                         SpecialistCard spec = specialistList[specId];
+// 
+//                         Entity curEntity = new Entity(dr.GetUInt64("id"), tInterval,
+//                             new ClientCard(new FIO(dr.GetString("CName"), dr.GetString("CSurname"), dr.GetString("CPatronimyc")), dr.GetUInt64("TelNumber"), dr.GetString("Comment"), dr.GetBoolean("inRedList")),
+//                             spec,
+//                             specializationsList.Find(x => x.Title == dr.GetString("Specialization")),
+//                             cabinetList.Find(x=>x.Name == dr.GetString("CabName"))
+//                             );
+//                         result.Add(curEntity);
+//                     }
+//                 }
+//             }
+//             CloseConnection();
             return result;
         }
 
-        public List<Specialization> LoadSpecializations()
+        public List<string> LoadSpecializations()
         {
-            List<Specialization> result = new List<Specialization>();
-            OpenConnection();
-            using (MySqlCommand cmd = new MySqlCommand("SELECT id, Specialization FROM specializations", connection))
-            {
-                using (MySqlDataReader dr = cmd.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        result.Add(new Specialization(dr.GetString("Specialization"), dr.GetByte("id")));
-                    }
-                }
-            }
-            CloseConnection();
-            return result;
+            List<string> result = new List<string>();
+//             OpenConnection();
+//             using (MySqlCommand cmd = new MySqlCommand("SELECT id, Specialization FROM specializations", connection))
+//             {
+//                 using (MySqlDataReader dr = cmd.ExecuteReader())
+//                 {
+//                     while (dr.Read())
+//                     {
+//                         result.Add(dr.GetString("Specialization"));
+//                     }
+//                 }
+//             }
+//             CloseConnection();
+            return new List<string>(result.Distinct());
         }
 
- 
-         public List<SpecialistCard> LoadSpecialists(List<Specialization> allSpecs)
+
+        public List<SpecialistCard> LoadSpecialists(List<string> allSpecs)
          {
             List<SpecialistCard> result = new List<SpecialistCard>();
-            OpenConnection();
-            using (MySqlCommand cmd = new MySqlCommand("SELECT s.id as id, s.SpecializationList as SpecializationList, f.Name as Name, f.Surname as Surname, f.Patronimyc as Patronimyc FROM specialist s, FIO f where f.id=s.id_FIO", connection))
-            {
-                using (MySqlDataReader dr = cmd.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        result.Add( 
-                            new SpecialistCard(
-                                new FIO(dr.GetString("Name"), dr.GetString("Surname"), dr.GetString("Patronimyc")), 
-                                Specialization.GetSpecializationsFromULong(dr.GetUInt64("SpecializationList"), allSpecs),
-                                dr.GetUInt16("id")
-                                )
-                                );
-                    }
-                }
-            }
-            CloseConnection();
+//             OpenConnection();
+//             using (MySqlCommand cmd = new MySqlCommand("SELECT s.id as id, s.SpecializationList as SpecializationList, f.Name as Name, f.Surname as Surname, f.Patronimyc as Patronimyc FROM specialist s, FIO f where f.id=s.id_FIO", connection))
+//             {
+//                 using (MySqlDataReader dr = cmd.ExecuteReader())
+//                 {
+//                     while (dr.Read())
+//                     {
+//                         result.Add( 
+//                             new SpecialistCard(
+//                                 new FIO(dr.GetString("Name"), dr.GetString("Surname"), dr.GetString("Patronimyc")), 
+//                                 Specialization.GetSpecializationsFromULong(dr.GetUInt64("SpecializationList"), allSpecs),
+//                                 dr.GetUInt16("id")
+//                                 )
+//                                 );
+//                     }
+//                 }
+//             }
+//             CloseConnection();
             return result;
         }
 
@@ -293,25 +293,25 @@ namespace Scheduler
         {
             List<ClientCard> result = new List<ClientCard>();
 
-            OpenConnection();
-            using (MySqlCommand cmd = new MySqlCommand("SELECT c.id as id, c.TelNumber as TelNumber, c.inRedList as inRedList, c.Comment as Comment, f.Name as Name, f.Surname as Surname, f.Patronimyc as Patronimyc FROM clients c, FIO f where f.id=c.id_FIO", connection))
-            {
-                using (MySqlDataReader dr = cmd.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        result.Add(
-                            new ClientCard(
-                                new FIO(dr.GetString("Name"), dr.GetString("Surname"), dr.GetString("Patronimyc")), 
-                                dr.GetUInt64("TelNumber"), 
-                                dr.GetString("Comment"),
-                                dr.GetBoolean("inRedList"), dr.GetUInt16("id")
-                                )
-                                );
-                    }
-                }
-            }
-            CloseConnection();
+//             OpenConnection();
+//             using (MySqlCommand cmd = new MySqlCommand("SELECT c.id as id, c.TelNumber as TelNumber, c.inRedList as inRedList, c.Comment as Comment, f.Name as Name, f.Surname as Surname, f.Patronimyc as Patronimyc FROM clients c, FIO f where f.id=c.id_FIO", connection))
+//             {
+//                 using (MySqlDataReader dr = cmd.ExecuteReader())
+//                 {
+//                     while (dr.Read())
+//                     {
+//                         result.Add(
+//                             new ClientCard(
+//                                 new FIO(dr.GetString("Name"), dr.GetString("Surname"), dr.GetString("Patronimyc")), 
+//                                 dr.GetUInt64("TelNumber"), 
+//                                 dr.GetString("Comment"),
+//                                 dr.GetBoolean("inRedList"), dr.GetUInt16("id")
+//                                 )
+//                                 );
+//                     }
+//                 }
+//             }
+//             CloseConnection();
 
             return result;
         }

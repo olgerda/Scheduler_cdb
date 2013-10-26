@@ -162,7 +162,7 @@ namespace Scheduler
                         currentTimeInterval,
                         SelectClientById((UInt16)row["Client"]),
                         SelectSpecialistById((UInt16)row["Specialist"]),
-                        SelectSpecializationById((byte)row["Specialization"]),
+                        (string)row["Specialization"],
                         SelectCabinetById((UInt16)row["Cabinet"])
                     );
                 }
@@ -189,7 +189,7 @@ namespace Scheduler
                     currentTimeInterval,
                     SelectClientById((UInt16)row["Client"]),
                     SelectSpecialistById((UInt16)row["Specialist"]),
-                    SelectSpecializationById((byte)row["Specialization"]),
+                    (string)row["Specialization"],
                     SelectCabinetById((UInt16)row["Cabinet"])
                 );
             }
@@ -211,38 +211,37 @@ namespace Scheduler
         {
             SpecialistCard cached = caches.SpecialistCache.Find(x => x.id == id);
             if (cached == default(SpecialistCard))
-            {
+            { //если в кеше нет - перечитываем из бд
                 caches.specialistFullfilled = false;
                 cached = SelectAllSpecialists().Find(x => x.id == id);
             }
             return cached;
         }
 
-        public FIO SelectFIObyId(UInt16 id)
+//         public FIO SelectFIObyId(UInt16 id)
+//         {
+//             FIO cached;// = caches.FioCache.Find(x => x.id == id);
+//             //             if (cached == default(FIO))
+//             //             {
+//             //var a3 = 
+// 
+//             var fioRow = mainDataSet.Tables["fio"].AsEnumerable()
+//                         .Where(fio => fio.Field<UInt16>("id") == id)
+//                         .First();
+// 
+//             cached = new FIO((string)fioRow["Name"], (string)fioRow["Surname"], (string)fioRow["Patronimyc"], (UInt16)fioRow["id"]);
+//             //  caches.FioCache.Add(cached);
+//             //}
+//             return cached;
+//         }
+
+        public List<string> SelectSpecializationsBySpecId(UInt16 SId)
         {
-            FIO cached;// = caches.FioCache.Find(x => x.id == id);
-            //             if (cached == default(FIO))
-            //             {
-            //var a3 = 
-
-            var fioRow = mainDataSet.Tables["fio"].AsEnumerable()
-                        .Where(fio => fio.Field<UInt16>("id") == id)
-                        .First();
-
-            cached = new FIO((string)fioRow["Name"], (string)fioRow["Surname"], (string)fioRow["Patronimyc"], (UInt16)fioRow["id"]);
-            //  caches.FioCache.Add(cached);
-            //}
-            return cached;
-        }
-
-        public Specialization SelectSpecializationById(byte id)
-        {
-            Specialization cached = caches.SpecializationCache.Find(x => x.id == id);
-            if (cached == default(Specialization))
-            {
-                caches.specializationFullfilled = false;
-                cached = SelectAllSpecializations().Find(x => x.id == id);
-            }
+            List<string> cached = new List<string>();
+            var querySpecializations = mainDataSet.Tables["specializations"].AsEnumerable()
+                .Where(x => x.Field<UInt16>("SpecID") == SId)
+                .Select(x => x.Field<string>("Specialization"));
+            cached.AddRange(querySpecializations);
             return cached;
         }
 
@@ -259,15 +258,15 @@ namespace Scheduler
 
         //List<Specialization> allSpecs; //если реализуется queryCache - это удалить.
         //Кэш специализаций инициализируется только здесь - всегда полон. Т.о. первая проверка валидна.
-        public List<Specialization> SelectAllSpecializations()
+        public List<string> SelectAllSpecializations()
         {
-            if (caches.specializationFullfilled) return caches.SpecializationCache;
+            //if (caches.specializationFullfilled) return caches.SpecializationCache;
             //allSpecs = new List<Specialization>();
-            var list = caches.SpecializationCache;
-            var querySpecializations = mainDataSet.Tables["specializations"].AsEnumerable();
+            var list = new List<String>();
+            var querySpecializations = mainDataSet.Tables["specializations"].AsEnumerable().Select(x => x.Field<string>("Specialization")).Distinct();
             foreach (var specRow in querySpecializations)
             {
-                list.Add(new Specialization((string)specRow["Specialization"], (byte)specRow["id"]));
+                list.Add(specRow);
             }
             caches.specializationFullfilled = true;
             return list;
@@ -284,8 +283,8 @@ namespace Scheduler
             foreach (var specialistRow in specialistQuery)
             {
                 listCached.Add(new SpecialistCard(
-                    SelectFIObyId((UInt16)specialistRow["id_FIO"]),
-                    Specialization.GetSpecializationsFromULong((UInt64)specialistRow["SpecializationList"], SelectAllSpecializations()),
+                    (string)specialistRow["Name"],
+                    SelectSpecializationsBySpecId((UInt16)specialistRow["id"]),
                     (UInt16)specialistRow["id"]
                     )
                     );
@@ -319,8 +318,8 @@ namespace Scheduler
             foreach (var clientRow in clientQuery)
             {
                 list.Add(new ClientCard(
-                SelectFIObyId((UInt16)clientRow["id_FIO"]),
-                (UInt64)clientRow["TelNumber"],
+                (string)clientRow["Name"],
+                GetTelephones((UInt16)clientRow["id"]),
                 (string)clientRow["Comment"],
                 Convert.ToBoolean(clientRow["inRedList"]),
                 (UInt16)clientRow["id"])
@@ -330,15 +329,44 @@ namespace Scheduler
             return list;
         }
 
+        public List<string> GetTelephones(UInt16 ClID)
+        {
+            List<string> result = new List<string>();
+            var telephonesQuery = mainDataSet.Tables["phones"].AsEnumerable()
+                .Where(id => id.Field<UInt16>("client_id") == ClID)
+                .Select(x => x.Field<string>("phonescol"));
+            foreach (var o in telephonesQuery)
+            {
+                result.Add(o);
+            }
+            return result;
+        }
+
+
+        public void SetTelephones(UInt16 ClID, List<string> telephones)
+        {
+            foreach (var row in mainDataSet.Tables["phones"].Select("client_id = " + ClID))
+                row.Delete(); //MSDN: row doesn't physicaly deleted - just marked for deleting on AcceptChanges.
+//            UpdateTable("phones");
+            foreach (var s in telephones)
+            {
+                var row = mainDataSet.Tables["phones"].NewRow();
+                row["client_id"] = ClID;
+                row["phonescol"] = s;
+                mainDataSet.Tables["phones"].Rows.Add(row);
+            }
+            UpdateTable("phones");
+        }
+
         /// <summary>
-        /// Класс - идея кешировать активно пользуемое в списки как более быстрый доступ нежели в таблицу. Сгодится как для dataset, так и для чистого sql.
+        /// Класс - идея. Кешировать активно пользуемое в списки как более быстрый доступ нежели в таблицу. Сгодится как для dataset, так и для чистого sql.
         /// С другой стороны, если мы в бд добавляем запись, надо говорить о неактуальном кеше...
         /// </summary>
         class QueryCache
         {
             private List<ClientCard> clientCache; //при вызове формы редактирования нужен полный список
             private List<SpecialistCard> specialistCache; //при вызове формы редактирования нужен полный список
-            private List<Specialization> specializationCache; //при вызове формы редактирования нужен полный список
+            //private List<string> specializationCache; //при вызове формы редактирования нужен полный список
             private List<CabinetCard> cabinetCache; //при вызове формы редактирования нужен полный список
             //private List<FIO> fioCache; //из-за полных clientCache и specialistCache надобность в этом отпадает.
             private List<Entity> entitiesCache;
@@ -358,11 +386,11 @@ namespace Scheduler
                 get { return specialistCache; }
                 set { specialistCache = value; }
             }
-            public List<Specialization> SpecializationCache
-            {
-                get { return specializationCache; }
-                set { specializationCache = value; }
-            }
+//             public List<string> SpecializationCache
+//             {
+//                 get { return specializationCache; }
+//                 set { specializationCache = value; }
+//             }
             public List<CabinetCard> CabinetCache
             {
                 get { return cabinetCache; }
@@ -383,7 +411,7 @@ namespace Scheduler
             {
                 clientCache = new List<ClientCard>();
                 specialistCache = new List<SpecialistCard>();
-                specializationCache = new List<Specialization>();
+                //specializationCache = new List<string>();
                 cabinetCache = new List<CabinetCard>();
                 //fioCache = new List<FIO>();
                 entitiesCache = new List<Entity>();

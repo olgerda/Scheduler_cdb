@@ -23,7 +23,7 @@ namespace Scheduler
         private List<string> errorlist;
 
         private List<SpecialistCard> specialistList;
-        private List<Specialization> specializationList;
+        private List<string> specializationList;
         private List<ClientCard> clientList;
         private List<CabinetCard> cabinetList;
 
@@ -82,7 +82,7 @@ namespace Scheduler
             if (chkRent.Checked && !toReturn.client.comment.StartsWith("АРЕНДА"))
             {
                 ClientCard cli = clientList.FirstOrDefault(x => x.comment.StartsWith("АРЕНДА"));
-                if (cli == default(ClientCard)) cli = new ClientCard(new FIO(""), newComment:"АРЕНДА");
+                if (cli == default(ClientCard)) cli = new ClientCard("", newComment:"АРЕНДА");
                 toReturn.client = cli;
             }
             else
@@ -126,11 +126,11 @@ namespace Scheduler
                 chkRent.Checked = false;
 
                 cmbbxClientFIO.Text = toReturn.client.Name.ToString();
-                txtClientTelephone.Text = toReturn.client.telNumber.ToString();
+                txtClientTelephone.Text = toReturn.client.TelNumbers[0].ToString();
                 txtClientComment.Text = toReturn.client.comment;
                 chkClientinRedBox.Checked = toReturn.client.inRedList;
 
-                cmbbxSpecialization.Text = toReturn.specialization.Title;
+                cmbbxSpecialization.Text = toReturn.specialization;
             }
             else
                 chkRent.Checked = true;
@@ -261,7 +261,7 @@ namespace Scheduler
                 cliList = clientList;
             else
             {
-                cliList = clientList.Where(x => x.telNumber.ToString().StartsWith(txtClientTelephone.Text)).ToList();
+                cliList = clientList.Where(x => x.TelNumbers[0].ToString().StartsWith(txtClientTelephone.Text)).ToList();
             }
 
             cmbbxClientFIO.DataSource = cliList;

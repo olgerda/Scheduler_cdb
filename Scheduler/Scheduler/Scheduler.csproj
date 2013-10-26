@@ -64,6 +64,12 @@
     <Compile Include="DetailViews\ClientCardsView.Designer.cs">
       <DependentUpon>ClientCardsView.cs</DependentUpon>
     </Compile>
+    <Compile Include="DetailViews\ClientInfoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DetailViews\ClientInfoControl.Designer.cs">
+      <DependentUpon>ClientInfoControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="DetailViews\NewCards\NewCabinetCard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +128,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DetailViews\ClientCardsView.resx">
+      <DependentUpon>ClientCardsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DetailViews\ClientInfoControl.resx">
+      <DependentUpon>ClientInfoControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ReceptionWorkaround\EditReception.resx">
       <DependentUpon>EditReception.cs</DependentUpon>
     </EmbeddedResource>
