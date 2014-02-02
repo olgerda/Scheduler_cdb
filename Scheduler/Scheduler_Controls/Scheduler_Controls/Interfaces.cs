@@ -62,12 +62,12 @@ namespace Scheduler_Controls_Interfaces
     public interface IReception
     {
         ITimeInterval ReceptionTimeInterval { get; set; }
-        IClient client { get; set; }
-        ISpecialist specialist { get; set; }
-        ICabinet cabinet { get; set; }
+        IClient Client { get; set; }
+        ISpecialist Specialist { get; set; }
+        ICabinet Cabinet { get; set; }
 
-        string specialization { get; set; }
-        bool rent { get; set; }
+        string Specialization { get; set; }
+        bool Rent { get; set; }
 
         /// <summary>
         /// Проверить данные на валидность.
@@ -84,5 +84,10 @@ namespace Scheduler_Controls_Interfaces
         DateTime Date { get; }
         DateTime StartDate { get; set; }
         DateTime EndDate { get; set; }
+    }
+
+    public interface ISpecializationList
+    {
+        HashSet<string> SpecializationList { get; set; }
     }
 }

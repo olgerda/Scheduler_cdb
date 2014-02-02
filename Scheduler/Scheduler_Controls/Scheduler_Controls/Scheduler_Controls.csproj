@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddString.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddString.Designer.cs">
+      <DependentUpon>AddString.cs</DependentUpon>
+    </Compile>
     <Compile Include="AddTelNumber.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,9 +81,18 @@
     <Compile Include="SpecialistInfo.Designer.cs">
       <DependentUpon>SpecialistInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="SpecializationsInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SpecializationsInfo.Designer.cs">
+      <DependentUpon>SpecializationsInfo.cs</DependentUpon>
+    </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AddString.resx">
+      <DependentUpon>AddString.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AddTelNumber.resx">
       <DependentUpon>AddTelNumber.cs</DependentUpon>
     </EmbeddedResource>
@@ -92,6 +107,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SpecialistInfo.resx">
       <DependentUpon>SpecialistInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SpecializationsInfo.resx">
+      <DependentUpon>SpecializationsInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

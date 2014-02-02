@@ -154,13 +154,13 @@ namespace Scheduler_Controls
 
             RenewLists();
 
-            txtClientName.Text = reception.client.Name;
-            chkRent.Checked = reception.rent;
+            txtClientName.Text = reception.Client.Name;
+            chkRent.Checked = reception.Rent;
             dateDate.Value = reception.ReceptionTimeInterval.Date;
             dateTimeStart.Value = reception.ReceptionTimeInterval.StartDate;
             dateTimeEnd.Value = reception.ReceptionTimeInterval.EndDate;
 
-            txtTelephone.Text = reception.client.Telephones.First();
+            txtTelephone.Text = reception.Client.Telephones.First();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -175,12 +175,12 @@ namespace Scheduler_Controls
                 return false;
 
             return
-                reception.client.Name != txtClientName.Text ||
-                reception.client.Telephones.First() != txtTelephone.Text ||
-                reception.rent != chkRent.Checked ||
-                reception.cabinet.Name != cmbCabinet.SelectedText ||
-                reception.specialist.Name != cmbSpecialist.SelectedText ||
-                reception.specialization != cmbSpecialisation.SelectedText ||
+                reception.Client.Name != txtClientName.Text ||
+                reception.Client.Telephones.First() != txtTelephone.Text ||
+                reception.Rent != chkRent.Checked ||
+                reception.Cabinet.Name != cmbCabinet.SelectedText ||
+                reception.Specialist.Name != cmbSpecialist.SelectedText ||
+                reception.Specialization != cmbSpecialisation.SelectedText ||
                 reception.ReceptionTimeInterval.Date != dateDate.Value ||
                 reception.ReceptionTimeInterval.StartDate != dateTimeStart.Value ||
                 reception.ReceptionTimeInterval.EndDate != dateTimeEnd.Value;
@@ -190,16 +190,16 @@ namespace Scheduler_Controls
         {
             if (reception == null)
                 return;
-            reception.client.Name = txtClientName.Text;
+            reception.Client.Name = txtClientName.Text;
 
-            var tmp = reception.client.Telephones;
+            var tmp = reception.Client.Telephones;
             tmp.Add(txtTelephone.Text);
-            reception.client.Telephones = tmp;
+            reception.Client.Telephones = tmp;
 
-            reception.rent = chkRent.Checked;
-            reception.cabinet.Name = cmbCabinet.SelectedText;
-            reception.specialist.Name = cmbSpecialist.SelectedText;
-            reception.specialization = cmbSpecialisation.SelectedText;
+            reception.Rent = chkRent.Checked;
+            reception.Cabinet.Name = cmbCabinet.SelectedText;
+            reception.Specialist.Name = cmbSpecialist.SelectedText;
+            reception.Specialization = cmbSpecialisation.SelectedText;
             reception.ReceptionTimeInterval.StartDate = dateTimeStart.Value;
             reception.ReceptionTimeInterval.EndDate = dateTimeEnd.Value;
 
