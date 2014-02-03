@@ -22,7 +22,7 @@ namespace Scheduler_Controls
 
         private void btnOK_Click_1(object sender, EventArgs e)
         {
-            number = this.maskedTextBox1.Text;
+            number = this.maskedTextBox1.Text.Trim();
         }
     }
 }

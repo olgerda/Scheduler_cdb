@@ -23,6 +23,13 @@ namespace Scheduler_Controls_Interfaces
         bool BlackListed { get; set; }
 
         HashSet<string> Telephones { get; set; }
+
+        /// <summary>
+        /// Проверить, входит ли переданный телефон в список телефонов клиента.
+        /// </summary>
+        /// <param name="telNumber">Строка с номером телефона.</param>
+        /// <returns>true если входит.</returns>
+        bool CheckTelephone(string telNumber);
 // 
 //         /// <summary>
 //         /// Добавляет (если ещё нет) или удаляет (если уже есть) номер телефона.
@@ -89,5 +96,19 @@ namespace Scheduler_Controls_Interfaces
     public interface ISpecializationList
     {
         HashSet<string> SpecializationList { get; set; }
+    }
+
+    public interface ITelephone
+    {
+        /// <summary>
+        /// Номер телефона как строка из цифр.
+        /// </summary>
+        string TelephoneNumber { get; set; }
+
+        /// <summary>
+        /// Номер телефона в виде отформатированной строки.
+        /// </summary>
+        string FormattedTelephoneNumber { get; }
+
     }
 }

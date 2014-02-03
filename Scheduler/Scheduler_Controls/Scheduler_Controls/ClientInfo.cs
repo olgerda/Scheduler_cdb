@@ -20,6 +20,9 @@ namespace Scheduler_Controls
         public ClientInfo()
         {
             InitializeComponent();
+
+            lstTelephones.DisplayMember = "FormattedTelephoneNumber";
+            lstTelephones.ValueMember = "FormattedTelephoneNumber";
         }
 
         public ClientInfo(IClient client)
@@ -34,7 +37,20 @@ namespace Scheduler_Controls
         /// </summary>
         public IClient Client
         {
-            get { return client; }
+            get 
+            {
+                if (SomethingChanged())
+                {
+                    var dresult = MessageBox.Show("Сохранить изменения?", "Некоторые поля изменены.", MessageBoxButtons.YesNoCancel);
+                    if (dresult == DialogResult.Cancel)
+                        return null;
+                    if (dresult == DialogResult.OK)
+                    {
+                        SaveChanges();
+                    }
+                }
+                return client; 
+            }
             set
             {
                 if (SomethingChanged())
@@ -61,6 +77,8 @@ namespace Scheduler_Controls
             txtComment.Text = client.Comment;
             lstReceptions.Items.AddRange(client.Receptions.ToArray());
             lstTelephones.Items.AddRange(client.Telephones.ToArray());
+            lstTelephones.DisplayMember = "FormattedTelephoneNumber";
+            lstTelephones.ValueMember = "FormattedTelephoneNumber";
 
             chkBlackList.Checked = client.BlackListed;
 
@@ -75,7 +93,7 @@ namespace Scheduler_Controls
                 client.Name != txtFIO.Text ||
                 client.Comment != txtComment.Text ||
                 client.BlackListed != chkBlackList.Checked ||
-                client.Telephones.SequenceEqual(lstTelephones.Items.Cast<string>());
+                client.Telephones.SequenceEqual(lstTelephones.Items.Cast<ITelephone>().Select(f => f.TelephoneNumber));
         }
 
         private void btnRemoveTelephone_Click(object sender, EventArgs e)
@@ -97,11 +115,13 @@ namespace Scheduler_Controls
                 Point p = btnAddTelephone.PointToScreen(btnAddTelephone.Location);
                 p.Y -= this.Height;
                 f.Location = p;
-                if (f.ShowDialog() == DialogResult.OK)
+                if (f.ShowDialog() == DialogResult.OK &&
+                    !String.IsNullOrWhiteSpace(f.number) && 
+                    !lstTelephones.Items.Cast<ITelephone>().Select(t => t.TelephoneNumber).ToList().Contains(f.number))
                 {
-                    if (!String.IsNullOrWhiteSpace(f.number) && !lstTelephones.Items.Cast<string>().ToList().Contains(f.number))
-                        lstTelephones.Items.Add(f.number);
-                    lstTelephones.SelectedItem = f.number;
+                    TelephoneNumberImpl tel = new TelephoneNumberImpl(f.number);
+                    lstTelephones.Items.Add(tel);
+                    lstTelephones.SelectedItem = tel;
                 }
             }
         }
@@ -117,8 +137,7 @@ namespace Scheduler_Controls
             client.Name = txtFIO.Text;
             client.Comment = txtComment.Text;
 
-            var telList = new HashSet<string>(lstTelephones.Items.AsQueryable().Cast<string>());
-            client.Telephones = telList;
+            client.Telephones = new HashSet<string>(lstTelephones.Items.Cast<ITelephone>().Select(f => f.TelephoneNumber));
 //             var telListToRemove = client.Telephones.Except(telList);
 //             var telListToAdd = telList.Except(client.Telephones);
 // 
@@ -128,5 +147,44 @@ namespace Scheduler_Controls
             client.BlackListed = chkBlackList.Checked;
         }
 
+
+        private class TelephoneNumberImpl : ITelephone
+        {
+            string telNumber;
+
+            public TelephoneNumberImpl(string telNum)
+            {
+                TelephoneNumber = telNum;
+            }
+
+            public string TelephoneNumber
+            {
+                get
+                {
+                    return telNumber;
+                }
+                set
+                {
+                    if (value.All(c => Char.IsDigit(c)))
+                    {
+                        telNumber = value;
+                        if (telNumber.Length == 10)
+                            telNumber = "7" + telNumber;
+                    }
+                }
+            }
+
+            public string FormattedTelephoneNumber
+            {
+                get 
+                {
+                    if (String.IsNullOrWhiteSpace(telNumber))
+                        return String.Empty;
+                    if (telNumber.Length < 11)
+                        return telNumber;
+                    return "+" + telNumber[0] + "(" + telNumber.Substring(1, 3) + ")" + telNumber.Substring(4, 3) + "-" + telNumber.Substring(7);
+                }
+            }
+        }
     }
 }
