@@ -50,6 +50,12 @@
     </Compile>
     <Compile Include="Interfaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecializationListEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SpecializationListEdit.Designer.cs">
+      <DependentUpon>SpecializationListEdit.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Scheduler_Controls\Scheduler_Controls.csproj">
@@ -60,6 +66,9 @@
   <ItemGroup>
     <EmbeddedResource Include="FindClientCard.resx">
       <DependentUpon>FindClientCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SpecializationListEdit.resx">
+      <DependentUpon>SpecializationListEdit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

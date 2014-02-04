@@ -14,6 +14,8 @@ namespace Scheduler_Controls
     {
         private ICabinet cab;
 
+        public event SaveChangesHandler<ICabinet> OnSaveChanges;
+
         public CabinetInfo()
         {
             InitializeComponent();
@@ -74,6 +76,9 @@ namespace Scheduler_Controls
                 return;
             cab.Name = txtName.Text;
             cab.Availability = chkAvailable.Checked;
+
+            if (OnSaveChanges != null)
+                OnSaveChanges(this, new SaveChangesEventArgs<ICabinet>(cab));
         }
     }
 }

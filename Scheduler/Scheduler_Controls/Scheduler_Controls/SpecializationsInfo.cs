@@ -14,6 +14,8 @@ namespace Scheduler_Controls
     {
         private ISpecializationList specialisationsList;
 
+        public event SaveChangesHandler<ISpecializationList> OnSaveChanges;
+
         public SpecializationsInfo()
         {
             InitializeComponent();
@@ -22,13 +24,17 @@ namespace Scheduler_Controls
         public SpecializationsInfo(ISpecializationList SpecialisationsList)
         {
             InitializeComponent();
-            UpdateList(SpecialisationsList);
+            SpecializationList = SpecialisationsList;
         }
 
-        public void UpdateList(ISpecializationList SpecialisationsList)
+        public ISpecializationList SpecializationList
         {
-            this.specialisationsList = SpecialisationsList;
-            InitializeSpecializationList();
+            get { return specialisationsList; }
+            set
+            {
+                specialisationsList = value;
+                InitializeSpecializationList();
+            }
         }
 
         void InitializeSpecializationList()
@@ -52,7 +58,7 @@ namespace Scheduler_Controls
             else
                 foreach (var item in new List<string>(lstSpecializations.SelectedItems.Cast<string>()))
                     lstSpecializations.Items.Remove(item);
-            
+
         }
 
         bool SomethingChanged()
@@ -67,6 +73,8 @@ namespace Scheduler_Controls
             if (specialisationsList == null)
                 return;
             specialisationsList.SpecializationList = new HashSet<string>(lstSpecializations.Items.Cast<string>());
+            if (OnSaveChanges != null)
+                OnSaveChanges(this, new SaveChangesEventArgs<ISpecializationList>(specialisationsList));
         }
 
         private void btnCommit_Click(object sender, EventArgs e)
@@ -83,7 +91,7 @@ namespace Scheduler_Controls
                 Point p = btnAdd.PointToScreen(btnAdd.Location);
                 p.Y -= this.Height;
                 f.Location = p;
-                if (f.ShowDialog() == DialogResult.OK && 
+                if (f.ShowDialog() == DialogResult.OK &&
                     !lstSpecializations.Items.Cast<string>().ToList().Contains(f.TextInputed))
                     lstSpecializations.Items.Add(f.TextInputed);
                 lstSpecializations.SelectedIndex = -1;

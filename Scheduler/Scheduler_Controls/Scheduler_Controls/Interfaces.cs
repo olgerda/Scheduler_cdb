@@ -6,6 +6,14 @@ using System.Text;
 namespace Scheduler_Controls_Interfaces
 {
     /// <summary>
+    /// Интерфейс, обобщающий значимые. Для типизированных template.
+    /// </summary>
+    public interface IDummy
+    {
+
+    }
+
+    /// <summary>
     /// Коренной интерфейс для сущностей, имеющих имя/название.
     /// </summary>
     public interface INamedEntity
@@ -16,7 +24,7 @@ namespace Scheduler_Controls_Interfaces
     /// <summary>
     /// Интерфейс клиента.
     /// </summary>
-    public interface IClient : INamedEntity
+    public interface IClient : INamedEntity, IDummy
     {
         string Comment { get; set; }
 
@@ -30,11 +38,11 @@ namespace Scheduler_Controls_Interfaces
         /// <param name="telNumber">Строка с номером телефона.</param>
         /// <returns>true если входит.</returns>
         bool CheckTelephone(string telNumber);
-// 
-//         /// <summary>
-//         /// Добавляет (если ещё нет) или удаляет (если уже есть) номер телефона.
-//         /// </summary>
-//         string Telephone { set; }
+        // 
+        //         /// <summary>
+        //         /// Добавляет (если ещё нет) или удаляет (если уже есть) номер телефона.
+        //         /// </summary>
+        //         string Telephone { set; }
 
         List<string> Receptions { get; }
     }
@@ -42,23 +50,23 @@ namespace Scheduler_Controls_Interfaces
     /// <summary>
     /// Интерфейс специалиста.
     /// </summary>
-    public interface ISpecialist : INamedEntity
+    public interface ISpecialist : INamedEntity, IDummy
     {
         bool NotWorking { get; set; }
 
         HashSet<string> Specialisations { get; set; }
 
-//         /// <summary>
-//         /// Добавляет (если ещё нет) или удаляет (если уже есть) специализацию.
-//         /// </summary>
-//         string Specialisation { set; }
+        //         /// <summary>
+        //         /// Добавляет (если ещё нет) или удаляет (если уже есть) специализацию.
+        //         /// </summary>
+        //         string Specialisation { set; }
 
     }
 
     /// <summary>
     /// Интерфейс кабинета.
     /// </summary>
-    public interface ICabinet : INamedEntity
+    public interface ICabinet : INamedEntity, IDummy
     {
         bool Availability { get; set; }
     }
@@ -66,7 +74,7 @@ namespace Scheduler_Controls_Interfaces
     /// <summary>
     /// Интерфейс записи на приём.
     /// </summary>
-    public interface IReception
+    public interface IReception: IDummy
     {
         ITimeInterval ReceptionTimeInterval { get; set; }
         IClient Client { get; set; }
@@ -93,7 +101,7 @@ namespace Scheduler_Controls_Interfaces
         DateTime EndDate { get; set; }
     }
 
-    public interface ISpecializationList
+    public interface ISpecializationList: IDummy
     {
         HashSet<string> SpecializationList { get; set; }
     }
@@ -110,5 +118,26 @@ namespace Scheduler_Controls_Interfaces
         /// </summary>
         string FormattedTelephoneNumber { get; }
 
+    }
+
+    public interface IFactory
+    {
+        T Create<T>();
+    }
+
+    public delegate void SaveChangesHandler<T>(object source, SaveChangesEventArgs<T> e) where T: IDummy;
+
+    public class SaveChangesEventArgs<T> : EventArgs where T: IDummy
+    {
+        private T ChangedEntity;
+        public SaveChangesEventArgs(T input)
+        {
+            ChangedEntity = input;
+        }
+
+        public T Entity
+        {
+            get { return ChangedEntity; }
+        }
     }
 }

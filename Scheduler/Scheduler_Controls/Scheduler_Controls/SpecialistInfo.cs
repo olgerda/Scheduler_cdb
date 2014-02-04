@@ -16,6 +16,8 @@ namespace Scheduler_Controls
         private ISpecialist spec;
         private IEnumerable<string> specialisationsList;
 
+        public event SaveChangesHandler<ISpecialist> OnSaveChanges;
+
         public SpecialistInfo()
         {
             InitializeComponent();
@@ -88,6 +90,9 @@ namespace Scheduler_Controls
             spec.Name = txtName.Text;
             spec.NotWorking = chkNotWorking.Checked;
             spec.Specialisations = new HashSet<string>(lstSpecialisations.CheckedItems.Cast<string>());
+
+            if (OnSaveChanges != null)
+                OnSaveChanges(this, new SaveChangesEventArgs<ISpecialist>(spec));
         }
     }
 }

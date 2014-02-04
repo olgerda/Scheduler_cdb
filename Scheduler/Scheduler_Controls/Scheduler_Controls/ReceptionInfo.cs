@@ -21,6 +21,8 @@ namespace Scheduler_Controls
         private IReception reception;
         private ShowModes mode;
 
+        public event SaveChangesHandler<IReception> OnSaveChanges;
+
         public enum ShowModes
         {
             ReadExist,
@@ -205,7 +207,11 @@ namespace Scheduler_Controls
 
             string errorMessage = reception.Validate();
             if (errorMessage == null)
+            {
+                if (OnSaveChanges != null)
+                    OnSaveChanges(this, new SaveChangesEventArgs<IReception>(reception));
                 return;
+            }
 
             MessageBox.Show(errorMessage, "Ошибка при сохранении результатов.", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }

@@ -17,6 +17,8 @@ namespace Scheduler_Controls
     {
         private IClient client;
 
+        public event SaveChangesHandler<IClient> OnSaveChanges;
+
         public ClientInfo()
         {
             InitializeComponent();
@@ -145,6 +147,9 @@ namespace Scheduler_Controls
 //                 client.Telephone = s;
 
             client.BlackListed = chkBlackList.Checked;
+
+            if (OnSaveChanges != null)
+                OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));
         }
 
 

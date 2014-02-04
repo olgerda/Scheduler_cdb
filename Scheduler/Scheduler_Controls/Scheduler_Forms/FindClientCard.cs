@@ -17,6 +17,8 @@ namespace Scheduler_Forms
 
         IClient selectedClient;
 
+        IFactory entityFactory;
+
         public FindClientCard()
         {
             InitializeComponent();
@@ -24,18 +26,19 @@ namespace Scheduler_Forms
             StartInit();
         }
 
-        public FindClientCard(IClientList clientList)
+        public FindClientCard(IClientList clientList, IFactory entityFactory)
         {
             InitializeComponent();
 
             this.clientList = clientList;
+            this.entityFactory = entityFactory;
 
             StartInit();
         }
 
         void StartInit()
         {
-            grpEditMode.Location = grpSelectClient.Location;
+            //grpEditMode.Location = grpSelectClient.Location;
 
             lstClientList.DisplayMember = "Name";
             if (clientList != null)
@@ -48,6 +51,13 @@ namespace Scheduler_Forms
             customAutoComplete = new AutoCompleteStringCollection();
             customAutoComplete.AddRange(lstClientList.Items.Cast<IClient>().SelectMany(c => c.Telephones).ToArray());
             txtTelephone.AutoCompleteCustomSource = customAutoComplete;
+
+            clientInfoCard.OnSaveChanges += new SaveChangesHandler<IClient>(clientInfoCard_OnSaveChanges);
+        }
+
+        void clientInfoCard_OnSaveChanges(object source, SaveChangesEventArgs<IClient> e)
+        {
+            DeactivateEditMode();
         }
 
         IClientList ClientList
@@ -58,6 +68,12 @@ namespace Scheduler_Forms
                 clientList = value;
                 StartInit();
             }
+        }
+
+        IFactory EntityFactory
+        {
+            get { return entityFactory; }
+            set { entityFactory = value; }
         }
 
         IClient SelectedClient
@@ -80,7 +96,7 @@ namespace Scheduler_Forms
         private void ActivateEditMode(IClient clientInfo)
         {
             clientInfoCard.Client = clientInfo;
-            grpSelectClient.Visible = false;
+            /*//grpSelectClient.Visible = false;*/
             grpSelectClient.Enabled = false;
 
             grpEditMode.Visible = true;
@@ -101,7 +117,7 @@ namespace Scheduler_Forms
                 clientInfoCard.Enabled = false;
             }
             return result;
-
+            //return null;
         }
 
         private void btnEditModeOff_Click(object sender, EventArgs e)
@@ -111,9 +127,9 @@ namespace Scheduler_Forms
 
         private void btnAddClient_Click(object sender, EventArgs e)
         {
-//             IClient newClient = new IClient();//IClient.CreateBlank();
-//             ActivateEditMode(newClient);
-//             clientList.List.Add(newClient);
+            IClient newClient = entityFactory.Create<IClient>();
+            ActivateEditMode(newClient);
+            clientList.List.Add(newClient);
         }
 
         private void lstClientList_SelectedIndexChanged(object sender, EventArgs e)
