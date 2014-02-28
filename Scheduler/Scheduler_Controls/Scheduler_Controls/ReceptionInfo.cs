@@ -14,14 +14,19 @@ namespace Scheduler_Controls
 
     public partial class ReceptionInfo : UserControl
     {
-        private IEnumerable<string> cabinetList;
-        private IEnumerable<string> specialistList;
+        private IEnumerable<ICabinet> cabinetList;
+        private IEnumerable<ISpecialist> specialistList;
         private IEnumerable<string> specialisationList;
+
+        private IClient clientOnReception = null;
 
         private IReception reception;
         private ShowModes mode;
 
         public event SaveChangesHandler<IReception> OnSaveChanges;
+        public event ShowClientsHandler OnShowClientsButtonClicked;
+        public event CreateChildReceptionHandler OnCreateChildReceptionClicked;
+        public event CancelReceptionHandler OnCancelReceptionClicked;
 
         public enum ShowModes
         {
@@ -42,7 +47,7 @@ namespace Scheduler_Controls
             SetMode();
         }
 
-        public ReceptionInfo(IEnumerable<string> cabinetList, IEnumerable<string> specialistList, IEnumerable<string> specialisationList, ShowModes mode = ShowModes.CreateNew)
+        public ReceptionInfo(IEnumerable<ICabinet> cabinetList, IEnumerable<ISpecialist> specialistList, IEnumerable<string> specialisationList, ShowModes mode = ShowModes.CreateNew)
         {
             InitializeComponent();
             this.mode = mode;
@@ -52,7 +57,7 @@ namespace Scheduler_Controls
             this.specialisationList = specialisationList;
         }
 
-        public ReceptionInfo(IEnumerable<string> cabinetList, IEnumerable<string> specialistList, IEnumerable<string> specialisationList, IReception reception, ShowModes mode = ShowModes.CreateNew)
+        public ReceptionInfo(IEnumerable<ICabinet> cabinetList, IEnumerable<ISpecialist> specialistList, IEnumerable<string> specialisationList, IReception reception, ShowModes mode = ShowModes.CreateNew)
         {
             InitializeComponent();
             this.mode = mode;
@@ -64,7 +69,7 @@ namespace Scheduler_Controls
             InitializeReceptionInfo();
         }
 
-        public void UpdateLists(IEnumerable<string> cabinetList, IEnumerable<string> specialistList, IEnumerable<string> specialisationList)
+        public void UpdateLists(IEnumerable<ICabinet> cabinetList, IEnumerable<ISpecialist> specialistList, IEnumerable<string> specialisationList)
         {
             this.cabinetList = cabinetList;
             this.specialistList = specialistList;
@@ -80,7 +85,21 @@ namespace Scheduler_Controls
 
         public IReception Reception
         {
-            get { return reception; }
+            get
+            {
+                if (SomethingChanged())
+                {
+                    var dresult = MessageBox.Show("Сохранить изменения?", "Некоторые поля изменены.", MessageBoxButtons.YesNoCancel);
+                    if (dresult == DialogResult.Cancel)
+                        return null;
+                    if (dresult == DialogResult.OK)
+                    {
+                        SaveChanges();
+                    }
+                }
+
+                return reception;
+            }
             set
             {
                 if (SomethingChanged())
@@ -98,6 +117,24 @@ namespace Scheduler_Controls
             }
         }
 
+        public IClient ClientOnReception
+        {
+            get
+            {
+                clientOnReception.Name = txtClientName.Text;
+                clientOnReception.Telephones.Add(txtTelephone.Text);
+                return clientOnReception;
+            }
+            set
+            {
+                clientOnReception = value;
+                if (clientOnReception == null)
+                    return;
+                txtClientName.Text = clientOnReception.Name;
+                txtTelephone.Text = clientOnReception.Telephones.FirstOrDefault();
+            }
+        }
+
         void SetMode()
         {
             switch (mode)
@@ -112,9 +149,9 @@ namespace Scheduler_Controls
                     btnCancelReception.Enabled = false;
                     btnCreateChildReception.Enabled = false;
                     if (reception != null)
-                        btnShowClientCard.Enabled = true;                    
+                        btnShowClientCard.Enabled = true;
                     else
-                        btnShowClientCard.Enabled = false;                    
+                        btnShowClientCard.Enabled = false;
                     break;
                 case ShowModes.ReadExist:
                     if (reception != null &&
@@ -132,20 +169,29 @@ namespace Scheduler_Controls
         {
             if (cabinetList != null)
             {
-                cmbCabinet.Items.Clear();
-                cmbCabinet.Items.AddRange(cabinetList.ToArray());
+                cmbCabinet.DataSource = cabinetList;
+
+                cmbCabinet.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                //                 cmbCabinet.Items.Clear();
+                //                 cmbCabinet.Items.AddRange(cabinetList.ToArray());
             }
 
             if (specialisationList != null)
             {
-                cmbSpecialisation.Items.Clear();
-                cmbSpecialisation.Items.AddRange(specialisationList.ToArray());
+                cmbSpecialisation.DataSource = specialisationList;
+
+                cmbSpecialisation.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                //                 cmbSpecialisation.Items.Clear();
+                //                 cmbSpecialisation.Items.AddRange(specialisationList.ToArray());
             }
 
             if (specialistList != null)
             {
-                cmbSpecialist.Items.Clear();
-                cmbSpecialist.Items.AddRange(specialistList.ToArray());
+                cmbSpecialist.DataSource = specialistList;
+
+                cmbSpecialist.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                //                 cmbSpecialist.Items.Clear();
+                //                 cmbSpecialist.Items.AddRange(specialistList.ToArray());
             }
         }
 
@@ -156,13 +202,14 @@ namespace Scheduler_Controls
 
             RenewLists();
 
-            txtClientName.Text = reception.Client.Name;
+            //txtClientName.Text = reception.Client.Name;
             chkRent.Checked = reception.Rent;
             dateDate.Value = reception.ReceptionTimeInterval.Date;
             dateTimeStart.Value = reception.ReceptionTimeInterval.StartDate;
             dateTimeEnd.Value = reception.ReceptionTimeInterval.EndDate;
 
-            txtTelephone.Text = reception.Client.Telephones.First();
+            //txtTelephone.Text = reception.Client.Telephones.FirstOrDefault();
+            ClientOnReception = reception.Client;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -178,7 +225,7 @@ namespace Scheduler_Controls
 
             return
                 reception.Client.Name != txtClientName.Text ||
-                reception.Client.Telephones.First() != txtTelephone.Text ||
+                !reception.Client.Telephones.Contains(txtTelephone.Text) ||
                 reception.Rent != chkRent.Checked ||
                 reception.Cabinet.Name != cmbCabinet.SelectedText ||
                 reception.Specialist.Name != cmbSpecialist.SelectedText ||
@@ -192,11 +239,12 @@ namespace Scheduler_Controls
         {
             if (reception == null)
                 return;
-            reception.Client.Name = txtClientName.Text;
-
-            var tmp = reception.Client.Telephones;
-            tmp.Add(txtTelephone.Text);
-            reception.Client.Telephones = tmp;
+            reception.Client = ClientOnReception;
+            //             reception.Client.Name = txtClientName.Text;
+            // 
+            //             var tmp = reception.Client.Telephones;
+            //             tmp.Add(txtTelephone.Text);
+            //             reception.Client.Telephones = tmp;
 
             reception.Rent = chkRent.Checked;
             reception.Cabinet.Name = cmbCabinet.SelectedText;
@@ -225,6 +273,29 @@ namespace Scheduler_Controls
         private void chkRent_CheckedChanged(object sender, EventArgs e)
         {
             pnlClient.Enabled = !chkRent.Checked;
+        }
+
+        private void btnShowClientCard_Click(object sender, EventArgs e)
+        {
+            if (OnShowClientsButtonClicked != null)
+                OnShowClientsButtonClicked(this, new ShowClientsEventsArgs(txtClientName.Text, txtTelephone.Text));
+        }
+
+        private void btnCreateChildReception_Click(object sender, EventArgs e)
+        {
+            if (OnCreateChildReceptionClicked != null)
+                OnCreateChildReceptionClicked(this, new CreateChildReceptionEventArgs(reception));
+        }
+
+        private void btnCancelReception_Click(object sender, EventArgs e)
+        {
+            if (OnCancelReceptionClicked != null)
+                OnCancelReceptionClicked(this, new CancelReceptionEventArgs(reception));
+        }
+
+        private void cmbSpecialist_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

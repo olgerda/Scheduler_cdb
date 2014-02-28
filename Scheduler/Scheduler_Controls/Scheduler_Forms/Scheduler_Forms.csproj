@@ -42,6 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CabinetListEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CabinetListEdit.Designer.cs">
+      <DependentUpon>CabinetListEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="FindClientCard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -50,6 +56,18 @@
     </Compile>
     <Compile Include="Interfaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceptionInfoEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReceptionInfoEdit.Designer.cs">
+      <DependentUpon>ReceptionInfoEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SpecialistListEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SpecialistListEdit.Designer.cs">
+      <DependentUpon>SpecialistListEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="SpecializationListEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,8 +82,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CabinetListEdit.resx">
+      <DependentUpon>CabinetListEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FindClientCard.resx">
       <DependentUpon>FindClientCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReceptionInfoEdit.resx">
+      <DependentUpon>ReceptionInfoEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SpecialistListEdit.resx">
+      <DependentUpon>SpecialistListEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SpecializationListEdit.resx">
       <DependentUpon>SpecializationListEdit.cs</DependentUpon>

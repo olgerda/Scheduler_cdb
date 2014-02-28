@@ -83,8 +83,9 @@
             this.btnShowClientCard.Name = "btnShowClientCard";
             this.btnShowClientCard.Size = new System.Drawing.Size(266, 23);
             this.btnShowClientCard.TabIndex = 18;
-            this.btnShowClientCard.Text = "Просмотреть карту клиента";
+            this.btnShowClientCard.Text = "Показать/выбрать карту клиента";
             this.btnShowClientCard.UseVisualStyleBackColor = true;
+            this.btnShowClientCard.Click += new System.EventHandler(this.btnShowClientCard_Click);
             // 
             // cmbSpecialist
             // 
@@ -93,6 +94,7 @@
             this.cmbSpecialist.Name = "cmbSpecialist";
             this.cmbSpecialist.Size = new System.Drawing.Size(217, 21);
             this.cmbSpecialist.TabIndex = 9;
+            this.cmbSpecialist.SelectedIndexChanged += new System.EventHandler(this.cmbSpecialist_SelectedIndexChanged);
             // 
             // btnCreateChildReception
             // 
@@ -102,6 +104,7 @@
             this.btnCreateChildReception.TabIndex = 16;
             this.btnCreateChildReception.Text = "Назначить следующий приём";
             this.btnCreateChildReception.UseVisualStyleBackColor = true;
+            this.btnCreateChildReception.Click += new System.EventHandler(this.btnCreateChildReception_Click);
             // 
             // btnCancelReception
             // 
@@ -111,6 +114,7 @@
             this.btnCancelReception.TabIndex = 17;
             this.btnCancelReception.Text = "Отменить приём";
             this.btnCancelReception.UseVisualStyleBackColor = true;
+            this.btnCancelReception.Click += new System.EventHandler(this.btnCancelReception_Click);
             // 
             // cmbSpecialisation
             // 

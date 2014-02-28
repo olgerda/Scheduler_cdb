@@ -41,29 +41,17 @@ namespace Scheduler_Controls
         {
             get 
             {
-                if (SomethingChanged())
+                if (SomethingChanged() && SaveChangesAbort())
                 {
-                    var dresult = MessageBox.Show("Сохранить изменения?", "Некоторые поля изменены.", MessageBoxButtons.YesNoCancel);
-                    if (dresult == DialogResult.Cancel)
-                        return null;
-                    if (dresult == DialogResult.OK)
-                    {
-                        SaveChanges();
-                    }
+                    return null;
                 }
                 return client; 
             }
             set
             {
-                if (SomethingChanged())
+                if (SomethingChanged() && SaveChangesAbort())
                 {
-                    var dresult = MessageBox.Show("Сохранить изменения?", "Некоторые поля изменены.", MessageBoxButtons.YesNoCancel);
-                    if (dresult == DialogResult.Cancel)
-                        return;
-                    if (dresult == DialogResult.OK)
-                    {
-                        SaveChanges();
-                    }
+                    return;
                 }
                 client = value;
                 InitializeClientInfo();
@@ -132,6 +120,22 @@ namespace Scheduler_Controls
         {
             if (SomethingChanged())
                 SaveChanges();
+        }
+
+        /// <summary>
+        /// Задать вопрос о необходимости сохранения внесённых изменений.
+        /// </summary>
+        /// <returns>true - если была нажата кнопка Cancel (Отмена), т.е. процесс сохранения изменений отменён и надо вернуться к редактированию.</returns>
+        private bool SaveChangesAbort()
+        {
+            var dresult = MessageBox.Show("Сохранить изменения?", "Некоторые поля изменены.", MessageBoxButtons.YesNoCancel);
+            if (dresult == DialogResult.Cancel)
+                return true;
+            if (dresult == DialogResult.OK)
+            {
+                SaveChanges();
+            }
+            return false;
         }
 
         private void SaveChanges()

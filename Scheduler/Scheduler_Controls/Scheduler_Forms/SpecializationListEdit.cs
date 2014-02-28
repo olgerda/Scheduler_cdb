@@ -35,7 +35,7 @@ namespace Scheduler_Forms
             set 
             { 
                 specList = value;
-                specializationsInfo.SpecializationList = specList;
+                Init();
             }
         }
 

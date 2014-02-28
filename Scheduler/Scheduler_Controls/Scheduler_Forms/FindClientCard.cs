@@ -23,7 +23,7 @@ namespace Scheduler_Forms
         {
             InitializeComponent();
 
-            StartInit();
+            Init();
         }
 
         public FindClientCard(IClientList clientList, IFactory entityFactory)
@@ -33,16 +33,18 @@ namespace Scheduler_Forms
             this.clientList = clientList;
             this.entityFactory = entityFactory;
 
-            StartInit();
+            Init();
         }
 
-        void StartInit()
+        void Init()
         {
             //grpEditMode.Location = grpSelectClient.Location;
 
             lstClientList.DisplayMember = "Name";
-            if (clientList != null)
-                lstClientList.DataSource = clientList.List;
+            if (clientList == null)
+                return;
+            
+            lstClientList.DataSource = clientList.List;
 
             var customAutoComplete = new AutoCompleteStringCollection();
             customAutoComplete.AddRange(lstClientList.Items.Cast<IClient>().Select(c => c.Name).ToArray());
@@ -60,25 +62,34 @@ namespace Scheduler_Forms
             DeactivateEditMode();
         }
 
-        IClientList ClientList
+        public IClientList ClientList
         {
             get { return clientList; }
             set
             {
                 clientList = value;
-                StartInit();
+                Init();
             }
         }
 
-        IFactory EntityFactory
+        public IFactory EntityFactory
         {
             get { return entityFactory; }
             set { entityFactory = value; }
         }
 
-        IClient SelectedClient
+        public IClient SelectedClient
         {
             get { return selectedClient; }
+            set
+            {
+                selectedClient = value;
+                if (selectedClient == null) 
+                    return;
+                txtClientName.Text = selectedClient.Name;
+                txtTelephone.Text = selectedClient.Telephones.FirstOrDefault();
+                clientInfoCard.Client = selectedClient;
+            }
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -98,6 +109,7 @@ namespace Scheduler_Forms
             clientInfoCard.Client = clientInfo;
             /*//grpSelectClient.Visible = false;*/
             grpSelectClient.Enabled = false;
+            grpSelectClient.Visible = false;
 
             grpEditMode.Visible = true;
             grpEditMode.Enabled = true;
@@ -115,6 +127,12 @@ namespace Scheduler_Forms
                 grpEditMode.Visible = false;
                 grpEditMode.Enabled = false;
                 clientInfoCard.Enabled = false;
+
+                if (!clientList.List.Contains(result))
+                {
+                    clientList.List.Add(result);
+                }
+                lstClientList.SelectedItem = result;
             }
             return result;
             //return null;
@@ -136,18 +154,11 @@ namespace Scheduler_Forms
         {
             if (lstClientList.SelectedIndex == -1)
                 return;
-            selectedClient = (IClient)lstClientList.SelectedItem;
+            SelectedClient = (IClient)lstClientList.SelectedItem;
 
-            clientInfoCard.Client = selectedClient;
-            txtClientName.Text = selectedClient.Name;
-            txtTelephone.Text = selectedClient.Telephones.FirstOrDefault();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (lstClientList.SelectedIndex != -1)
-                selectedClient = (IClient)lstClientList.SelectedItem;
-            this.Close();
+//            clientInfoCard.Client = selectedClient;
+//             txtClientName.Text = selectedClient.Name;
+//             txtTelephone.Text = selectedClient.Telephones.FirstOrDefault();
         }
 
         private void txtClientName_TextChanged(object sender, EventArgs e)
@@ -171,6 +182,7 @@ namespace Scheduler_Forms
             else
                 lstClientList.SelectedIndex = -1;
         }
+
         
 
 

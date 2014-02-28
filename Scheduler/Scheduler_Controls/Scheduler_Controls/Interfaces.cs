@@ -19,6 +19,8 @@ namespace Scheduler_Controls_Interfaces
     public interface INamedEntity
     {
         string Name { get; set; }
+
+        string ToString();
     }
 
     /// <summary>
@@ -74,7 +76,7 @@ namespace Scheduler_Controls_Interfaces
     /// <summary>
     /// Интерфейс записи на приём.
     /// </summary>
-    public interface IReception: IDummy
+    public interface IReception : IDummy
     {
         ITimeInterval ReceptionTimeInterval { get; set; }
         IClient Client { get; set; }
@@ -89,6 +91,11 @@ namespace Scheduler_Controls_Interfaces
         /// </summary>
         /// <returns>null в случае отсутствия проблем. Сообщение с пояснениями, что не так, в случае ошибки.</returns>
         string Validate();
+
+        /// <summary>
+        /// Удалить информацию о себе из системы.
+        /// </summary>
+        void Dispose();
     }
 
     /// <summary>
@@ -101,7 +108,7 @@ namespace Scheduler_Controls_Interfaces
         DateTime EndDate { get; set; }
     }
 
-    public interface ISpecializationList: IDummy
+    public interface ISpecializationList : IDummy
     {
         HashSet<string> SpecializationList { get; set; }
     }
@@ -122,12 +129,15 @@ namespace Scheduler_Controls_Interfaces
 
     public interface IFactory
     {
-        T Create<T>();
+        T Create<T>() where T : IDummy;
     }
 
-    public delegate void SaveChangesHandler<T>(object source, SaveChangesEventArgs<T> e) where T: IDummy;
+    public delegate void SaveChangesHandler<T>(object source, SaveChangesEventArgs<T> e) where T : IDummy;
+    public delegate void ShowClientsHandler(object source, ShowClientsEventsArgs e);
+    public delegate void CreateChildReceptionHandler(object source, CreateChildReceptionEventArgs e);
+    public delegate void CancelReceptionHandler(object source, CancelReceptionEventArgs e);
 
-    public class SaveChangesEventArgs<T> : EventArgs where T: IDummy
+    public class SaveChangesEventArgs<T> : EventArgs where T : IDummy
     {
         private T ChangedEntity;
         public SaveChangesEventArgs(T input)
@@ -138,6 +148,37 @@ namespace Scheduler_Controls_Interfaces
         public T Entity
         {
             get { return ChangedEntity; }
+        }
+    }
+
+    public class ShowClientsEventsArgs : EventArgs
+    {
+        private string name;
+        private string telephone;
+
+        public ShowClientsEventsArgs(string Name = "", string Telephone = "")
+        {
+            name = Name;
+            telephone = Telephone;
+        }
+
+        public string Name { get { return name; } }
+        public string Telephone { get { return telephone; } }
+    }
+
+    public class CreateChildReceptionEventArgs : SaveChangesEventArgs<IReception>
+    {
+        public CreateChildReceptionEventArgs(IReception reception)
+            : base(reception)
+        {
+        }
+    }
+
+    public class CancelReceptionEventArgs : SaveChangesEventArgs<IReception>
+    {
+        public CancelReceptionEventArgs(IReception reception)
+            : base(reception)
+        {
         }
     }
 }

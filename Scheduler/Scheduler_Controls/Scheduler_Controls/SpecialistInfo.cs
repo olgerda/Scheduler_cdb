@@ -40,18 +40,19 @@ namespace Scheduler_Controls
 
         public ISpecialist Spec
         {
-            get { return spec; }
+            get 
+            {
+                if (SomethingChanged() && SaveChangesAbort())
+                {
+                        return null;
+                }
+                return spec; 
+            }
             set
             {
-                if (SomethingChanged())
+                if (SomethingChanged() && SaveChangesAbort())
                 {
-                    var dresult = MessageBox.Show("Сохранить изменения?", "Некоторые поля изменены.", MessageBoxButtons.YesNoCancel);
-                    if (dresult == DialogResult.Cancel)
-                        return;
-                    if (dresult == DialogResult.OK)
-                    {
-                        SaveChanges();
-                    }
+                    return;
                 }
                 spec = value;
                 InitializeSpecialistInfo();
@@ -81,6 +82,22 @@ namespace Scheduler_Controls
             return spec.Name != txtName.Text ||
                 spec.Specialisations.SequenceEqual(lstSpecialisations.CheckedItems.Cast<string>()) ||
                 spec.NotWorking != chkNotWorking.Checked;
+        }
+
+        /// <summary>
+        /// Задать вопрос о необходимости сохранения внесённых изменений.
+        /// </summary>
+        /// <returns>true - если была нажата кнопка Cancel (Отмена), т.е. процесс сохранения изменений отменён и надо вернуться к редактированию.</returns>
+        private bool SaveChangesAbort()
+        {
+            var dresult = MessageBox.Show("Сохранить изменения?", "Некоторые поля изменены.", MessageBoxButtons.YesNoCancel);
+            if (dresult == DialogResult.Cancel)
+                return true;
+            if (dresult == DialogResult.OK)
+            {
+                SaveChanges();
+            }
+            return false;
         }
 
         void SaveChanges()
