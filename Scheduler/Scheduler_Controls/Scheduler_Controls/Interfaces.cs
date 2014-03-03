@@ -103,6 +103,7 @@ namespace Scheduler_Controls_Interfaces
     /// </summary>
     public interface ITimeInterval
     {
+        void SetStartEnd(DateTime startDate, DateTime endDate);
         DateTime Date { get; }
         DateTime StartDate { get; set; }
         DateTime EndDate { get; set; }
@@ -129,7 +130,7 @@ namespace Scheduler_Controls_Interfaces
 
     public interface IFactory
     {
-        T Create<T>() where T : IDummy;
+        T Create<T>();// where T : IDummy;
     }
 
     public delegate void SaveChangesHandler<T>(object source, SaveChangesEventArgs<T> e) where T : IDummy;

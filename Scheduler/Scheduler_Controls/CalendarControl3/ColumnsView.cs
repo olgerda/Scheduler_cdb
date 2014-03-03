@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using CalendarControl3_Interfaces;
 
 namespace CalendarControl3
 {
@@ -109,10 +110,10 @@ namespace CalendarControl3
 
         void MakeTableFromInput()
         {
-            if (table == null || table.GetColumnCount() == 0) return;
+            if (table == null || table.ColumnCount == 0) return;
             //tableLeft = infoColumnWidth;
 
-            oneColumnWidth = (this.Width - infoColumnWidth) / table.GetColumnCount();
+            oneColumnWidth = (this.Width - infoColumnWidth) / table.ColumnCount;
 
             
             if (oneColumnWidth < minimumColumnWidth)
@@ -120,8 +121,8 @@ namespace CalendarControl3
                 oneColumnWidth = minimumColumnWidth;
             }
 
-            topLevel = table.GetMinValue();
-            bottomLevel = table.GetMaxValue();
+            topLevel = table.MinValue;
+            bottomLevel = table.MaxValue;
             
             headerHeight = 40;
             
@@ -135,7 +136,7 @@ namespace CalendarControl3
 
             hScrollBar1.Minimum = 0;
             hScrollBar1.Value = 0;
-            hScrollBar1.Maximum = table.GetColumnCount() > 0 ? table.GetColumnCount() - 1 : 0;
+            hScrollBar1.Maximum = table.ColumnCount > 0 ? table.ColumnCount - 1 : 0;
             hScrollBar1.LargeChange = columnsOnControl;
 
 
@@ -167,14 +168,14 @@ namespace CalendarControl3
 //                     PaintColumn(e.Graphics, column, currentLeft, oneColumnWidth, tableBottom);
 //                     currentLeft += oneColumnWidth;
 //                 }
-                var columns = table.GetColumns();
+                var columns = table.Columns;
                 for (int i = hScrollBar1.Value; i < hScrollBar1.Value + columnsOnControl; i++)
                 //for (int i = hScrollBar1.Value - hScrollBar1.Minimum; i < hScrollBar1.Value; i++)
                 {
                     if (i > columns.Count - 1) break;
                     PaintColumn(e.Graphics, columns[i], currentLeft, oneColumnWidth, tableBottom);
                     drawPoint = new PointF(currentLeft + 1f, tableTop - drawFont.Height - 1f);
-                    e.Graphics.DrawString(columns[i].GetName(), drawFont, drawBrush, drawPoint);
+                    e.Graphics.DrawString(columns[i].Name, drawFont, drawBrush, drawPoint);
                     currentLeft += oneColumnWidth;
                 }
 
@@ -228,15 +229,6 @@ namespace CalendarControl3
             Refresh();
         }
 
-        /// <summary>
-        /// Forces full repaint with recalculating table. Probably will removed and changed for event-based model of redriving.
-        /// </summary>
-        public void TotalRepaint()
-        {
-            MakeTableFromInput();
-            Refresh();
-        }
-
 
 // 
 //         int CompareByInt(IDescription2ControlInterface x, IDescription2ControlInterface y)
@@ -258,7 +250,7 @@ namespace CalendarControl3
         void PaintColumn(Graphics g, IColumn2ControlInterface column, int leftside, int width, int height)
         {
             
-            foreach (var entity in column.GetEntities())
+            foreach (var entity in column.Entities)
             {
                 PaintEntity(g, entity, leftside + 1, width -2 );
             }
@@ -279,7 +271,7 @@ namespace CalendarControl3
         void PaintEntity(Graphics g, IEntity2ControlInterface entity, int leftside, int width)
         {
             //нарисуем сглаженный прямоугольник
-            Rectangle entRect = new Rectangle(leftside, tableTop + ScaleLevelsToControl(entity.TopLevel()), width, ScaleLevelsToControl(entity.BottomLevel()) - ScaleLevelsToControl(entity.TopLevel()));
+            Rectangle entRect = new Rectangle(leftside, tableTop + ScaleLevelsToControl(entity.TopLevel), width, ScaleLevelsToControl(entity.BottomLevel) - ScaleLevelsToControl(entity.TopLevel));
             GraphicsPath entShape = GetBarShape(entRect, 10); //10 - магическое число, смотрится хорошо
             g.FillPath(Brushes.LightYellow, entShape);
             g.DrawPath(new Pen(Brushes.DarkGreen, 2f), entShape);
@@ -293,7 +285,7 @@ namespace CalendarControl3
             //g.DrawString()
             StringFormat format = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap);
             format.Alignment = StringAlignment.Center;
-            g.DrawString(entity.StringToShow(), drawFont, drawBrush, strRect, format);//, drawPoint);
+            g.DrawString(entity.StringToShow, drawFont, drawBrush, strRect, format);//, drawPoint);
         }
 
         /// <summary>
@@ -358,7 +350,7 @@ namespace CalendarControl3
         /// </summary>
         /// <param name="click">Точка клика в координатах контрола.</param>
         /// <returns>-1 - вне зоны таблицы.</returns>
-        int GetValue(Point click)
+        public int GetVerticalValueOfClick(Point click)
         {
             if (click.Y < tableTop || click.Y > tableBottom) return -1;
             
@@ -368,11 +360,11 @@ namespace CalendarControl3
         }
 
         /// <summary>
-        /// Получить абсолютный номер столбца, в котором произошёл клик.
+        /// Получить номер столбца как он отрисован, в котором произошёл клик.
         /// </summary>
         /// <param name="click">Точка клика в координатах контрола.</param>
         /// <returns>Zero-based index. -1 если клик вне рабочей таблицы.</returns>
-        int GetVisibleColumnNumber(Point click)
+        int GetVisibleColumnNumberOfClick(Point click)
         {
             if (click.X <= infoColumnWidth || click.X > realTableWidth) return -1;
             int result = (click.X - infoColumnWidth) / oneColumnWidth;
@@ -385,31 +377,36 @@ namespace CalendarControl3
         /// </summary>
         /// <param name="click">Точка клика в координатах контрола.</param>
         /// <returns>Zero-based index. -1 если клик вне рабочей таблицы.</returns>
-        int GetAbsoluteColumnNumber(Point click)
+        int GetAbsoluteColumnNumberOfClick(Point click)
         {
-            int relativeNumber = GetVisibleColumnNumber(click);
+            int relativeNumber = GetVisibleColumnNumberOfClick(click);
             if (relativeNumber == -1) return -1;
             return hScrollBar1.Value + relativeNumber;
         }
 
+        public IEntity2ControlInterface GetNearestTopEntity(Point click)
+        {
+            return null;
+        }
+
         public IEntity2ControlInterface GetEntityOnClick(Point click)
         {
-            int level = GetValue(click);
-            int columnNumber = GetAbsoluteColumnNumber(click);
-            if (level < 0 || columnNumber < 0 || table.GetColumnCount() < 1) return null;
-            foreach (var entity in table.GetColumns()[columnNumber].GetEntities())
+            int level = GetVerticalValueOfClick(click);
+            int columnNumber = GetAbsoluteColumnNumberOfClick(click);
+            if (level < 0 || columnNumber < 0 || table.ColumnCount < 1) return null;
+            foreach (var entity in table.Columns[columnNumber].Entities)
             {
-                if (entity.TopLevel() < level && level < entity.BottomLevel()) return entity;  
+                if (entity.TopLevel < level && level < entity.BottomLevel) return entity;  
             }
             return null;
         }
 
         public string GetColumnNameOnClick(Point click)
         {
-            int level = GetValue(click);
-            int columnNumber = GetAbsoluteColumnNumber(click);
+            int level = GetVerticalValueOfClick(click);
+            int columnNumber = GetAbsoluteColumnNumberOfClick(click);
             if (level < 0 || columnNumber < 0) return null;
-            return table.GetColumns()[columnNumber].GetName();
+            return table.Columns[columnNumber].Name;
         }
 #endregion
 
@@ -428,7 +425,7 @@ namespace CalendarControl3
                         tt.Active = true;
                         tt.InitialDelay = 10;
                     }
-                    tt.Show(clicked.StringToShow(), this);
+                    tt.Show(clicked.StringToShow, this);
                     
                 }
             }

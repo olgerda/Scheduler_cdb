@@ -44,21 +44,16 @@ namespace Scheduler
             this.monthCalendar = new System.Windows.Forms.MonthCalendar();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.расписаниеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.выбратьДатуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сформироватьОтчетToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.закрытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.приемыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.назначитьПриемToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.спискиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.клиентыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.новыйКлиентToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.найтиКлиентаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.просмотретьЧерныйСписокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.специалистыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.новыйСпециалистToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.найтиСпециалистаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.чёрныйСписокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.кабинетыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.новыйКабинетToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.редактироватьКабинетыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.недоступныеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.специалистыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.неработающиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.специальностиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.базаДанныхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сделатьРезервнуюКопиюToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.развернутьРезервнуюКопиюToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -129,10 +124,7 @@ namespace Scheduler
             // 
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.расписаниеToolStripMenuItem,
-            this.приемыToolStripMenuItem,
-            this.клиентыToolStripMenuItem,
-            this.специалистыToolStripMenuItem,
-            this.кабинетыToolStripMenuItem,
+            this.спискиToolStripMenuItem,
             this.базаДанныхToolStripMenuItem,
             this.помощьToolStripMenuItem});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
@@ -144,18 +136,11 @@ namespace Scheduler
             // расписаниеToolStripMenuItem
             // 
             this.расписаниеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.выбратьДатуToolStripMenuItem,
             this.сформироватьОтчетToolStripMenuItem,
             this.закрытьToolStripMenuItem});
             this.расписаниеToolStripMenuItem.Name = "расписаниеToolStripMenuItem";
-            this.расписаниеToolStripMenuItem.Size = new System.Drawing.Size(84, 20);
-            this.расписаниеToolStripMenuItem.Text = "Расписание";
-            // 
-            // выбратьДатуToolStripMenuItem
-            // 
-            this.выбратьДатуToolStripMenuItem.Name = "выбратьДатуToolStripMenuItem";
-            this.выбратьДатуToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.выбратьДатуToolStripMenuItem.Text = "Выбрать дату";
+            this.расписаниеToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.расписаниеToolStripMenuItem.Text = "Файл";
             // 
             // сформироватьОтчетToolStripMenuItem
             // 
@@ -169,89 +154,65 @@ namespace Scheduler
             this.закрытьToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.закрытьToolStripMenuItem.Text = "Закрыть";
             // 
-            // приемыToolStripMenuItem
+            // спискиToolStripMenuItem
             // 
-            this.приемыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.назначитьПриемToolStripMenuItem});
-            this.приемыToolStripMenuItem.Name = "приемыToolStripMenuItem";
-            this.приемыToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
-            this.приемыToolStripMenuItem.Text = "Приемы";
-            // 
-            // назначитьПриемToolStripMenuItem
-            // 
-            this.назначитьПриемToolStripMenuItem.Name = "назначитьПриемToolStripMenuItem";
-            this.назначитьПриемToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.назначитьПриемToolStripMenuItem.Text = "Назначить прием";
+            this.спискиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.клиентыToolStripMenuItem,
+            this.кабинетыToolStripMenuItem,
+            this.специалистыToolStripMenuItem,
+            this.специальностиToolStripMenuItem});
+            this.спискиToolStripMenuItem.Name = "спискиToolStripMenuItem";
+            this.спискиToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
+            this.спискиToolStripMenuItem.Text = "Списки";
             // 
             // клиентыToolStripMenuItem
             // 
             this.клиентыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.новыйКлиентToolStripMenuItem,
-            this.найтиКлиентаToolStripMenuItem,
-            this.просмотретьЧерныйСписокToolStripMenuItem});
+            this.чёрныйСписокToolStripMenuItem});
             this.клиентыToolStripMenuItem.Name = "клиентыToolStripMenuItem";
-            this.клиентыToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.клиентыToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.клиентыToolStripMenuItem.Text = "Клиенты";
+            this.клиентыToolStripMenuItem.Click += new System.EventHandler(this.клиентыToolStripMenuItem_Click);
             // 
-            // новыйКлиентToolStripMenuItem
+            // чёрныйСписокToolStripMenuItem
             // 
-            this.новыйКлиентToolStripMenuItem.Name = "новыйКлиентToolStripMenuItem";
-            this.новыйКлиентToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
-            this.новыйКлиентToolStripMenuItem.Text = "Новый клиент";
-            // 
-            // найтиКлиентаToolStripMenuItem
-            // 
-            this.найтиКлиентаToolStripMenuItem.Name = "найтиКлиентаToolStripMenuItem";
-            this.найтиКлиентаToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
-            this.найтиКлиентаToolStripMenuItem.Text = "Найти клиента";
-            // 
-            // просмотретьЧерныйСписокToolStripMenuItem
-            // 
-            this.просмотретьЧерныйСписокToolStripMenuItem.Name = "просмотретьЧерныйСписокToolStripMenuItem";
-            this.просмотретьЧерныйСписокToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
-            this.просмотретьЧерныйСписокToolStripMenuItem.Text = "Просмотреть черный список";
-            // 
-            // специалистыToolStripMenuItem
-            // 
-            this.специалистыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.новыйСпециалистToolStripMenuItem,
-            this.найтиСпециалистаToolStripMenuItem});
-            this.специалистыToolStripMenuItem.Name = "специалистыToolStripMenuItem";
-            this.специалистыToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
-            this.специалистыToolStripMenuItem.Text = "Специалисты";
-            // 
-            // новыйСпециалистToolStripMenuItem
-            // 
-            this.новыйСпециалистToolStripMenuItem.Name = "новыйСпециалистToolStripMenuItem";
-            this.новыйСпециалистToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.новыйСпециалистToolStripMenuItem.Text = "Новый специалист";
-            // 
-            // найтиСпециалистаToolStripMenuItem
-            // 
-            this.найтиСпециалистаToolStripMenuItem.Name = "найтиСпециалистаToolStripMenuItem";
-            this.найтиСпециалистаToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.найтиСпециалистаToolStripMenuItem.Text = "Найти  специалиста";
+            this.чёрныйСписокToolStripMenuItem.Name = "чёрныйСписокToolStripMenuItem";
+            this.чёрныйСписокToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.чёрныйСписокToolStripMenuItem.Text = "Чёрный список";
             // 
             // кабинетыToolStripMenuItem
             // 
             this.кабинетыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.новыйКабинетToolStripMenuItem,
-            this.редактироватьКабинетыToolStripMenuItem});
+            this.недоступныеToolStripMenuItem});
             this.кабинетыToolStripMenuItem.Name = "кабинетыToolStripMenuItem";
-            this.кабинетыToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.кабинетыToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.кабинетыToolStripMenuItem.Text = "Кабинеты";
             // 
-            // новыйКабинетToolStripMenuItem
+            // недоступныеToolStripMenuItem
             // 
-            this.новыйКабинетToolStripMenuItem.Name = "новыйКабинетToolStripMenuItem";
-            this.новыйКабинетToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.новыйКабинетToolStripMenuItem.Text = "Новый кабинет";
+            this.недоступныеToolStripMenuItem.Name = "недоступныеToolStripMenuItem";
+            this.недоступныеToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.недоступныеToolStripMenuItem.Text = "Недоступные";
             // 
-            // редактироватьКабинетыToolStripMenuItem
+            // специалистыToolStripMenuItem
             // 
-            this.редактироватьКабинетыToolStripMenuItem.Name = "редактироватьКабинетыToolStripMenuItem";
-            this.редактироватьКабинетыToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.редактироватьКабинетыToolStripMenuItem.Text = "Редактировать кабинеты";
+            this.специалистыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.неработающиеToolStripMenuItem});
+            this.специалистыToolStripMenuItem.Name = "специалистыToolStripMenuItem";
+            this.специалистыToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.специалистыToolStripMenuItem.Text = "Специалисты";
+            // 
+            // неработающиеToolStripMenuItem
+            // 
+            this.неработающиеToolStripMenuItem.Name = "неработающиеToolStripMenuItem";
+            this.неработающиеToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.неработающиеToolStripMenuItem.Text = "Неработающие";
+            // 
+            // специальностиToolStripMenuItem
+            // 
+            this.специальностиToolStripMenuItem.Name = "специальностиToolStripMenuItem";
+            this.специальностиToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.специальностиToolStripMenuItem.Text = "Специальности";
             // 
             // базаДанныхToolStripMenuItem
             // 
@@ -267,12 +228,14 @@ namespace Scheduler
             this.сделатьРезервнуюКопиюToolStripMenuItem.Name = "сделатьРезервнуюКопиюToolStripMenuItem";
             this.сделатьРезервнуюКопиюToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.сделатьРезервнуюКопиюToolStripMenuItem.Text = "Сделать резервную копию";
+            this.сделатьРезервнуюКопиюToolStripMenuItem.Click += new System.EventHandler(this.сделатьРезервнуюКопиюToolStripMenuItem_Click);
             // 
             // развернутьРезервнуюКопиюToolStripMenuItem
             // 
             this.развернутьРезервнуюКопиюToolStripMenuItem.Name = "развернутьРезервнуюКопиюToolStripMenuItem";
             this.развернутьРезервнуюКопиюToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.развернутьРезервнуюКопиюToolStripMenuItem.Text = "Развернуть резервную копию";
+            this.развернутьРезервнуюКопиюToolStripMenuItem.Click += new System.EventHandler(this.развернутьРезервнуюКопиюToolStripMenuItem_Click);
             // 
             // помощьToolStripMenuItem
             // 
@@ -321,22 +284,9 @@ namespace Scheduler
 		private System.Windows.Forms.ToolStripMenuItem помощьToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem развернутьРезервнуюКопиюToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem сделатьРезервнуюКопиюToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem базаДанныхToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem редактироватьКабинетыToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem новыйКабинетToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem кабинетыToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem найтиСпециалистаToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem новыйСпециалистToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem специалистыToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem просмотретьЧерныйСписокToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem найтиКлиентаToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem новыйКлиентToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem клиентыToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem назначитьПриемToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem приемыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem базаДанныхToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem закрытьToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem сформироватьОтчетToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem выбратьДатуToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem сформироватьОтчетToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem расписаниеToolStripMenuItem;
 		private System.Windows.Forms.MenuStrip mainMenu;
 		private System.Windows.Forms.Button buttonShowToday;
@@ -344,5 +294,13 @@ namespace Scheduler
 		private System.Windows.Forms.SplitContainer mainView;
 		private System.Windows.Forms.Label label1;
         private System.Windows.Forms.MonthCalendar monthCalendar;
+        private System.Windows.Forms.ToolStripMenuItem спискиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem клиентыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem чёрныйСписокToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem кабинетыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem недоступныеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem специалистыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem неработающиеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem специальностиToolStripMenuItem;
 	}
 }

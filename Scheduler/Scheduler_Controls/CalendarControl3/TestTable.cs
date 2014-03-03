@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CalendarControl3_Interfaces;
 
 namespace CalendarControl3
 {
@@ -17,30 +18,30 @@ namespace CalendarControl3
             //testtable.descriptions.Add(100, "100");
             testtable.descriptions.Add(1000, "1000");
             testtable.descriptions.Add(1600, "1600");
-            testtable.descriptions.Add(200,"200");
-            testtable.descriptions.Add(400,"400");
-            testtable.descriptions.Add(600,"600");
-            testtable.descriptions.Add(1500,"1500");
-            testtable.descriptions.Add(900,"900");
-//             testtable.descriptions.Add("first");
-//             testtable.descriptions.Add("second");
-//             testtable.descriptions.Add("thrird");
+            testtable.descriptions.Add(200, "200");
+            testtable.descriptions.Add(400, "400");
+            testtable.descriptions.Add(600, "600");
+            testtable.descriptions.Add(1500, "1500");
+            testtable.descriptions.Add(900, "900");
+            //             testtable.descriptions.Add("first");
+            //             testtable.descriptions.Add("second");
+            //             testtable.descriptions.Add("thrird");
             var testcol1 = new TestColumn("column1");
             var testcol2 = new TestColumn("column2");
-            testcol1.entities.Add(new TestEntity("200\r\n400",200, 400));
+            testcol1.entities.Add(new TestEntity("200\r\n400", 200, 400));
             testcol1.entities.Add(new TestEntity("600\r\n1500", 600, 1500));
             testcol2.entities.Add(new TestEntity("200\r\n900", 200, 900));
             testtable.columns.Add(testcol1);
-            
+
             testtable.columns.Add(new TestColumn("3"));
             testtable.columns.Add(new TestColumn("4"));
-            
-//             testtable.columns.Add(new TestColumn("5"));
-//             testtable.columns.Add(new TestColumn("6"));
-//             testtable.columns.Add(new TestColumn("7"));
-//             testtable.columns.Add(new TestColumn("8"));
-//             testtable.columns.Add(new TestColumn("9"));
-//             testtable.columns.Add(new TestColumn("10"));
+
+            //             testtable.columns.Add(new TestColumn("5"));
+            //             testtable.columns.Add(new TestColumn("6"));
+            //             testtable.columns.Add(new TestColumn("7"));
+            //             testtable.columns.Add(new TestColumn("8"));
+            //             testtable.columns.Add(new TestColumn("9"));
+            //             testtable.columns.Add(new TestColumn("10"));
             testtable.columns.Add(new TestColumn("11"));
             testtable.columns.Add(testcol2);
 
@@ -69,19 +70,19 @@ namespace CalendarControl3
             maxValue = maxV;
         }
 
-        public int GetColumnCount()
+        public int ColumnCount
         {
-            return columns.Count;
+            get { return columns.Count; }
         }
 
-        public int GetMinValue()
+        public int MinValue
         {
-            return minValue;
+            get { return minValue; }
         }
 
-        public int GetMaxValue()
+        public int MaxValue
         {
-            return maxValue;
+            get { return maxValue; }
         }
 
         //public List<IDescription2ControlInterface> GetDescripptionsToValueLevels()
@@ -90,9 +91,9 @@ namespace CalendarControl3
             return descriptions;
         }
 
-        public List<IColumn2ControlInterface> GetColumns()
+        public List<IColumn2ControlInterface> Columns
         {
-            return columns;
+            get { return columns; }
         }
     }
 
@@ -107,15 +108,15 @@ namespace CalendarControl3
             entities = new List<IEntity2ControlInterface>();
         }
 
-        public string GetName()
+        public string Name
         {
-            return name;
+            get { return name; }
         }
 
-        public List<IEntity2ControlInterface> GetEntities()
+        public List<IEntity2ControlInterface> Entities
         {
             //entities.Add(new TestEntity());
-            return entities;
+            get { return entities; }
         }
     }
 
@@ -134,56 +135,56 @@ namespace CalendarControl3
             obj = o;
         }
 
-        public string StringToShow()
+        public string StringToShow
         {
-            return Message;
+            get { return Message; }
         }
 
-        public int TopLevel()
+        public int TopLevel
         {
-            return tLevel;
+            get { return tLevel; }
         }
 
-        public int BottomLevel()
+        public int BottomLevel
         {
-            return bLevel;
+            get { return bLevel; }
         }
 
-        public object GetObject()
-        {
-            return obj;
-        }
+//         public object GetObject()
+//         {
+//             return obj;
+//         }
 
 
-        public ulong GetID()
+        public ulong ID
         {
-            throw new NotImplementedException();
+            get { return 0; }
         }
     }
 
-//     public class TestDescription : IDescription2ControlInterface
-//     {
-//         public string description;
-//         public int level;
-// 
-// 
-// 
-//         public TestDescription(string msg = "default", int lvl = 200)
-//         {
-//             description = msg;
-//             level = lvl;
-//         }
-// 
-//         public int ToInt()
-//         {
-//             return level;
-//         }
-// 
-//         public string ToString()
-//         {
-//             return description;
-//         }
-//     }
+    //     public class TestDescription : IDescription2ControlInterface
+    //     {
+    //         public string description;
+    //         public int level;
+    // 
+    // 
+    // 
+    //         public TestDescription(string msg = "default", int lvl = 200)
+    //         {
+    //             description = msg;
+    //             level = lvl;
+    //         }
+    // 
+    //         public int ToInt()
+    //         {
+    //             return level;
+    //         }
+    // 
+    //         public string ToString()
+    //         {
+    //             return description;
+    //         }
+    //     }
 
 
 }

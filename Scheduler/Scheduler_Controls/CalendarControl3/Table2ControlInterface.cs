@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CalendarControl3
+namespace CalendarControl3_Interfaces
 {
 
     /// <summary>
@@ -14,16 +14,16 @@ namespace CalendarControl3
         /// <summary>
         /// Получить число столбцов для отображения
         /// </summary>
-        int GetColumnCount();
+        int ColumnCount { get; }
         /// <summary>
         /// Получить значение, от которого отталкиваться при отрисовке от верхнего края.
         /// </summary>
-        int GetMinValue();
+        int MinValue { get; }
         /// <summary>
         /// Получить значение, от которого отталкиваться при отрисовке до нижнего края.
         /// </summary>
         /// <returns></returns>
-        int GetMaxValue();
+        int MaxValue { get; }
 
         /// <summary>
         /// Получить список описаний, которые будут отображены в левом столбце как легенда к строкам таблицы.
@@ -35,40 +35,40 @@ namespace CalendarControl3
         /// Получить столбцы для отображения.
         /// </summary>
         /// <returns></returns>
-        List<IColumn2ControlInterface> GetColumns();
+        List<IColumn2ControlInterface> Columns { get; }
 
         //event EventHandler Changed;
     }
 
     public interface IColumn2ControlInterface
     {
-        string GetName();
-        List<IEntity2ControlInterface> GetEntities();
+        string Name {get;}
+        List<IEntity2ControlInterface> Entities { get; }
         //event EventHandler Changed;
     }
 
     public interface IEntity2ControlInterface
     {
         //bool oneStringToShow;
-        string StringToShow();
+        string StringToShow { get; }
         //List<string> StringsToShow();
         /// <summary>
         /// Получить верхнюю границу отрисовки сущности.
         /// </summary>
-        int TopLevel();
+        int TopLevel { get; }
         /// <summary>
         /// Получить нижнюю границу отрисовки сущности.
         /// </summary>
         /// <returns></returns>
-        int BottomLevel();
+        int BottomLevel { get; }
 
         /// <summary>
         /// Получить объект, относящийся к данной сущности.
         /// </summary>
         /// <returns></returns>
-        object GetObject();
+        //object GetObject();
 
-        ulong GetID();
+        ulong ID { get; }
         
         //event EventHandler Changed;
     }

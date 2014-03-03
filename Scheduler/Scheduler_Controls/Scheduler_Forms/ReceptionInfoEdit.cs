@@ -14,6 +14,8 @@ namespace Scheduler_Forms
     public partial class ReceptionInfoEdit : Form
     {
         IReception currentReception;
+        Scheduler_Controls.ReceptionInfo.ShowModes mode;
+
         static ISpecialistList specialistList;
         static ISpecializationList specializationsList;
         static ICabinetList cabinetList;
@@ -63,7 +65,6 @@ namespace Scheduler_Forms
             //тут логика показа формы с выбором клиента
             using (FindClientCard FindClientForm = new FindClientCard(clientList, entityFactory))
             {
-                
                 FindClientForm.SelectedClient = clientList.FindClientByPartialTelephone(e.Telephone) ?? clientList.FindClientByPartialName(e.Name);
                 FindClientForm.ShowDialog();
                 currentReception.Client = FindClientForm.SelectedClient;
@@ -74,6 +75,8 @@ namespace Scheduler_Forms
             }
 
         }
+
+
 
         public IReception Reception
         {
@@ -100,14 +103,35 @@ namespace Scheduler_Forms
             set { cabinetList = value; Init(); }
         }
 
-        public static void SetLists(ICabinetList cabinetList, ISpecialistList specialistList, ISpecializationList specializationList)
+        public IClientList ClientList
+        {
+            set { clientList = value; }
+        }
+
+        public IFactory EntityFactory
+        {
+            set { entityFactory = value; }
+        }
+
+        public Scheduler_Controls.ReceptionInfo.ShowModes Mode
+        {
+            get { return mode; }
+            set
+            {
+                mode = value;
+                receptionInfoCard.Mode = mode;
+            }
+        }
+
+        public static void SetLists(ICabinetList cabinetList, ISpecialistList specialistList, ISpecializationList specializationList, 
+            IClientList clientList, IFactory entityFactory)
         {
             ReceptionInfoEdit.cabinetList = cabinetList;
             ReceptionInfoEdit.specialistList = specialistList;
             ReceptionInfoEdit.specializationsList = specializationList;
+            ReceptionInfoEdit.clientList = clientList;
+            ReceptionInfoEdit.entityFactory = entityFactory;
         }
-
-
 
         void Init()
         {
@@ -125,14 +149,14 @@ namespace Scheduler_Forms
             receptionInfoCard.UpdateLists(cabinetListActualised, specialistListActualised, specializationsList.SpecializationList);
         }
 
-        private void ReceptionInfoEdit_FormClosed(object sender, FormClosedEventArgs e)
-        {
-
-        }
-
         private void ReceptionInfoEdit_FormClosing(object sender, FormClosingEventArgs e)
         {
             Reception = receptionInfoCard.Reception;
+        }
+
+        private void receptionInfoCard_Load(object sender, EventArgs e)
+        {
+
         }
 
 

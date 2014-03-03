@@ -172,7 +172,6 @@
             this.clientInfoCard.Name = "clientInfoCard";
             this.clientInfoCard.Size = new System.Drawing.Size(400, 265);
             this.clientInfoCard.TabIndex = 0;
-            this.clientInfoCard.Load += new System.EventHandler(this.clientInfoCard_Load);
             // 
             // FindClientCard
             // 

@@ -41,6 +41,7 @@
             this.receptionInfoCard.Reception = null;
             this.receptionInfoCard.Size = new System.Drawing.Size(595, 150);
             this.receptionInfoCard.TabIndex = 0;
+            this.receptionInfoCard.Load += new System.EventHandler(this.receptionInfoCard_Load);
             // 
             // ReceptionInfoEdit
             // 
@@ -52,7 +53,6 @@
             this.Name = "ReceptionInfoEdit";
             this.Text = "ReceptionInfoEdit";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReceptionInfoEdit_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ReceptionInfoEdit_FormClosed);
             this.ResumeLayout(false);
 
         }

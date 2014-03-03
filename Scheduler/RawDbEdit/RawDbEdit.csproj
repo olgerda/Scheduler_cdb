@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MySqlDataSet.cs" />
     <Compile Include="RawDBEdit.cs">
       <SubType>Form</SubType>
     </Compile>

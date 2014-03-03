@@ -31,7 +31,6 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -48,78 +47,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBworkaround\DataRepresentation.cs" />
-    <Compile Include="DBworkaround\DbConnect.cs" />
-    <Compile Include="DBworkaround\DBobjects.cs" />
-    <Compile Include="DetailViews\CabinetCardsView.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DetailViews\CabinetCardsView.Designer.cs">
-      <DependentUpon>CabinetCardsView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DetailViews\CardPutGet.cs" />
-    <Compile Include="DetailViews\ClientCardsView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DetailViews\ClientCardsView.Designer.cs">
-      <DependentUpon>ClientCardsView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DetailViews\ClientInfoControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DetailViews\ClientInfoControl.Designer.cs">
-      <DependentUpon>ClientInfoControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DetailViews\NewCards\NewCabinetCard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DetailViews\NewCards\NewCabinetCard.Designer.cs">
-      <DependentUpon>NewCabinetCard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DetailViews\NewCards\NewClientCard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DetailViews\NewCards\NewClientCard.Designer.cs">
-      <DependentUpon>NewClientCard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DetailViews\NewCards\NewSpecialistCard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DetailViews\NewCards\NewSpecialistCard.Designer.cs">
-      <DependentUpon>NewSpecialistCard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DetailViews\NewCards\NewSpecialization.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DetailViews\NewCards\NewSpecialization.Designer.cs">
-      <DependentUpon>NewSpecialization.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DetailViews\SpecialistCardsView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DetailViews\SpecialistCardsView.Designer.cs">
-      <DependentUpon>SpecialistCardsView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DetailViews\SpecializationsView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DetailViews\SpecializationsView.Designer.cs">
-      <DependentUpon>SpecializationsView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ReceptionWorkaround\EditReception.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ReceptionWorkaround\EditReception.Designer.cs">
-      <DependentUpon>EditReception.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ReceptionWorkaround\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ReceptionWorkaround\MainForm.Designer.cs">
+    <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="DBworkaround\MySqlDataSet.cs" />
-    <Compile Include="ReceptionWorkaround\Program.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -128,16 +62,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DetailViews\ClientCardsView.resx">
-      <DependentUpon>ClientCardsView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DetailViews\ClientInfoControl.resx">
-      <DependentUpon>ClientInfoControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ReceptionWorkaround\EditReception.resx">
-      <DependentUpon>EditReception.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ReceptionWorkaround\MainForm.resx">
+    <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -149,9 +74,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="ControlSubproject\CalendarControl3\CalendarControl3.csproj">
+    <ProjectReference Include="..\Scheduler_Controls\CalendarControl3\CalendarControl3.csproj">
       <Project>{C14311FB-8AA9-4536-9476-B41E50BBD4CD}</Project>
       <Name>CalendarControl3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scheduler_Controls\Scheduler_Controls\Scheduler_Controls.csproj">
+      <Project>{DED801C8-E565-46A1-A0C9-406C631695C8}</Project>
+      <Name>Scheduler_Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scheduler_Controls\Scheduler_Forms\Scheduler_Forms.csproj">
+      <Project>{1FCF4D1A-82BC-440C-95E7-8F061C83FF72}</Project>
+      <Name>Scheduler_Forms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scheduler_DBobjects\Scheduler_DBobjects.csproj">
+      <Project>{214B915E-1761-437B-A7FE-3493C6876B9A}</Project>
+      <Name>Scheduler_DBobjects</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

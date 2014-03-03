@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Scheduler.DetailViews
+namespace Scheduler_DBobjects
 {
-    interface CardPutGet
+    public class Class1
     {
     }
 }
