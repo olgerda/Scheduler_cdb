@@ -54,7 +54,6 @@
     <Compile Include="FindClientCard.Designer.cs">
       <DependentUpon>FindClientCard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReceptionInfoEdit.cs">
       <SubType>Form</SubType>
@@ -76,6 +75,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Scheduler_Interfaces\Scheduler_Interfaces.csproj">
+      <Project>{E79A1BCB-3BB2-474E-AE57-71DF882E295D}</Project>
+      <Name>Scheduler_Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Scheduler_Controls\Scheduler_Controls.csproj">
       <Project>{DED801C8-E565-46A1-A0C9-406C631695C8}</Project>
       <Name>Scheduler_Controls</Name>

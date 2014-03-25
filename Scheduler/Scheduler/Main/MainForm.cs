@@ -1,12 +1,4 @@
-﻿/*
- * Created by SharpDevelop.
- * User: ANC_04
- * Date: 09.05.2013
- * Time: 14:45
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -81,16 +73,14 @@ namespace Scheduler
 
 			InitializeComponent();
 
-            Init();
+            //Init();
 		}
 
         public MainForm(IMainDataBase database)
         {
             InitializeComponent();
 
-            this.database = database;
-
-            Init();
+            Database = database;
         }
 
         void Init()
@@ -110,9 +100,13 @@ namespace Scheduler
         public IMainDataBase Database
         {
             get { return database; }
-            set { database = value; }
+            set 
+            { 
+                database = value;
+                Init();
+            }
         }
-
+        
         void calendarControl_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
@@ -121,7 +115,7 @@ namespace Scheduler
             
             if (ent == null)
             {
-                ent = database.EntityFactory.Create<IEntity>();
+                ent = database.EntityFactory.NewEntity();
                 ent.Cabinet = database.CabinetList.List.Find(x => x.Name == calendarControl.GetColumnNameOnClick(e.Location));
 
                 IEntity nearestTopEntity = (calendarControl.GetNearestTopEntity(e.Location) as IEntity);
@@ -145,8 +139,8 @@ namespace Scheduler
 
         void FirstLoad()
         {
-            receptionEntitiesTable = database.EntityFactory.Create<ITable>();
-            ITimeInterval workday = database.EntityFactory.Create<ITimeInterval>();
+            receptionEntitiesTable = database.EntityFactory.NewTable();
+            ITimeInterval workday = database.EntityFactory.NewTimeInterval();
             workday.SetStartEnd(new DateTime(1, 1, 1, 8, 0, 0), new DateTime(1, 1, 1, 18, 0, 0));
             receptionEntitiesTable.WorkTimeInterval = workday;
 
@@ -158,7 +152,7 @@ namespace Scheduler
                 var column = listOfColumns.Find(x => x.Name == ent.Cabinet.Name);
                 if (column == null) 
                 {
-                    column = database.EntityFactory.Create<IColumn>();
+                    column = database.EntityFactory.NewColumn();
                     listOfColumns.Add(column);
                 }
                 column.AddEntity(ent);
@@ -203,10 +197,59 @@ namespace Scheduler
 
         private void клиентыToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             using (FindClientCard clientsForm = new FindClientCard(database.ClientList, database.EntityFactory))
             {
                 clientsForm.Show();
             }            
         }
+
+        private void чёрныйСписокToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("Данная функция пока не реализована. Пользуйтесь полным списком.");
+            
+        }
+
+        private void кабинетыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (CabinetListEdit cabinetForm = new CabinetListEdit(database.CabinetList, database.EntityFactory))
+            {
+                cabinetForm.Show();
+            }
+        }
+
+        private void недоступныеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("Данная функция пока не реализована. Пользуйтесь полным списком.");
+            
+        }
+
+        private void специалистыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SpecialistListEdit specialistForm = new SpecialistListEdit(database.SpecialistList, database.EntityFactory))
+            {
+                specialistForm.Show();
+            }
+        }
+
+        private void неработающиеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("Данная функция пока не реализована. Пользуйтесь полным списком.");
+        }
+
+        private void специальностиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SpecializationListEdit specializationsForm = new SpecializationListEdit(database.SpecializationList))
+            {
+                specializationsForm.Show();
+            }
+        }
+
+        private void закрытьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
 	}
 }

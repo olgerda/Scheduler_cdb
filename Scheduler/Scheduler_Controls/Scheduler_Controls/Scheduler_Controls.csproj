@@ -67,7 +67,6 @@
     <Compile Include="ClientInfo.Designer.cs">
       <DependentUpon>ClientInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReceptionInfo.cs">
       <SubType>UserControl</SubType>
@@ -111,6 +110,12 @@
     <EmbeddedResource Include="SpecializationsInfo.resx">
       <DependentUpon>SpecializationsInfo.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Scheduler_Interfaces\Scheduler_Interfaces.csproj">
+      <Project>{E79A1BCB-3BB2-474E-AE57-71DF882E295D}</Project>
+      <Name>Scheduler_Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -23,6 +23,7 @@ namespace Scheduler_Controls_Interfaces
         string ToString();
     }
 
+    public delegate List<string> GetClientReceptionsList(IClient client);
     /// <summary>
     /// Интерфейс клиента.
     /// </summary>
@@ -33,7 +34,6 @@ namespace Scheduler_Controls_Interfaces
         bool BlackListed { get; set; }
 
         HashSet<string> Telephones { get; set; }
-
         /// <summary>
         /// Проверить, входит ли переданный телефон в список телефонов клиента.
         /// </summary>
@@ -82,7 +82,6 @@ namespace Scheduler_Controls_Interfaces
         IClient Client { get; set; }
         ISpecialist Specialist { get; set; }
         ICabinet Cabinet { get; set; }
-
         string Specialization { get; set; }
         bool Rent { get; set; }
 
@@ -104,6 +103,7 @@ namespace Scheduler_Controls_Interfaces
     public interface ITimeInterval
     {
         void SetStartEnd(DateTime startDate, DateTime endDate);
+        string Interval();
         DateTime Date { get; }
         DateTime StartDate { get; set; }
         DateTime EndDate { get; set; }
@@ -128,10 +128,7 @@ namespace Scheduler_Controls_Interfaces
 
     }
 
-    public interface IFactory
-    {
-        T Create<T>();// where T : IDummy;
-    }
+
 
     public delegate void SaveChangesHandler<T>(object source, SaveChangesEventArgs<T> e) where T : IDummy;
     public delegate void ShowClientsHandler(object source, ShowClientsEventsArgs e);

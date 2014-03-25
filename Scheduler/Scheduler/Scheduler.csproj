@@ -47,13 +47,100 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainForm.cs">
+    <Compile Include="Controls\AddString.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Controls\AddString.Designer.cs">
+      <DependentUpon>AddString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AddTelNumber.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\AddTelNumber.Designer.cs">
+      <DependentUpon>AddTelNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CabinetInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CabinetInfo.Designer.cs">
+      <DependentUpon>CabinetInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ClientInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ClientInfo.Designer.cs">
+      <DependentUpon>ClientInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ReceptionInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ReceptionInfo.Designer.cs">
+      <DependentUpon>ReceptionInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SpecialistInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SpecialistInfo.Designer.cs">
+      <DependentUpon>SpecialistInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SpecializationsInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SpecializationsInfo.Designer.cs">
+      <DependentUpon>SpecializationsInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DBobjects\Column.cs" />
+    <Compile Include="DBobjects\MainDatabase.cs" />
+    <Compile Include="DBobjects\Table.cs" />
+    <Compile Include="Forms\CabinetListEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CabinetListEdit.Designer.cs">
+      <DependentUpon>CabinetListEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FindClientCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FindClientCard.Designer.cs">
+      <DependentUpon>FindClientCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ReceptionInfoEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReceptionInfoEdit.Designer.cs">
+      <DependentUpon>ReceptionInfoEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SpecialistListEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpecialistListEdit.Designer.cs">
+      <DependentUpon>SpecialistListEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SpecializationListEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpecializationListEdit.Designer.cs">
+      <DependentUpon>SpecializationListEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InterfacesRealisations\Cabinet.cs" />
+    <Compile Include="InterfacesRealisations\Client.cs" />
+    <Compile Include="InterfacesRealisations\EntityFactory.cs" />
+    <Compile Include="InterfacesRealisations\Reception.cs" />
+    <Compile Include="InterfacesRealisations\Specialist.cs" />
+    <Compile Include="InterfacesRealisations\SpecializationList.cs" />
+    <Compile Include="InterfacesRealisations\Telephone.cs" />
+    <Compile Include="InterfacesRealisations\TimeInterval.cs" />
+    <Compile Include="Interfaces\ControlsInterfaces.cs" />
+    <Compile Include="Interfaces\DBobjectsInterfaces.cs" />
+    <Compile Include="Interfaces\EntityFactory.cs" />
+    <Compile Include="Interfaces\FormsInterfaces.cs" />
+    <Compile Include="Main\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="Main\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -62,12 +149,48 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Controls\AddString.resx">
+      <DependentUpon>AddString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AddTelNumber.resx">
+      <DependentUpon>AddTelNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CabinetInfo.resx">
+      <DependentUpon>CabinetInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ClientInfo.resx">
+      <DependentUpon>ClientInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ReceptionInfo.resx">
+      <DependentUpon>ReceptionInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SpecialistInfo.resx">
+      <DependentUpon>SpecialistInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SpecializationsInfo.resx">
+      <DependentUpon>SpecializationsInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CabinetListEdit.resx">
+      <DependentUpon>CabinetListEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FindClientCard.resx">
+      <DependentUpon>FindClientCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReceptionInfoEdit.resx">
+      <DependentUpon>ReceptionInfoEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpecialistListEdit.resx">
+      <DependentUpon>SpecialistListEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpecializationListEdit.resx">
+      <DependentUpon>SpecializationListEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="Main\app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -77,18 +200,6 @@
     <ProjectReference Include="..\Scheduler_Controls\CalendarControl3\CalendarControl3.csproj">
       <Project>{C14311FB-8AA9-4536-9476-B41E50BBD4CD}</Project>
       <Name>CalendarControl3</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Scheduler_Controls\Scheduler_Controls\Scheduler_Controls.csproj">
-      <Project>{DED801C8-E565-46A1-A0C9-406C631695C8}</Project>
-      <Name>Scheduler_Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Scheduler_Controls\Scheduler_Forms\Scheduler_Forms.csproj">
-      <Project>{1FCF4D1A-82BC-440C-95E7-8F061C83FF72}</Project>
-      <Name>Scheduler_Forms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Scheduler_DBobjects\Scheduler_DBobjects.csproj">
-      <Project>{214B915E-1761-437B-A7FE-3493C6876B9A}</Project>
-      <Name>Scheduler_DBobjects</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -77,9 +77,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Scheduler_Controls\Scheduler_Controls.csproj">
-      <Project>{DED801C8-E565-46A1-A0C9-406C631695C8}</Project>
-      <Name>Scheduler_Controls</Name>
+    <ProjectReference Include="..\..\Scheduler\Scheduler.csproj">
+      <Project>{0A15E2C2-845D-4A5B-B4AC-3E9B7F2C590E}</Project>
+      <Name>Scheduler</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

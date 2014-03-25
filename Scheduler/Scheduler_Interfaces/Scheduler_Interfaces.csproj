@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{214B915E-1761-437B-A7FE-3493C6876B9A}</ProjectGuid>
+    <ProjectGuid>{E79A1BCB-3BB2-474E-AE57-71DF882E295D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Scheduler_DBobjects</RootNamespace>
-    <AssemblyName>Scheduler_DBobjects</AssemblyName>
+    <RootNamespace>Scheduler_Interfaces</RootNamespace>
+    <AssemblyName>Scheduler_Interfaces</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,27 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Column.cs" />
-    <Compile Include="MainDatabase.cs" />
+    <Compile Include="EntityFactory.cs" />
+    <Compile Include="FormsInterfaces.cs" />
+    <Compile Include="ControlsInterfaces.cs" />
+    <Compile Include="DBobjectsInterfaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Table.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Scheduler_Controls\CalendarControl3\CalendarControl3.csproj">
       <Project>{C14311FB-8AA9-4536-9476-B41E50BBD4CD}</Project>
       <Name>CalendarControl3</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Scheduler_Controls\Scheduler_Controls\Scheduler_Controls.csproj">
-      <Project>{DED801C8-E565-46A1-A0C9-406C631695C8}</Project>
-      <Name>Scheduler_Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Scheduler_Controls\Scheduler_Forms\Scheduler_Forms.csproj">
-      <Project>{1FCF4D1A-82BC-440C-95E7-8F061C83FF72}</Project>
-      <Name>Scheduler_Forms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Scheduler_Interfaces\Scheduler_Interfaces.csproj">
-      <Project>{E79A1BCB-3BB2-474E-AE57-71DF882E295D}</Project>
-      <Name>Scheduler_Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

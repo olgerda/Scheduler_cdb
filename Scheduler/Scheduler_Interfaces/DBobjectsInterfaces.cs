@@ -5,7 +5,7 @@ using System.Text;
 using CalendarControl3_Interfaces;
 using Scheduler_Controls_Interfaces;
 using Scheduler_Forms_Interfaces;
-
+using Scheduler_Common_Interfaces;
 
 namespace Scheduler_DBobjects_Intefraces
 {
