@@ -95,6 +95,27 @@ namespace CalendarControl3
         {
             get { return columns; }
         }
+
+
+        int ITable2ControlInterface.MinValue
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        int ITable2ControlInterface.MaxValue
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 
     public class TestColumn : IColumn2ControlInterface
@@ -117,6 +138,18 @@ namespace CalendarControl3
         {
             //entities.Add(new TestEntity());
             get { return entities; }
+        }
+
+        string IColumn2ControlInterface.Name
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 
@@ -159,6 +192,12 @@ namespace CalendarControl3
         public ulong ID
         {
             get { return 0; }
+        }
+
+
+        public bool IsIntersectWith(IEntity2ControlInterface second)
+        {
+            throw new NotImplementedException();
         }
     }
 

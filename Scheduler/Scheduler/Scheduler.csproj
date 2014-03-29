@@ -89,9 +89,9 @@
     <Compile Include="Controls\SpecializationsInfo.Designer.cs">
       <DependentUpon>SpecializationsInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="DBobjects\Column.cs" />
+    <Compile Include="InterfacesRealisations\Column.cs" />
     <Compile Include="DBobjects\MainDatabase.cs" />
-    <Compile Include="DBobjects\Table.cs" />
+    <Compile Include="InterfacesRealisations\Table.cs" />
     <Compile Include="Forms\CabinetListEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +190,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Main\app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -7,6 +7,19 @@ namespace Scheduler_DBobjects
 {
     public class MainDatabase : Scheduler_DBobjects_Intefraces.IMainDataBase
     {
+        Scheduler_Common_Interfaces.IFactory entityFactory;
+
+        Scheduler_Forms_Interfaces.ISpecialistList specialistList;
+        Scheduler_Forms_Interfaces.IClientList clientList;
+        Scheduler_Controls_Interfaces.ISpecializationList specializationList;
+        Scheduler_Forms_Interfaces.ICabinetList cabinetList;
+
+
+        public MainDatabase()
+        {
+            entityFactory = new InterfacesRealisations.EntityFactory();
+        }
+
         List<Scheduler_DBobjects_Intefraces.IEntity> Scheduler_DBobjects_Intefraces.IMainDataBase.SelectReceptionsFromDate(DateTime date)
         {
             throw new NotImplementedException();
@@ -34,7 +47,7 @@ namespace Scheduler_DBobjects
 
         Scheduler_Common_Interfaces.IFactory Scheduler_DBobjects_Intefraces.IMainDataBase.EntityFactory
         {
-            get { throw new NotImplementedException(); }
+            get { return entityFactory; }
         }
     }
 }

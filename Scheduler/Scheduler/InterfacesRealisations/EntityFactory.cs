@@ -90,17 +90,17 @@ namespace InterfacesRealisations
 
         public Scheduler_DBobjects_Intefraces.IMainDataBase NewMainDataBase()
         {
-            throw new NotImplementedException();
+            return new Scheduler_DBobjects.MainDatabase();
         }
 
         public Scheduler_DBobjects_Intefraces.ITable NewTable()
         {
-            throw new NotImplementedException();
+            return new Table();
         }
 
         public Scheduler_DBobjects_Intefraces.IColumn NewColumn()
         {
-            throw new NotImplementedException();
+            return new Column();
         }
 
         public Scheduler_DBobjects_Intefraces.IEntity NewEntity()

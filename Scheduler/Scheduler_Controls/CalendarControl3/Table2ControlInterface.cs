@@ -18,12 +18,12 @@ namespace CalendarControl3_Interfaces
         /// <summary>
         /// Получить значение, от которого отталкиваться при отрисовке от верхнего края.
         /// </summary>
-        int MinValue { get; }
+        int MinValue { get; set; }
         /// <summary>
         /// Получить значение, от которого отталкиваться при отрисовке до нижнего края.
         /// </summary>
         /// <returns></returns>
-        int MaxValue { get; }
+        int MaxValue { get;}
 
         /// <summary>
         /// Получить список описаний, которые будут отображены в левом столбце как легенда к строкам таблицы.
@@ -42,7 +42,7 @@ namespace CalendarControl3_Interfaces
 
     public interface IColumn2ControlInterface
     {
-        string Name {get;}
+        string Name { get; set; }
         List<IEntity2ControlInterface> Entities { get; }
         //event EventHandler Changed;
     }
@@ -69,7 +69,8 @@ namespace CalendarControl3_Interfaces
         //object GetObject();
 
         ulong ID { get; }
-        
+
+        bool IsIntersectWith(IEntity2ControlInterface second);
         //event EventHandler Changed;
     }
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Scheduler.Properties {
+namespace MySqlConnector.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -23,12 +23,15 @@ namespace Scheduler.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server=kvartetMySQL;Uid=kvartetAdmin;Pwd=KvArTeT;Database=kvartet_new;")]
-        public string ConnectionString {
+        [global::System.Configuration.DefaultSettingValueAttribute("Server=kvartetDBserver;Uid=kvartetAdmin;Pwd=1;Database=kvartet_new;")]
+        public string mysqlconnstring {
             get {
-                return ((string)(this["ConnectionString"]));
+                return ((string)(this["mysqlconnstring"]));
+            }
+            set {
+                this["mysqlconnstring"] = value;
             }
         }
     }

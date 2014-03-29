@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MySqlConnector.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="mysqlconnstring" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Server=kvartetDBserver;Uid=kvartetAdmin;Pwd=1;Database=kvartet_new;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

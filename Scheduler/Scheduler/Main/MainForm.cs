@@ -153,6 +153,7 @@ namespace Scheduler
                 if (column == null) 
                 {
                     column = database.EntityFactory.NewColumn();
+                    column.Name = ent.Cabinet.Name;
                     listOfColumns.Add(column);
                 }
                 column.AddEntity(ent);
