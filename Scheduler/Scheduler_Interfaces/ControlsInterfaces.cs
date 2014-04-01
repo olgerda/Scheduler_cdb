@@ -13,10 +13,15 @@ namespace Scheduler_Controls_Interfaces
 
     }
 
+    public interface IHaveID
+    {
+        int ID { get; set; }
+    }
+
     /// <summary>
     /// Коренной интерфейс для сущностей, имеющих имя/название.
     /// </summary>
-    public interface INamedEntity
+    public interface INamedEntity: IHaveID
     {
         string Name { get; set; }
 
@@ -76,7 +81,7 @@ namespace Scheduler_Controls_Interfaces
     /// <summary>
     /// Интерфейс записи на приём.
     /// </summary>
-    public interface IReception : IDummy
+    public interface IReception : IDummy, IHaveID
     {
         ITimeInterval ReceptionTimeInterval { get; set; }
         IClient Client { get; set; }
@@ -112,6 +117,8 @@ namespace Scheduler_Controls_Interfaces
     public interface ISpecializationList : IDummy
     {
         HashSet<string> SpecializationList { get; set; }
+
+        ISpecializationList Copy();
     }
 
     public interface ITelephone

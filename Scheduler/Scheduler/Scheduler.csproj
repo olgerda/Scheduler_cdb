@@ -130,10 +130,6 @@
     <Compile Include="InterfacesRealisations\SpecializationList.cs" />
     <Compile Include="InterfacesRealisations\Telephone.cs" />
     <Compile Include="InterfacesRealisations\TimeInterval.cs" />
-    <Compile Include="Interfaces\ControlsInterfaces.cs" />
-    <Compile Include="Interfaces\DBobjectsInterfaces.cs" />
-    <Compile Include="Interfaces\EntityFactory.cs" />
-    <Compile Include="Interfaces\FormsInterfaces.cs" />
     <Compile Include="Main\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -198,9 +194,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MySqlConnector\MySqlConnector.csproj">
+      <Project>{DD5BE090-725B-4BF6-A8D3-4FA8BD2E0392}</Project>
+      <Name>MySqlConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Scheduler_Controls\CalendarControl3\CalendarControl3.csproj">
       <Project>{C14311FB-8AA9-4536-9476-B41E50BBD4CD}</Project>
       <Name>CalendarControl3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scheduler_Interfaces\Scheduler_Interfaces.csproj">
+      <Project>{D1A24643-FACE-4675-899D-70E02AC564F6}</Project>
+      <Name>Scheduler_Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

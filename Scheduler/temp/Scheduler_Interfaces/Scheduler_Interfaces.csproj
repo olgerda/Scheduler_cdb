@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D1A24643-FACE-4675-899D-70E02AC564F6}</ProjectGuid>
+    <ProjectGuid>{E79A1BCB-3BB2-474E-AE57-71DF882E295D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Scheduler_Interfaces</RootNamespace>
@@ -40,10 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControlsInterfaces.cs" />
-    <Compile Include="DBobjectsInterfaces.cs" />
     <Compile Include="EntityFactory.cs" />
     <Compile Include="FormsInterfaces.cs" />
+    <Compile Include="ControlsInterfaces.cs" />
+    <Compile Include="DBobjectsInterfaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

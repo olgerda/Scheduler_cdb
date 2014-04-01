@@ -93,6 +93,11 @@ namespace InterfacesRealisations
             return new Scheduler_DBobjects.MainDatabase();
         }
 
+        public Scheduler_DBobjects_Intefraces.Scheduler_DBconnector NewDBConnector()
+        {
+            return new MySqlConnector.MySQLConnector(this);
+        }
+
         public Scheduler_DBobjects_Intefraces.ITable NewTable()
         {
             return new Table();

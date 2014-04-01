@@ -24,6 +24,7 @@ namespace Scheduler_Common_Interfaces
         ITimeInterval NewTimeInterval();
 
         Scheduler_DBobjects_Intefraces.IMainDataBase NewMainDataBase();
+        Scheduler_DBobjects_Intefraces.Scheduler_DBconnector NewDBConnector();
         Scheduler_DBobjects_Intefraces.ITable NewTable();
         Scheduler_DBobjects_Intefraces.IColumn NewColumn();
         Scheduler_DBobjects_Intefraces.IEntity NewEntity();

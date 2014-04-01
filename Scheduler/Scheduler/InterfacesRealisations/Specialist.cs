@@ -11,6 +11,8 @@ namespace InterfacesRealisations
         HashSet<string> specialisations;
         bool notworking;
 
+        int id;
+
         public Specialist()
         {
             name = String.Empty;
@@ -58,6 +60,18 @@ namespace InterfacesRealisations
         {
             return name;
         }
+
+        int Scheduler_Controls_Interfaces.IHaveID.ID
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
     }
 
     public class SpecialistList : Scheduler_Forms_Interfaces.ISpecialistList
@@ -67,6 +81,11 @@ namespace InterfacesRealisations
         public SpecialistList()
         {
             list = new List<Scheduler_Controls_Interfaces.ISpecialist>();
+        }
+
+        SpecialistList(SpecialistList old)
+        {
+            list = new List<Scheduler_Controls_Interfaces.ISpecialist>(old.list);
         }
 
         Scheduler_Controls_Interfaces.ISpecialist Scheduler_Forms_Interfaces.ISpecialistList.FindSpecialistByPartialName(string partialName)
@@ -79,6 +98,11 @@ namespace InterfacesRealisations
         List<Scheduler_Controls_Interfaces.ISpecialist> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist>.List
         {
             get { return list; }
+        }
+
+        Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist>.Copy()
+        {
+            return new SpecialistList(this);
         }
     }
 }

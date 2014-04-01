@@ -15,8 +15,7 @@ namespace InterfacesRealisations
 
         int minValue;
         int maxValue;
-        int length;
-
+        
         public Table()
         {
             columns = new List<CalendarControl3_Interfaces.IColumn2ControlInterface>();

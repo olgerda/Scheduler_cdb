@@ -16,6 +16,8 @@ namespace InterfacesRealisations
         public delegate void DisposeThis();
         DisposeThis DisposeThisFunction;
 
+        int id;
+
         Scheduler_Controls_Interfaces.ITimeInterval Scheduler_Controls_Interfaces.IReception.ReceptionTimeInterval
         {
             get { return receptionTimeInterval; }
@@ -110,7 +112,7 @@ namespace InterfacesRealisations
 
         ulong CalendarControl3_Interfaces.IEntity2ControlInterface.ID
         {
-            get { throw new NotImplementedException(); }
+            get { return Convert.ToUInt64(id); }
         }
 
 
@@ -120,6 +122,18 @@ namespace InterfacesRealisations
             bool topIntersect = theThis.TopLevel > second.TopLevel && theThis.TopLevel < second.BottomLevel;
             bool bottomIntersect = theThis.BottomLevel < second.BottomLevel && theThis.BottomLevel > second.TopLevel;
             return topIntersect || bottomIntersect;
+        }
+
+        int Scheduler_Controls_Interfaces.IHaveID.ID
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
         }
     }
 }

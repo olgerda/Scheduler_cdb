@@ -18,7 +18,7 @@ namespace Scheduler_DBobjects_Intefraces
         ISpecializationList SpecializationList { get; }
         ICabinetList CabinetList { get; }
         IFactory EntityFactory { get; }
-        
+
     }
 
     public interface ITable : ITable2ControlInterface
@@ -38,4 +38,26 @@ namespace Scheduler_DBobjects_Intefraces
     {
     }
 
+    public interface Scheduler_DBconnector
+    {
+        Scheduler_Common_Interfaces.IFactory EntityFactory { get; set; }
+
+        void AddClient(Scheduler_Controls_Interfaces.IClient client);
+        void RemoveClient(Scheduler_Controls_Interfaces.IClient client);
+        IClientList AllClients();
+
+        void AddSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist);
+        void RemoveSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist);
+        ISpecialistList AllSpecialists();
+
+        void AddSpecialization(string specialization);
+        void RemoveSpecialization(string specialization);
+        ISpecializationList AllSpecializations();
+
+        void AddCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet);
+        void RemoveCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet);
+        ICabinetList AllCabinets();
+
+        List<IEntity> GetReceptionsFromDate(DateTime date);
+    }
 }

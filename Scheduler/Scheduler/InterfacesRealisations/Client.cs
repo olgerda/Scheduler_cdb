@@ -5,7 +5,7 @@ using System.Text;
 
 namespace InterfacesRealisations
 {
-    public class Client: Scheduler_Controls_Interfaces.IClient
+    public class Client : Scheduler_Controls_Interfaces.IClient
     {
         string comment;
         bool blacklisted;
@@ -13,6 +13,8 @@ namespace InterfacesRealisations
         string name;
         public delegate List<string> GetReceptions(Scheduler_Controls_Interfaces.IClient client);
         GetReceptions getreceptions;
+
+        int id;
 
         public Client()
         {
@@ -66,7 +68,7 @@ namespace InterfacesRealisations
 
         GetReceptions SetReceptionListFuncition
         {
-            set { getreceptions = value;}
+            set { getreceptions = value; }
         }
 
         List<string> Scheduler_Controls_Interfaces.IClient.Receptions
@@ -96,6 +98,18 @@ namespace InterfacesRealisations
         {
             return name;
         }
+
+        int Scheduler_Controls_Interfaces.IHaveID.ID
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
     }
 
     public class ClientList : Scheduler_Forms_Interfaces.IClientList
@@ -105,6 +119,11 @@ namespace InterfacesRealisations
         public ClientList()
         {
             list = new List<Scheduler_Controls_Interfaces.IClient>();
+        }
+
+        ClientList(ClientList old)
+        {
+            list = new List<Scheduler_Controls_Interfaces.IClient>(old.list);
         }
 
         Scheduler_Controls_Interfaces.IClient Scheduler_Forms_Interfaces.IClientList.FindClientByPartialName(string partialName)
@@ -124,6 +143,11 @@ namespace InterfacesRealisations
         List<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.List
         {
             get { return list; }
+        }
+
+        Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.Copy()
+        {
+            return new ClientList(this);
         }
     }
 }

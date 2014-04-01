@@ -5,28 +5,22 @@ using System.Text;
 
 namespace MySqlConnector
 {
-    public class Main
+    public class MySQLConnector: Scheduler_DBobjects_Intefraces.Scheduler_DBconnector
     {
         MySql.Data.MySqlClient.MySqlConnection conn;
+        Scheduler_Common_Interfaces.IFactory entityFactory;
 
-        public Main()
+        public MySQLConnector()
         {
             conn = new MySql.Data.MySqlClient.MySqlConnection(Properties.Settings.Default.mysqlconnstring);
-            try
-            {
-                conn.Open();
-            }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
-            {
-                switch (ex.Number)
-                {
-                    case 0:
-                    case 1042:
-                        throw new Exception("Не могу подключиться к серверу. Проверьте настройки сервера.", ex);
-                    case 1045:
-                        throw new Exception("Неверно введен логин или пароль.", ex);
-                }
-            }
+            Connect();
+        }
+        
+        public MySQLConnector(Scheduler_Common_Interfaces.IFactory entityFactory)
+        {
+            conn = new MySql.Data.MySqlClient.MySqlConnection(Properties.Settings.Default.mysqlconnstring);
+            Connect();
+            this.entityFactory = entityFactory;
         }
 
         void CheckConn()
@@ -43,7 +37,7 @@ namespace MySqlConnector
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
                 throw new Exception("Ошибка подключения к серверу. ", ex);
-            }                
+            }
         }
 
         void Connect()
@@ -79,7 +73,7 @@ namespace MySqlConnector
             MySql.Data.MySqlClient.MySqlDataReader reader = cmd.ExecuteReader();
 
             string[] fields_splitted = fields.Split(',');
-            
+
             while (reader.Read())
             {
                 //BAD! VERY BAD!
@@ -92,9 +86,88 @@ namespace MySqlConnector
             return result;
         }
 
-        ~Main()
+        ~MySQLConnector()
         {
             conn.Close();
+        }
+
+        string[] clientColumns = { "id","name","blacklisted",""};
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddClient(Scheduler_Controls_Interfaces.IClient client)
+        {
+            CheckConn();
+
+        }
+
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveClient(Scheduler_Controls_Interfaces.IClient client)
+        {
+            throw new NotImplementedException();
+        }
+
+        Scheduler_Forms_Interfaces.IClientList Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AllClients()
+        {
+            throw new NotImplementedException();
+        }
+
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist)
+        {
+            throw new NotImplementedException();
+        }
+
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist)
+        {
+            throw new NotImplementedException();
+        }
+
+        Scheduler_Forms_Interfaces.ISpecialistList Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AllSpecialists()
+        {
+            throw new NotImplementedException();
+        }
+
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddSpecialization(string specialization)
+        {
+            throw new NotImplementedException();
+        }
+
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveSpecialization(string specialization)
+        {
+            throw new NotImplementedException();
+        }
+
+        Scheduler_Controls_Interfaces.ISpecializationList Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AllSpecializations()
+        {
+            throw new NotImplementedException();
+        }
+
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet)
+        {
+            throw new NotImplementedException();
+        }
+
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet)
+        {
+            throw new NotImplementedException();
+        }
+
+        Scheduler_Forms_Interfaces.ICabinetList Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AllCabinets()
+        {
+            throw new NotImplementedException();
+        }
+
+        List<Scheduler_DBobjects_Intefraces.IEntity> Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.GetReceptionsFromDate(DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        Scheduler_Common_Interfaces.IFactory Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.EntityFactory
+        {
+            get
+            {
+                return entityFactory;
+            }
+            set
+            {
+                entityFactory = value;
+            }
         }
     }
 }

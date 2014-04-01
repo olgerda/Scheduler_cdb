@@ -56,6 +56,16 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Scheduler_Controls\CalendarControl3\CalendarControl3.csproj">
+      <Project>{C14311FB-8AA9-4536-9476-B41E50BBD4CD}</Project>
+      <Name>CalendarControl3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scheduler_Interfaces\Scheduler_Interfaces.csproj">
+      <Project>{D1A24643-FACE-4675-899D-70E02AC564F6}</Project>
+      <Name>Scheduler_Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

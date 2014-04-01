@@ -14,6 +14,11 @@ namespace InterfacesRealisations
             list = new HashSet<string>();
         }
 
+        public SpecializationList(HashSet<string> listToCopy)
+        {
+            list = new HashSet<string>(listToCopy);
+        }
+
         HashSet<string> Scheduler_Controls_Interfaces.ISpecializationList.SpecializationList
         {
             get
@@ -24,6 +29,11 @@ namespace InterfacesRealisations
             {
                 list = value;
             }
+        }
+
+        Scheduler_Controls_Interfaces.ISpecializationList Scheduler_Controls_Interfaces.ISpecializationList.Copy()
+        {
+            return new SpecializationList(list);
         }
     }
 }

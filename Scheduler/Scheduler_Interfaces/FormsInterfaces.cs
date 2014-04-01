@@ -8,6 +8,8 @@ namespace Scheduler_Forms_Interfaces
     public interface IEntityList<T> where T : Scheduler_Controls_Interfaces.IDummy
     {
         List<T> List { get; }
+
+        IEntityList<T> Copy();
     }
 
     public interface IClientList: IEntityList<Scheduler_Controls_Interfaces.IClient>
@@ -27,6 +29,8 @@ namespace Scheduler_Forms_Interfaces
         /// <param name="partialName"></param>
         /// <returns>null если ничего похожего не найдено.</returns>
         Scheduler_Controls_Interfaces.IClient FindClientByPartialTelephone(string partialName);
+        
+        //IClientList Copy();
     }
 
     public interface ISpecialistList : IEntityList<Scheduler_Controls_Interfaces.ISpecialist>
@@ -34,10 +38,12 @@ namespace Scheduler_Forms_Interfaces
         //List<Scheduler_Controls_Interfaces.ISpecialist> List { get; }
 
         Scheduler_Controls_Interfaces.ISpecialist FindSpecialistByPartialName(string partialName);
+
+        //ISpecialistList Copy();
     }
 
     public interface ICabinetList : IEntityList<Scheduler_Controls_Interfaces.ICabinet>
     {
-
+        //ICabinetList Copy();
     }
 }
