@@ -68,7 +68,7 @@ namespace CalendarControl3_Interfaces
         /// <returns></returns>
         //object GetObject();
 
-        ulong ID { get; }
+        //ulong ID { get; }
 
         bool IsIntersectWith(IEntity2ControlInterface second);
         //event EventHandler Changed;

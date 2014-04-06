@@ -13,8 +13,8 @@ namespace InterfacesRealisations
         Scheduler_Controls_Interfaces.ICabinet cabinet;
         string specialisation;
         bool isRented;
-        public delegate void DisposeThis();
-        DisposeThis DisposeThisFunction;
+
+        Scheduler_Controls_Interfaces.DisposeReception disposeFunc;
 
         int id;
 
@@ -77,14 +77,6 @@ namespace InterfacesRealisations
             return result == String.Empty ? null : result;
         }
 
-
-
-        void Scheduler_Controls_Interfaces.IReception.Dispose()
-        {
-            if (DisposeThisFunction != null)
-                DisposeThisFunction();
-        }
-
         string CalendarControl3_Interfaces.IEntity2ControlInterface.StringToShow
         {
             get
@@ -110,10 +102,10 @@ namespace InterfacesRealisations
             get { return Convert.ToInt32(Math.Truncate(receptionTimeInterval.EndDate.TimeOfDay.TotalMinutes)); }
         }
 
-        ulong CalendarControl3_Interfaces.IEntity2ControlInterface.ID
-        {
-            get { return Convert.ToUInt64(id); }
-        }
+//         ulong CalendarControl3_Interfaces.IEntity2ControlInterface.ID
+//         {
+//             get { return Convert.ToUInt64(id); }
+//         }
 
 
         bool CalendarControl3_Interfaces.IEntity2ControlInterface.IsIntersectWith(CalendarControl3_Interfaces.IEntity2ControlInterface second)
@@ -134,6 +126,26 @@ namespace InterfacesRealisations
             {
                 id = value;
             }
+        }
+
+
+        string Scheduler_Controls_Interfaces.IReception.DisplayString
+        {
+            get { return receptionTimeInterval.Interval() + " " + specialist.Name + " " + specialisation + " " + cabinet.Name; }
+        }
+
+
+
+        void Scheduler_Controls_Interfaces.IReception.Dispose()
+        {
+            if (disposeFunc != null)
+                disposeFunc(this);
+        }
+
+        void Scheduler_Controls_Interfaces.IReception.SetDisposeFunction(Scheduler_Controls_Interfaces.DisposeReception func)
+        {
+            if (disposeFunc == null)
+                disposeFunc = func;
         }
     }
 }

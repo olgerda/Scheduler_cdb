@@ -11,8 +11,9 @@ namespace InterfacesRealisations
         bool blacklisted;
         HashSet<string> telephones;
         string name;
-        public delegate List<string> GetReceptions(Scheduler_Controls_Interfaces.IClient client);
-        GetReceptions getreceptions;
+        //public delegate List<Scheduler_Controls_Interfaces.IReception> GetReceptions(Scheduler_Controls_Interfaces.IClient client);
+
+        Scheduler_Controls_Interfaces.GetClientReceptionsList getreceptions;
 
         int id;
 
@@ -66,19 +67,19 @@ namespace InterfacesRealisations
             return telephones.Contains(telNumber);
         }
 
-        GetReceptions SetReceptionListFuncition
-        {
-            set { getreceptions = value; }
-        }
+        //         GetReceptions SetReceptionListFuncition
+        //         {
+        //             set { getreceptions = value; }
+        //         }
 
-        List<string> Scheduler_Controls_Interfaces.IClient.Receptions
+        List<Scheduler_Controls_Interfaces.IReception> Scheduler_Controls_Interfaces.IClient.Receptions
         {
             get
             {
                 if (getreceptions != null)
                     return getreceptions(this);
                 else
-                    return new List<string>();
+                    return new List<Scheduler_Controls_Interfaces.IReception>();
             }
         }
 
@@ -109,6 +110,13 @@ namespace InterfacesRealisations
             {
                 id = value;
             }
+        }
+
+
+        void Scheduler_Controls_Interfaces.IClient.ReceptionListFuncition(Scheduler_Controls_Interfaces.GetClientReceptionsList func)
+        {
+            if (getreceptions == null)
+                getreceptions = func;
         }
     }
 

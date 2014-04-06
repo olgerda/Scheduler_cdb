@@ -43,10 +43,12 @@ namespace Scheduler_DBobjects_Intefraces
         Scheduler_Common_Interfaces.IFactory EntityFactory { get; set; }
 
         void AddClient(Scheduler_Controls_Interfaces.IClient client);
+        void UpdateClientData(Scheduler_Controls_Interfaces.IClient client);
         void RemoveClient(Scheduler_Controls_Interfaces.IClient client);
         IClientList AllClients();
 
         void AddSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist);
+        void UpdateSpecialistData(Scheduler_Controls_Interfaces.ISpecialist specialist);
         void RemoveSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist);
         ISpecialistList AllSpecialists();
 
@@ -55,9 +57,17 @@ namespace Scheduler_DBobjects_Intefraces
         ISpecializationList AllSpecializations();
 
         void AddCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet);
+        void UpdateCabinetData(Scheduler_Controls_Interfaces.ICabinet cabinet);
         void RemoveCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet);
         ICabinetList AllCabinets();
 
         List<IEntity> GetReceptionsFromDate(DateTime date);
+        List<IReception> GetReceptionsForClient(IClient client);
+
+        //GetClientReceptionsList GetReceptionsForClient(IClient client);
+
+        void AddReception(IEntity reception);
+        void UpdateReception(IEntity reception);
+        void RemoveReception(IEntity reception);
     }
 }

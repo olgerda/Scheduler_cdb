@@ -51,6 +51,14 @@
       <Project>{DD5BE090-725B-4BF6-A8D3-4FA8BD2E0392}</Project>
       <Name>MySqlConnector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Scheduler\Scheduler.csproj">
+      <Project>{0A15E2C2-845D-4A5B-B4AC-3E9B7F2C590E}</Project>
+      <Name>Scheduler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scheduler_Interfaces\Scheduler_Interfaces.csproj">
+      <Project>{D1A24643-FACE-4675-899D-70E02AC564F6}</Project>
+      <Name>Scheduler_Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -41,11 +41,13 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.chkBlackList = new System.Windows.Forms.CheckBox();
+            this.btnLoadReceptions = new System.Windows.Forms.Button();
             this.grpMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMain
             // 
+            this.grpMain.Controls.Add(this.btnLoadReceptions);
             this.grpMain.Controls.Add(this.label2);
             this.grpMain.Controls.Add(this.label1);
             this.grpMain.Controls.Add(this.btnCommit);
@@ -174,6 +176,16 @@
             this.chkBlackList.Text = "BlackList";
             this.chkBlackList.UseVisualStyleBackColor = true;
             // 
+            // btnLoadReceptions
+            // 
+            this.btnLoadReceptions.Location = new System.Drawing.Point(9, 63);
+            this.btnLoadReceptions.Name = "btnLoadReceptions";
+            this.btnLoadReceptions.Size = new System.Drawing.Size(69, 20);
+            this.btnLoadReceptions.TabIndex = 13;
+            this.btnLoadReceptions.Text = "Загрузить";
+            this.btnLoadReceptions.UseVisualStyleBackColor = true;
+            this.btnLoadReceptions.Click += new System.EventHandler(this.btnLoadReceptions_Click);
+            // 
             // ClientInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -204,5 +216,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox chkBlackList;
+        private System.Windows.Forms.Button btnLoadReceptions;
     }
 }

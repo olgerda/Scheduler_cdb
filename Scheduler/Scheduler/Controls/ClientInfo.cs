@@ -75,7 +75,7 @@ namespace Scheduler_Controls
 
             txtFIO.Text = client.Name;
             txtComment.Text = client.Comment;
-            lstReceptions.Items.AddRange(client.Receptions.ToArray());
+            lstTelephones.Items.Clear();
             lstTelephones.Items.AddRange(client.Telephones.ToArray());
             lstTelephones.DisplayMember = "FormattedTelephoneNumber";
             lstTelephones.ValueMember = "FormattedTelephoneNumber";
@@ -165,6 +165,12 @@ namespace Scheduler_Controls
 
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));
+        }
+
+        private void btnLoadReceptions_Click(object sender, EventArgs e)
+        {
+            lstReceptions.Items.Clear();
+            lstReceptions.Items.AddRange(client.Receptions.Select(r => r.DisplayString).ToArray());
         }
 
 

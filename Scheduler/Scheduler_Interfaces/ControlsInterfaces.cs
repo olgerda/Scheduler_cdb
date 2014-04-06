@@ -28,7 +28,7 @@ namespace Scheduler_Controls_Interfaces
         string ToString();
     }
 
-    public delegate List<string> GetClientReceptionsList(IClient client);
+    public delegate List<IReception> GetClientReceptionsList(IClient client);
     /// <summary>
     /// Интерфейс клиента.
     /// </summary>
@@ -51,7 +51,11 @@ namespace Scheduler_Controls_Interfaces
         //         /// </summary>
         //         string Telephone { set; }
 
-        List<string> Receptions { get; }
+        List<IReception> Receptions { get; }
+        /// <summary>
+        /// Установить функцию получения списка посещений данного клиента.
+        /// </summary>
+        void ReceptionListFuncition(GetClientReceptionsList func);
     }
 
     /// <summary>
@@ -78,6 +82,7 @@ namespace Scheduler_Controls_Interfaces
         bool Availability { get; set; }
     }
 
+    public delegate void DisposeReception(IHaveID item);
     /// <summary>
     /// Интерфейс записи на приём.
     /// </summary>
@@ -100,6 +105,16 @@ namespace Scheduler_Controls_Interfaces
         /// Удалить информацию о себе из системы.
         /// </summary>
         void Dispose();
+
+        /// <summary>
+        /// Установить функцию удаления записи.
+        /// </summary>
+        void SetDisposeFunction(DisposeReception func);
+
+        /// <summary>
+        /// Отобразить содержимое в виде максимально информативной строки.
+        /// </summary>
+        string DisplayString { get; }
     }
 
     /// <summary>
