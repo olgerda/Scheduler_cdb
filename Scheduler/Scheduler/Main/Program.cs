@@ -23,9 +23,10 @@ namespace Scheduler
 		[STAThread]
 		private static void Main(string[] args)
 		{
+            var entity = new Scheduler_InterfacesRealisations.EntityFactory();
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm(/*curDB*/));
+			Application.Run(new MainForm(entity.NewMainDataBase()));
 		}
 		
 	}

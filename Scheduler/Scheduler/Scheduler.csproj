@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="InterfacesRealisations\Column.cs" />
     <Compile Include="DBobjects\MainDatabase.cs" />
+    <Compile Include="InterfacesRealisations\CommonObjects.cs" />
     <Compile Include="InterfacesRealisations\Table.cs" />
     <Compile Include="Forms\CabinetListEdit.cs">
       <SubType>Form</SubType>

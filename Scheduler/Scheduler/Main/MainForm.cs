@@ -201,7 +201,7 @@ namespace Scheduler
 
             using (FindClientCard clientsForm = new FindClientCard(database.ClientList, database.EntityFactory))
             {
-                clientsForm.Show();
+                clientsForm.ShowDialog();
             }            
         }
 
@@ -215,7 +215,7 @@ namespace Scheduler
         {
             using (CabinetListEdit cabinetForm = new CabinetListEdit(database.CabinetList, database.EntityFactory))
             {
-                cabinetForm.Show();
+                cabinetForm.ShowDialog();
             }
         }
 
@@ -229,7 +229,7 @@ namespace Scheduler
         {
             using (SpecialistListEdit specialistForm = new SpecialistListEdit(database.SpecialistList, database.EntityFactory))
             {
-                specialistForm.Show();
+                specialistForm.ShowDialog();
             }
         }
 
@@ -242,7 +242,7 @@ namespace Scheduler
         {
             using (SpecializationListEdit specializationsForm = new SpecializationListEdit(database.SpecializationList))
             {
-                specializationsForm.Show();
+                specializationsForm.ShowDialog();
             }
         }
 

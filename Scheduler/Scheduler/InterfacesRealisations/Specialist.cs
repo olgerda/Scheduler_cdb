@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace InterfacesRealisations
+namespace Scheduler_InterfacesRealisations
 {
-    public class Specialist : Scheduler_Controls_Interfaces.ISpecialist
+    public class Specialist : CommonObjectWithNotify, Scheduler_Controls_Interfaces.ISpecialist
     {
         string name;
         HashSet<string> specialisations;
@@ -29,6 +29,7 @@ namespace InterfacesRealisations
             set
             {
                 notworking = value;
+                RaisePropertyChanged("NotWorking");
             }
         }
 
@@ -41,6 +42,7 @@ namespace InterfacesRealisations
             set
             {
                 specialisations = value;
+                RaisePropertyChanged("Specialisations");
             }
         }
 
@@ -53,10 +55,11 @@ namespace InterfacesRealisations
             set
             {
                 name = value;
+                RaisePropertyChanged("Name");
             }
         }
 
-        string Scheduler_Controls_Interfaces.INamedEntity.ToString()
+        public override string /*Scheduler_Controls_Interfaces.INamedEntity.*/ToString()
         {
             return name;
         }
@@ -70,37 +73,43 @@ namespace InterfacesRealisations
             set
             {
                 id = value;
+                RaisePropertyChanged("ID");
             }
         }
     }
 
-    public class SpecialistList : Scheduler_Forms_Interfaces.ISpecialistList
+    public class SpecialistList : CommonList<Scheduler_Controls_Interfaces.ISpecialist>, Scheduler_Forms_Interfaces.ISpecialistList
     {
-        List<Scheduler_Controls_Interfaces.ISpecialist> list;
+        //List<Scheduler_Controls_Interfaces.ISpecialist> list;
 
-        public SpecialistList()
+        public SpecialistList(): base()
         {
-            list = new List<Scheduler_Controls_Interfaces.ISpecialist>();
+            //list = new List<Scheduler_Controls_Interfaces.ISpecialist>();
         }
 
-        SpecialistList(SpecialistList old)
+        SpecialistList(SpecialistList old): base(old)
         {
-            list = new List<Scheduler_Controls_Interfaces.ISpecialist>(old.list);
+            //list = new List<Scheduler_Controls_Interfaces.ISpecialist>(old.list);
         }
 
         Scheduler_Controls_Interfaces.ISpecialist Scheduler_Forms_Interfaces.ISpecialistList.FindSpecialistByPartialName(string partialName)
         {
             Scheduler_Controls_Interfaces.ISpecialist result;
-            result = list.FirstOrDefault(s => s.Name.StartsWith(partialName));
+            result = this.List.FirstOrDefault(s => s.Name.StartsWith(partialName));
             return result;
         }
 
-        List<Scheduler_Controls_Interfaces.ISpecialist> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist>.List
-        {
-            get { return list; }
-        }
+//         List<Scheduler_Controls_Interfaces.ISpecialist> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist>.List
+//         {
+//             get { return list; }
+//         }
 
-        Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist>.Copy()
+//         Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist>.Copy()
+//         {
+//             return new SpecialistList(this);
+//         }
+
+        public override Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist> Copy()
         {
             return new SpecialistList(this);
         }

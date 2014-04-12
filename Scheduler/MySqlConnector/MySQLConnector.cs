@@ -8,6 +8,7 @@ namespace MySqlConnector
     public class MySQLConnector : Scheduler_DBobjects_Intefraces.Scheduler_DBconnector
     {
         static Scheduler_Common_Interfaces.IFactory entityFactory;
+        static MySQLConnector singleton;
 
         public MySQLConnector(Scheduler_Common_Interfaces.IFactory entityFactor)
         {
@@ -49,7 +50,7 @@ namespace MySqlConnector
         }
 
         #region Clients and Telephones
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddClient(Scheduler_Controls_Interfaces.IClient client)
+        void  Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddClient(Scheduler_Controls_Interfaces.IClient client)
         {
             //clients columns are: idclients, name, comment, blacklisted
             //telephones columns: idtelephones, telephonescol
@@ -98,7 +99,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveClient(Scheduler_Controls_Interfaces.IClient client)
+        void  Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveClient(Scheduler_Controls_Interfaces.IClient client)
         {
             var connection = OpenConnection();
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
@@ -316,6 +317,8 @@ namespace MySqlConnector
 
             var result = entityFactory.NewClientList();
             result.List.AddRange(clientList);
+            result.OnItemAdded += ListAddHandler;
+            result.OnItemRemoved += ListRemoveHandler;
 
             return result;
         }
@@ -532,15 +535,18 @@ namespace MySqlConnector
 
                 using (var reader = cmd.ExecuteReader())
                 {
-                    var currentSpec = entityFactory.NewSpecialist();
-                    currentSpec.ID = reader.GetInt32("idspecialists");
-                    currentSpec.Name = reader.GetString("name");
-                    currentSpec.NotWorking = reader.GetInt32("notworking") == 1;
-                    result.List.Add(currentSpec);
+                    while (reader.Read())
+                    {
+                        var currentSpec = entityFactory.NewSpecialist();
+                        currentSpec.ID = reader.GetInt32("idspecialists");
+                        currentSpec.Name = reader.GetString("name");
+                        currentSpec.NotWorking = reader.GetInt32("notworking") == 1;
+                        result.List.Add(currentSpec);
+                    }
                 }
 
                 cmd.CommandText = "select s.name from specializations s, specializations2specialist s2s where s2s.specialist = @specialistId and s.idspecializations = s2s.specialization";
-                cmd.Parameters.Add("@specialistId");
+                cmd.Parameters.Add("@specialistId", MySql.Data.MySqlClient.MySqlDbType.Int32);
                 foreach (var specialist in result.List)
                 {
                     cmd.Parameters["@specialistId"].Value = specialist.ID;
@@ -1085,6 +1091,36 @@ namespace MySqlConnector
         {
             return GetReceptionsForClient(client);
         }
+        #endregion
+
+        #region ListEventAddRemoveHandlers
+
+        public void ListAddHandler(object item)// where T : Scheduler_Controls_Interfaces.IDummy
+        {
+            Scheduler_Controls_Interfaces.IClient client = item as Scheduler_Controls_Interfaces.IClient;
+            if (client != null)
+            {
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).AddClient(client);
+            }
+            else
+            {
+
+            }
+        }
+
+        public void ListRemoveHandler(object item)// where T : Scheduler_Controls_Interfaces.IDummy
+        {
+            Scheduler_Controls_Interfaces.IClient client = item as Scheduler_Controls_Interfaces.IClient;
+            if (client != null)
+            {
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).RemoveClient(client);
+            }
+            else
+            {
+
+            }
+        }
+
         #endregion
 
         Scheduler_Common_Interfaces.IFactory Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.EntityFactory

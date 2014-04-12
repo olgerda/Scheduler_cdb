@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace InterfacesRealisations
+namespace Scheduler_InterfacesRealisations
 {
     public class Telephone: Scheduler_Controls_Interfaces.ITelephone
     {

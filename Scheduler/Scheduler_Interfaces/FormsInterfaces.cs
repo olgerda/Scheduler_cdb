@@ -5,9 +5,33 @@ using System.Text;
 
 namespace Scheduler_Forms_Interfaces
 {
-    public interface IEntityList<T> where T : Scheduler_Controls_Interfaces.IDummy
+    public delegate void ItemAddedHandler(object item);// where T : Scheduler_Controls_Interfaces.IDummy;
+    public delegate void ItemRemovedHandler(object item);// where T : Scheduler_Controls_Interfaces.IDummy;
+
+    public class ItemEventArgs<T> : EventArgs where T : Scheduler_Controls_Interfaces.IDummy 
+    {
+        T changedItem;
+        public ItemEventArgs(T item)
+            : base()
+        {
+            changedItem = item;
+        }
+
+        T ChangedItem
+        {
+            get { return changedItem; }
+        }
+    }
+
+    public interface IEntityList<T> /*: List<T>*/ where T : Scheduler_Controls_Interfaces.IDummy 
     {
         List<T> List { get; }
+
+        void Add(T item);
+        void Remove(T item);
+
+        event ItemAddedHandler OnItemAdded;
+        event ItemRemovedHandler OnItemRemoved;
 
         IEntityList<T> Copy();
     }

@@ -41,11 +41,13 @@ namespace Scheduler_Forms
         {
             //grpEditMode.Location = grpSelectClient.Location;
 
-            lstClientList.DisplayMember = "Name";
+            
+            
             if (clientList == null)
                 return;
 
-            lstClientList.DataSource = clientList.List;
+            lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
+            lstClientList.DisplayMember = "Name";
 
             var customAutoComplete = new AutoCompleteStringCollection();
             customAutoComplete.AddRange(lstClientList.Items.Cast<IClient>().Select(c => c.Name).ToArray());
@@ -136,8 +138,10 @@ namespace Scheduler_Forms
 
                 if (!clientList.List.Contains(result))
                 {
-                    clientList.List.Add(result);
+                    //clientList.List.Add(result);
+                    clientList.Add(result);
                 }
+                lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
                 lstClientList.SelectedItem = result;
             }
             return result;
@@ -153,7 +157,7 @@ namespace Scheduler_Forms
         {
             IClient newClient = entityFactory.NewClient();
             ActivateEditMode(newClient);
-            clientList.List.Add(newClient);
+            //clientList.List.Add(newClient);
         }
 
         private void lstClientList_SelectedIndexChanged(object sender, EventArgs e)

@@ -8,7 +8,7 @@ namespace Scheduler_Controls_Interfaces
     /// <summary>
     /// Интерфейс, обобщающий значимые. Для типизированных template.
     /// </summary>
-    public interface IDummy
+    public interface IDummy: System.ComponentModel.INotifyPropertyChanged
     {
 
     }
@@ -25,7 +25,7 @@ namespace Scheduler_Controls_Interfaces
     {
         string Name { get; set; }
 
-        string ToString();
+        //string ToString();
     }
 
     public delegate List<IReception> GetClientReceptionsList(IClient client);
@@ -51,7 +51,7 @@ namespace Scheduler_Controls_Interfaces
         //         /// </summary>
         //         string Telephone { set; }
 
-        List<IReception> Receptions { get; }
+        List<IReception> GetReceptions();
         /// <summary>
         /// Установить функцию получения списка посещений данного клиента.
         /// </summary>

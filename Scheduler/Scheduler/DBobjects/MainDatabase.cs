@@ -23,7 +23,7 @@ namespace Scheduler_DBobjects
 
         public MainDatabase()
         {
-            entityFactory = new InterfacesRealisations.EntityFactory();
+            entityFactory = new Scheduler_InterfacesRealisations.EntityFactory();
 
             dbconnector = entityFactory.NewDBConnector();
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace InterfacesRealisations
+namespace Scheduler_InterfacesRealisations
 {
-    public class Reception : Scheduler_DBobjects_Intefraces.IEntity
+    public class Reception : CommonObjectWithNotify, Scheduler_DBobjects_Intefraces.IEntity
     {
         Scheduler_Controls_Interfaces.ITimeInterval receptionTimeInterval;
         Scheduler_Controls_Interfaces.IClient client;
@@ -21,38 +21,38 @@ namespace InterfacesRealisations
         Scheduler_Controls_Interfaces.ITimeInterval Scheduler_Controls_Interfaces.IReception.ReceptionTimeInterval
         {
             get { return receptionTimeInterval; }
-            set { receptionTimeInterval = value; }
+            set { receptionTimeInterval = value; RaisePropertyChanged("ReceptionTimeInterval"); }
         }
 
         Scheduler_Controls_Interfaces.IClient Scheduler_Controls_Interfaces.IReception.Client
         {
             get { return client; }
-            set { client = value; }
+            set { client = value; RaisePropertyChanged("Client"); }
         }
 
         Scheduler_Controls_Interfaces.ISpecialist Scheduler_Controls_Interfaces.IReception.Specialist
         {
             get { return specialist; }
 
-            set { specialist = value; }
+            set { specialist = value; RaisePropertyChanged("Specialist"); }
         }
 
         Scheduler_Controls_Interfaces.ICabinet Scheduler_Controls_Interfaces.IReception.Cabinet
         {
             get { return cabinet; }
-            set { cabinet = value; }
+            set { cabinet = value; RaisePropertyChanged("Cabinet"); }
         }
 
         string Scheduler_Controls_Interfaces.IReception.Specialization
         {
             get { return specialisation; }
-            set { specialisation = value; }
+            set { specialisation = value; RaisePropertyChanged("Specialization"); }
         }
 
         bool Scheduler_Controls_Interfaces.IReception.Rent
         {
             get { return isRented; }
-            set { isRented = value; }
+            set { isRented = value; RaisePropertyChanged("Rent"); }
         }
 
         string Scheduler_Controls_Interfaces.IReception.Validate()
@@ -124,7 +124,7 @@ namespace InterfacesRealisations
             }
             set
             {
-                id = value;
+                id = value; RaisePropertyChanged("ID");
             }
         }
 

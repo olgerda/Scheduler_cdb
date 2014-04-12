@@ -77,8 +77,6 @@ namespace Scheduler_Controls
             txtComment.Text = client.Comment;
             lstTelephones.Items.Clear();
             lstTelephones.Items.AddRange(client.Telephones.ToArray());
-            lstTelephones.DisplayMember = "FormattedTelephoneNumber";
-            lstTelephones.ValueMember = "FormattedTelephoneNumber";
 
             chkBlackList.Checked = client.BlackListed;
 
@@ -89,11 +87,12 @@ namespace Scheduler_Controls
             if (client == null)
                 return false;
 
-            return 
+            return
                 client.Name != txtFIO.Text ||
                 client.Comment != txtComment.Text ||
                 client.BlackListed != chkBlackList.Checked ||
-                client.Telephones.SequenceEqual(lstTelephones.Items.Cast<ITelephone>().Select(f => f.TelephoneNumber));
+                !client.Telephones.SequenceEqual(lstTelephones.Items.Cast<string>());
+                //client.Telephones.SequenceEqual(lstTelephones.Items.Cast<ITelephone>().Select(f => f.TelephoneNumber));
         }
 
         private void btnRemoveTelephone_Click(object sender, EventArgs e)
@@ -117,12 +116,14 @@ namespace Scheduler_Controls
                 f.Location = p;
                 if (f.ShowDialog() == DialogResult.OK &&
                     !String.IsNullOrWhiteSpace(f.number) && 
-                    !lstTelephones.Items.Cast<ITelephone>().Select(t => t.TelephoneNumber).ToList().Contains(f.number))
+                    !lstTelephones.Items.Cast<string>().ToList().Contains(f.number))
+                    //!lstTelephones.Items.Cast<ITelephone>().Select(t => t.TelephoneNumber).ToList().Contains(f.number))
                 {
-                    ITelephone tel = entityFactory.NewTelephone();
-                    tel.TelephoneNumber = f.number;
-                    lstTelephones.Items.Add(tel);
-                    lstTelephones.SelectedItem = tel;
+                       lstTelephones.Items.Add(f.number);
+//                     ITelephone tel = entityFactory.NewTelephone();
+//                     tel.TelephoneNumber = f.number;
+//                     lstTelephones.Items.Add(tel);
+//                     lstTelephones.SelectedItem = tel;
                 }
             }
         }
@@ -154,7 +155,7 @@ namespace Scheduler_Controls
             client.Name = txtFIO.Text;
             client.Comment = txtComment.Text;
 
-            client.Telephones = new HashSet<string>(lstTelephones.Items.Cast<ITelephone>().Select(f => f.TelephoneNumber));
+            client.Telephones = new HashSet<string>(lstTelephones.Items.Cast<string>());
 //             var telListToRemove = client.Telephones.Except(telList);
 //             var telListToAdd = telList.Except(client.Telephones);
 // 
@@ -170,7 +171,7 @@ namespace Scheduler_Controls
         private void btnLoadReceptions_Click(object sender, EventArgs e)
         {
             lstReceptions.Items.Clear();
-            lstReceptions.Items.AddRange(client.Receptions.Select(r => r.DisplayString).ToArray());
+            lstReceptions.Items.AddRange(client.GetReceptions().Select(r => r.DisplayString).ToArray());
         }
 
 

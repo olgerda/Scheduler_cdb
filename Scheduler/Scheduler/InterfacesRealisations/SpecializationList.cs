@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace InterfacesRealisations
+namespace Scheduler_InterfacesRealisations
 {
     public class SpecializationList: Scheduler_Controls_Interfaces.ISpecializationList
     {
@@ -35,5 +35,8 @@ namespace InterfacesRealisations
         {
             return new SpecializationList(list);
         }
+
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
     }
 }

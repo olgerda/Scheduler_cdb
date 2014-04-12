@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel;
 
-namespace InterfacesRealisations
+namespace Scheduler_InterfacesRealisations
 {
-    public class Client : Scheduler_Controls_Interfaces.IClient
+    public class Client : CommonObjectWithNotify, Scheduler_Controls_Interfaces.IClient
     {
         string comment;
         bool blacklisted;
@@ -35,6 +36,7 @@ namespace InterfacesRealisations
             set
             {
                 comment = value;
+                RaisePropertyChanged("Comment");
             }
         }
 
@@ -47,6 +49,7 @@ namespace InterfacesRealisations
             set
             {
                 blacklisted = value;
+                RaisePropertyChanged("Blacklisted");
             }
         }
 
@@ -59,6 +62,7 @@ namespace InterfacesRealisations
             set
             {
                 telephones = value;
+                RaisePropertyChanged("Telephones");
             }
         }
 
@@ -67,20 +71,16 @@ namespace InterfacesRealisations
             return telephones.Contains(telNumber);
         }
 
-        //         GetReceptions SetReceptionListFuncition
-        //         {
-        //             set { getreceptions = value; }
-        //         }
 
-        List<Scheduler_Controls_Interfaces.IReception> Scheduler_Controls_Interfaces.IClient.Receptions
+        List<Scheduler_Controls_Interfaces.IReception> Scheduler_Controls_Interfaces.IClient.GetReceptions()
         {
-            get
-            {
+//             get
+//             {
                 if (getreceptions != null)
                     return getreceptions(this);
                 else
                     return new List<Scheduler_Controls_Interfaces.IReception>();
-            }
+//            }
         }
 
         string Scheduler_Controls_Interfaces.INamedEntity.Name
@@ -92,13 +92,14 @@ namespace InterfacesRealisations
             set
             {
                 name = value;
+                RaisePropertyChanged("Name");
             }
         }
 
-        string Scheduler_Controls_Interfaces.INamedEntity.ToString()
-        {
-            return name;
-        }
+//         public override string ToString()
+//         {
+//             return name;
+//         }
 
         int Scheduler_Controls_Interfaces.IHaveID.ID
         {
@@ -109,6 +110,7 @@ namespace InterfacesRealisations
             set
             {
                 id = value;
+                RaisePropertyChanged("ID");
             }
         }
 
@@ -118,42 +120,48 @@ namespace InterfacesRealisations
             if (getreceptions == null)
                 getreceptions = func;
         }
+
     }
 
-    public class ClientList : Scheduler_Forms_Interfaces.IClientList
+    public class ClientList : CommonList<Scheduler_Controls_Interfaces.IClient>, Scheduler_Forms_Interfaces.IClientList
     {
-        List<Scheduler_Controls_Interfaces.IClient> list;
+        //List<Scheduler_Controls_Interfaces.IClient> list;
 
-        public ClientList()
+        public ClientList(): base()
         {
-            list = new List<Scheduler_Controls_Interfaces.IClient>();
+            //list = new List<Scheduler_Controls_Interfaces.IClient>();
         }
 
-        ClientList(ClientList old)
+        ClientList(ClientList old): base(old)
         {
-            list = new List<Scheduler_Controls_Interfaces.IClient>(old.list);
+            //list = new List<Scheduler_Controls_Interfaces.IClient>(old.list);
         }
 
         Scheduler_Controls_Interfaces.IClient Scheduler_Forms_Interfaces.IClientList.FindClientByPartialName(string partialName)
         {
             Scheduler_Controls_Interfaces.IClient result;
-            result = list.FirstOrDefault(c => c.Name.StartsWith(partialName));
+            result = this.List.FirstOrDefault(c => c.Name.StartsWith(partialName));
             return result;
         }
 
         Scheduler_Controls_Interfaces.IClient Scheduler_Forms_Interfaces.IClientList.FindClientByPartialTelephone(string partialName)
         {
             Scheduler_Controls_Interfaces.IClient result;
-            result = list.FirstOrDefault(c => c.Telephones.FirstOrDefault(t => t.StartsWith(partialName)) != default(string));
+            result = this.List.FirstOrDefault(c => c.Telephones.FirstOrDefault(t => t.StartsWith(partialName)) != default(string));
             return result;
         }
 
-        List<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.List
-        {
-            get { return list; }
-        }
+//         List<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.List
+//         {
+//             get { return list; }
+//         }
 
-        Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.Copy()
+//         Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.Copy()
+//         {
+//             return new ClientList(this);
+//         }
+
+        public override Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient> Copy()
         {
             return new ClientList(this);
         }

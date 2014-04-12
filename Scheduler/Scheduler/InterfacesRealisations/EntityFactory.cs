@@ -5,7 +5,7 @@ using System.Text;
 using Scheduler_Controls_Interfaces;
 using Scheduler_Forms_Interfaces;
 
-namespace InterfacesRealisations
+namespace Scheduler_InterfacesRealisations
 {
     public class EntityFactory : Scheduler_Common_Interfaces.IFactory
     {
@@ -45,7 +45,7 @@ namespace InterfacesRealisations
 
         public IClient NewClient()
         {
-            return new Client();
+            return (IClient)(new Client());
         }
 
         public ISpecialist NewSpecialist()

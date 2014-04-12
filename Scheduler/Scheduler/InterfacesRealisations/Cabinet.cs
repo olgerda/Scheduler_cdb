@@ -3,35 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace InterfacesRealisations
+namespace Scheduler_InterfacesRealisations
 {
 
-    public class CabinetList : Scheduler_Forms_Interfaces.ICabinetList
+    public class CabinetList : CommonList<Scheduler_Controls_Interfaces.ICabinet>, Scheduler_Forms_Interfaces.ICabinetList
     {
-        List<Scheduler_Controls_Interfaces.ICabinet> list;
+        //List<Scheduler_Controls_Interfaces.ICabinet> list;
 
-        public CabinetList()
+        public CabinetList(): base()
         {
-            list = new List<Scheduler_Controls_Interfaces.ICabinet>();
+            //list = new List<Scheduler_Controls_Interfaces.ICabinet>();
         }
 
-        CabinetList(CabinetList cablist2copy)
+        CabinetList(CabinetList cablist2copy) : base(cablist2copy)
         {
-            list = new List<Scheduler_Controls_Interfaces.ICabinet>(cablist2copy.list);
         }
+// 
+//         List<Scheduler_Controls_Interfaces.ICabinet> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet>.List
+//         {
+//             get { return list; }
+//         }
 
-        List<Scheduler_Controls_Interfaces.ICabinet> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet>.List
-        {
-            get { return list; }
-        }
+//         Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet>.Copy()
+//         {
+//             return new CabinetList(this);
+//         }
 
-        Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet>.Copy()
+        public override Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet> Copy()
         {
             return new CabinetList(this);
         }
     }
 
-    public class Cabinet: Scheduler_Controls_Interfaces.ICabinet
+    public class Cabinet: CommonObjectWithNotify, Scheduler_Controls_Interfaces.ICabinet
     {
         //public UInt16 id;
         private string name;
@@ -47,7 +51,7 @@ namespace InterfacesRealisations
         public string Name
         {
             get { return name; }
-            set { name = value; }
+            set { name = value; RaisePropertyChanged("Name"); }
         }
 
         public override string ToString()
@@ -74,14 +78,14 @@ namespace InterfacesRealisations
             }
             set
             {
-                availability = value;
+                availability = value; RaisePropertyChanged("Availability");
             }
         }
 
         public int ID
         {
             get { return id; }
-            set { id = value; }
+            set { id = value; RaisePropertyChanged("ID"); }
         }
     }
 }
