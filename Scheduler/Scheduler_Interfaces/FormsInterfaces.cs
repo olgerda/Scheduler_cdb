@@ -7,6 +7,7 @@ namespace Scheduler_Forms_Interfaces
 {
     public delegate void ItemAddedHandler(object item);// where T : Scheduler_Controls_Interfaces.IDummy;
     public delegate void ItemRemovedHandler(object item);// where T : Scheduler_Controls_Interfaces.IDummy;
+    public delegate void ItemChangedHandler(object item);// where T : Scheduler_Controls_Interfaces.IDummy;
 
     public class ItemEventArgs<T> : EventArgs where T : Scheduler_Controls_Interfaces.IDummy 
     {
@@ -32,7 +33,7 @@ namespace Scheduler_Forms_Interfaces
 
         event ItemAddedHandler OnItemAdded;
         event ItemRemovedHandler OnItemRemoved;
-
+        event ItemChangedHandler OnItemChange;
         IEntityList<T> Copy();
     }
 

@@ -115,8 +115,9 @@ namespace Scheduler_Forms
 
                 if (!cabList.List.Contains(result))
                 {
-                    cabList.List.Add(result);
+                    cabList.Add(result);
                 }
+                lstCabinets.DataSource = cabList.List.Cast<INamedEntity>().ToList();
                 lstCabinets.SelectedItem = result;
             }
             return result;

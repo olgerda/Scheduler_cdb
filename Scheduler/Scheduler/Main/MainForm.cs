@@ -205,12 +205,6 @@ namespace Scheduler
             }            
         }
 
-        private void чёрныйСписокToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Данная функция пока не реализована. Пользуйтесь полным списком.");
-            
-        }
-
         private void кабинетыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (CabinetListEdit cabinetForm = new CabinetListEdit(database.CabinetList, database.EntityFactory))
@@ -219,23 +213,12 @@ namespace Scheduler
             }
         }
 
-        private void недоступныеToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Данная функция пока не реализована. Пользуйтесь полным списком.");
-            
-        }
-
         private void специалистыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (SpecialistListEdit specialistForm = new SpecialistListEdit(database.SpecialistList, database.EntityFactory))
+            using (SpecialistListEdit specialistForm = new SpecialistListEdit(database.SpecialistList, database.SpecializationList, database.EntityFactory))
             {
                 specialistForm.ShowDialog();
             }
-        }
-
-        private void неработающиеToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Данная функция пока не реализована. Пользуйтесь полным списком.");
         }
 
         private void специальностиToolStripMenuItem_Click(object sender, EventArgs e)

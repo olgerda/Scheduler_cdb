@@ -134,6 +134,9 @@ namespace Scheduler_Controls_Interfaces
         HashSet<string> SpecializationList { get; set; }
 
         ISpecializationList Copy();
+
+        event Scheduler_Forms_Interfaces.ItemAddedHandler OnItemAdded;
+        event Scheduler_Forms_Interfaces.ItemRemovedHandler OnItemRemoved;
     }
 
     public interface ITelephone

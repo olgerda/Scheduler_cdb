@@ -27,21 +27,27 @@ namespace Scheduler_DBobjects
 
             dbconnector = entityFactory.NewDBConnector();
 
-            DBspecialistList = entityFactory.NewSpecialistList();
-            DBclientList = entityFactory.NewClientList();
-            DBspecializationList = entityFactory.NewSpecializationList();
-            DBcabinetList = entityFactory.NewCabinetList();
+            //             DBspecialistList = entityFactory.NewSpecialistList();
+            //             DBclientList = entityFactory.NewClientList();
+            //             DBspecializationList = entityFactory.NewSpecializationList();
+            //             DBcabinetList = entityFactory.NewCabinetList();
+            // 
+            // 
+            //             UpdateDBbyList<Scheduler_Controls_Interfaces.ICabinet>(DBcabinetList);
+            //             UpdateDBbyList<Scheduler_Controls_Interfaces.IClient>(DBclientList);
+            //             UpdateDBbyList<Scheduler_Controls_Interfaces.ISpecialist>(DBspecialistList);
+            //             UpdateSpecialization();
+
+            //             specialistList = (Scheduler_Forms_Interfaces.ISpecialistList)DBspecialistList.Copy();
+            //             clientList = (Scheduler_Forms_Interfaces.IClientList)DBclientList.Copy();
+            //             specializationList = (Scheduler_Controls_Interfaces.ISpecializationList)DBspecializationList.Copy();
+            //             cabinetList = (Scheduler_Forms_Interfaces.ICabinetList)DBcabinetList.Copy();
 
 
-            UpdateDBbyList<Scheduler_Controls_Interfaces.ICabinet>(DBcabinetList);
-            UpdateDBbyList<Scheduler_Controls_Interfaces.IClient>(DBclientList);
-            UpdateDBbyList<Scheduler_Controls_Interfaces.ISpecialist>(DBspecialistList);
-            UpdateSpecialization();
-
-            specialistList = (Scheduler_Forms_Interfaces.ISpecialistList)DBspecialistList.Copy();
-            clientList = (Scheduler_Forms_Interfaces.IClientList)DBclientList.Copy();
-            specializationList = (Scheduler_Controls_Interfaces.ISpecializationList)DBspecializationList.Copy();
-            cabinetList = (Scheduler_Forms_Interfaces.ICabinetList)DBcabinetList.Copy();
+            clientList = dbconnector.AllClients();
+            specialistList = dbconnector.AllSpecialists();
+            specializationList = dbconnector.AllSpecializations();
+            cabinetList = dbconnector.AllCabinets();
 
         }
 
@@ -54,7 +60,7 @@ namespace Scheduler_DBobjects
         {
             get
             {
-                SyncList<Scheduler_Controls_Interfaces.ISpecialist>(DBspecialistList, specialistList);
+                //SyncList<Scheduler_Controls_Interfaces.ISpecialist>(DBspecialistList, specialistList);
 
                 return specialistList;
             }
@@ -64,7 +70,7 @@ namespace Scheduler_DBobjects
         {
             get
             {
-                SyncList<Scheduler_Controls_Interfaces.IClient>(DBclientList, clientList);
+                //SyncList<Scheduler_Controls_Interfaces.IClient>(DBclientList, clientList);
 
                 return clientList;
             }
@@ -75,18 +81,17 @@ namespace Scheduler_DBobjects
         {
             get
             {
-                var Added = specializationList.SpecializationList.Except(DBspecializationList.SpecializationList);
-                var Removed = DBspecializationList.SpecializationList.Except(specializationList.SpecializationList);
-
-                foreach (var sa in Added)
-                    AddSpecialization(sa);
-                foreach (var sr in Removed)
-                    RemoveSpecialization(sr);
-                UpdateSpecialization();
-                specializationList.SpecializationList.Clear();
-                foreach (var s in DBspecializationList.SpecializationList)
-                    specializationList.SpecializationList.Add(s);
-
+                //                     var Added = specializationList.SpecializationList.Except(DBspecializationList.SpecializationList);
+                //                     var Removed = DBspecializationList.SpecializationList.Except(specializationList.SpecializationList);
+                // 
+                //                     foreach (var sa in Added)
+                //                         AddSpecialization(sa);
+                //                     foreach (var sr in Removed)
+                //                         RemoveSpecialization(sr);
+                //                     UpdateSpecialization();
+                //                     specializationList.SpecializationList.Clear();
+                //                     foreach (var s in DBspecializationList.SpecializationList)
+                //                         specializationList.SpecializationList.Add(s);
                 return specializationList;
             }
         }
@@ -95,7 +100,7 @@ namespace Scheduler_DBobjects
         {
             get
             {
-                SyncList<Scheduler_Controls_Interfaces.ICabinet>(DBcabinetList, cabinetList);
+                //SyncList<Scheduler_Controls_Interfaces.ICabinet>(DBcabinetList, cabinetList);
 
                 return cabinetList;
             }
@@ -109,110 +114,110 @@ namespace Scheduler_DBobjects
         //         delegate void AddItem<T>(T item);
         //         delegate void RemoveItem<T>(T item);
         //         delegate void UpdateDBbyList<T>(Scheduler_Forms_Interfaces.IEntityList<T> list);
-
-        void SyncList<T>(Scheduler_Forms_Interfaces.IEntityList<T> dblist, Scheduler_Forms_Interfaces.IEntityList<T> list) where T : Scheduler_Controls_Interfaces.IDummy
-        {
-            var Added = list.List.Except(dblist.List);
-            var Removed = dblist.List.Except(list.List);
-            bool needUpdate = false;
-            foreach (var sa in Added)
-            {
-                AddItem<T>(sa);
-                needUpdate = true;
-            }
-            foreach (var sr in Removed)
-            {
-                RemoveItem<T>(sr);
-                needUpdate = true;
-            }
-            if (needUpdate)
-                UpdateDBbyList<T>(dblist);
-            list.List.Clear();
-            list.List.AddRange(dblist.List);
-        }
-
-        void AddItem<T>(T item) where T : Scheduler_Controls_Interfaces.IDummy
-        {
-            Scheduler_Controls_Interfaces.IClient cl = item as Scheduler_Controls_Interfaces.IClient;
-            if (cl != null)
-            {
-                dbconnector.AddClient(cl);
-                return;
-            }
-            Scheduler_Controls_Interfaces.ISpecialist sp = item as Scheduler_Controls_Interfaces.ISpecialist;
-            if (sp != null)
-            {
-                dbconnector.AddSpecialist(sp);
-                return;
-            }
-            Scheduler_Controls_Interfaces.ICabinet cab = item as Scheduler_Controls_Interfaces.ICabinet;
-            if (cab != null)
-            {
-                dbconnector.AddCabinet(cab);
-                return;
-            }
-        }
-
-        void RemoveItem<T>(T item) where T : Scheduler_Controls_Interfaces.IDummy
-        {
-            Scheduler_Controls_Interfaces.IClient cl = item as Scheduler_Controls_Interfaces.IClient;
-            if (cl != null)
-            {
-                dbconnector.RemoveClient(cl);
-                return;
-            }
-            Scheduler_Controls_Interfaces.ISpecialist sp = item as Scheduler_Controls_Interfaces.ISpecialist;
-            if (sp != null)
-            {
-                dbconnector.RemoveSpecialist(sp);
-                return;
-            }
-            Scheduler_Controls_Interfaces.ICabinet cab = item as Scheduler_Controls_Interfaces.ICabinet;
-            if (cab != null)
-            {
-                dbconnector.RemoveCabinet(cab);
-                return;
-            }
-        }
-
-        void UpdateDBbyList<T>(Scheduler_Forms_Interfaces.IEntityList<T> list) where T : Scheduler_Controls_Interfaces.IDummy
-        {
-            Scheduler_Forms_Interfaces.IClientList cl = list as Scheduler_Forms_Interfaces.IClientList;
-            if (cl != null)
-            {
-                DBclientList = dbconnector.AllClients();
-                return;
-            }
-            Scheduler_Forms_Interfaces.ISpecialistList sp = list as Scheduler_Forms_Interfaces.ISpecialistList;
-            if (sp != null)
-            {
-                DBspecialistList = dbconnector.AllSpecialists();
-                return;
-            }
-            Scheduler_Forms_Interfaces.ICabinetList cab = list as Scheduler_Forms_Interfaces.ICabinetList;
-            if (cab != null)
-            {
-                DBcabinetList = dbconnector.AllCabinets();
-                return;
-            }
-        }
-
-        void AddSpecialization(string specialization)
-        {
-            dbconnector.AddSpecialization(specialization);
-        }
-
-        void RemoveSpecialization(string specialization)
-        {
-            dbconnector.RemoveSpecialization(specialization);
-        }
-
-        void UpdateSpecialization()
-        {
-            DBspecializationList.SpecializationList.Clear();
-            DBspecializationList = dbconnector.AllSpecializations();
-        }
-
+        #region old update logic
+        //         void SyncList<T>(Scheduler_Forms_Interfaces.IEntityList<T> dblist, Scheduler_Forms_Interfaces.IEntityList<T> list) where T : Scheduler_Controls_Interfaces.IDummy
+        //         {
+        //             var Added = list.List.Except(dblist.List);
+        //             var Removed = dblist.List.Except(list.List);
+        //             bool needUpdate = false;
+        //             foreach (var sa in Added)
+        //             {
+        //                 AddItem<T>(sa);
+        //                 needUpdate = true;
+        //             }
+        //             foreach (var sr in Removed)
+        //             {
+        //                 RemoveItem<T>(sr);
+        //                 needUpdate = true;
+        //             }
+        //             if (needUpdate)
+        //                 UpdateDBbyList<T>(dblist);
+        //             list.List.Clear();
+        //             list.List.AddRange(dblist.List);
+        //         }
+        // 
+        //         void AddItem<T>(T item) where T : Scheduler_Controls_Interfaces.IDummy
+        //         {
+        //             Scheduler_Controls_Interfaces.IClient cl = item as Scheduler_Controls_Interfaces.IClient;
+        //             if (cl != null)
+        //             {
+        //                 dbconnector.AddClient(cl);
+        //                 return;
+        //             }
+        //             Scheduler_Controls_Interfaces.ISpecialist sp = item as Scheduler_Controls_Interfaces.ISpecialist;
+        //             if (sp != null)
+        //             {
+        //                 dbconnector.AddSpecialist(sp);
+        //                 return;
+        //             }
+        //             Scheduler_Controls_Interfaces.ICabinet cab = item as Scheduler_Controls_Interfaces.ICabinet;
+        //             if (cab != null)
+        //             {
+        //                 dbconnector.AddCabinet(cab);
+        //                 return;
+        //             }
+        //         }
+        // 
+        //         void RemoveItem<T>(T item) where T : Scheduler_Controls_Interfaces.IDummy
+        //         {
+        //             Scheduler_Controls_Interfaces.IClient cl = item as Scheduler_Controls_Interfaces.IClient;
+        //             if (cl != null)
+        //             {
+        //                 dbconnector.RemoveClient(cl);
+        //                 return;
+        //             }
+        //             Scheduler_Controls_Interfaces.ISpecialist sp = item as Scheduler_Controls_Interfaces.ISpecialist;
+        //             if (sp != null)
+        //             {
+        //                 dbconnector.RemoveSpecialist(sp);
+        //                 return;
+        //             }
+        //             Scheduler_Controls_Interfaces.ICabinet cab = item as Scheduler_Controls_Interfaces.ICabinet;
+        //             if (cab != null)
+        //             {
+        //                 dbconnector.RemoveCabinet(cab);
+        //                 return;
+        //             }
+        //         }
+        // 
+        //         void UpdateDBbyList<T>(Scheduler_Forms_Interfaces.IEntityList<T> list) where T : Scheduler_Controls_Interfaces.IDummy
+        //         {
+        //             Scheduler_Forms_Interfaces.IClientList cl = list as Scheduler_Forms_Interfaces.IClientList;
+        //             if (cl != null)
+        //             {
+        //                 DBclientList = dbconnector.AllClients();
+        //                 return;
+        //             }
+        //             Scheduler_Forms_Interfaces.ISpecialistList sp = list as Scheduler_Forms_Interfaces.ISpecialistList;
+        //             if (sp != null)
+        //             {
+        //                 DBspecialistList = dbconnector.AllSpecialists();
+        //                 return;
+        //             }
+        //             Scheduler_Forms_Interfaces.ICabinetList cab = list as Scheduler_Forms_Interfaces.ICabinetList;
+        //             if (cab != null)
+        //             {
+        //                 DBcabinetList = dbconnector.AllCabinets();
+        //                 return;
+        //             }
+        //         }
+        // 
+        //         void AddSpecialization(string specialization)
+        //         {
+        //             dbconnector.AddSpecialization(specialization);
+        //         }
+        // 
+        //         void RemoveSpecialization(string specialization)
+        //         {
+        //             dbconnector.RemoveSpecialization(specialization);
+        //         }
+        // 
+        //         void UpdateSpecialization()
+        //         {
+        //             DBspecializationList.SpecializationList.Clear();
+        //             DBspecializationList = dbconnector.AllSpecializations();
+        //         }
+        #endregion
 
 
     }

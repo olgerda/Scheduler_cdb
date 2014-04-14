@@ -17,18 +17,20 @@ namespace Scheduler_Forms
         private ISpecialistList specList;
         private IFactory entityFactory;
         private ISpecialist selectedSpecialist;
+        private ISpecializationList specializationList;
 
         public SpecialistListEdit()
         {
             InitializeComponent();
         }
 
-        public SpecialistListEdit(ISpecialistList specList, IFactory entityFactory)
+        public SpecialistListEdit(ISpecialistList specList, ISpecializationList specializationList , IFactory entityFactory)
         {
             InitializeComponent();
 
             this.specList = specList;
             this.entityFactory = entityFactory;
+            this.SpecializationList = specializationList;
 
             Init();
         }
@@ -38,10 +40,10 @@ namespace Scheduler_Forms
             if (specList == null)
                 return;
 
-            lstSpecialistList.DataSource = specList.List;
+            lstSpecialistList.DataSource = specList.List.Cast<INamedEntity>().ToList();
 
             var customAutoComplete = new AutoCompleteStringCollection();
-            customAutoComplete.AddRange(lstSpecialistList.Items.Cast<ISpecialist>().Select(c => c.Name).ToArray());
+            customAutoComplete.AddRange(lstSpecialistList.Items.Cast<INamedEntity>().Select(c => c.Name).ToArray());
             txtSpecialistName.AutoCompleteCustomSource = customAutoComplete;
 
             specialistInfoCard.OnSaveChanges += new SaveChangesHandler<ISpecialist>(specialistInfoCard_OnSaveChanges);
@@ -62,6 +64,15 @@ namespace Scheduler_Forms
             }
         }
 
+        public ISpecializationList SpecializationList
+        {
+            get { return specializationList; }
+            set
+            {
+                specializationList = value;
+                this.specialistInfoCard.UpdateList(specializationList.SpecializationList);
+            }
+        }
 
         public IFactory EntityFactory
         {
@@ -105,7 +116,7 @@ namespace Scheduler_Forms
 
                 if (!specList.List.Contains(result))
                 {
-                    specList.List.Add(result);
+                    specList.Add(result);
                 }
                 lstSpecialistList.SelectedItem = result;
             }
@@ -147,7 +158,7 @@ namespace Scheduler_Forms
 
         private void lstSpecialistList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstSpecialistList.SelectedIndex == -1)
+            if (lstSpecialistList.SelectedIndex == -1 && SpecialistList == null)
                 return;
             SelectedSpecialist = (ISpecialist)lstSpecialistList.SelectedItem;
         }

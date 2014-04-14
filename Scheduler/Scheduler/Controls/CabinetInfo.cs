@@ -67,7 +67,7 @@ namespace Scheduler_Controls
             if (cab == null)
                 return false;
             return cab.Availability != chkAvailable.Checked ||
-                cab.Name == txtName.Text;
+                cab.Name != txtName.Text;
         }
 
         void SaveChanges()

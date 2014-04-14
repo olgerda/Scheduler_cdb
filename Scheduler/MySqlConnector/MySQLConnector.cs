@@ -50,7 +50,7 @@ namespace MySqlConnector
         }
 
         #region Clients and Telephones
-        void  Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddClient(Scheduler_Controls_Interfaces.IClient client)
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddClient(Scheduler_Controls_Interfaces.IClient client)
         {
             //clients columns are: idclients, name, comment, blacklisted
             //telephones columns: idtelephones, telephonescol
@@ -99,7 +99,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        void  Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveClient(Scheduler_Controls_Interfaces.IClient client)
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveClient(Scheduler_Controls_Interfaces.IClient client)
         {
             var connection = OpenConnection();
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
@@ -557,6 +557,8 @@ namespace MySqlConnector
 
             CloseConnection(connection);
 
+            result.OnItemAdded += ListAddHandler;
+            result.OnItemRemoved += ListRemoveHandler;
             return result;
         }
 
@@ -641,6 +643,9 @@ namespace MySqlConnector
             }
 
             CloseConnection(connection);
+
+            resultList.OnItemAdded += ListAddHandler;
+            resultList.OnItemRemoved += ListRemoveHandler;
             return resultList;
         }
         #endregion Specializations
@@ -776,6 +781,9 @@ namespace MySqlConnector
             }
 
             CloseConnection(connection);
+
+            resultList.OnItemAdded += ListAddHandler;
+            resultList.OnItemRemoved += ListRemoveHandler;
             return resultList;
         }
         #endregion
@@ -953,7 +961,7 @@ namespace MySqlConnector
 
                     cmd.Parameters.Clear();
                     cmd.CommandText = "update receptions set specializationid = @id where idreceptions = @rcptid";
-                    cmd.Parameters.AddWithValue("@id" ,specnid);
+                    cmd.Parameters.AddWithValue("@id", specnid);
                     cmd.Parameters.AddWithValue("@rcptid", reception.ID);
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
@@ -1101,11 +1109,30 @@ namespace MySqlConnector
             if (client != null)
             {
                 ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).AddClient(client);
+                return;
             }
-            else
+            
+            Scheduler_Controls_Interfaces.ISpecialist specialist = item as Scheduler_Controls_Interfaces.ISpecialist;
+            if (specialist != null)
             {
-
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).AddSpecialist(specialist);
+                return;
             }
+
+            Scheduler_Controls_Interfaces.ICabinet cabinet = item as Scheduler_Controls_Interfaces.ICabinet;
+            if (cabinet != null)
+            {
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).AddCabinet(cabinet);
+                return;
+            }
+
+            string specialization = item as string;
+            if (specialization != null)
+            {
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).AddSpecialization(specialization);
+                return;
+            }
+
         }
 
         public void ListRemoveHandler(object item)// where T : Scheduler_Controls_Interfaces.IDummy
@@ -1114,10 +1141,28 @@ namespace MySqlConnector
             if (client != null)
             {
                 ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).RemoveClient(client);
+                return;
             }
-            else
-            {
 
+            Scheduler_Controls_Interfaces.ISpecialist specialist = item as Scheduler_Controls_Interfaces.ISpecialist;
+            if (specialist != null)
+            {
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).RemoveSpecialist(specialist);
+                return;
+            }
+
+            Scheduler_Controls_Interfaces.ICabinet cabinet = item as Scheduler_Controls_Interfaces.ICabinet;
+            if (cabinet != null)
+            {
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).RemoveCabinet(cabinet);
+                return;
+            }
+
+            string specialization = item as string;
+            if (specialization != null)
+            {
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).RemoveSpecialization(specialization);
+                return;
             }
         }
 

@@ -41,8 +41,9 @@ namespace Scheduler_Controls
         {
             if (specialisationsList == null)
                 return;
-            lstSpecializations.Items.Clear();
-            lstSpecializations.Items.AddRange(specialisationsList.SpecializationList.ToArray());
+            lstSpecializations.DataSource = specialisationsList.SpecializationList;
+//             lstSpecializations.Items.Clear();
+//             lstSpecializations.Items.AddRange(specialisationsList.SpecializationList.ToArray());
         }
 
 

@@ -28,6 +28,10 @@ namespace Scheduler_InterfacesRealisations
     {
         private List<T> list;
 
+        public event Scheduler_Forms_Interfaces.ItemAddedHandler OnItemAdded;
+        public event Scheduler_Forms_Interfaces.ItemRemovedHandler OnItemRemoved;
+        public event Scheduler_Forms_Interfaces.ItemChangedHandler OnItemChange;
+
         public CommonList()
         {
             list = new List<T>();
@@ -36,6 +40,9 @@ namespace Scheduler_InterfacesRealisations
         public CommonList(CommonList<T> oldlist)
         {
             list = new List<T>(oldlist.List);
+            OnItemAdded += oldlist.OnItemAdded;
+            OnItemRemoved += oldlist.OnItemRemoved;
+            OnItemChange += oldlist.OnItemChange;
         }
 
         public List<T> List
@@ -48,8 +55,8 @@ namespace Scheduler_InterfacesRealisations
             if (!list.Contains(item))
             {
                 list.Add(item);
-                if (onItemAdded != null)
-                    onItemAdded(item);
+                if (OnItemAdded != null)
+                    OnItemAdded(item);
             }
         }
 
@@ -58,27 +65,11 @@ namespace Scheduler_InterfacesRealisations
             if (list.Contains(item))
             {
                 list.Remove(item);
-                if (onItemRemoved != null)
-                    onItemRemoved(item);
+                if (OnItemRemoved != null)
+                    OnItemRemoved(item);
             }
         }
 
-        event Scheduler_Forms_Interfaces.ItemAddedHandler onItemAdded;
-
-        event Scheduler_Forms_Interfaces.ItemRemovedHandler onItemRemoved;
-
         public abstract Scheduler_Forms_Interfaces.IEntityList<T> Copy();
-
-        event Scheduler_Forms_Interfaces.ItemAddedHandler Scheduler_Forms_Interfaces.IEntityList<T>.OnItemAdded
-        {
-            add { onItemAdded += value; }
-            remove { onItemAdded -= value; }
-        }
-
-        event Scheduler_Forms_Interfaces.ItemRemovedHandler Scheduler_Forms_Interfaces.IEntityList<T>.OnItemRemoved
-        {
-            add { onItemRemoved += value; }
-            remove { onItemRemoved -= value; }
-        }
     }
 }

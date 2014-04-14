@@ -80,7 +80,7 @@ namespace Scheduler_Controls
             if (spec == null)
                 return false;
             return spec.Name != txtName.Text ||
-                spec.Specialisations.SequenceEqual(lstSpecialisations.CheckedItems.Cast<string>()) ||
+                !spec.Specialisations.SequenceEqual(lstSpecialisations.CheckedItems.Cast<string>()) ||
                 spec.NotWorking != chkNotWorking.Checked;
         }
 
