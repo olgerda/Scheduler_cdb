@@ -48,7 +48,8 @@ namespace Scheduler_InterfacesRealisations
                         foreach (var item in ValueExceptList)
                             OnItemAdded(item);
                 }
-
+                if (PropertyChanged != null)
+                    PropertyChangedHandler(null, null);
                 list = value;
             }
         }
@@ -60,9 +61,12 @@ namespace Scheduler_InterfacesRealisations
 
         private void PropertyChangedHandler(object o, System.ComponentModel.PropertyChangedEventArgs args)
         {
-            if (o == null)
-                return;
         }
 
+
+        public bool IAmChanged
+        {
+            get { return false; }
+        }
     }
 }

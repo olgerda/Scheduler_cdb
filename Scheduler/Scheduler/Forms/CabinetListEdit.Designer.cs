@@ -99,6 +99,7 @@
             this.lstCabinets.Size = new System.Drawing.Size(308, 121);
             this.lstCabinets.TabIndex = 2;
             this.lstCabinets.SelectedIndexChanged += new System.EventHandler(this.lstCabinets_SelectedIndexChanged);
+            this.lstCabinets.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstCabinets_KeyDown);
             // 
             // CabinetListEdit
             // 
@@ -110,6 +111,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "CabinetListEdit";
             this.Text = "CabinetListEdit";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CabinetListEdit_FormClosing);
             this.grpCabinetList.ResumeLayout(false);
             this.ResumeLayout(false);
 

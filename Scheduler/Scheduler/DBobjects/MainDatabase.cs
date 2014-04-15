@@ -14,10 +14,10 @@ namespace Scheduler_DBobjects
         Scheduler_Controls_Interfaces.ISpecializationList specializationList;
         Scheduler_Forms_Interfaces.ICabinetList cabinetList;
 
-        Scheduler_Forms_Interfaces.ISpecialistList DBspecialistList;
-        Scheduler_Forms_Interfaces.IClientList DBclientList;
-        Scheduler_Controls_Interfaces.ISpecializationList DBspecializationList;
-        Scheduler_Forms_Interfaces.ICabinetList DBcabinetList;
+//         Scheduler_Forms_Interfaces.ISpecialistList DBspecialistList;
+//         Scheduler_Forms_Interfaces.IClientList DBclientList;
+//         Scheduler_Controls_Interfaces.ISpecializationList DBspecializationList;
+//         Scheduler_Forms_Interfaces.ICabinetList DBcabinetList;
 
         Scheduler_DBobjects_Intefraces.Scheduler_DBconnector dbconnector;
 

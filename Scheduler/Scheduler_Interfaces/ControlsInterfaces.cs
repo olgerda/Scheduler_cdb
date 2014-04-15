@@ -8,9 +8,9 @@ namespace Scheduler_Controls_Interfaces
     /// <summary>
     /// Интерфейс, обобщающий значимые. Для типизированных template.
     /// </summary>
-    public interface IDummy: System.ComponentModel.INotifyPropertyChanged
+    public interface IDummy//: System.ComponentModel.INotifyPropertyChanged
     {
-
+        bool IAmChanged { get; }
     }
 
     public interface IHaveID

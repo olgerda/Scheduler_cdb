@@ -8,19 +8,34 @@ namespace Scheduler_InterfacesRealisations
 {
     public abstract class CommonObjectWithNotify : Scheduler_Controls_Interfaces.IDummy
     {
-        event System.ComponentModel.PropertyChangedEventHandler innerPropertyChanged;
-        event System.ComponentModel.PropertyChangedEventHandler System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-        {
-            add { innerPropertyChanged = value; }
-            remove { innerPropertyChanged = null; }
-        }
+        //         event System.ComponentModel.PropertyChangedEventHandler innerPropertyChanged;
+        //         event System.ComponentModel.PropertyChangedEventHandler System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+        //         {
+        //             add { innerPropertyChanged = value; }
+        //             remove { innerPropertyChanged = null; }
+        //         }
+
+        bool iAmChanged = false;
+
+
 
         public void RaisePropertyChanged(string caller)
         {
-            if (innerPropertyChanged == null)
-                return;
+            iAmChanged = true;
+            //             if (innerPropertyChanged == null)
+            //                 return;
+            // 
+            //             innerPropertyChanged(this, new PropertyChangedEventArgs(caller));
+        }
 
-            innerPropertyChanged(this, new PropertyChangedEventArgs(caller));
+        public bool IAmChanged
+        {
+            get
+            {
+                bool result = iAmChanged;
+                iAmChanged = false;
+                return result;
+            }
         }
     }
 
@@ -30,7 +45,7 @@ namespace Scheduler_InterfacesRealisations
 
         public event Scheduler_Forms_Interfaces.ItemAddedHandler OnItemAdded;
         public event Scheduler_Forms_Interfaces.ItemRemovedHandler OnItemRemoved;
-        public event Scheduler_Forms_Interfaces.ItemChangedHandler OnItemChange;
+        public event Scheduler_Forms_Interfaces.ItemChangedHandler OnItemChanged;
 
         public CommonList()
         {
@@ -42,7 +57,7 @@ namespace Scheduler_InterfacesRealisations
             list = new List<T>(oldlist.List);
             OnItemAdded += oldlist.OnItemAdded;
             OnItemRemoved += oldlist.OnItemRemoved;
-            OnItemChange += oldlist.OnItemChange;
+            OnItemChanged += oldlist.OnItemChanged;
         }
 
         public List<T> List
@@ -68,6 +83,13 @@ namespace Scheduler_InterfacesRealisations
                 if (OnItemRemoved != null)
                     OnItemRemoved(item);
             }
+        }
+
+        public void ValidateAndUpdate()
+        {
+            if (OnItemChanged != null)
+                foreach (var item in list.Where(i => i.IAmChanged))
+                    OnItemChanged(item);
         }
 
         public abstract Scheduler_Forms_Interfaces.IEntityList<T> Copy();

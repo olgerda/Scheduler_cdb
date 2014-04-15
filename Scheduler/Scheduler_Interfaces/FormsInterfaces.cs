@@ -30,10 +30,11 @@ namespace Scheduler_Forms_Interfaces
 
         void Add(T item);
         void Remove(T item);
+        void ValidateAndUpdate();
 
         event ItemAddedHandler OnItemAdded;
         event ItemRemovedHandler OnItemRemoved;
-        event ItemChangedHandler OnItemChange;
+        event ItemChangedHandler OnItemChanged;
         IEntityList<T> Copy();
     }
 

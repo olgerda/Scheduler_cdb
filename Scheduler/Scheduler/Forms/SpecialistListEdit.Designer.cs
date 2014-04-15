@@ -140,6 +140,7 @@
             this.lstSpecialistList.Size = new System.Drawing.Size(260, 147);
             this.lstSpecialistList.TabIndex = 11;
             this.lstSpecialistList.SelectedIndexChanged += new System.EventHandler(this.lstSpecialistList_SelectedIndexChanged);
+            this.lstSpecialistList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstSpecialistList_KeyDown);
             // 
             // label1
             // 
@@ -160,6 +161,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SpecialistListEdit";
             this.Text = "SpecialistListEdit";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SpecialistListEdit_FormClosing);
             this.grpSelectSpecialist.ResumeLayout(false);
             this.grpSelectSpecialist.PerformLayout();
             this.grpEditMode.ResumeLayout(false);

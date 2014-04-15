@@ -134,5 +134,19 @@ namespace Scheduler_Forms
                 return;
             SelectedCabinet = (ICabinet)lstCabinets.SelectedItem;
         }
+
+        private void CabinetListEdit_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CabinetList.ValidateAndUpdate();
+        }
+
+        private void lstCabinets_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.Delete && lstCabinets.SelectedIndex != -1)
+            {
+                CabinetList.Remove((ICabinet)lstCabinets.SelectedItem);
+                lstCabinets.DataSource = CabinetList.List.Cast<INamedEntity>().ToList();
+            }
+        }
     }
 }

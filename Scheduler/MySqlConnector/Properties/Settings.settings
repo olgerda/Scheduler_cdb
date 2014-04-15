@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="mysqlconnstring" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Server=kvartetDBserver;Uid=kvartetAdmin;Pwd=1;Database=kvartet_new;</Value>
+      <Value Profile="(Default)">Server=kvartetDBserver;Uid=kvartetAdmin;Pwd=1;Database=kvartet_new;charset=utf8</Value>
     </Setting>
   </Settings>
 </SettingsFile>

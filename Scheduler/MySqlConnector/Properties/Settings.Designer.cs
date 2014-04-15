@@ -25,7 +25,7 @@ namespace MySqlConnector.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server=kvartetDBserver;Uid=kvartetAdmin;Pwd=1;Database=kvartet_new;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server=kvartetDBserver;Uid=kvartetAdmin;Pwd=1;Database=kvartet_new;charset=utf8")]
         public string mysqlconnstring {
             get {
                 return ((string)(this["mysqlconnstring"]));

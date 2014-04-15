@@ -163,5 +163,19 @@ namespace Scheduler_Forms
             SelectedSpecialist = (ISpecialist)lstSpecialistList.SelectedItem;
         }
 
+        private void SpecialistListEdit_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SpecialistList.ValidateAndUpdate();
+        }
+
+        private void lstSpecialistList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.Delete && lstSpecialistList.SelectedIndex != -1)
+            {
+                SpecialistList.Remove((ISpecialist)lstSpecialistList.SelectedItem);
+                lstSpecialistList.DataSource = SpecialistList.List.Cast<INamedEntity>().ToList();
+            }
+        }
+
     }
 }

@@ -20,6 +20,8 @@ namespace Scheduler_Forms
 
         IFactory entityFactory;
 
+        bool doNothingNow;
+
         public FindClientCard()
         {
             InitializeComponent();
@@ -40,9 +42,7 @@ namespace Scheduler_Forms
         void Init()
         {
             //grpEditMode.Location = grpSelectClient.Location;
-
-            
-            
+            doNothingNow = false;
             if (clientList == null)
                 return;
 
@@ -94,8 +94,11 @@ namespace Scheduler_Forms
                 selectedClient = value;
                 if (selectedClient == null)
                     return;
+                doNothingNow = true;
                 txtClientName.Text = selectedClient.Name;
-                txtTelephone.Text = selectedClient.Telephones.FirstOrDefault();
+                txtTelephone.Text = String.IsNullOrEmpty(selectedClient.Telephones.FirstOrDefault(t => t.StartsWith(txtTelephone.Text))) ? selectedClient.Telephones.FirstOrDefault()
+                    : selectedClient.Telephones.FirstOrDefault(t => t.StartsWith(txtTelephone.Text));
+                doNothingNow = false;
                 clientInfoCard.Client = selectedClient;
             }
         }
@@ -164,7 +167,8 @@ namespace Scheduler_Forms
         {
             if (lstClientList.SelectedIndex == -1)
                 return;
-            SelectedClient = (IClient)lstClientList.SelectedItem;
+            //if (SelectedClient != (IClient)lstClientList.SelectedItem)
+                SelectedClient = (IClient)lstClientList.SelectedItem;
 
             //            clientInfoCard.Client = selectedClient;
             //             txtClientName.Text = selectedClient.Name;
@@ -173,6 +177,8 @@ namespace Scheduler_Forms
 
         private void txtClientName_TextChanged(object sender, EventArgs e)
         {
+            if (doNothingNow)
+                return;
             IClient curClient = null;
             if (txtClientName.Text.Length > 4 && !String.IsNullOrWhiteSpace(txtClientName.Text))
                 curClient = clientList.FindClientByPartialName(txtClientName.Text);
@@ -184,6 +190,8 @@ namespace Scheduler_Forms
 
         private void txtTelephone_TextChanged(object sender, EventArgs e)
         {
+            if (doNothingNow)
+                return;
             IClient curClient = null;
             if (txtTelephone.Text.Length > 3 && !String.IsNullOrWhiteSpace(txtTelephone.Text))
                 curClient = clientList.FindClientByPartialTelephone(txtTelephone.Text);
@@ -191,6 +199,20 @@ namespace Scheduler_Forms
                 lstClientList.SelectedItem = curClient;
             else
                 lstClientList.SelectedIndex = -1;
+        }
+
+        private void FindClientCard_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ClientList.ValidateAndUpdate();
+        }
+
+        private void lstClientList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.Delete && lstClientList.SelectedIndex != -1)
+            {
+                ClientList.Remove((IClient)lstClientList.SelectedItem);
+                lstClientList.DataSource = ClientList.List.Cast<INamedEntity>().ToList();
+            }
         }
 
 

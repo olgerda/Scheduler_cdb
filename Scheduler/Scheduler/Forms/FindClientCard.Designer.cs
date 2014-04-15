@@ -80,6 +80,7 @@
             this.lstClientList.Size = new System.Drawing.Size(260, 160);
             this.lstClientList.TabIndex = 11;
             this.lstClientList.SelectedIndexChanged += new System.EventHandler(this.lstClientList_SelectedIndexChanged);
+            this.lstClientList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstClientList_KeyDown);
             // 
             // btnAddClient
             // 
@@ -166,6 +167,7 @@
             // 
             this.clientInfoCard.Client = null;
             this.clientInfoCard.Enabled = false;
+            this.clientInfoCard.EntityFactory = null;
             this.clientInfoCard.Location = new System.Drawing.Point(287, 10);
             this.clientInfoCard.MaximumSize = new System.Drawing.Size(400, 265);
             this.clientInfoCard.MinimumSize = new System.Drawing.Size(400, 265);
@@ -186,6 +188,7 @@
             this.MinimumSize = new System.Drawing.Size(700, 305);
             this.Name = "FindClientCard";
             this.Text = "Поиск карточки клиента";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FindClientCard_FormClosing);
             this.grpSelectClient.ResumeLayout(false);
             this.grpSelectClient.PerformLayout();
             this.grpEditMode.ResumeLayout(false);
