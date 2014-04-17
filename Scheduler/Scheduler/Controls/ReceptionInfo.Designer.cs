@@ -59,8 +59,8 @@
             this.grpMain.Controls.Add(this.cmbSpecialist);
             this.grpMain.Controls.Add(this.btnCreateChildReception);
             this.grpMain.Controls.Add(this.btnCancelReception);
-            this.grpMain.Controls.Add(this.cmbSpecialisation);
-            this.grpMain.Controls.Add(this.label5);
+            this.grpMain.Controls.Add(this.label6);
+            this.grpMain.Controls.Add(this.cmbCabinet);
             this.grpMain.Controls.Add(this.label4);
             this.grpMain.Controls.Add(this.dateTimeEnd);
             this.grpMain.Controls.Add(this.dateTimeStart);
@@ -119,15 +119,15 @@
             // cmbSpecialisation
             // 
             this.cmbSpecialisation.FormattingEnabled = true;
-            this.cmbSpecialisation.Location = new System.Drawing.Point(102, 62);
+            this.cmbSpecialisation.Location = new System.Drawing.Point(100, 52);
             this.cmbSpecialisation.Name = "cmbSpecialisation";
-            this.cmbSpecialisation.Size = new System.Drawing.Size(194, 21);
+            this.cmbSpecialisation.Size = new System.Drawing.Size(186, 21);
             this.cmbSpecialisation.TabIndex = 11;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 65);
+            this.label5.Location = new System.Drawing.Point(3, 55);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(86, 13);
             this.label5.TabIndex = 12;
@@ -182,6 +182,7 @@
             this.btnCommit.TabIndex = 19;
             this.btnCommit.Text = "Сохранить изменения";
             this.btnCommit.UseVisualStyleBackColor = true;
+            this.btnCommit.Click += new System.EventHandler(this.btnCommit_Click);
             // 
             // chkRent
             // 
@@ -209,8 +210,8 @@
             this.pnlClient.Controls.Add(this.txtClientName);
             this.pnlClient.Controls.Add(this.label2);
             this.pnlClient.Controls.Add(this.label3);
-            this.pnlClient.Controls.Add(this.cmbCabinet);
-            this.pnlClient.Controls.Add(this.label6);
+            this.pnlClient.Controls.Add(this.label5);
+            this.pnlClient.Controls.Add(this.cmbSpecialisation);
             this.pnlClient.Location = new System.Drawing.Point(302, 36);
             this.pnlClient.Name = "pnlClient";
             this.pnlClient.Size = new System.Drawing.Size(288, 80);
@@ -254,7 +255,7 @@
             // cmbCabinet
             // 
             this.cmbCabinet.FormattingEnabled = true;
-            this.cmbCabinet.Location = new System.Drawing.Point(69, 52);
+            this.cmbCabinet.Location = new System.Drawing.Point(79, 62);
             this.cmbCabinet.Name = "cmbCabinet";
             this.cmbCabinet.Size = new System.Drawing.Size(217, 21);
             this.cmbCabinet.TabIndex = 14;
@@ -262,7 +263,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 55);
+            this.label6.Location = new System.Drawing.Point(6, 65);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(49, 13);
             this.label6.TabIndex = 15;

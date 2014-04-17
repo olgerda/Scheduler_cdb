@@ -23,9 +23,13 @@ namespace Scheduler_Forms
         static IClientList clientList;
         static IFactory entityFactory;
 
+        private bool doNothing;
+
         public ReceptionInfoEdit()
         {
             InitializeComponent();
+
+            doNothing = false;
 
             receptionInfoCard.OnSaveChanges += new SaveChangesHandler<IReception>(receptionInfoCard_OnSaveChanges);
             receptionInfoCard.OnShowClientsButtonClicked += new ShowClientsHandler(receptionInfoCard_OnShowClientsButtonClicked);
@@ -57,7 +61,10 @@ namespace Scheduler_Forms
 
         void receptionInfoCard_OnSaveChanges(object source, SaveChangesEventArgs<IReception> e)
         {
+            doNothing = true;
             Reception = receptionInfoCard.Reception;
+            doNothing = false;
+
             this.Close();
         }
 
@@ -82,10 +89,11 @@ namespace Scheduler_Forms
         public IReception Reception
         {
             get { return currentReception; }
-            set 
-            { 
-                currentReception = value; 
-                Init(); 
+            set
+            {
+                currentReception = value;
+                if (!doNothing)
+                    Init();
             }
         }
 
@@ -124,7 +132,7 @@ namespace Scheduler_Forms
             }
         }
 
-        public static void SetLists(ICabinetList cabinetList, ISpecialistList specialistList, ISpecializationList specializationList, 
+        public static void SetLists(ICabinetList cabinetList, ISpecialistList specialistList, ISpecializationList specializationList,
             IClientList clientList, IFactory entityFactory)
         {
             ReceptionInfoEdit.cabinetList = cabinetList;
@@ -139,8 +147,6 @@ namespace Scheduler_Forms
             if (currentReception == null)
                 return;
 
-            receptionInfoCard.Reception = currentReception;
-
             if (cabinetList == null || specialistList == null || specializationsList == null)
                 return;
 
@@ -148,11 +154,18 @@ namespace Scheduler_Forms
             var specialistListActualised = specialistList.List.Where(s => !s.NotWorking);
 
             receptionInfoCard.UpdateLists(cabinetListActualised, specialistListActualised, specializationsList.SpecializationList);
+
+            receptionInfoCard.Reception = currentReception;
         }
 
         private void ReceptionInfoEdit_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Reception = receptionInfoCard.Reception;
+            if (e.CloseReason == CloseReason.UserClosing && !doNothing)
+            {
+                doNothing = true;
+                Reception = receptionInfoCard.Reception;
+                doNothing = false;
+            }
         }
 
         private void receptionInfoCard_Load(object sender, EventArgs e)

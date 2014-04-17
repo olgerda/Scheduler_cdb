@@ -115,7 +115,7 @@ namespace MySqlConnector
                 catch (MySql.Data.MySqlClient.MySqlException mex)
                 {
                     CloseConnection(connection);
-                    throw new Exception("Ошибка удаления клиента из БД: " + mex.Message, mex);
+                    throw new Exception(mex.Number.ToString() + "\r\nОшибка удаления клиента из БД: " + mex.Message, mex);
                 }
                 cmd.CommandText = "call CleanupTelephones()";
                 cmd.Parameters.Clear();
@@ -384,7 +384,7 @@ namespace MySqlConnector
                 catch (MySql.Data.MySqlClient.MySqlException mex)
                 {
                     CloseConnection(connection);
-                    throw new Exception("Ошибка удаления специалиста из БД: " + mex.Message, mex);
+                    throw new Exception(mex.Number.ToString() + "\r\nОшибка удаления специалиста из БД: " + mex.Message, mex);
                 }
             }
             CloseConnection(connection);
@@ -551,7 +551,11 @@ namespace MySqlConnector
                 {
                     cmd.Parameters["@specialistId"].Value = specialist.ID;
                     cmd.Prepare();
-                    specialist.Specialisations.Add(Convert.ToString(cmd.ExecuteScalar()));
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                            specialist.Specialisations.Add(reader.GetString("name"));
+                    }
                 }
             }
 
@@ -600,7 +604,7 @@ namespace MySqlConnector
                 catch (MySql.Data.MySqlClient.MySqlException mex)
                 {
                     CloseConnection(connection);
-                    throw new Exception("Ошибка удаления специализации из БД: " + mex.Message, mex);
+                    throw new Exception(mex.Number.ToString() + "\r\nОшибка удаления специализации из БД: " + mex.Message, mex);
                 }
             }
 
@@ -687,7 +691,7 @@ namespace MySqlConnector
                 catch (MySql.Data.MySqlClient.MySqlException mex)
                 {
                     CloseConnection(connection);
-                    throw new Exception("Ошибка удаления кабинета из БД: " + mex.Message, mex);
+                    throw new Exception(mex.Number.ToString() + "\r\nОшибка удаления кабинета из БД: " + mex.Message, mex);
                 }
             }
 
@@ -1039,7 +1043,7 @@ namespace MySqlConnector
                 catch (MySql.Data.MySqlClient.MySqlException mex)
                 {
                     CloseConnection(connection);
-                    throw new Exception("Ошибка при удалении посещения из БД: " + mex.Message, mex);
+                    throw new Exception(mex.Number.ToString() + "\r\nОшибка при удалении посещения из БД: " + mex.Message, mex);
                 }
             }
 

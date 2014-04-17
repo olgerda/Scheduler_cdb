@@ -25,6 +25,7 @@ namespace Scheduler_Forms
         public FindClientCard()
         {
             InitializeComponent();
+            clientInfoCard.OnSaveChanges += new SaveChangesHandler<IClient>(clientInfoCard_OnSaveChanges);
 
             Init();
         }
@@ -35,7 +36,7 @@ namespace Scheduler_Forms
 
             this.clientList = clientList;
             this.entityFactory = entityFactory;
-
+            clientInfoCard.OnSaveChanges += new SaveChangesHandler<IClient>(clientInfoCard_OnSaveChanges);
             Init();
         }
 
@@ -57,7 +58,7 @@ namespace Scheduler_Forms
             customAutoComplete.AddRange(lstClientList.Items.Cast<IClient>().SelectMany(c => c.Telephones).ToArray());
             txtTelephone.AutoCompleteCustomSource = customAutoComplete;
 
-            clientInfoCard.OnSaveChanges += new SaveChangesHandler<IClient>(clientInfoCard_OnSaveChanges);
+            
             clientInfoCard.EntityFactory = entityFactory;
         }
 
@@ -168,33 +169,26 @@ namespace Scheduler_Forms
             if (lstClientList.SelectedIndex == -1)
                 return;
             //if (SelectedClient != (IClient)lstClientList.SelectedItem)
-                SelectedClient = (IClient)lstClientList.SelectedItem;
+            SelectedClient = (IClient)lstClientList.SelectedItem;
 
             //            clientInfoCard.Client = selectedClient;
             //             txtClientName.Text = selectedClient.Name;
             //             txtTelephone.Text = selectedClient.Telephones.FirstOrDefault();
         }
 
-        private void txtClientName_TextChanged(object sender, EventArgs e)
+        private void txtField_TextChanged(object sender, EventArgs e)
         {
             if (doNothingNow)
                 return;
-            IClient curClient = null;
-            if (txtClientName.Text.Length > 4 && !String.IsNullOrWhiteSpace(txtClientName.Text))
-                curClient = clientList.FindClientByPartialName(txtClientName.Text);
-            if (curClient != null)
-                lstClientList.SelectedItem = curClient;
-            else
-                lstClientList.SelectedIndex = -1;
-        }
-
-        private void txtTelephone_TextChanged(object sender, EventArgs e)
-        {
-            if (doNothingNow)
+            var source = sender as TextBox;
+            if (source == null)
                 return;
-            IClient curClient = null;
-            if (txtTelephone.Text.Length > 3 && !String.IsNullOrWhiteSpace(txtTelephone.Text))
-                curClient = clientList.FindClientByPartialTelephone(txtTelephone.Text);
+            string text = source.Text;
+            if (string.IsNullOrWhiteSpace(text))
+                return;
+            IClient curClient;
+            curClient = source == txtClientName ? clientList.List.FirstOrDefault(c => c.Name == source.Text)
+                : ClientList.List.FirstOrDefault(c => c.Telephones.Contains(source.Text));
             if (curClient != null)
                 lstClientList.SelectedItem = curClient;
             else
@@ -210,9 +204,44 @@ namespace Scheduler_Forms
         {
             if (e.Control && e.KeyCode == Keys.Delete && lstClientList.SelectedIndex != -1)
             {
-                ClientList.Remove((IClient)lstClientList.SelectedItem);
+                if (MessageBox.Show("Вы уверены, что хотите удалить пользователя\n" + ((INamedEntity)lstClientList.SelectedItem).Name + "\nиз базы?\nОтменить удаление невозможно!", 
+                    "Удаление пользователя из Базы", 
+                    MessageBoxButtons.YesNo, 
+                    MessageBoxIcon.Exclamation, 
+                    MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.No)
+                    return;
+                try
+                {
+                    ClientList.Remove((IClient)lstClientList.SelectedItem);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Substring(0, 4) == "1451")
+                        System.Windows.Forms.MessageBox.Show("Произошла ошибка удаления. Удаляемый клиент используется.", "Удаление невозможно.",
+                            System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Stop);
+                    else
+                        throw ex;
+                }
                 lstClientList.DataSource = ClientList.List.Cast<INamedEntity>().ToList();
             }
+        }
+
+        private void txtField_KeyDown(object sender, KeyEventArgs e)
+        {
+//             var source = sender as TextBox;
+//             if (source == null)
+//                 return;
+// 
+//             if (e.KeyCode == Keys.Enter && !String.IsNullOrWhiteSpace(source.Text))
+//             {
+//                 IClient curClient;
+//                 curClient = source == txtClientName ? clientList.List.FirstOrDefault(c => c.Name == source.Text)
+//                     : ClientList.List.FirstOrDefault(c => c.Telephones.Contains(source.Text));
+//                 if (curClient != null)
+//                     lstClientList.SelectedItem = curClient;
+//                 else
+//                     lstClientList.SelectedIndex = -1;
+//             }
         }
 
 

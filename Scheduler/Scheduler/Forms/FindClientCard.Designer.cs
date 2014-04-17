@@ -46,13 +46,14 @@
             // 
             // txtClientName
             // 
-            this.txtClientName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.txtClientName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtClientName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.txtClientName.Location = new System.Drawing.Point(85, 22);
             this.txtClientName.Name = "txtClientName";
             this.txtClientName.Size = new System.Drawing.Size(184, 20);
             this.txtClientName.TabIndex = 1;
-            this.txtClientName.TextChanged += new System.EventHandler(this.txtClientName_TextChanged);
+            this.txtClientName.TextChanged += new System.EventHandler(this.txtField_TextChanged);
+            this.txtClientName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtField_KeyDown);
             // 
             // label1
             // 
@@ -161,7 +162,8 @@
             this.txtTelephone.Name = "txtTelephone";
             this.txtTelephone.Size = new System.Drawing.Size(160, 20);
             this.txtTelephone.TabIndex = 17;
-            this.txtTelephone.TextChanged += new System.EventHandler(this.txtTelephone_TextChanged);
+            this.txtTelephone.TextChanged += new System.EventHandler(this.txtField_TextChanged);
+            this.txtTelephone.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtField_KeyDown);
             // 
             // clientInfoCard
             // 

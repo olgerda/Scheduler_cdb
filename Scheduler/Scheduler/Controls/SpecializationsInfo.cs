@@ -41,9 +41,9 @@ namespace Scheduler_Controls
         {
             if (specialisationsList == null)
                 return;
-            lstSpecializations.DataSource = specialisationsList.SpecializationList;
-//             lstSpecializations.Items.Clear();
-//             lstSpecializations.Items.AddRange(specialisationsList.SpecializationList.ToArray());
+//            lstSpecializations.DataSource = specialisationsList.SpecializationList.ToList();
+            lstSpecializations.Items.Clear();
+            lstSpecializations.Items.AddRange(specialisationsList.SpecializationList.ToArray());
         }
 
 
@@ -73,7 +73,18 @@ namespace Scheduler_Controls
         {
             if (specialisationsList == null)
                 return;
-            specialisationsList.SpecializationList = new HashSet<string>(lstSpecializations.Items.Cast<string>());
+            try
+            {
+                specialisationsList.SpecializationList = new HashSet<string>(lstSpecializations.Items.Cast<string>());
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Substring(0, 4) == "1451")
+                    MessageBox.Show("Произошла ошибка удаления. Удаляемая специальность используется.", "Удаление невозможно.",
+                        MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                else
+                    throw ex;
+            }
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<ISpecializationList>(specialisationsList));
         }

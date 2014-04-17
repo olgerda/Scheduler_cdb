@@ -42,8 +42,8 @@ namespace Scheduler_InterfacesRealisations
                     var listExceptValue = list.Except(value);
                     var ValueExceptList = value.Except(list);
                     if (OnItemRemoved != null)
-                        foreach (var item in listExceptValue)
-                            OnItemRemoved(item);
+                            foreach (var item in listExceptValue)
+                                OnItemRemoved(item);
                     if (OnItemAdded != null)
                         foreach (var item in ValueExceptList)
                             OnItemAdded(item);

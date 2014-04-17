@@ -104,7 +104,7 @@
             // 
             // txtSpecialistName
             // 
-            this.txtSpecialistName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.txtSpecialistName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtSpecialistName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.txtSpecialistName.Location = new System.Drawing.Point(9, 32);
             this.txtSpecialistName.Name = "txtSpecialistName";

@@ -112,29 +112,43 @@ namespace Scheduler
             if (e.Button != MouseButtons.Left) return;
             IEntity ent = ((CalendarControl3.ColumnsView)sender).GetEntityOnClick(e.Location) as IEntity;
             ReceptionInfoEdit receptionEditForm = new ReceptionInfoEdit();
-            
             if (ent == null)
             {
                 ent = database.EntityFactory.NewEntity();
                 ent.Cabinet = database.CabinetList.List.Find(x => x.Name == calendarControl.GetColumnNameOnClick(e.Location));
 
                 IEntity nearestTopEntity = (calendarControl.GetNearestTopEntity(e.Location) as IEntity);
-                var clickLevel = calendarControl.GetVerticalValueOfClick(e.Location);
-                var nearestLevel = receptionEntitiesTable.GetDescripptionsToValueLevels().Keys.Select(i => (int)i).Where(i => i <= clickLevel).Max();
+                int nearestTopEntityBottomLevel = nearestTopEntity == null ? 0 : nearestTopEntity.BottomLevel;
+                int clickLevel = calendarControl.GetVerticalValueOfClick(e.Location);
+                int nearestLevel = clickLevel;
+                try
+                {
+                    nearestLevel = receptionEntitiesTable.GetDescripptionsToValueLevels().Keys.Select(i => (int)i).Where(i => i <= clickLevel).Max();
+                }
+                catch (InvalidOperationException)
+                {
+                }
 
-                var maximum = Math.Max(nearestTopEntity.BottomLevel, nearestLevel);
-                ent.ReceptionTimeInterval.StartDate = schedule_date + receptionEntitiesTable.ConvertLevelToTime(maximum).TimeOfDay;
-                ent.ReceptionTimeInterval.EndDate = ent.ReceptionTimeInterval.StartDate + new TimeSpan(1,0,0);
+                var maximum = Math.Max(nearestTopEntityBottomLevel, nearestLevel);
+                var timeInterval = database.EntityFactory.NewTimeInterval();
+                timeInterval.StartDate = schedule_date + receptionEntitiesTable.ConvertLevelToTime(maximum).TimeOfDay;
+                timeInterval.EndDate = timeInterval.StartDate + new TimeSpan(1, 0, 0);
+                ent.ReceptionTimeInterval = timeInterval;
 
                 receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CreateNew;
-                receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Add(ent);
+                receptionEditForm.Reception = ent;
+                if (receptionEditForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Add(ent);
+                }
             }
             else
             {
                 receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.ReadExist;
+                receptionEditForm.Reception = ent;
+                receptionEditForm.ShowDialog();
             }
-            receptionEditForm.Reception = ent;
-            receptionEditForm.ShowDialog();
+            
         }
 
         void FirstLoad()
@@ -147,15 +161,15 @@ namespace Scheduler
             var listOfEntities = database.SelectReceptionsFromDate(schedule_date);
 
             List<IColumn> listOfColumns = new List<IColumn>();
+            foreach (var cabname in database.CabinetList.List.Where(c => c.Availability))
+            {
+                var column = database.EntityFactory.NewColumn();
+                column.Name = cabname.Name;
+                listOfColumns.Add(column);
+            }
             foreach (var ent in listOfEntities)
             {
                 var column = listOfColumns.Find(x => x.Name == ent.Cabinet.Name);
-                if (column == null) 
-                {
-                    column = database.EntityFactory.NewColumn();
-                    column.Name = ent.Cabinet.Name;
-                    listOfColumns.Add(column);
-                }
                 column.AddEntity(ent);
             }
 

@@ -112,6 +112,7 @@ namespace Scheduler
             // 
             // monthCalendar
             // 
+            this.monthCalendar.Enabled = false;
             this.monthCalendar.Location = new System.Drawing.Point(31, 64);
             this.monthCalendar.Name = "monthCalendar";
             this.monthCalendar.TabIndex = 3;

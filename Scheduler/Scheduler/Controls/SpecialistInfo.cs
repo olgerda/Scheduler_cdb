@@ -36,6 +36,7 @@ namespace Scheduler_Controls
             this.specialisationsList = SpecialisationsList;
             lstSpecialisations.Items.Clear();
             lstSpecialisations.Items.AddRange(specialisationsList.ToArray());
+            InitializeSpecialistInfo();
         }
 
         public ISpecialist Spec
@@ -61,12 +62,14 @@ namespace Scheduler_Controls
 
         private void InitializeSpecialistInfo()
         {
-            if (spec == null)
+            if (spec == null || specialisationsList == null)
                 return;
             txtName.Text = spec.Name;
             chkNotWorking.Checked = spec.NotWorking;
             lstSpecialisations.Items.Clear();
             lstSpecialisations.Items.AddRange(specialisationsList.ToArray());
+            foreach (var s in spec.Specialisations)
+                lstSpecialisations.SetItemChecked(lstSpecialisations.Items.IndexOf(s), true);
         }
 
         private void btnCommit_Click(object sender, EventArgs e)

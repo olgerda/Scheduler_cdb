@@ -69,9 +69,9 @@ namespace Scheduler_InterfacesRealisations
         {
             if (!list.Contains(item))
             {
-                list.Add(item);
                 if (OnItemAdded != null)
                     OnItemAdded(item);
+                list.Add(item);
             }
         }
 
@@ -79,9 +79,9 @@ namespace Scheduler_InterfacesRealisations
         {
             if (list.Contains(item))
             {
-                list.Remove(item);
                 if (OnItemRemoved != null)
                     OnItemRemoved(item);
+                list.Remove(item);
             }
         }
 

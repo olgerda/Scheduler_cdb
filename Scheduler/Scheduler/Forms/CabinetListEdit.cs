@@ -125,11 +125,6 @@ namespace Scheduler_Forms
 
         private void lstCabinets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //             DisplaySelected();
-            //         }
-            // 
-            //         private void DisplaySelected()
-            //         {
             if (lstCabinets.SelectedIndex == -1)
                 return;
             SelectedCabinet = (ICabinet)lstCabinets.SelectedItem;
@@ -144,8 +139,26 @@ namespace Scheduler_Forms
         {
             if (e.Control && e.KeyCode == Keys.Delete && lstCabinets.SelectedIndex != -1)
             {
-                CabinetList.Remove((ICabinet)lstCabinets.SelectedItem);
-                lstCabinets.DataSource = CabinetList.List.Cast<INamedEntity>().ToList();
+                if (MessageBox.Show("Вы уверены, что хотите удалить кабинет\n" + ((INamedEntity)lstCabinets.SelectedItem).Name + "\nиз базы?\nОтменить удаление невозможно!",
+                    "Удаление кабинета из Базы",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.No)
+                    return;
+                try
+                {
+                    CabinetList.Remove((ICabinet)lstCabinets.SelectedItem);
+                    lstCabinets.DataSource = CabinetList.List.Cast<INamedEntity>().ToList();
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Substring(0, 4) == "1451")
+                        MessageBox.Show("Произошла ошибка удаления. Удаляемый кабинет используется.", "Удаление невозможно.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    else
+                        throw ex;
+                }
+                
+                
             }
         }
     }

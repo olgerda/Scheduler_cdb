@@ -121,8 +121,8 @@ namespace Scheduler_Controls
         {
             get
             {
-                clientOnReception.Name = txtClientName.Text;
-                clientOnReception.Telephones.Add(txtTelephone.Text);
+                //                 clientOnReception.Name = txtClientName.Text;
+                //                 clientOnReception.Telephones.Add(txtTelephone.Text);
                 return clientOnReception;
             }
             set
@@ -143,7 +143,7 @@ namespace Scheduler_Controls
                     chkRent.Checked = false;
                     btnCancelReception.Enabled = false;
                     btnCreateChildReception.Enabled = false;
-                    btnShowClientCard.Enabled = false;
+                    btnShowClientCard.Enabled = true;
                     break;
                 case ShowModes.CloneExist:
                     btnCancelReception.Enabled = false;
@@ -169,7 +169,9 @@ namespace Scheduler_Controls
         {
             if (cabinetList != null)
             {
-                cmbCabinet.DataSource = cabinetList;
+                cmbCabinet.DataSource = cabinetList.ToList();
+                //                 if (reception.Cabinet != null && cabinetList.Any(f => reception.Cabinet == f))
+                //                     cmbCabinet.SelectedItem = reception.Cabinet.Name;
 
                 cmbCabinet.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 //                 cmbCabinet.Items.Clear();
@@ -178,7 +180,10 @@ namespace Scheduler_Controls
 
             if (specialisationList != null)
             {
-                cmbSpecialisation.DataSource = specialisationList;
+                cmbSpecialisation.DataSource = specialisationList.ToList();
+
+                //                 if (!String.IsNullOrWhiteSpace(reception.Specialization) && specialisationList.Any(s => s == reception.Specialization))
+                //                     cmbSpecialisation.SelectedItem = reception.Specialization;
 
                 cmbSpecialisation.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 //                 cmbSpecialisation.Items.Clear();
@@ -187,7 +192,10 @@ namespace Scheduler_Controls
 
             if (specialistList != null)
             {
-                cmbSpecialist.DataSource = specialistList;
+                cmbSpecialist.DataSource = specialistList.ToList();
+
+                //                 if (reception.Specialist != null && specialistList.Any(s => reception.Specialist == s))
+                //                     cmbSpecialist.SelectedItem = reception.Specialist;
 
                 cmbSpecialist.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 //                 cmbSpecialist.Items.Clear();
@@ -208,6 +216,13 @@ namespace Scheduler_Controls
             dateTimeStart.Value = reception.ReceptionTimeInterval.StartDate;
             dateTimeEnd.Value = reception.ReceptionTimeInterval.EndDate;
 
+            if (reception.Cabinet != null && cabinetList.Any(f => reception.Cabinet == f))
+                cmbCabinet.SelectedItem = reception.Cabinet;
+            if (reception.Specialist != null && specialistList.Any(s => reception.Specialist == s))
+                cmbSpecialist.SelectedItem = reception.Specialist;
+            if (!String.IsNullOrWhiteSpace(reception.Specialization) && specialisationList.Any(s => s == reception.Specialization))
+                cmbSpecialisation.SelectedItem = reception.Specialization;
+
             //txtTelephone.Text = reception.Client.Telephones.FirstOrDefault();
             ClientOnReception = reception.Client;
         }
@@ -220,12 +235,10 @@ namespace Scheduler_Controls
 
         bool SomethingChanged()
         {
-            if (reception == null)
+            if (reception == null || reception.Cabinet == null || reception.Specialist == null)
                 return false;
 
             return
-                reception.Client.Name != txtClientName.Text ||
-                !reception.Client.Telephones.Contains(txtTelephone.Text) ||
                 reception.Rent != chkRent.Checked ||
                 reception.Cabinet.Name != cmbCabinet.SelectedText ||
                 reception.Specialist.Name != cmbSpecialist.SelectedText ||
@@ -247,9 +260,9 @@ namespace Scheduler_Controls
             //             reception.Client.Telephones = tmp;
 
             reception.Rent = chkRent.Checked;
-            reception.Cabinet.Name = cmbCabinet.SelectedText;
-            reception.Specialist.Name = cmbSpecialist.SelectedText;
-            reception.Specialization = cmbSpecialisation.SelectedText;
+            reception.Cabinet = (ICabinet)cmbCabinet.SelectedItem;
+            reception.Specialist = (ISpecialist)cmbSpecialist.SelectedItem;
+            reception.Specialization = (string)cmbSpecialisation.SelectedItem;
             reception.ReceptionTimeInterval.StartDate = dateTimeStart.Value;
             reception.ReceptionTimeInterval.EndDate = dateTimeEnd.Value;
 
@@ -273,6 +286,7 @@ namespace Scheduler_Controls
         private void chkRent_CheckedChanged(object sender, EventArgs e)
         {
             pnlClient.Enabled = !chkRent.Checked;
+            btnShowClientCard.Enabled = !chkRent.Checked;
         }
 
         private void btnShowClientCard_Click(object sender, EventArgs e)
@@ -296,6 +310,11 @@ namespace Scheduler_Controls
         private void cmbSpecialist_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnCommit_Click(object sender, EventArgs e)
+        {
+            SaveChanges();
         }
     }
 }

@@ -19,18 +19,22 @@ namespace Scheduler_Forms
         private ISpecialist selectedSpecialist;
         private ISpecializationList specializationList;
 
+        private bool doNothing;
+
         public SpecialistListEdit()
         {
             InitializeComponent();
+            doNothing = false;
         }
 
-        public SpecialistListEdit(ISpecialistList specList, ISpecializationList specializationList , IFactory entityFactory)
+        public SpecialistListEdit(ISpecialistList specList, ISpecializationList specializationList, IFactory entityFactory)
         {
             InitializeComponent();
 
             this.specList = specList;
             this.entityFactory = entityFactory;
             this.SpecializationList = specializationList;
+            doNothing = false;
 
             Init();
         }
@@ -87,6 +91,7 @@ namespace Scheduler_Forms
             {
                 selectedSpecialist = value;
                 specialistInfoCard.Spec = selectedSpecialist;
+                txtSpecialistName.Text = selectedSpecialist.Name;
             }
         }
 
@@ -117,6 +122,7 @@ namespace Scheduler_Forms
                 if (!specList.List.Contains(result))
                 {
                     specList.Add(result);
+                    lstSpecialistList.DataSource = specList.List.Cast<INamedEntity>().ToList();
                 }
                 lstSpecialistList.SelectedItem = result;
             }
@@ -130,12 +136,16 @@ namespace Scheduler_Forms
 
         private void txtSpecialistName_TextChanged(object sender, EventArgs e)
         {
+            if (doNothing)
+                return;
             ISpecialist curSpec = null;
-            curSpec = specList.FindSpecialistByPartialName(txtSpecialistName.Text);
+            curSpec = specList.List.FirstOrDefault(s => s.Name == txtSpecialistName.Text) ?? specList.FindSpecialistByPartialName(txtSpecialistName.Text);
+            doNothing = true;
             if (curSpec != null)
                 lstSpecialistList.SelectedItem = curSpec;
             else
                 lstSpecialistList.SelectedIndex = -1;
+            doNothing = false;
         }
 
         private void btnAddSpecialist_Click(object sender, EventArgs e)
@@ -172,7 +182,24 @@ namespace Scheduler_Forms
         {
             if (e.Control && e.KeyCode == Keys.Delete && lstSpecialistList.SelectedIndex != -1)
             {
-                SpecialistList.Remove((ISpecialist)lstSpecialistList.SelectedItem);
+                if (MessageBox.Show("Вы уверены, что хотите удалить специалиста\n" + ((INamedEntity)lstSpecialistList.SelectedItem).Name + "\nиз базы?\nОтменить удаление невозможно!",
+                    "Удаление специалиста из Базы",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.No)
+                    return;
+                try
+                {
+                    SpecialistList.Remove((ISpecialist)lstSpecialistList.SelectedItem);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Substring(0, 4) == "1451")
+                        System.Windows.Forms.MessageBox.Show("Произошла ошибка удаления. Удаляемый специалист используется.", "Удаление невозможно.",
+                            System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Stop);
+                    else
+                        throw ex;
+                }
                 lstSpecialistList.DataSource = SpecialistList.List.Cast<INamedEntity>().ToList();
             }
         }
