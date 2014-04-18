@@ -33,6 +33,7 @@
             // 
             // receptionInfoCard
             // 
+            this.receptionInfoCard.ClientOnReception = null;
             this.receptionInfoCard.Location = new System.Drawing.Point(12, 12);
             this.receptionInfoCard.MaximumSize = new System.Drawing.Size(595, 150);
             this.receptionInfoCard.MinimumSize = new System.Drawing.Size(595, 150);
@@ -50,9 +51,11 @@
             this.ClientSize = new System.Drawing.Size(622, 177);
             this.Controls.Add(this.receptionInfoCard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.KeyPreview = true;
             this.Name = "ReceptionInfoEdit";
             this.Text = "ReceptionInfoEdit";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReceptionInfoEdit_FormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ReceptionInfoEdit_KeyDown);
             this.ResumeLayout(false);
 
         }

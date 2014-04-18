@@ -61,11 +61,16 @@ namespace Scheduler_Forms
 
         void receptionInfoCard_OnSaveChanges(object source, SaveChangesEventArgs<IReception> e)
         {
-            doNothing = true;
-            Reception = receptionInfoCard.Reception;
-            doNothing = false;
-
-            this.Close();
+            
+            var temp = receptionInfoCard.Reception;
+            if (temp != null)
+            {
+                doNothing = true;
+                Reception = temp;
+                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                this.Close();
+                doNothing = false;
+            }
         }
 
         void receptionInfoCard_OnShowClientsButtonClicked(object source, ShowClientsEventsArgs e)
@@ -160,10 +165,15 @@ namespace Scheduler_Forms
 
         private void ReceptionInfoEdit_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing && !doNothing)
+            if (!doNothing)
             {
+
+                var temp = receptionInfoCard.Reception; 
                 doNothing = true;
-                Reception = receptionInfoCard.Reception;
+                if (temp == null)
+                    e.Cancel = true;
+                else
+                    Reception = temp;
                 doNothing = false;
             }
         }
@@ -171,6 +181,12 @@ namespace Scheduler_Forms
         private void receptionInfoCard_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void ReceptionInfoEdit_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+                this.Close();
         }
 
 

@@ -87,7 +87,7 @@ namespace Scheduler_InterfacesRealisations
                 }
                 else
                 {
-                    return receptionTimeInterval.Interval() + Environment.NewLine + specialist + Environment.NewLine + specialisation + Environment.NewLine + client;
+                    return receptionTimeInterval.Interval() + Environment.NewLine + specialist.Name + Environment.NewLine + specialisation + Environment.NewLine + client.Name;
                 }
             }
         }

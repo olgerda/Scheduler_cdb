@@ -111,42 +111,51 @@ namespace Scheduler
         {
             if (e.Button != MouseButtons.Left) return;
             IEntity ent = ((CalendarControl3.ColumnsView)sender).GetEntityOnClick(e.Location) as IEntity;
-            ReceptionInfoEdit receptionEditForm = new ReceptionInfoEdit();
-            if (ent == null)
+            using (ReceptionInfoEdit receptionEditForm = new ReceptionInfoEdit())
             {
-                ent = database.EntityFactory.NewEntity();
-                ent.Cabinet = database.CabinetList.List.Find(x => x.Name == calendarControl.GetColumnNameOnClick(e.Location));
 
-                IEntity nearestTopEntity = (calendarControl.GetNearestTopEntity(e.Location) as IEntity);
-                int nearestTopEntityBottomLevel = nearestTopEntity == null ? 0 : nearestTopEntity.BottomLevel;
-                int clickLevel = calendarControl.GetVerticalValueOfClick(e.Location);
-                int nearestLevel = clickLevel;
-                try
-                {
-                    nearestLevel = receptionEntitiesTable.GetDescripptionsToValueLevels().Keys.Select(i => (int)i).Where(i => i <= clickLevel).Max();
-                }
-                catch (InvalidOperationException)
-                {
-                }
 
-                var maximum = Math.Max(nearestTopEntityBottomLevel, nearestLevel);
-                var timeInterval = database.EntityFactory.NewTimeInterval();
-                timeInterval.StartDate = schedule_date + receptionEntitiesTable.ConvertLevelToTime(maximum).TimeOfDay;
-                timeInterval.EndDate = timeInterval.StartDate + new TimeSpan(1, 0, 0);
-                ent.ReceptionTimeInterval = timeInterval;
-
-                receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CreateNew;
-                receptionEditForm.Reception = ent;
-                if (receptionEditForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                if (ent == null)
                 {
-                    receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Add(ent);
+                    ent = database.EntityFactory.NewEntity();
+                    ent.Cabinet = database.CabinetList.List.Find(x => x.Name == calendarControl.GetColumnNameOnClick(e.Location));
+
+                    IEntity nearestTopEntity = (calendarControl.GetNearestTopEntity(e.Location) as IEntity);
+                    int nearestTopEntityBottomLevel = nearestTopEntity == null ? 0 : nearestTopEntity.BottomLevel;
+                    int clickLevel = calendarControl.GetVerticalValueOfClick(e.Location);
+                    int nearestLevel = clickLevel;
+                    try
+                    {
+                        nearestLevel = receptionEntitiesTable.GetDescripptionsToValueLevels().Keys.Select(i => (int)i).Where(i => i <= clickLevel).Max();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
+
+                    var maximum = Math.Max(nearestTopEntityBottomLevel, nearestLevel);
+                    var timeInterval = database.EntityFactory.NewTimeInterval();
+                    timeInterval.StartDate = schedule_date + receptionEntitiesTable.ConvertLevelToTime(maximum).TimeOfDay;
+                    timeInterval.EndDate = timeInterval.StartDate + new TimeSpan(1, 0, 0);
+                    ent.ReceptionTimeInterval = timeInterval;
+
+                    receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CreateNew;
+                    receptionEditForm.Reception = ent;
+                    if (receptionEditForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        if (!receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Any(existed => ent.IsIntersectWith(existed)))
+                            receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Add(ent);
+                        calendarControl.Refresh();
+                    }
                 }
-            }
-            else
-            {
-                receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.ReadExist;
-                receptionEditForm.Reception = ent;
-                receptionEditForm.ShowDialog();
+                else
+                {
+                    receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.ReadExist;
+                    receptionEditForm.Reception = ent;
+                    if (receptionEditForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        calendarControl.Refresh();
+                    }
+                }
             }
             
         }

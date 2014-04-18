@@ -96,7 +96,7 @@ namespace Scheduler_Controls
             var dresult = MessageBox.Show("Сохранить изменения?", "Некоторые поля изменены.", MessageBoxButtons.YesNoCancel);
             if (dresult == DialogResult.Cancel)
                 return true;
-            if (dresult == DialogResult.OK)
+            if (dresult == DialogResult.Yes)
             {
                 SaveChanges();
             }

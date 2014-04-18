@@ -90,23 +90,7 @@ namespace CalendarControl3
         public ColumnsView()
         {
             InitializeComponent();
-            
-            
-            //designtime TEST
-             //table = TESTCASE.GetTestTable();
-             //MakeTableFromInput();
-            //designtime TEST
-
         }
-
-//         public ColumnsView(ITable2ControlInterface inputTable)
-//         {
-//             InitializeComponent();
-// 
-//             table = inputTable;
-// 
-//             //MakeTableFromInput();
-//         }
 
         void MakeTableFromInput()
         {
@@ -249,15 +233,12 @@ namespace CalendarControl3
         /// <param name="height">Высота отрисовки столбца.</param>
         void PaintColumn(Graphics g, IColumn2ControlInterface column, int leftside, int width, int height)
         {
-            
             foreach (var entity in column.Entities)
             {
                 PaintEntity(g, entity, leftside + 1, width -2 );
             }
             g.DrawLine(new Pen(Brushes.Black), leftside, 0, leftside, height); //рисуем левую линию каждого столбца
             g.DrawLine(new Pen(Brushes.Black), leftside + width, 0, leftside + width, height); //рисуем правую линию
-            
-
         }
 
         /// <summary>
@@ -356,7 +337,7 @@ namespace CalendarControl3
             
             int delta = bottomLevel - topLevel;
             double dotsPerPixel = (double)delta / (tableBottom - tableTop);
-            return topLevel + (int)Math.Floor((click.Y - tableTop) * dotsPerPixel);
+            return topLevel + (int)Math.Truncate((click.Y - tableTop) * dotsPerPixel);
         }
 
         /// <summary>

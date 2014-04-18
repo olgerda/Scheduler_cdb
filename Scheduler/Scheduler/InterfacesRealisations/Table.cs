@@ -36,7 +36,8 @@ namespace Scheduler_InterfacesRealisations
             {
                 workInterval = value;
                 duration = workInterval.EndDate - workInterval.StartDate;
-                maxValue = minValue + Convert.ToInt32(Math.Truncate(duration.TotalMinutes));
+                minValue = Convert.ToInt32(Math.Truncate(workInterval.StartDate.TimeOfDay.TotalMinutes));
+                maxValue = Convert.ToInt32(Math.Truncate(workInterval.EndDate.TimeOfDay.TotalMinutes));
             }
         }
 
@@ -44,7 +45,7 @@ namespace Scheduler_InterfacesRealisations
         {
             if (workInterval == null || level > maxValue || level < minValue)
                 return DateTime.Now;
-            return workInterval.StartDate.AddMinutes(level);
+            return workInterval.StartDate.Date.AddMinutes(level);
         }
 
         int Scheduler_DBobjects_Intefraces.ITable.ConvertTimeToLevel(DateTime time)

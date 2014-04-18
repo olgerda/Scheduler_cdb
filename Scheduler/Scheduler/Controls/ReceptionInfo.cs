@@ -22,6 +22,7 @@ namespace Scheduler_Controls
 
         private IReception reception;
         private ShowModes mode;
+        private bool doNothing;
 
         public event SaveChangesHandler<IReception> OnSaveChanges;
         public event ShowClientsHandler OnShowClientsButtonClicked;
@@ -92,7 +93,7 @@ namespace Scheduler_Controls
                     var dresult = MessageBox.Show("Сохранить изменения?", "Некоторые поля изменены.", MessageBoxButtons.YesNoCancel);
                     if (dresult == DialogResult.Cancel)
                         return null;
-                    if (dresult == DialogResult.OK)
+                    if (dresult == DialogResult.Yes)
                     {
                         SaveChanges();
                     }
@@ -107,7 +108,7 @@ namespace Scheduler_Controls
                     var dresult = MessageBox.Show("Сохранить изменения?", "Некоторые поля изменены.", MessageBoxButtons.YesNoCancel);
                     if (dresult == DialogResult.Cancel)
                         return;
-                    if (dresult == DialogResult.OK)
+                    if (dresult == DialogResult.Yes)
                     {
                         SaveChanges();
                     }
@@ -137,6 +138,8 @@ namespace Scheduler_Controls
 
         void SetMode()
         {
+            doNothing = false;
+
             switch (mode)
             {
                 case ShowModes.CreateNew:
@@ -227,25 +230,32 @@ namespace Scheduler_Controls
             ClientOnReception = reception.Client;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (SomethingChanged())
-                SaveChanges();
-        }
+//         private void button1_Click(object sender, EventArgs e)
+//         {
+//             if (SomethingChanged())
+//                 SaveChanges();
+//         }
 
         bool SomethingChanged()
         {
-            if (reception == null || reception.Cabinet == null || reception.Specialist == null)
+            if (reception == null || reception.Cabinet == null || reception.Specialist == null || doNothing)
                 return false;
 
             return
                 reception.Rent != chkRent.Checked ||
-                reception.Cabinet.Name != cmbCabinet.SelectedText ||
-                reception.Specialist.Name != cmbSpecialist.SelectedText ||
-                reception.Specialization != cmbSpecialisation.SelectedText ||
+                reception.Cabinet != cmbCabinet.SelectedItem ||
+                reception.Specialist != cmbSpecialist.SelectedItem ||
+
                 reception.ReceptionTimeInterval.Date != dateDate.Value ||
                 reception.ReceptionTimeInterval.StartDate != dateTimeStart.Value ||
-                reception.ReceptionTimeInterval.EndDate != dateTimeEnd.Value;
+                reception.ReceptionTimeInterval.EndDate != dateTimeEnd.Value ||
+                (chkRent.Checked &&
+                    (
+                        reception.Specialization != cmbSpecialisation.SelectedText ||
+                        reception.Client != clientOnReception
+                    )
+                );
+
         }
 
         void SaveChanges()
@@ -269,8 +279,10 @@ namespace Scheduler_Controls
             string errorMessage = reception.Validate();
             if (errorMessage == null)
             {
+                doNothing = true;
                 if (OnSaveChanges != null)
                     OnSaveChanges(this, new SaveChangesEventArgs<IReception>(reception));
+                doNothing = false;
                 return;
             }
 
