@@ -220,5 +220,21 @@ namespace Scheduler_DBobjects
         #endregion
 
 
+
+
+        void Scheduler_DBobjects_Intefraces.IMainDataBase.AddReception(Scheduler_DBobjects_Intefraces.IEntity reception)
+        {
+            dbconnector.AddReception(reception);
+        }
+
+        void Scheduler_DBobjects_Intefraces.IMainDataBase.RemoveReception(Scheduler_DBobjects_Intefraces.IEntity reception)
+        {
+            dbconnector.RemoveReception(reception);
+        }
+
+        void Scheduler_DBobjects_Intefraces.IMainDataBase.UpdateReception(Scheduler_DBobjects_Intefraces.IEntity reception)
+        {
+            dbconnector.UpdateReception(reception);
+        }
     }
 }

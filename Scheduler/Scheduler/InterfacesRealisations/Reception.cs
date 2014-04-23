@@ -14,7 +14,7 @@ namespace Scheduler_InterfacesRealisations
         string specialisation;
         bool isRented;
 
-        Scheduler_Controls_Interfaces.DisposeReception disposeFunc;
+        static Scheduler_DBobjects_Intefraces.IMainDataBase database;
 
         int id;
 
@@ -72,8 +72,20 @@ namespace Scheduler_InterfacesRealisations
                 if (String.IsNullOrWhiteSpace(specialisation))
                     result += "Специализация не задана." + Environment.NewLine;
                 if (client == null)
-                    result += "Клиент не задан.";
+                    result += "Клиент не задан." + Environment.NewLine;
             }
+
+            if (database != null)
+            {
+                List<Scheduler_DBobjects_Intefraces.IEntity> receptionsIntersectedWith = new List<Scheduler_DBobjects_Intefraces.IEntity>();
+                foreach (var r in database.SelectReceptionsFromDate(this.receptionTimeInterval.Date).Where(r => r.Cabinet.ID == this.cabinet.ID && r.IsIntersectWith(this)))
+                    receptionsIntersectedWith.Add(r);
+                if (receptionsIntersectedWith.Count != 0)
+                    result += "Время посещения пересекается с другими: " + Environment.NewLine;
+                foreach (var r in receptionsIntersectedWith)
+                    result += r.DisplayString + Environment.NewLine;//r.ReceptionTimeInterval.Interval() + Environment.NewLine;
+            }
+
             return result == String.Empty ? null : result;
         }
 
@@ -102,10 +114,10 @@ namespace Scheduler_InterfacesRealisations
             get { return Convert.ToInt32(Math.Truncate(receptionTimeInterval.EndDate.TimeOfDay.TotalMinutes)); }
         }
 
-//         ulong CalendarControl3_Interfaces.IEntity2ControlInterface.ID
-//         {
-//             get { return Convert.ToUInt64(id); }
-//         }
+        //         ulong CalendarControl3_Interfaces.IEntity2ControlInterface.ID
+        //         {
+        //             get { return Convert.ToUInt64(id); }
+        //         }
 
 
         bool CalendarControl3_Interfaces.IEntity2ControlInterface.IsIntersectWith(CalendarControl3_Interfaces.IEntity2ControlInterface second)
@@ -134,18 +146,11 @@ namespace Scheduler_InterfacesRealisations
             get { return receptionTimeInterval.Interval() + " " + specialist.Name + " " + specialisation + " " + cabinet.Name; }
         }
 
-
-
-        void Scheduler_Controls_Interfaces.IReception.Dispose()
+        void Scheduler_DBobjects_Intefraces.IEntity.SetDatabase(Scheduler_DBobjects_Intefraces.IMainDataBase db)
         {
-            if (disposeFunc != null)
-                disposeFunc(this);
+            if (database == null)
+                database = db;
         }
 
-        void Scheduler_Controls_Interfaces.IReception.SetDisposeFunction(Scheduler_Controls_Interfaces.DisposeReception func)
-        {
-            if (disposeFunc == null)
-                disposeFunc = func;
-        }
     }
 }

@@ -102,16 +102,6 @@ namespace Scheduler_Controls_Interfaces
         string Validate();
 
         /// <summary>
-        /// Удалить информацию о себе из системы.
-        /// </summary>
-        void Dispose();
-
-        /// <summary>
-        /// Установить функцию удаления записи.
-        /// </summary>
-        void SetDisposeFunction(DisposeReception func);
-
-        /// <summary>
         /// Отобразить содержимое в виде максимально информативной строки.
         /// </summary>
         string DisplayString { get; }

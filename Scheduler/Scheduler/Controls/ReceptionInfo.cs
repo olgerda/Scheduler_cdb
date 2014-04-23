@@ -20,6 +20,17 @@ namespace Scheduler_Controls
 
         private IClient clientOnReception = null;
 
+        private static IReception dummyReception = null;
+
+        public static IReception DummyReception
+        {
+            set
+            {
+                if (dummyReception == null)
+                    dummyReception = value;
+            }
+        }
+
         private IReception reception;
         private ShowModes mode;
         private bool doNothing;
@@ -230,11 +241,11 @@ namespace Scheduler_Controls
             ClientOnReception = reception.Client;
         }
 
-//         private void button1_Click(object sender, EventArgs e)
-//         {
-//             if (SomethingChanged())
-//                 SaveChanges();
-//         }
+        //         private void button1_Click(object sender, EventArgs e)
+        //         {
+        //             if (SomethingChanged())
+        //                 SaveChanges();
+        //         }
 
         bool SomethingChanged()
         {
@@ -260,26 +271,35 @@ namespace Scheduler_Controls
 
         void SaveChanges()
         {
-            if (reception == null)
+            if (reception == null || dummyReception == null)
                 return;
-            reception.Client = ClientOnReception;
+
+            dummyReception.Client = ClientOnReception;
             //             reception.Client.Name = txtClientName.Text;
             // 
             //             var tmp = reception.Client.Telephones;
             //             tmp.Add(txtTelephone.Text);
             //             reception.Client.Telephones = tmp;
 
-            reception.Rent = chkRent.Checked;
-            reception.Cabinet = (ICabinet)cmbCabinet.SelectedItem;
-            reception.Specialist = (ISpecialist)cmbSpecialist.SelectedItem;
-            reception.Specialization = (string)cmbSpecialisation.SelectedItem;
-            reception.ReceptionTimeInterval.StartDate = dateTimeStart.Value;
-            reception.ReceptionTimeInterval.EndDate = dateTimeEnd.Value;
+            dummyReception.Rent = chkRent.Checked;
+            dummyReception.Cabinet = (ICabinet)cmbCabinet.SelectedItem;
+            dummyReception.Specialist = (ISpecialist)cmbSpecialist.SelectedItem;
+            dummyReception.Specialization = (string)cmbSpecialisation.SelectedItem;
+            dummyReception.ReceptionTimeInterval.StartDate = dateTimeStart.Value;
+            dummyReception.ReceptionTimeInterval.EndDate = dateTimeEnd.Value;
 
-            string errorMessage = reception.Validate();
+            string errorMessage = dummyReception.Validate();
             if (errorMessage == null)
             {
                 doNothing = true;
+
+                reception.Client = dummyReception.Client;
+                reception.Rent = dummyReception.Rent;
+                reception.Cabinet = dummyReception.Cabinet;
+                reception.Specialist = dummyReception.Specialist;
+                reception.Specialization = dummyReception.Specialization;
+                reception.ReceptionTimeInterval = dummyReception.ReceptionTimeInterval;
+
                 if (OnSaveChanges != null)
                     OnSaveChanges(this, new SaveChangesEventArgs<IReception>(reception));
                 doNothing = false;
@@ -315,8 +335,13 @@ namespace Scheduler_Controls
 
         private void btnCancelReception_Click(object sender, EventArgs e)
         {
-            if (OnCancelReceptionClicked != null)
-                OnCancelReceptionClicked(this, new CancelReceptionEventArgs(reception));
+            if (DateTime.Today.Date - reception.ReceptionTimeInterval.Date < TimeSpan.FromDays(1))
+            {
+                if (OnCancelReceptionClicked != null)
+                    OnCancelReceptionClicked(this, new CancelReceptionEventArgs(reception));
+            }
+            else
+                MessageBox.Show("Данное посещение уже в прошлом.","Прошедшее посещение.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void cmbSpecialist_SelectedIndexChanged(object sender, EventArgs e)

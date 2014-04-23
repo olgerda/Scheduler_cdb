@@ -38,10 +38,7 @@ namespace Scheduler
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainView = new System.Windows.Forms.SplitContainer();
-            this.datePicker = new System.Windows.Forms.TextBox();
-            this.buttonShowToday = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.monthCalendar = new System.Windows.Forms.MonthCalendar();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.расписаниеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сформироватьОтчетToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,6 +54,7 @@ namespace Scheduler
             this.помощьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.инструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.контактыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.mainView)).BeginInit();
             this.mainView.Panel2.SuspendLayout();
             this.mainView.SuspendLayout();
@@ -66,6 +64,8 @@ namespace Scheduler
             // mainView
             // 
             this.mainView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainView.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.mainView.IsSplitterFixed = true;
             this.mainView.Location = new System.Drawing.Point(0, 24);
             this.mainView.Name = "mainView";
             // 
@@ -75,48 +75,19 @@ namespace Scheduler
             // 
             // mainView.Panel2
             // 
-            this.mainView.Panel2.Controls.Add(this.datePicker);
-            this.mainView.Panel2.Controls.Add(this.buttonShowToday);
+            this.mainView.Panel2.Controls.Add(this.dateTimePicker1);
             this.mainView.Panel2.Controls.Add(this.label1);
-            this.mainView.Panel2.Controls.Add(this.monthCalendar);
-            this.mainView.Size = new System.Drawing.Size(920, 407);
-            this.mainView.SplitterDistance = 683;
+            this.mainView.Size = new System.Drawing.Size(696, 407);
+            this.mainView.SplitterDistance = 538;
             this.mainView.TabIndex = 3;
-            // 
-            // datePicker
-            // 
-            this.datePicker.Location = new System.Drawing.Point(31, 32);
-            this.datePicker.Name = "datePicker";
-            this.datePicker.Size = new System.Drawing.Size(163, 20);
-            this.datePicker.TabIndex = 7;
-            this.datePicker.TextChanged += new System.EventHandler(this.DatePickerTextChanged);
-            // 
-            // buttonShowToday
-            // 
-            this.buttonShowToday.Enabled = false;
-            this.buttonShowToday.Location = new System.Drawing.Point(31, 238);
-            this.buttonShowToday.Name = "buttonShowToday";
-            this.buttonShowToday.Size = new System.Drawing.Size(163, 35);
-            this.buttonShowToday.TabIndex = 6;
-            this.buttonShowToday.Text = "Вернуться к расписанию на сегодня";
-            this.buttonShowToday.UseVisualStyleBackColor = true;
-            this.buttonShowToday.Visible = false;
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(31, 16);
+            this.label1.Location = new System.Drawing.Point(3, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(164, 22);
+            this.label1.Size = new System.Drawing.Size(90, 16);
             this.label1.TabIndex = 4;
             this.label1.Text = "Расписание  на";
-            // 
-            // monthCalendar
-            // 
-            this.monthCalendar.Enabled = false;
-            this.monthCalendar.Location = new System.Drawing.Point(31, 64);
-            this.monthCalendar.Name = "monthCalendar";
-            this.monthCalendar.TabIndex = 3;
-            this.monthCalendar.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.MonthCalendarDateChanged);
             // 
             // mainMenu
             // 
@@ -127,7 +98,7 @@ namespace Scheduler
             this.помощьToolStripMenuItem});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(920, 24);
+            this.mainMenu.Size = new System.Drawing.Size(696, 24);
             this.mainMenu.TabIndex = 4;
             this.mainMenu.Text = "mainMenu";
             // 
@@ -227,20 +198,28 @@ namespace Scheduler
             // инструкцииToolStripMenuItem
             // 
             this.инструкцииToolStripMenuItem.Name = "инструкцииToolStripMenuItem";
-            this.инструкцииToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.инструкцииToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.инструкцииToolStripMenuItem.Text = "Инструкции";
             // 
             // контактыToolStripMenuItem
             // 
             this.контактыToolStripMenuItem.Name = "контактыToolStripMenuItem";
-            this.контактыToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.контактыToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.контактыToolStripMenuItem.Text = "Контакты";
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Location = new System.Drawing.Point(3, 28);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(146, 20);
+            this.dateTimePicker1.TabIndex = 7;
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(920, 431);
+            this.ClientSize = new System.Drawing.Size(696, 431);
             this.Controls.Add(this.mainView);
             this.Controls.Add(this.mainMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -248,7 +227,6 @@ namespace Scheduler
             this.Name = "MainForm";
             this.Text = "Scheduler";
             this.mainView.Panel2.ResumeLayout(false);
-            this.mainView.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainView)).EndInit();
             this.mainView.ResumeLayout(false);
             this.mainMenu.ResumeLayout(false);
@@ -266,16 +244,14 @@ namespace Scheduler
 		private System.Windows.Forms.ToolStripMenuItem закрытьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem сформироватьОтчетToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem расписаниеToolStripMenuItem;
-		private System.Windows.Forms.MenuStrip mainMenu;
-		private System.Windows.Forms.Button buttonShowToday;
-        private System.Windows.Forms.TextBox datePicker;
+        private System.Windows.Forms.MenuStrip mainMenu;
 		private System.Windows.Forms.SplitContainer mainView;
-		private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.MonthCalendar monthCalendar;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem спискиToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem клиентыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem кабинетыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem специалистыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem специальностиToolStripMenuItem;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
 	}
 }

@@ -10,30 +10,26 @@ using Scheduler_DBobjects_Intefraces;
 
 namespace Scheduler
 {
-	/// <summary>
-	/// Description of MainForm.
-	/// </summary>
-	public partial class MainForm : Form
-	{
-		/// <summary>
-		/// Дата, на которую строится расписание.
-		/// </summary>
-		private DateTime schedule_date = DateTime.Today;
+    /// <summary>
+    /// Description of MainForm.
+    /// </summary>
+    public partial class MainForm : Form
+    {
+        /// <summary>
+        /// Дата, на которую строится расписание.
+        /// </summary>
+        private DateTime schedule_date = DateTime.Today;
 
         public DateTime ScheduleDate
         {
             get { return schedule_date; }
-            set 
-            { 
+            set
+            {
                 schedule_date = value;
                 FirstLoad();
                 calendarControl.Table = receptionEntitiesTable;
             }
         }
-		/// <summary>
-		/// Флаг, указывающий, была ли дата изменена путем ввода строки в dataPicker (true) или выбором даты в календаре (false)
-		/// </summary>
-		bool changedByHand = false;
 
         /// <summary>
         /// Таблица, хранящая в себе посещения на текущую дату
@@ -44,37 +40,13 @@ namespace Scheduler
 
         CalendarControl3.ColumnsView calendarControl;
 
-        /// <summary>
-        /// Рабочее время. Используется для масштабного отображения и проверок границ.
-        /// </summary>
-//        public ITimeInterval workDay;// = new TimeInterval(new DateTime(1, 1, 1, 8, 0, 0), new DateTime(1, 1, 1, 20, 0, 0));
-//         /// <summary>
-//         /// Период, который будет отображаться на сетке расписания. Влияет только на отображение.
-//         /// </summary>
-//         public static TimeSpan workDelta = new TimeSpan(2, 0, 0);
-// 
-//         private List<DateTime> GetWorkTimeList
-//         {
-//             get 
-//             {
-//                 List<DateTime> result = new List<DateTime>();
-//                 DateTime curTime = workDay.StartDate;
-//                 while (curTime < workDay.EndDate)
-//                 {
-//                     result.Add(curTime);
-//                     curTime.Add(workDelta);
-//                 }
-//                 return result;
-//             }
-//         }
+        public MainForm()
+        {
 
-		public MainForm()
-		{
-
-			InitializeComponent();
+            InitializeComponent();
 
             //Init();
-		}
+        }
 
         public MainForm(IMainDataBase database)
         {
@@ -92,29 +64,25 @@ namespace Scheduler
             calendarControl.Table = receptionEntitiesTable;
             calendarControl.MouseClick += new MouseEventHandler(calendarControl_MouseClick);
 
-            datePicker.Text = schedule_date.Day.ToString() + "." +
-                schedule_date.Month.ToString() + "." + schedule_date.Year.ToString();
             ReceptionInfoEdit.SetLists(database.CabinetList, database.SpecialistList, database.SpecializationList, database.ClientList, database.EntityFactory);
         }
 
         public IMainDataBase Database
         {
             get { return database; }
-            set 
-            { 
+            set
+            {
                 database = value;
                 Init();
             }
         }
-        
+
         void calendarControl_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
             IEntity ent = ((CalendarControl3.ColumnsView)sender).GetEntityOnClick(e.Location) as IEntity;
             using (ReceptionInfoEdit receptionEditForm = new ReceptionInfoEdit())
             {
-
-
                 if (ent == null)
                 {
                     ent = database.EntityFactory.NewEntity();
@@ -142,22 +110,29 @@ namespace Scheduler
                     receptionEditForm.Reception = ent;
                     if (receptionEditForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
-                        if (!receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Any(existed => ent.IsIntersectWith(existed)))
-                            receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Add(ent);
-                        calendarControl.Refresh();
+                        database.AddReception(ent);
+                        receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Add(ent);
                     }
                 }
                 else
                 {
                     receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.ReadExist;
                     receptionEditForm.Reception = ent;
-                    if (receptionEditForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    var dresult = receptionEditForm.ShowDialog();
+                    if (dresult == System.Windows.Forms.DialogResult.Abort)
                     {
-                        calendarControl.Refresh();
+                        database.RemoveReception(ent);
+                        receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Remove(ent);
                     }
+                    else
+                        if (dresult == System.Windows.Forms.DialogResult.OK)
+                        {
+                            database.UpdateReception(ent);
+                        }
                 }
+                calendarControl.Refresh();
             }
-            
+
         }
 
         void FirstLoad()
@@ -167,47 +142,39 @@ namespace Scheduler
             workday.SetStartEnd(new DateTime(1, 1, 1, 8, 0, 0), new DateTime(1, 1, 1, 18, 0, 0));
             receptionEntitiesTable.WorkTimeInterval = workday;
 
+            var dummy = database.EntityFactory.NewEntity();
+            dummy.SetDatabase(database);
+            dummy = null;
+
+
+            ReloadColumns();
+            ReloadEntities();
+        }
+
+        void ReloadEntities()
+        {
+            receptionEntitiesTable.Columns.ForEach(c => c.Entities.Clear());
+
             var listOfEntities = database.SelectReceptionsFromDate(schedule_date);
 
-            List<IColumn> listOfColumns = new List<IColumn>();
+            foreach (var ent in listOfEntities)
+            {
+                receptionEntitiesTable.Columns.Find(x => x.Name == ent.Cabinet.Name).Entities.Add(ent);
+            }
+            if (calendarControl != null)
+            calendarControl.Refresh();
+        }
+
+        void ReloadColumns()
+        {
+            receptionEntitiesTable.Columns.Clear();
             foreach (var cabname in database.CabinetList.List.Where(c => c.Availability))
             {
                 var column = database.EntityFactory.NewColumn();
                 column.Name = cabname.Name;
-                listOfColumns.Add(column);
+                receptionEntitiesTable.Columns.Add(column);
             }
-            foreach (var ent in listOfEntities)
-            {
-                var column = listOfColumns.Find(x => x.Name == ent.Cabinet.Name);
-                column.AddEntity(ent);
-            }
-
-            foreach (var col in listOfColumns)
-                receptionEntitiesTable.Columns.Add(col);//.columns.Add(col);
         }
-
-		void MonthCalendarDateChanged(object sender, DateRangeEventArgs e)
-		{
-			changedByHand = false;
-			schedule_date = e.Start;
-			datePicker.Text = schedule_date.Day.ToString() + "." + 
-				schedule_date.Month.ToString() + "." + schedule_date.Year.ToString();
-		}
-		
-		void DatePickerTextChanged(object sender, EventArgs e)
-		{
-			string[] date = datePicker.Text.Split(' ');
-			string[] date_parsed = date[0].Split('.');
-
-			if(date_parsed.Length == 3 && date_parsed[2].Length == 4)
-				schedule_date = new DateTime(Convert.ToInt32(date_parsed[2]), Convert.ToInt32(date_parsed[1]), Convert.ToInt32(date_parsed[0]));
-			if(changedByHand)
-			{
-				//monthCalendar.SetSelectionRange(schedule_date, schedule_date);
-				monthCalendar.SetDate(schedule_date);
-			}
-			
-		}
 
         private void сделатьРезервнуюКопиюToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -221,11 +188,10 @@ namespace Scheduler
 
         private void клиентыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             using (FindClientCard clientsForm = new FindClientCard(database.ClientList, database.EntityFactory))
             {
                 clientsForm.ShowDialog();
-            }            
+            }
         }
 
         private void кабинетыToolStripMenuItem_Click(object sender, EventArgs e)
@@ -234,6 +200,8 @@ namespace Scheduler
             {
                 cabinetForm.ShowDialog();
             }
+            ReloadColumns();
+            ReloadEntities();
         }
 
         private void специалистыToolStripMenuItem_Click(object sender, EventArgs e)
@@ -257,6 +225,12 @@ namespace Scheduler
             this.Close();
         }
 
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            schedule_date = dateTimePicker1.Value;
+            ReloadEntities();
+        }
 
-	}
+
+    }
 }

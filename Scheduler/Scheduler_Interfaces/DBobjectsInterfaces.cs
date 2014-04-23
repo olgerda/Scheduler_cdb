@@ -12,6 +12,9 @@ namespace Scheduler_DBobjects_Intefraces
     public interface IMainDataBase
     {
         List<IEntity> SelectReceptionsFromDate(DateTime date);
+        void AddReception(IEntity reception);
+        void RemoveReception(IEntity reception);
+        void UpdateReception(IEntity reception);
 
         ISpecialistList SpecialistList { get; }
         IClientList ClientList { get; }
@@ -36,6 +39,7 @@ namespace Scheduler_DBobjects_Intefraces
 
     public interface IEntity : IEntity2ControlInterface, IReception
     {
+        void SetDatabase(Scheduler_DBobjects_Intefraces.IMainDataBase db);
     }
 
     public interface Scheduler_DBconnector

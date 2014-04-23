@@ -43,8 +43,11 @@ namespace Scheduler_Forms
         {
             if (MessageBox.Show("Вы действительно хотите отменить запись?", "Удаление записи.", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
                 return;
-            currentReception.Dispose();
+            //currentReception.Dispose();
+            this.DialogResult = System.Windows.Forms.DialogResult.Abort;
+            doNothing = true;
             this.Close();
+            doNothing = false;
         }
 
         void receptionInfoCard_OnCreateChildReceptionClicked(object source, CreateChildReceptionEventArgs e)
@@ -61,12 +64,12 @@ namespace Scheduler_Forms
 
         void receptionInfoCard_OnSaveChanges(object source, SaveChangesEventArgs<IReception> e)
         {
-            
-            var temp = receptionInfoCard.Reception;
-            if (temp != null)
+
+            //var temp = receptionInfoCard.Reception;
+            if (e.Entity != null)
             {
                 doNothing = true;
-                Reception = temp;
+                Reception = e.Entity;
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
                 doNothing = false;
@@ -145,6 +148,12 @@ namespace Scheduler_Forms
             ReceptionInfoEdit.specializationsList = specializationList;
             ReceptionInfoEdit.clientList = clientList;
             ReceptionInfoEdit.entityFactory = entityFactory;
+            if (entityFactory != null)
+            {
+                var ent = entityFactory.NewEntity();
+                ent.ReceptionTimeInterval = entityFactory.NewTimeInterval();
+                Scheduler_Controls.ReceptionInfo.DummyReception = ent;
+            }
         }
 
         void Init()

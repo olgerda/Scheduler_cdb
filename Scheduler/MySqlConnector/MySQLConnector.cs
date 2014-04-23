@@ -128,6 +128,8 @@ namespace MySqlConnector
         private static Scheduler_Controls_Interfaces.IClient GetClientById(int id, MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
         {
             Scheduler_Controls_Interfaces.IClient result = null;
+            if (id == 0)
+                return result;
             var connection = existedConnection ?? OpenConnection();
 
             string query = "select idclients, name, comment, blacklisted from clients where idclients = @id";
@@ -484,6 +486,8 @@ namespace MySqlConnector
 
         static Scheduler_Controls_Interfaces.ISpecialist GetSpecialistById(int id, MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
         {
+            if (id == 0)
+                return null;
             var connection = existedConnection ?? OpenConnection();
 
             Scheduler_Controls_Interfaces.ISpecialist result = null;
@@ -613,6 +617,8 @@ namespace MySqlConnector
 
         static string GetSpecializationById(int id, MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
         {
+            if (id == 0)
+                return null;
             var connection = existedConnection ?? OpenConnection();
             string result = String.Empty;
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
@@ -737,6 +743,8 @@ namespace MySqlConnector
 
         static Scheduler_Controls_Interfaces.ICabinet GetCabinetById(int id, MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
         {
+            if (id == 0)
+                return null;
             Scheduler_Controls_Interfaces.ICabinet result = null;
             var connection = existedConnection ?? OpenConnection();
 
@@ -867,21 +875,30 @@ namespace MySqlConnector
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
             {
                 cmd.Connection = connection;
-                cmd.CommandText = "select id from specializations where name = @specname";
-                cmd.Parameters.AddWithValue("@specname", reception.Specialization);
-                cmd.Prepare();
-                var specnid = Convert.ToInt32(cmd.ExecuteScalar());
+                int specid = 0;
+                if (!reception.Rent)
+                {
+                    cmd.CommandText = "select idspecializations from specializations where name = @specname";
+                    cmd.Parameters.AddWithValue("@specname", reception.Specialization);
+                    cmd.Prepare();
+                    specid = Convert.ToInt32(cmd.ExecuteScalar());
+                }
 
                 cmd.Parameters.Clear();
                 cmd.CommandText = "insert into receptions (clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate) values (@cnt, @sst, @cab, @son, @r, @ts, @te, @td)";
-                cmd.Parameters.AddWithValue("@cnt", reception.Client.ID);
                 cmd.Parameters.AddWithValue("@sst", reception.Specialist.ID);
                 cmd.Parameters.AddWithValue("@cab", reception.Cabinet.ID);
-                cmd.Parameters.AddWithValue("@son", specnid);
                 cmd.Parameters.AddWithValue("@r", reception.Rent ? 1 : 0);
                 cmd.Parameters.AddWithValue("@ts", reception.ReceptionTimeInterval.StartDate.TimeOfDay);
                 cmd.Parameters.AddWithValue("@te", reception.ReceptionTimeInterval.EndDate.TimeOfDay);
                 cmd.Parameters.AddWithValue("@td", reception.ReceptionTimeInterval.Date);
+
+                //                 int? tmp = null;
+                //                 if (reception.Client != null)
+                //                     tmp = reception.Client.ID;
+                cmd.Parameters.AddWithValue("@cnt", reception.Client == null ? 0 : reception.Client.ID);
+                cmd.Parameters.AddWithValue("@son", specid);
+
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
                 reception.ID = Convert.ToInt32(cmd.LastInsertedId);
@@ -895,11 +912,15 @@ namespace MySqlConnector
             var oldReception = GetReceptionById(reception.ID);
             if (oldReception == null)
                 return;
-            bool needUpdateClient = oldReception.Client.ID != reception.Client.ID;
+
             bool needUpdateSpecialist = oldReception.Specialist.ID != reception.Specialist.ID;
-            bool needUpdateSpecialization = oldReception.Specialization != reception.Specialization;
+
             bool needUpdateCabinet = oldReception.Cabinet.ID != reception.Cabinet.ID;
             bool needUpdateRent = oldReception.Rent != reception.Rent;
+            //тут есть проблема - если клиент не задан, то жопа нас встречает!
+            bool needUpdateClient = oldReception.Client.ID != reception.Client.ID;
+            bool needUpdateSpecialization = oldReception.Specialization != reception.Specialization;
+
             bool needUpdateTimeInterval =
                 oldReception.ReceptionTimeInterval.Date != reception.ReceptionTimeInterval.Date ||
                 oldReception.ReceptionTimeInterval.StartDate != reception.ReceptionTimeInterval.StartDate ||
@@ -916,7 +937,7 @@ namespace MySqlConnector
                 if (needUpdateClient)
                 {
                     cmd.CommandText = "update receptions set clientid = @id where idreceptions = @rcptid";
-                    cmd.Parameters["@id"].Value = reception.Client.ID;
+                    cmd.Parameters["@id"].Value = reception.Client == null ? 0 : reception.Client.ID;
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
                 }
@@ -960,11 +981,17 @@ namespace MySqlConnector
                 if (needUpdateSpecialization)
                 {
                     cmd.Parameters.Clear();
-                    cmd.CommandText = "select id from specializations where name = @specname";
+                    cmd.CommandText = "select idspecializations from specializations where name = @specname";
                     cmd.Parameters.AddWithValue("@specname", reception.Specialization);
                     cmd.Prepare();
-                    var specnid = Convert.ToInt32(cmd.ExecuteScalar());
+                    int specnid = 0;
 
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            specnid = reader.GetInt32("idspecializations");
+                    }
+                    
                     cmd.Parameters.Clear();
                     cmd.CommandText = "update receptions set specializationid = @id where idreceptions = @rcptid";
                     cmd.Parameters.AddWithValue("@id", specnid);
@@ -979,6 +1006,8 @@ namespace MySqlConnector
 
         Scheduler_DBobjects_Intefraces.IEntity GetReceptionById(int id)
         {
+            if (id == 0)
+                return null;
             var connection = OpenConnection();
 
             Scheduler_DBobjects_Intefraces.IEntity result = null;
@@ -1117,7 +1146,7 @@ namespace MySqlConnector
                 ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).AddClient(client);
                 return;
             }
-            
+
             Scheduler_Controls_Interfaces.ISpecialist specialist = item as Scheduler_Controls_Interfaces.ISpecialist;
             if (specialist != null)
             {
