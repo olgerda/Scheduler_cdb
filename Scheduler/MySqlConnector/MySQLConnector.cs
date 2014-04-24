@@ -42,6 +42,7 @@ namespace MySqlConnector
             try
             {
                 connection.Close();
+                connection.Dispose();
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
@@ -991,7 +992,7 @@ namespace MySqlConnector
                         if (reader.Read())
                             specnid = reader.GetInt32("idspecializations");
                     }
-                    
+
                     cmd.Parameters.Clear();
                     cmd.CommandText = "update receptions set specializationid = @id where idreceptions = @rcptid";
                     cmd.Parameters.AddWithValue("@id", specnid);
@@ -1239,11 +1240,37 @@ namespace MySqlConnector
             }
         }
 
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.MakeBackup(string filename)
+        {
+            if (System.IO.File.Exists(filename))
+                return;
+            var connection = OpenConnection();
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
+            {
+                using (MySql.Data.MySqlClient.MySqlBackup mb = new MySql.Data.MySqlClient.MySqlBackup(cmd))
+                {
+                    cmd.Connection = connection;
+                    mb.ExportToFile(filename);
+                }
+            }
+            CloseConnection(connection);
+        }
 
-
-
-
-
-
+        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RestoreBackup(string filename)
+        {
+            if (!System.IO.File.Exists(filename))
+                return;
+            var connection = OpenConnection();
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
+            {
+                using (MySql.Data.MySqlClient.MySqlBackup mb = new MySql.Data.MySqlClient.MySqlBackup(cmd))
+                {
+                    cmd.Connection = connection;
+                    mb.ImportInfo.DatabaseDefaultCharSet = "utf8";
+                    mb.ImportFromFile(filename);
+                }
+            }
+            CloseConnection(connection);
+        }
     }
 }

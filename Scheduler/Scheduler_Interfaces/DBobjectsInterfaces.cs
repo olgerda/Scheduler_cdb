@@ -16,6 +16,9 @@ namespace Scheduler_DBobjects_Intefraces
         void RemoveReception(IEntity reception);
         void UpdateReception(IEntity reception);
 
+        void MakeBackup(string filename);
+        void RestoreBackup(string filename);
+
         ISpecialistList SpecialistList { get; }
         IClientList ClientList { get; }
         ISpecializationList SpecializationList { get; }
@@ -73,5 +76,8 @@ namespace Scheduler_DBobjects_Intefraces
         void AddReception(IEntity reception);
         void UpdateReception(IEntity reception);
         void RemoveReception(IEntity reception);
+
+        void MakeBackup(string filename);
+        void RestoreBackup(string filename);
     }
 }

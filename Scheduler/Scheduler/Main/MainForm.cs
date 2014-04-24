@@ -162,7 +162,7 @@ namespace Scheduler
                 receptionEntitiesTable.Columns.Find(x => x.Name == ent.Cabinet.Name).Entities.Add(ent);
             }
             if (calendarControl != null)
-            calendarControl.Refresh();
+                calendarControl.Refresh();
         }
 
         void ReloadColumns()
@@ -178,12 +178,25 @@ namespace Scheduler
 
         private void сделатьРезервнуюКопиюToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.CheckFileExists = false;
+                dlg.Filter = "SQL files (*.sql)|*.sql|All files (*.*)|*.*";
+                dlg.FilterIndex = 1;
+                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    database.MakeBackup(dlg.FileName);
+            }
         }
 
         private void развернутьРезервнуюКопиюToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.Filter = "SQL files (*.sql)|*.sql|All files (*.*)|*.*";
+                dlg.FilterIndex = 1;
+                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    database.RestoreBackup(dlg.FileName);
+            }
         }
 
         private void клиентыToolStripMenuItem_Click(object sender, EventArgs e)
