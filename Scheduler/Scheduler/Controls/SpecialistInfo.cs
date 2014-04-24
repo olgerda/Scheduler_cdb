@@ -76,6 +76,9 @@ namespace Scheduler_Controls
         {
             if (SomethingChanged())
                 SaveChanges();
+            else
+                if (OnSaveChanges != null)
+                    OnSaveChanges(this, new SaveChangesEventArgs<ISpecialist>(spec));
         }
 
         bool SomethingChanged()

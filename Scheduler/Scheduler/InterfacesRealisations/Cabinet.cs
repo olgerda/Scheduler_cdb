@@ -40,7 +40,7 @@ namespace Scheduler_InterfacesRealisations
         //public UInt16 id;
         private string name;
         bool availability;
-        int id;
+        //int id;
 
         public Cabinet()
         {
@@ -82,10 +82,10 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        public int ID
-        {
-            get { return id; }
-            set { id = value; RaisePropertyChanged("ID"); }
-        }
+//         public int ID
+//         {
+//             get { return id; }
+//             set { id = value; RaisePropertyChanged("ID"); }
+//         }
     }
 }

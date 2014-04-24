@@ -87,10 +87,10 @@ namespace Scheduler_InterfacesRealisations
             get { return startDate; }
             set
             {
-                if (value == default(DateTime)) 
-                    throw new DateSetException(this, value, "Set to default(DateTime) happen.");
-                if (endDate != default(DateTime) && value > endDate) 
-                    throw new DateSetException(this, value, "Set StartDate after EndDate happen.");
+//                 if (value == default(DateTime)) 
+//                     throw new DateSetException(this, value, "Set to default(DateTime) happen.");
+//                 if (endDate != default(DateTime) && value > endDate) 
+//                     throw new DateSetException(this, value, "Set StartDate after EndDate happen.");
                 startDate = value;
             }
         }
@@ -100,10 +100,10 @@ namespace Scheduler_InterfacesRealisations
             get { return endDate; }
             set
             {
-                if (value == default(DateTime)) 
-                    throw new DateSetException(this, value, "Set to default(DateTime) happen.");
-                if (startDate != default(DateTime) && value < startDate) 
-                    throw new DateSetException(this, value, "Set EndDate before StartDate happen.");
+//                 if (value == default(DateTime)) 
+//                     throw new DateSetException(this, value, "Set to default(DateTime) happen.");
+//                 if (startDate != default(DateTime) && value < startDate) 
+//                     throw new DateSetException(this, value, "Set EndDate before StartDate happen.");
                 endDate = value;
             }
         }

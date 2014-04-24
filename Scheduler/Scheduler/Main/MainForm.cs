@@ -111,7 +111,7 @@ namespace Scheduler
                     if (receptionEditForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
                         database.AddReception(ent);
-                        receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Add(ent);
+                        //receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Add(ent);
                     }
                 }
                 else
@@ -122,7 +122,7 @@ namespace Scheduler
                     if (dresult == System.Windows.Forms.DialogResult.Abort)
                     {
                         database.RemoveReception(ent);
-                        receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Remove(ent);
+                        //receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Remove(ent);
                     }
                     else
                         if (dresult == System.Windows.Forms.DialogResult.OK)
@@ -130,7 +130,8 @@ namespace Scheduler
                             database.UpdateReception(ent);
                         }
                 }
-                calendarControl.Refresh();
+
+                ReloadEntities();
             }
 
         }

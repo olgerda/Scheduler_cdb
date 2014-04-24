@@ -16,7 +16,7 @@ namespace Scheduler_InterfacesRealisations
 
         Scheduler_Controls_Interfaces.GetClientReceptionsList getreceptions;
 
-        int id;
+        //int id;
 
         public Client()
         {
@@ -101,18 +101,18 @@ namespace Scheduler_InterfacesRealisations
 //             return name;
 //         }
 
-        int Scheduler_Controls_Interfaces.IHaveID.ID
-        {
-            get
-            {
-                return id;
-            }
-            set
-            {
-                id = value;
-                RaisePropertyChanged("ID");
-            }
-        }
+//         int Scheduler_Controls_Interfaces.IHaveID.ID
+//         {
+//             get
+//             {
+//                 return id;
+//             }
+//             set
+//             {
+//                 id = value;
+//                 RaisePropertyChanged("ID");
+//             }
+//         }
 
 
         void Scheduler_Controls_Interfaces.IClient.ReceptionListFuncition(Scheduler_Controls_Interfaces.GetClientReceptionsList func)

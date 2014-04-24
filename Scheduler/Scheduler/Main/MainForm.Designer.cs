@@ -38,6 +38,7 @@ namespace Scheduler
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainView = new System.Windows.Forms.SplitContainer();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.расписаниеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +55,6 @@ namespace Scheduler
             this.помощьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.инструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.контактыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.mainView)).BeginInit();
             this.mainView.Panel2.SuspendLayout();
             this.mainView.SuspendLayout();
@@ -80,6 +80,14 @@ namespace Scheduler
             this.mainView.Size = new System.Drawing.Size(696, 407);
             this.mainView.SplitterDistance = 538;
             this.mainView.TabIndex = 3;
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Location = new System.Drawing.Point(3, 28);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(146, 20);
+            this.dateTimePicker1.TabIndex = 7;
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // label1
             // 
@@ -194,6 +202,7 @@ namespace Scheduler
             this.помощьToolStripMenuItem.Name = "помощьToolStripMenuItem";
             this.помощьToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
             this.помощьToolStripMenuItem.Text = "Помощь";
+            this.помощьToolStripMenuItem.Visible = false;
             // 
             // инструкцииToolStripMenuItem
             // 
@@ -206,14 +215,6 @@ namespace Scheduler
             this.контактыToolStripMenuItem.Name = "контактыToolStripMenuItem";
             this.контактыToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.контактыToolStripMenuItem.Text = "Контакты";
-            // 
-            // dateTimePicker1
-            // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(3, 28);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(146, 20);
-            this.dateTimePicker1.TabIndex = 7;
-            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // MainForm
             // 

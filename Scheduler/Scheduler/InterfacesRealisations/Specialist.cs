@@ -11,8 +11,6 @@ namespace Scheduler_InterfacesRealisations
         HashSet<string> specialisations;
         bool notworking;
 
-        int id;
-
         public Specialist()
         {
             name = String.Empty;
@@ -64,18 +62,18 @@ namespace Scheduler_InterfacesRealisations
             return name;
         }
 
-        int Scheduler_Controls_Interfaces.IHaveID.ID
-        {
-            get
-            {
-                return id;
-            }
-            set
-            {
-                id = value;
-                RaisePropertyChanged("ID");
-            }
-        }
+//         int Scheduler_Controls_Interfaces.IHaveID.ID
+//         {
+//             get
+//             {
+//                 return id;
+//             }
+//             set
+//             {
+//                 id = value;
+//                 RaisePropertyChanged("ID");
+//             }
+//         }
     }
 
     public class SpecialistList : CommonList<Scheduler_Controls_Interfaces.ISpecialist>, Scheduler_Forms_Interfaces.ISpecialistList

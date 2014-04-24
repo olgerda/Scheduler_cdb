@@ -69,7 +69,7 @@ namespace Scheduler_Forms
             if (e.Entity != null)
             {
                 doNothing = true;
-                Reception = e.Entity;
+                //Reception = e.Entity;
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
                 doNothing = false;

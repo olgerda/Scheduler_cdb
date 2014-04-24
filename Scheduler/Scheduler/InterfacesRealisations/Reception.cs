@@ -16,7 +16,7 @@ namespace Scheduler_InterfacesRealisations
 
         static Scheduler_DBobjects_Intefraces.IMainDataBase database;
 
-        int id;
+        //int id;
 
         Scheduler_Controls_Interfaces.ITimeInterval Scheduler_Controls_Interfaces.IReception.ReceptionTimeInterval
         {
@@ -78,7 +78,10 @@ namespace Scheduler_InterfacesRealisations
             if (database != null)
             {
                 List<Scheduler_DBobjects_Intefraces.IEntity> receptionsIntersectedWith = new List<Scheduler_DBobjects_Intefraces.IEntity>();
-                foreach (var r in database.SelectReceptionsFromDate(this.receptionTimeInterval.Date).Where(r => r.Cabinet.ID == this.cabinet.ID && r.IsIntersectWith(this)))
+                foreach (var r in database.SelectReceptionsFromDate(this.receptionTimeInterval.Date)
+                    .Where(r => r.ID != this.ID &&
+                        r.Cabinet.ID == this.cabinet.ID &&
+                        r.IsIntersectWith(this)))
                     receptionsIntersectedWith.Add(r);
                 if (receptionsIntersectedWith.Count != 0)
                     result += "Время посещения пересекается с другими: " + Environment.NewLine;
@@ -127,23 +130,23 @@ namespace Scheduler_InterfacesRealisations
             bool bottomIntersect = theThis.BottomLevel < second.BottomLevel && theThis.BottomLevel > second.TopLevel;
             return topIntersect || bottomIntersect;
         }
-
-        int Scheduler_Controls_Interfaces.IHaveID.ID
-        {
-            get
-            {
-                return id;
-            }
-            set
-            {
-                id = value; RaisePropertyChanged("ID");
-            }
-        }
+        // 
+        //         int Scheduler_Controls_Interfaces.IHaveID.ID
+        //         {
+        //             get
+        //             {
+        //                 return id;
+        //             }
+        //             set
+        //             {
+        //                 id = value; RaisePropertyChanged("ID");
+        //             }
+        //         }
 
 
         string Scheduler_Controls_Interfaces.IReception.DisplayString
         {
-            get { return receptionTimeInterval.Interval() + " " + specialist.Name + " " + specialisation + " " + cabinet.Name; }
+            get { return receptionTimeInterval.Date.ToShortDateString() + " " + receptionTimeInterval.Interval() + " " + specialist.Name + " " + specialisation + " " + cabinet.Name; }
         }
 
         void Scheduler_DBobjects_Intefraces.IEntity.SetDatabase(Scheduler_DBobjects_Intefraces.IMainDataBase db)

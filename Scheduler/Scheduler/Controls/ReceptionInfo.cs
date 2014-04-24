@@ -230,11 +230,11 @@ namespace Scheduler_Controls
             dateTimeStart.Value = reception.ReceptionTimeInterval.StartDate;
             dateTimeEnd.Value = reception.ReceptionTimeInterval.EndDate;
 
-            if (reception.Cabinet != null && cabinetList.Any(f => reception.Cabinet == f))
+            if (reception.Cabinet != null/* && cabinetList.Any(f => reception.Cabinet == f)*/)
                 cmbCabinet.SelectedItem = reception.Cabinet;
-            if (reception.Specialist != null && specialistList.Any(s => reception.Specialist == s))
+            if (reception.Specialist != null/* && specialistList.Any(s => reception.Specialist == s)*/)
                 cmbSpecialist.SelectedItem = reception.Specialist;
-            if (!String.IsNullOrWhiteSpace(reception.Specialization) && specialisationList.Any(s => s == reception.Specialization))
+            if (!String.IsNullOrWhiteSpace(reception.Specialization)/* && specialisationList.Any(s => s == reception.Specialization)*/)
                 cmbSpecialisation.SelectedItem = reception.Specialization;
 
             //txtTelephone.Text = reception.Client.Telephones.FirstOrDefault();
@@ -254,16 +254,16 @@ namespace Scheduler_Controls
 
             return
                 reception.Rent != chkRent.Checked ||
-                reception.Cabinet != cmbCabinet.SelectedItem ||
-                reception.Specialist != cmbSpecialist.SelectedItem ||
+                (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Cabinet != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)cmbCabinet.SelectedItem ||
+                (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Specialist != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)cmbSpecialist.SelectedItem ||
 
                 reception.ReceptionTimeInterval.Date != dateDate.Value ||
                 reception.ReceptionTimeInterval.StartDate != dateTimeStart.Value ||
                 reception.ReceptionTimeInterval.EndDate != dateTimeEnd.Value ||
-                (chkRent.Checked &&
+                (!chkRent.Checked &&
                     (
                         reception.Specialization != cmbSpecialisation.SelectedText ||
-                        reception.Client != clientOnReception
+                        (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Client != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)clientOnReception
                     )
                 );
 
@@ -274,13 +274,13 @@ namespace Scheduler_Controls
             if (reception == null || dummyReception == null)
                 return;
 
+            if (dateTimeEnd.Value - dateTimeStart.Value < TimeSpan.FromMinutes(10))
+            {
+                MessageBox.Show("Время между началом и концом приёма меньше 10 минут.", "Ошибка при сохранении результатов.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            dummyReception.ID = reception.ID;
             dummyReception.Client = ClientOnReception;
-            //             reception.Client.Name = txtClientName.Text;
-            // 
-            //             var tmp = reception.Client.Telephones;
-            //             tmp.Add(txtTelephone.Text);
-            //             reception.Client.Telephones = tmp;
-
             dummyReception.Rent = chkRent.Checked;
             dummyReception.Cabinet = (ICabinet)cmbCabinet.SelectedItem;
             dummyReception.Specialist = (ISpecialist)cmbSpecialist.SelectedItem;
@@ -341,7 +341,7 @@ namespace Scheduler_Controls
                     OnCancelReceptionClicked(this, new CancelReceptionEventArgs(reception));
             }
             else
-                MessageBox.Show("Данное посещение уже в прошлом.","Прошедшее посещение.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Данный приём уже в прошлом.","Прошедший приём.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void cmbSpecialist_SelectedIndexChanged(object sender, EventArgs e)

@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Scheduler_InterfacesRealisations
 {
-    public abstract class CommonObjectWithNotify : Scheduler_Controls_Interfaces.IDummy
+    public abstract class CommonObjectWithNotify : Scheduler_Controls_Interfaces.IDummy, Scheduler_Controls_Interfaces.IHaveID
     {
         //         event System.ComponentModel.PropertyChangedEventHandler innerPropertyChanged;
         //         event System.ComponentModel.PropertyChangedEventHandler System.ComponentModel.INotifyPropertyChanged.PropertyChanged
@@ -36,6 +36,56 @@ namespace Scheduler_InterfacesRealisations
                 iAmChanged = false;
                 return result;
             }
+        }
+
+        int id = 0;
+
+        public int ID
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            CommonObjectWithNotify t = obj as CommonObjectWithNotify;
+            if (t == null)
+                return false;
+            return this.ID == t.ID;
+        }
+
+        public override int GetHashCode()
+        {
+            return ID;
+        }
+
+        public static bool operator ==(CommonObjectWithNotify a, CommonObjectWithNotify b)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return a.ID == b.ID;
+        }
+
+        public static bool operator !=(CommonObjectWithNotify a, CommonObjectWithNotify b)
+        {
+            return !(a == b);
         }
     }
 

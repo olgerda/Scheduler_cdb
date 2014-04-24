@@ -504,6 +504,7 @@ namespace MySqlConnector
                     if (reader.Read())
                     {
                         result = entityFactory.NewSpecialist();
+                        result.ID = id;
                         result.Name = reader.GetString("name");
                         result.NotWorking = reader.GetInt32("notworking") == 1;
                     }
@@ -760,6 +761,7 @@ namespace MySqlConnector
                     if (reader.Read())
                     {
                         result = entityFactory.NewCabinet();
+                        result.ID = id;
                         result.Name = reader.GetString("name");
                         result.Availability = reader.GetInt32("availability") == 1;
                     }
@@ -919,7 +921,13 @@ namespace MySqlConnector
             bool needUpdateCabinet = oldReception.Cabinet.ID != reception.Cabinet.ID;
             bool needUpdateRent = oldReception.Rent != reception.Rent;
             //тут есть проблема - если клиент не задан, то жопа нас встречает!
-            bool needUpdateClient = oldReception.Client.ID != reception.Client.ID;
+            
+            bool needUpdateClient = false;// = oldReception.Client.ID != reception.Client.ID;
+            needUpdateClient = 
+                oldReception.Client == null && reception.Client != null ||
+                oldReception.Client != null && reception.Client == null ||
+                (oldReception.Client != null && reception.Client != null && oldReception.Client.ID != reception.Client.ID);
+                
             bool needUpdateSpecialization = oldReception.Specialization != reception.Specialization;
 
             bool needUpdateTimeInterval =

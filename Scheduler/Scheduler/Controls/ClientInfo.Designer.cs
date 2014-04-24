@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.grpMain = new System.Windows.Forms.GroupBox();
+            this.btnLoadReceptions = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnCommit = new System.Windows.Forms.Button();
@@ -41,7 +42,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.chkBlackList = new System.Windows.Forms.CheckBox();
-            this.btnLoadReceptions = new System.Windows.Forms.Button();
             this.grpMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,6 +67,16 @@
             this.grpMain.TabIndex = 0;
             this.grpMain.TabStop = false;
             this.grpMain.Text = "Карточка клиента";
+            // 
+            // btnLoadReceptions
+            // 
+            this.btnLoadReceptions.Location = new System.Drawing.Point(9, 63);
+            this.btnLoadReceptions.Name = "btnLoadReceptions";
+            this.btnLoadReceptions.Size = new System.Drawing.Size(69, 20);
+            this.btnLoadReceptions.TabIndex = 13;
+            this.btnLoadReceptions.Text = "Загрузить";
+            this.btnLoadReceptions.UseVisualStyleBackColor = true;
+            this.btnLoadReceptions.Click += new System.EventHandler(this.btnLoadReceptions_Click);
             // 
             // label2
             // 
@@ -120,14 +130,15 @@
             // lstReceptions
             // 
             this.lstReceptions.FormattingEnabled = true;
+            this.lstReceptions.HorizontalScrollbar = true;
             this.lstReceptions.Location = new System.Drawing.Point(85, 47);
             this.lstReceptions.Name = "lstReceptions";
-            this.lstReceptions.Size = new System.Drawing.Size(308, 69);
+            this.lstReceptions.Size = new System.Drawing.Size(308, 82);
             this.lstReceptions.TabIndex = 4;
             // 
             // txtComment
             // 
-            this.txtComment.Location = new System.Drawing.Point(85, 125);
+            this.txtComment.Location = new System.Drawing.Point(85, 135);
             this.txtComment.Multiline = true;
             this.txtComment.Name = "txtComment";
             this.txtComment.Size = new System.Drawing.Size(308, 45);
@@ -151,7 +162,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 125);
+            this.label4.Location = new System.Drawing.Point(6, 135);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 13);
             this.label4.TabIndex = 11;
@@ -171,20 +182,10 @@
             this.chkBlackList.AutoSize = true;
             this.chkBlackList.Location = new System.Drawing.Point(9, 99);
             this.chkBlackList.Name = "chkBlackList";
-            this.chkBlackList.Size = new System.Drawing.Size(69, 17);
+            this.chkBlackList.Size = new System.Drawing.Size(62, 17);
             this.chkBlackList.TabIndex = 12;
-            this.chkBlackList.Text = "BlackList";
+            this.chkBlackList.Text = "RedList";
             this.chkBlackList.UseVisualStyleBackColor = true;
-            // 
-            // btnLoadReceptions
-            // 
-            this.btnLoadReceptions.Location = new System.Drawing.Point(9, 63);
-            this.btnLoadReceptions.Name = "btnLoadReceptions";
-            this.btnLoadReceptions.Size = new System.Drawing.Size(69, 20);
-            this.btnLoadReceptions.TabIndex = 13;
-            this.btnLoadReceptions.Text = "Загрузить";
-            this.btnLoadReceptions.UseVisualStyleBackColor = true;
-            this.btnLoadReceptions.Click += new System.EventHandler(this.btnLoadReceptions_Click);
             // 
             // ClientInfo
             // 
