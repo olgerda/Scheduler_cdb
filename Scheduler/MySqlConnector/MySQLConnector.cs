@@ -921,13 +921,13 @@ namespace MySqlConnector
             bool needUpdateCabinet = oldReception.Cabinet.ID != reception.Cabinet.ID;
             bool needUpdateRent = oldReception.Rent != reception.Rent;
             //тут есть проблема - если клиент не задан, то жопа нас встречает!
-            
+
             bool needUpdateClient = false;// = oldReception.Client.ID != reception.Client.ID;
-            needUpdateClient = 
+            needUpdateClient =
                 oldReception.Client == null && reception.Client != null ||
                 oldReception.Client != null && reception.Client == null ||
                 (oldReception.Client != null && reception.Client != null && oldReception.Client.ID != reception.Client.ID);
-                
+
             bool needUpdateSpecialization = oldReception.Specialization != reception.Specialization;
 
             bool needUpdateTimeInterval =
@@ -1279,6 +1279,52 @@ namespace MySqlConnector
                 }
             }
             CloseConnection(connection);
+        }
+
+
+        bool Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.CheckDBConnection(out string message)
+        {
+            bool result = true;
+            message = null;
+            MySql.Data.MySqlClient.MySqlConnection conn = null;
+            try
+            {
+                conn = OpenConnection();
+            }
+            catch (ArgumentException)
+            {
+                message = "Неправильный формат строки подключения.";
+                result = false;
+            }
+            catch (Exception ex)
+            {
+                var mysqlException = ex.InnerException as MySql.Data.MySqlClient.MySqlException;
+                if (mysqlException != null)
+                    switch (mysqlException.ErrorCode)
+                    {
+                        case 0:
+                            message = "В доступе к базе данных отказано. Проверьте настройки подключения и учётной записи БД.";
+                            break;
+                        case 1042:
+                            message = "Невозможно подключиться к базе данных. Проверьте настройки подключения (адрес сервера и порт).";
+                            break;
+                        case 1045:
+                            message = "Неверно введен логин или пароль.";
+                            break;
+                        default:
+                            message = "Неизвестная ошибка подключения к базе данных. " + mysqlException.Message;
+                            break;
+                    }
+                else
+                    message = "Неизвестная ошибка подключения к базе данных: " + ex.Message;
+                result = false;
+            }
+            finally
+            {
+                if (conn != null && conn.State == System.Data.ConnectionState.Open)
+                    CloseConnection(conn);
+            }
+            return result;
         }
     }
 }

@@ -52,7 +52,17 @@ namespace Scheduler
         {
             InitializeComponent();
 
-            Database = database;
+            if (database.ErrorString != null)
+            {
+                MessageBox.Show(database.ErrorString, "Ошибка подключения в базе данных.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                database.ClearErrorString();
+            }
+            else
+            {
+                Database = database;
+            }
+            
+
         }
 
         void Init()

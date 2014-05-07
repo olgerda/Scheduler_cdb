@@ -16,17 +16,30 @@ namespace Scheduler_DBobjects
 
         Scheduler_DBobjects_Intefraces.Scheduler_DBconnector dbconnector;
 
+        string errMsg;
+
         public MainDatabase()
         {
             entityFactory = new Scheduler_InterfacesRealisations.EntityFactory();
 
             dbconnector = entityFactory.NewDBConnector();
 
-            clientList = dbconnector.AllClients();
-            specialistList = dbconnector.AllSpecialists();
-            specializationList = dbconnector.AllSpecializations();
-            cabinetList = dbconnector.AllCabinets();
+            if (dbconnector.CheckDBConnection(out errMsg))
+            {
+                clientList = dbconnector.AllClients();
+                specialistList = dbconnector.AllSpecialists();
+                specializationList = dbconnector.AllSpecializations();
+                cabinetList = dbconnector.AllCabinets();
+            }
 
+        }
+
+        string Scheduler_DBobjects_Intefraces.IMainDataBase.ErrorString
+        {
+            get
+            {
+                return errMsg;
+            }
         }
 
         List<Scheduler_DBobjects_Intefraces.IEntity> Scheduler_DBobjects_Intefraces.IMainDataBase.SelectReceptionsFromDate(DateTime date)
@@ -96,6 +109,11 @@ namespace Scheduler_DBobjects
         void Scheduler_DBobjects_Intefraces.IMainDataBase.RestoreBackup(string filename)
         {
             dbconnector.RestoreBackup(filename);
+        }
+
+        void Scheduler_DBobjects_Intefraces.IMainDataBase.ClearErrorString()
+        {
+            errMsg = null;
         }
     }
 }

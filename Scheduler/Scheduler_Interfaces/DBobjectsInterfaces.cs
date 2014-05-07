@@ -25,6 +25,9 @@ namespace Scheduler_DBobjects_Intefraces
         ICabinetList CabinetList { get; }
         IFactory EntityFactory { get; }
 
+        string ErrorString { get; }
+        void ClearErrorString();
+
     }
 
     public interface ITable : ITable2ControlInterface
@@ -79,5 +82,7 @@ namespace Scheduler_DBobjects_Intefraces
 
         void MakeBackup(string filename);
         void RestoreBackup(string filename);
+
+        bool CheckDBConnection(out string message);
     }
 }
