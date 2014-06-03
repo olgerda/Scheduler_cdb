@@ -47,15 +47,18 @@ namespace CalendarControl3
         /// <summary>
         /// Значение, от которого отсчитывается левый край информативных столбцов.
         /// </summary>
-//        private int tableLeft;
+        //        private int tableLeft;
         /// <summary>
         /// Значение, до которого отсчитывается правый край информативных столбцов.
         /// </summary>
-//        private int tableRight;
+        //        private int tableRight;
         /// <summary>
-        /// Шинира реально отрисовываемой таблицы. Высчитывается исходя из columnsOnControl, oneColumnWidth и infoColumnWidth
+        /// Ширина реально отрисовываемой таблицы. Высчитывается исходя из columnsOnControl, oneColumnWidth и infoColumnWidth
         /// </summary>
-        private int realTableWidth;
+        private int RealTableWidth
+        {
+            get { return infoColumnWidth + oneColumnWidth * columnsOnControl; }
+        }
 
         /// <summary>
         /// Ширина одного столбца.
@@ -99,7 +102,7 @@ namespace CalendarControl3
 
             oneColumnWidth = (this.Width - infoColumnWidth) / table.ColumnCount;
 
-            
+
             if (oneColumnWidth < minimumColumnWidth)
             {
                 oneColumnWidth = minimumColumnWidth;
@@ -107,16 +110,13 @@ namespace CalendarControl3
 
             topLevel = table.MinValue;
             bottomLevel = table.MaxValue;
-            
+
             headerHeight = 40;
-            
+
             tableTop = headerHeight;
             tableBottom = Height - hScrollBar1.Height;
 
             columnsOnControl = (int)Math.Floor((Width - infoColumnWidth) / (float)oneColumnWidth);
-
-            realTableWidth = infoColumnWidth + oneColumnWidth * columnsOnControl;
-
 
             hScrollBar1.Minimum = 0;
             hScrollBar1.Value = 0;
@@ -136,7 +136,7 @@ namespace CalendarControl3
             //base.OnPaint(e);
             if (table == null)
             { // в случае умолчательного создания - нифига не делаем.
-                
+
             }
             else
             { // если создали по правилам (вместе с таблицей) - отрисовываем.
@@ -147,14 +147,8 @@ namespace CalendarControl3
                 PointF drawPoint;
 
                 //maincolumns
-//                 foreach (var column in table.GetColumns())
-//                 {
-//                     PaintColumn(e.Graphics, column, currentLeft, oneColumnWidth, tableBottom);
-//                     currentLeft += oneColumnWidth;
-//                 }
                 var columns = table.Columns;
                 for (int i = hScrollBar1.Value; i < hScrollBar1.Value + columnsOnControl; i++)
-                //for (int i = hScrollBar1.Value - hScrollBar1.Minimum; i < hScrollBar1.Value; i++)
                 {
                     if (i > columns.Count - 1) break;
                     PaintColumn(e.Graphics, columns[i], currentLeft, oneColumnWidth, tableBottom);
@@ -164,9 +158,9 @@ namespace CalendarControl3
                 }
 
                 e.Graphics.DrawLine(new Pen(Brushes.Black), 0, 0, 0, tableBottom - 1); //левая граница
-                e.Graphics.DrawLine(new Pen(Brushes.Black), 0, tableTop, realTableWidth, tableTop); //верхняя граница столбцов
-                e.Graphics.DrawLine(new Pen(Brushes.Black), 0, 0, realTableWidth, 0); //верхняя граница шапки
-                e.Graphics.DrawLine(new Pen(Brushes.Black), 0, tableBottom - 1, realTableWidth, tableBottom - 1); //нижняя граница
+                e.Graphics.DrawLine(new Pen(Brushes.Black), 0, tableTop, RealTableWidth, tableTop); //верхняя граница столбцов
+                e.Graphics.DrawLine(new Pen(Brushes.Black), 0, 0, RealTableWidth, 0); //верхняя граница шапки
+                e.Graphics.DrawLine(new Pen(Brushes.Black), 0, tableBottom - 1, RealTableWidth, tableBottom - 1); //нижняя граница
 
                 //infocolumn
                 var descriptions_ = table.GetDescripptionsToValueLevels();
@@ -175,53 +169,53 @@ namespace CalendarControl3
                 {
                     var y = tableTop + ScaleLevelsToControl(pair.Key);
                     if (y > tableTop && y < tableBottom)
-                        e.Graphics.DrawLine(new Pen(Brushes.LightSeaGreen), 0f, y, realTableWidth, y);
+                        e.Graphics.DrawLine(new Pen(Brushes.LightSeaGreen), 0f, y, RealTableWidth, y);
                     //if (y < tableTop) y = tableTop;
                     if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
                     drawPoint = new PointF(2f, y);
                     e.Graphics.DrawString(pair.Value, drawFont, drawBrush, drawPoint);
                 }
-//                descriptions.Sort(CompareByInt);
-//                 switch (descriptions.Count)
-//                 {
-//                     case 0: break;
-//                     case 1:
-//                         drawPoint = new PointF(2f, 2f);
-//                         e.Graphics.DrawString(descriptions[0].ToString(), drawFont, drawBrush, drawPoint);
-//                         break;
-//                     default:
-//                 for (int i = 0; i < descriptions.Count; i++)
-//                 {
-//                     var y = ScaleLevelsToControl(descriptions[i].ToInt());
-//                     if (i != 0 && i != descriptions.Count - 1) //рисуем разделители только у промежуточных
-//                         e.Graphics.DrawLine(new Pen(Brushes.LightSeaGreen), 0f, y, realTableWidth, y);
-//                     if (y < tableTop) y = tableTop;
-//                     if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
-//                     drawPoint = new PointF(2f, y);
-//                     e.Graphics.DrawString(descriptions[i].ToString(), drawFont, drawBrush, drawPoint);
-//                 }
-//                         break;
-//                 }
+                //                descriptions.Sort(CompareByInt);
+                //                 switch (descriptions.Count)
+                //                 {
+                //                     case 0: break;
+                //                     case 1:
+                //                         drawPoint = new PointF(2f, 2f);
+                //                         e.Graphics.DrawString(descriptions[0].ToString(), drawFont, drawBrush, drawPoint);
+                //                         break;
+                //                     default:
+                //                 for (int i = 0; i < descriptions.Count; i++)
+                //                 {
+                //                     var y = ScaleLevelsToControl(descriptions[i].ToInt());
+                //                     if (i != 0 && i != descriptions.Count - 1) //рисуем разделители только у промежуточных
+                //                         e.Graphics.DrawLine(new Pen(Brushes.LightSeaGreen), 0f, y, realTableWidth, y);
+                //                     if (y < tableTop) y = tableTop;
+                //                     if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
+                //                     drawPoint = new PointF(2f, y);
+                //                     e.Graphics.DrawString(descriptions[i].ToString(), drawFont, drawBrush, drawPoint);
+                //                 }
+                //                         break;
+                //                 }
             }
         }
 
         protected override void OnResize(EventArgs e)
         {
-            
+
             base.OnResize(e);
             MakeTableFromInput();
             Refresh();
         }
 
 
-// 
-//         int CompareByInt(IDescription2ControlInterface x, IDescription2ControlInterface y)
-//         {
-//             if (x == null && y == null) return 0;
-//             if (x == null) return -1;
-//             if (y == null) return 1;
-//             return x.ToInt().CompareTo(y.ToInt());
-//         }
+        // 
+        //         int CompareByInt(IDescription2ControlInterface x, IDescription2ControlInterface y)
+        //         {
+        //             if (x == null && y == null) return 0;
+        //             if (x == null) return -1;
+        //             if (y == null) return 1;
+        //             return x.ToInt().CompareTo(y.ToInt());
+        //         }
 
         /// <summary>
         /// Отрисовать столбец вместе с содержащимися в нём сущностями.
@@ -235,10 +229,10 @@ namespace CalendarControl3
         {
             foreach (var entity in column.Entities)
             {
-                PaintEntity(g, entity, leftside + 1, width -2 );
+                PaintEntity(g, entity, leftside + 1, width - 2);
             }
-            g.DrawLine(new Pen(Brushes.Black), leftside, 0, leftside, height); //рисуем левую линию каждого столбца
-            g.DrawLine(new Pen(Brushes.Black), leftside + width, 0, leftside + width, height); //рисуем правую линию
+            g.DrawLine(new Pen(Brushes.Black), leftside, 0, leftside, height -1); //рисуем левую линию каждого столбца
+            g.DrawLine(new Pen(Brushes.Black), leftside + width, 0, leftside + width, height - 1); //рисуем правую линию
         }
 
         /// <summary>
@@ -262,7 +256,7 @@ namespace CalendarControl3
             Font drawFont = new Font("Arial", 10);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             //PointF drawPoint = new PointF(leftside + 5.0f, tableTop + ScaleLevelsToControl(entity.TopLevel()) + 5.0f);
-            RectangleF strRect = new RectangleF((float)entRect.X + 2f, (float)entRect.Y + 2f, entRect.Width - 4f, entRect.Height- 4f);
+            RectangleF strRect = new RectangleF((float)entRect.X + 2f, (float)entRect.Y + 2f, entRect.Width - 4f, entRect.Height - 4f);
             //g.DrawString()
             StringFormat format = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap);
             format.Alignment = StringAlignment.Center;
@@ -279,7 +273,7 @@ namespace CalendarControl3
             int delta = bottomLevel - topLevel;
             double dotsPerPixel = (double)delta / (tableBottom - tableTop);
             double dotsToReturn = input - topLevel;
-            return (int)Math.Floor(dotsToReturn/dotsPerPixel);
+            return (int)Math.Floor(dotsToReturn / dotsPerPixel);
         }
 
         /// <summary>
@@ -287,13 +281,13 @@ namespace CalendarControl3
         /// </summary>
         /// <param name="input">Значение в терминах float уровней исходных данных.</param>
         /// <returns>Значение в терминах float пикселей контрола.</returns>
-//         float ScaleLevelsToControlF(float input)
-//         {
-//             int delta = bottomLevel - topLevel;
-//             double dotsPerPixel = (double)delta / Height;
-//             double dotsToReturn = input - topLevel;
-//             return (float)Math.Floor(dotsToReturn / dotsPerPixel);
-//         }
+        //         float ScaleLevelsToControlF(float input)
+        //         {
+        //             int delta = bottomLevel - topLevel;
+        //             double dotsPerPixel = (double)delta / Height;
+        //             double dotsToReturn = input - topLevel;
+        //             return (float)Math.Floor(dotsToReturn / dotsPerPixel);
+        //         }
 
         public static GraphicsPath GetBarShape(Rectangle rect, int cornerRad)
         {
@@ -325,7 +319,7 @@ namespace CalendarControl3
             this.Refresh();
         }
 
-#region Получение объекта под мышью (для обработки кликов)
+        #region Получение объекта под мышью (для обработки кликов)
         /// <summary>
         /// Получить значение между topLevel и bottomLevel куда ткнулась мыша.
         /// </summary>
@@ -334,7 +328,7 @@ namespace CalendarControl3
         public int GetVerticalValueOfClick(Point click)
         {
             if (click.Y < tableTop || click.Y > tableBottom) return -1;
-            
+
             int delta = bottomLevel - topLevel;
             double dotsPerPixel = (double)delta / (tableBottom - tableTop);
             return topLevel + (int)Math.Truncate((click.Y - tableTop) * dotsPerPixel);
@@ -347,7 +341,7 @@ namespace CalendarControl3
         /// <returns>Zero-based index. -1 если клик вне рабочей таблицы.</returns>
         int GetVisibleColumnNumberOfClick(Point click)
         {
-            if (click.X <= infoColumnWidth || click.X > realTableWidth) return -1;
+            if (click.X <= infoColumnWidth || click.X > RealTableWidth) return -1;
             int result = (click.X - infoColumnWidth) / oneColumnWidth;
             if (result > (columnsOnControl - 1)) result--;
             return result;
@@ -377,7 +371,7 @@ namespace CalendarControl3
             if (level < 0 || columnNumber < 0 || table.ColumnCount < 1) return null;
             foreach (var entity in table.Columns[columnNumber].Entities)
             {
-                if (entity.TopLevel < level && level < entity.BottomLevel) return entity;  
+                if (entity.TopLevel < level && level < entity.BottomLevel) return entity;
             }
             return null;
         }
@@ -389,12 +383,39 @@ namespace CalendarControl3
             if (level < 0 || columnNumber < 0) return null;
             return table.Columns[columnNumber].Name;
         }
-#endregion
+        #endregion
+
+        #region Получение полноразмерной картинки контрола
+        public Bitmap GenerateBitmap()
+        {
+            if (table == null)
+                return null;
+
+            int fullwidth = oneColumnWidth * table.ColumnCount + infoColumnWidth + 1;
+            int fullheight = Height;
+
+            int bckpColumnsOnControl = columnsOnControl;
+            columnsOnControl = table.ColumnCount;
+
+            Bitmap bmp = new Bitmap(fullwidth, fullheight);
+            Graphics g = Graphics.FromImage(bmp);
+
+            g.FillRectangle(Brushes.White, 0, 0, fullwidth, fullheight);
+
+            PaintEventArgs e = new PaintEventArgs(g, new Rectangle());
+
+            OnPaint(e);
+
+            columnsOnControl = bckpColumnsOnControl;
+
+            return bmp;
+        }
+        #endregion
 
         private void MouseClickHandler(object sender, MouseEventArgs e)
         {
-            
-            
+
+
             if (e.Button == MouseButtons.Right)
             { //покажем подсказку по этому месту
                 IEntity2ControlInterface clicked = GetEntityOnClick(e.Location);
@@ -407,7 +428,7 @@ namespace CalendarControl3
                         tt.InitialDelay = 10;
                     }
                     tt.Show(clicked.StringToShow, this);
-                    
+
                 }
             }
         }
@@ -421,7 +442,7 @@ namespace CalendarControl3
             }
         }
 
-        
+
 
     }
 }

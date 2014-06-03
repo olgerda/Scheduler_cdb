@@ -55,6 +55,7 @@ namespace Scheduler
             this.помощьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.инструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.контактыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnCreteFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainView)).BeginInit();
             this.mainView.Panel2.SuspendLayout();
             this.mainView.SuspendLayout();
@@ -75,6 +76,7 @@ namespace Scheduler
             // 
             // mainView.Panel2
             // 
+            this.mainView.Panel2.Controls.Add(this.btnCreteFile);
             this.mainView.Panel2.Controls.Add(this.dateTimePicker1);
             this.mainView.Panel2.Controls.Add(this.label1);
             this.mainView.Size = new System.Drawing.Size(696, 407);
@@ -124,6 +126,7 @@ namespace Scheduler
             this.сформироватьОтчетToolStripMenuItem.Name = "сформироватьОтчетToolStripMenuItem";
             this.сформироватьОтчетToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.сформироватьОтчетToolStripMenuItem.Text = "Сформировать отчет";
+            this.сформироватьОтчетToolStripMenuItem.Click += new System.EventHandler(this.сформироватьОтчетToolStripMenuItem_Click);
             // 
             // закрытьToolStripMenuItem
             // 
@@ -207,14 +210,24 @@ namespace Scheduler
             // инструкцииToolStripMenuItem
             // 
             this.инструкцииToolStripMenuItem.Name = "инструкцииToolStripMenuItem";
-            this.инструкцииToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.инструкцииToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.инструкцииToolStripMenuItem.Text = "Инструкции";
             // 
             // контактыToolStripMenuItem
             // 
             this.контактыToolStripMenuItem.Name = "контактыToolStripMenuItem";
-            this.контактыToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.контактыToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.контактыToolStripMenuItem.Text = "Контакты";
+            // 
+            // btnCreteFile
+            // 
+            this.btnCreteFile.Location = new System.Drawing.Point(3, 372);
+            this.btnCreteFile.Name = "btnCreteFile";
+            this.btnCreteFile.Size = new System.Drawing.Size(146, 23);
+            this.btnCreteFile.TabIndex = 8;
+            this.btnCreteFile.Text = "Выгрузить в файл";
+            this.btnCreteFile.UseVisualStyleBackColor = true;
+            this.btnCreteFile.Click += new System.EventHandler(this.btnCreteFile_Click);
             // 
             // MainForm
             // 
@@ -254,5 +267,6 @@ namespace Scheduler
         private System.Windows.Forms.ToolStripMenuItem специалистыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem специальностиToolStripMenuItem;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.Button btnCreteFile;
 	}
 }

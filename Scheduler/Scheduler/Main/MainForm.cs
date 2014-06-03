@@ -255,6 +255,31 @@ namespace Scheduler
             ReloadEntities();
         }
 
+        private void сформироватьОтчетToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Reports reportsForm = new Reports(database))
+            {
+                reportsForm.ShowDialog();
+            }
+        }
+
+        private void btnCreteFile_Click(object sender, EventArgs e)
+        {
+
+            using (SaveFileDialog save = new SaveFileDialog() { Filter = "bmp (*.bmp)|*.bmp|jpeg (*.jpeg)|*.jpeg"})
+            {
+                if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    using (System.Drawing.Bitmap bmp = calendarControl.GenerateBitmap())
+                    {
+                        //calendarControl.DrawToBitmap(bmp, calendarControl.ClientRectangle);
+                        bmp.Save(save.FileName, save.FilterIndex == 1 ? System.Drawing.Imaging.ImageFormat.Bmp : System.Drawing.Imaging.ImageFormat.Jpeg);
+                    }
+                }
+            }
+            
+        }
+
 
     }
 }
