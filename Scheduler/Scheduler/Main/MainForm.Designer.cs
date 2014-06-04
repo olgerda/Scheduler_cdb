@@ -38,6 +38,7 @@ namespace Scheduler
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainView = new System.Windows.Forms.SplitContainer();
+            this.btnCreteFile = new System.Windows.Forms.Button();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
@@ -55,7 +56,6 @@ namespace Scheduler
             this.помощьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.инструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.контактыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnCreteFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainView)).BeginInit();
             this.mainView.Panel2.SuspendLayout();
             this.mainView.SuspendLayout();
@@ -79,9 +79,21 @@ namespace Scheduler
             this.mainView.Panel2.Controls.Add(this.btnCreteFile);
             this.mainView.Panel2.Controls.Add(this.dateTimePicker1);
             this.mainView.Panel2.Controls.Add(this.label1);
-            this.mainView.Size = new System.Drawing.Size(696, 407);
-            this.mainView.SplitterDistance = 538;
+            this.mainView.Panel2MinSize = 157;
+            this.mainView.Size = new System.Drawing.Size(832, 407);
+            this.mainView.SplitterDistance = 670;
             this.mainView.TabIndex = 3;
+            // 
+            // btnCreteFile
+            // 
+            this.btnCreteFile.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnCreteFile.Location = new System.Drawing.Point(0, 384);
+            this.btnCreteFile.Name = "btnCreteFile";
+            this.btnCreteFile.Size = new System.Drawing.Size(158, 23);
+            this.btnCreteFile.TabIndex = 8;
+            this.btnCreteFile.Text = "Выгрузить в файл";
+            this.btnCreteFile.UseVisualStyleBackColor = true;
+            this.btnCreteFile.Click += new System.EventHandler(this.btnCreteFile_Click);
             // 
             // dateTimePicker1
             // 
@@ -108,7 +120,7 @@ namespace Scheduler
             this.помощьToolStripMenuItem});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(696, 24);
+            this.mainMenu.Size = new System.Drawing.Size(832, 24);
             this.mainMenu.TabIndex = 4;
             this.mainMenu.Text = "mainMenu";
             // 
@@ -219,21 +231,11 @@ namespace Scheduler
             this.контактыToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.контактыToolStripMenuItem.Text = "Контакты";
             // 
-            // btnCreteFile
-            // 
-            this.btnCreteFile.Location = new System.Drawing.Point(3, 372);
-            this.btnCreteFile.Name = "btnCreteFile";
-            this.btnCreteFile.Size = new System.Drawing.Size(146, 23);
-            this.btnCreteFile.TabIndex = 8;
-            this.btnCreteFile.Text = "Выгрузить в файл";
-            this.btnCreteFile.UseVisualStyleBackColor = true;
-            this.btnCreteFile.Click += new System.EventHandler(this.btnCreteFile_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(696, 431);
+            this.ClientSize = new System.Drawing.Size(832, 431);
             this.Controls.Add(this.mainView);
             this.Controls.Add(this.mainMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

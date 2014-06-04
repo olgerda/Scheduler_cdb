@@ -72,6 +72,10 @@ namespace Scheduler
             calendarControl.Table = receptionEntitiesTable;
             calendarControl.MouseClick += new MouseEventHandler(calendarControl_MouseClick);
 
+            Rectangle screenRectangle=RectangleToScreen(this.ClientRectangle);
+            int titleHeight = screenRectangle.Top - this.Top;
+            this.MinimumSize = new System.Drawing.Size(calendarControl.MinimumSize.Width + mainView.Panel2MinSize, calendarControl.MinimumSize.Height + mainView.Location.Y + titleHeight + 20);
+
             ReceptionInfoEdit.SetLists(database.CabinetList, database.SpecialistList, database.SpecializationList, database.ClientList, database.EntityFactory);
         }
 
@@ -127,16 +131,19 @@ namespace Scheduler
                     receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.ReadExist;
                     receptionEditForm.Reception = ent;
                     var dresult = receptionEditForm.ShowDialog();
-                    if (dresult == System.Windows.Forms.DialogResult.Abort)
+
+                    switch (dresult)
                     {
-                        database.RemoveReception(ent);
-                        //receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Remove(ent);
-                    }
-                    else
-                        if (dresult == System.Windows.Forms.DialogResult.OK)
-                        {
+                        case System.Windows.Forms.DialogResult.Abort:
+                            database.RemoveReception(ent);
+                            break;
+                        case System.Windows.Forms.DialogResult.OK:
                             database.UpdateReception(ent);
-                        }
+                            break;
+                        case System.Windows.Forms.DialogResult.Yes:
+                            database.AddReception((IEntity)receptionEditForm.Reception);
+                            break;
+                    }
                 }
 
                 ReloadEntities();
@@ -152,9 +159,9 @@ namespace Scheduler
             receptionEntitiesTable.WorkTimeInterval = workday;
 
             Dictionary<DateTime, string> descriprions = new Dictionary<DateTime, string>(16);
-            for (int i = 6; i <= 21; i++ )
+            for (int i = 6; i <= 21; i++)
             {
-                DateTime date = new DateTime(1,1,1,i,0,0);
+                DateTime date = new DateTime(1, 1, 1, i, 0, 0);
                 descriprions.Add(date, date.ToShortTimeString());
             }
 
@@ -286,6 +293,7 @@ namespace Scheduler
             }
 
         }
+
 
 
     }

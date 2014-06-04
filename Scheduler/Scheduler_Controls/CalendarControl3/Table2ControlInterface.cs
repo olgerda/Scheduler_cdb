@@ -72,6 +72,8 @@ namespace CalendarControl3_Interfaces
 
         bool IsIntersectWith(IEntity2ControlInterface second);
         //event EventHandler Changed;
+
+        //System.Drawing.Color DrawColor { get; set; }
     }
 
 }

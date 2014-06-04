@@ -52,14 +52,30 @@ namespace Scheduler_Forms
 
         void receptionInfoCard_OnCreateChildReceptionClicked(object source, CreateChildReceptionEventArgs e)
         {
-            ReceptionInfoEdit childForm = new ReceptionInfoEdit();
+            using (ReceptionInfoEdit childForm = new ReceptionInfoEdit())
+            {
+                var receptionNew = entityFactory.NewEntity();
 
-            childForm.Reception = currentReception;
+                receptionNew.Client = e.Entity.Client;
+                receptionNew.Cabinet = e.Entity.Cabinet;
+                receptionNew.Specialist = e.Entity.Specialist;
+                receptionNew.Specialization = e.Entity.Specialization;
+                receptionNew.Rent = e.Entity.Rent;
+                receptionNew.ReceptionTimeInterval = entityFactory.NewTimeInterval();
+                receptionNew.ReceptionTimeInterval.StartDate = DateTime.Now;
+                receptionNew.ReceptionTimeInterval.EndDate = DateTime.Now + new TimeSpan(1, 0, 0);
 
-            childForm.Reception.ReceptionTimeInterval.StartDate = DateTime.Now;
-            childForm.Reception.ReceptionTimeInterval.EndDate = DateTime.Now + new TimeSpan(1, 0, 0);
-            childForm.receptionInfoCard.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CloneExist;
-            childForm.Show();
+                childForm.Reception = receptionNew;
+                childForm.receptionInfoCard.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CloneExist;
+                if (childForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    doNothing = true;
+                    Reception = childForm.Reception;
+                    this.DialogResult = System.Windows.Forms.DialogResult.Yes;
+                    this.Close();
+                    doNothing = false;
+                }
+            }
         }
 
         void receptionInfoCard_OnSaveChanges(object source, SaveChangesEventArgs<IReception> e)

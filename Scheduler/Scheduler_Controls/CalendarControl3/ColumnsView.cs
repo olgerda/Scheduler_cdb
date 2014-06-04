@@ -19,14 +19,6 @@ namespace CalendarControl3
         private int minimumColumnWidth = 100;
         private int infoColumnWidth = 50;
         /// <summary>
-        /// Оставлять ли сверху/сниху некий запас для "переработок"
-        /// </summary>
-        //private bool isReserveSpaceNeeded = false;
-        /// <summary>
-        /// Величина запаса для "переработок"
-        /// </summary>
-        //private int reserveSpace = 0;
-        /// <summary>
         /// Значение, от которого откладываются сущности.
         /// </summary>
         private int topLevel;
@@ -44,14 +36,6 @@ namespace CalendarControl3
         /// </summary>
         private int tableBottom;
 
-        /// <summary>
-        /// Значение, от которого отсчитывается левый край информативных столбцов.
-        /// </summary>
-        //        private int tableLeft;
-        /// <summary>
-        /// Значение, до которого отсчитывается правый край информативных столбцов.
-        /// </summary>
-        //        private int tableRight;
         /// <summary>
         /// Ширина реально отрисовываемой таблицы. Высчитывается исходя из columnsOnControl, oneColumnWidth и infoColumnWidth
         /// </summary>
@@ -93,19 +77,30 @@ namespace CalendarControl3
         public ColumnsView()
         {
             InitializeComponent();
+            this.MinimumSize = new Size(minimumColumnWidth + infoColumnWidth, 500);
         }
 
         void MakeTableFromInput()
         {
             if (table == null || table.ColumnCount == 0) return;
-            //tableLeft = infoColumnWidth;
 
-            oneColumnWidth = (this.Width - infoColumnWidth) / table.ColumnCount;
+            int columnCount = table.ColumnCount;
 
-
-            if (oneColumnWidth < minimumColumnWidth)
+            while (true)
             {
-                oneColumnWidth = minimumColumnWidth;
+                oneColumnWidth = (this.Width - infoColumnWidth) / columnCount;
+
+                if (oneColumnWidth < minimumColumnWidth)
+                {
+                    columnCount--;
+                    if (columnCount == 0)
+                    {
+                        oneColumnWidth = minimumColumnWidth;
+                        break;
+                    }
+                }
+                else
+                    break;
             }
 
             topLevel = table.MinValue;
