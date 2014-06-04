@@ -148,8 +148,17 @@ namespace Scheduler
         {
             receptionEntitiesTable = database.EntityFactory.NewTable();
             ITimeInterval workday = database.EntityFactory.NewTimeInterval();
-            workday.SetStartEnd(new DateTime(1, 1, 1, 8, 0, 0), new DateTime(1, 1, 1, 18, 0, 0));
+            workday.SetStartEnd(new DateTime(1, 1, 1, 6, 0, 0), new DateTime(1, 1, 1, 21, 0, 0));
             receptionEntitiesTable.WorkTimeInterval = workday;
+
+            Dictionary<DateTime, string> descriprions = new Dictionary<DateTime, string>(16);
+            for (int i = 6; i <= 21; i++ )
+            {
+                DateTime date = new DateTime(1,1,1,i,0,0);
+                descriprions.Add(date, date.ToShortTimeString());
+            }
+
+            receptionEntitiesTable.SetInfoColumnDescriptions(descriprions);
 
             var dummy = database.EntityFactory.NewEntity();
             dummy.SetDatabase(database);
@@ -264,7 +273,7 @@ namespace Scheduler
         private void btnCreteFile_Click(object sender, EventArgs e)
         {
 
-            using (SaveFileDialog save = new SaveFileDialog() { Filter = "bmp (*.bmp)|*.bmp|jpeg (*.jpeg)|*.jpeg"})
+            using (SaveFileDialog save = new SaveFileDialog() { Filter = "bmp (*.bmp)|*.bmp|jpeg (*.jpeg)|*.jpeg" })
             {
                 if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
@@ -275,7 +284,7 @@ namespace Scheduler
                     }
                 }
             }
-            
+
         }
 
 

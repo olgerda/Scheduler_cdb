@@ -36,8 +36,8 @@ namespace Scheduler_InterfacesRealisations
             {
                 workInterval = value;
                 duration = workInterval.EndDate - workInterval.StartDate;
-                minValue = Convert.ToInt32(Math.Truncate(workInterval.StartDate.TimeOfDay.TotalMinutes));
-                maxValue = Convert.ToInt32(Math.Truncate(workInterval.EndDate.TimeOfDay.TotalMinutes));
+                minValue = ConvertTimespanToLevel(workInterval.StartDate.TimeOfDay);
+                maxValue = ConvertTimespanToLevel(workInterval.EndDate.TimeOfDay);
             }
         }
 
@@ -54,7 +54,7 @@ namespace Scheduler_InterfacesRealisations
                 workInterval.StartDate.TimeOfDay > time.TimeOfDay 
                 || workInterval.EndDate.TimeOfDay < time.TimeOfDay)
                 return -1;
-            return minValue + Convert.ToInt32(Math.Truncate(time.TimeOfDay.TotalMinutes));
+            return minValue + ConvertTimespanToLevel(time.TimeOfDay);
         }
 
         int CalendarControl3_Interfaces.ITable2ControlInterface.ColumnCount
@@ -68,7 +68,7 @@ namespace Scheduler_InterfacesRealisations
             set
             {
                 minValue = value;
-                maxValue = minValue + Convert.ToInt32(Math.Truncate(duration.TotalMinutes));
+                maxValue = minValue + ConvertTimespanToLevel(duration);
             }
         }
 
@@ -85,6 +85,21 @@ namespace Scheduler_InterfacesRealisations
         List<CalendarControl3_Interfaces.IColumn2ControlInterface> CalendarControl3_Interfaces.ITable2ControlInterface.Columns
         {
             get { return columns; }
+        }
+
+
+        void Scheduler_DBobjects_Intefraces.ITable.SetInfoColumnDescriptions(Dictionary<DateTime, string> descriptions)
+        {
+            foreach (var pair in descriptions)
+            {
+                int level = ConvertTimespanToLevel(pair.Key.TimeOfDay);
+                if (!this.descriptions.ContainsKey(level))
+                    this.descriptions.Add(level, pair.Value);
+            }
+        }
+        private int ConvertTimespanToLevel(TimeSpan input)
+        {
+            return Convert.ToInt32(Math.Truncate(input.TotalMinutes));
         }
     }
 }

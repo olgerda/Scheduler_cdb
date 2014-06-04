@@ -34,6 +34,8 @@ namespace Scheduler_DBobjects_Intefraces
     {
         ITimeInterval WorkTimeInterval { get; set; }
 
+        void SetInfoColumnDescriptions(Dictionary<DateTime, string> descriptions);
+
         DateTime ConvertLevelToTime(int level);
         int ConvertTimeToLevel(DateTime time);
     }
