@@ -251,16 +251,13 @@ namespace CalendarControl3
             g.FillPath(Brushes.LightYellow, entShape);
             g.DrawPath(new Pen(Brushes.DarkGreen, 2f), entShape);
 
-
             //напишем в нём текст
             Font drawFont = new Font("Arial", 10);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
-            //PointF drawPoint = new PointF(leftside + 5.0f, tableTop + ScaleLevelsToControl(entity.TopLevel()) + 5.0f);
             RectangleF strRect = new RectangleF((float)entRect.X + 2f, (float)entRect.Y + 2f, entRect.Width - 4f, entRect.Height - 4f);
-            //g.DrawString()
             StringFormat format = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap);
             format.Alignment = StringAlignment.Center;
-            g.DrawString(entity.StringToShow, drawFont, drawBrush, strRect, format);//, drawPoint);
+            g.DrawString(entity.StringToShow, drawFont, drawBrush, strRect, format);
         }
 
         /// <summary>
@@ -275,19 +272,6 @@ namespace CalendarControl3
             double dotsToReturn = input - topLevel;
             return (int)Math.Floor(dotsToReturn / dotsPerPixel);
         }
-
-        /// <summary>
-        /// Преобразовать входящее значение в float значение относительно предварительно заданных topLevel и bottomLevel.
-        /// </summary>
-        /// <param name="input">Значение в терминах float уровней исходных данных.</param>
-        /// <returns>Значение в терминах float пикселей контрола.</returns>
-        //         float ScaleLevelsToControlF(float input)
-        //         {
-        //             int delta = bottomLevel - topLevel;
-        //             double dotsPerPixel = (double)delta / Height;
-        //             double dotsToReturn = input - topLevel;
-        //             return (float)Math.Floor(dotsToReturn / dotsPerPixel);
-        //         }
 
         public static GraphicsPath GetBarShape(Rectangle rect, int cornerRad)
         {
@@ -414,8 +398,6 @@ namespace CalendarControl3
 
         private void MouseClickHandler(object sender, MouseEventArgs e)
         {
-
-
             if (e.Button == MouseButtons.Right)
             { //покажем подсказку по этому месту
                 IEntity2ControlInterface clicked = GetEntityOnClick(e.Location);
@@ -428,7 +410,6 @@ namespace CalendarControl3
                         tt.InitialDelay = 10;
                     }
                     tt.Show(clicked.StringToShow, this);
-
                 }
             }
         }

@@ -8,7 +8,7 @@ namespace MySqlConnector
     public class MySQLConnector : Scheduler_DBobjects_Intefraces.Scheduler_DBconnector
     {
         static Scheduler_Common_Interfaces.IFactory entityFactory;
-        static MySQLConnector singleton;
+        static string connectionString;
 
         public MySQLConnector(Scheduler_Common_Interfaces.IFactory entityFactor)
         {
@@ -17,7 +17,7 @@ namespace MySqlConnector
 
         static MySql.Data.MySqlClient.MySqlConnection OpenConnection()
         {
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(Properties.Settings.Default.mysqlconnstring);
+            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(connectionString);
             try
             {
                 connection.Open();
@@ -31,6 +31,8 @@ namespace MySqlConnector
                         throw new Exception("Не могу подключиться к серверу. Проверьте настройки сервера.", ex);
                     case 1045:
                         throw new Exception("Неверно введен логин или пароль.", ex);
+                    default:
+                        throw ex;
                 }
             }
             return connection;
@@ -1312,11 +1314,11 @@ namespace MySqlConnector
                             message = "Неверно введен логин или пароль.";
                             break;
                         default:
-                            message = "Неизвестная ошибка подключения к базе данных. " + mysqlException.Message;
+                            message = "Неизвестная ошибка подключения к базе данных. " + Environment.NewLine + mysqlException.Message + Environment.NewLine + connectionString ?? String.Empty;
                             break;
                     }
                 else
-                    message = "Неизвестная ошибка подключения к базе данных: " + ex.Message;
+                    message = "Неизвестная ошибка подключения к базе данных: " + Environment.NewLine + ex.Message + Environment.NewLine + connectionString ?? String.Empty;
                 result = false;
             }
             finally
@@ -1325,6 +1327,19 @@ namespace MySqlConnector
                     CloseConnection(conn);
             }
             return result;
+        }
+
+
+        string Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.ConnectionString
+        {
+            get
+            {
+                return connectionString;
+            }
+            set
+            {
+                connectionString = value;
+            }
         }
     }
 }

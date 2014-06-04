@@ -51,6 +51,7 @@ namespace Scheduler_DBobjects_Intefraces
     public interface Scheduler_DBconnector
     {
         Scheduler_Common_Interfaces.IFactory EntityFactory { get; set; }
+        string ConnectionString { get; set; }
 
         void AddClient(Scheduler_Controls_Interfaces.IClient client);
         void UpdateClientData(Scheduler_Controls_Interfaces.IClient client);
@@ -73,8 +74,6 @@ namespace Scheduler_DBobjects_Intefraces
 
         List<IEntity> GetReceptionsFromDate(DateTime date);
         List<IReception> GetReceptionsForClient(IClient client);
-
-        //GetClientReceptionsList GetReceptionsForClient(IClient client);
 
         void AddReception(IEntity reception);
         void UpdateReception(IEntity reception);

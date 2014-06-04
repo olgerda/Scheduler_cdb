@@ -1,0 +1,9 @@
+<root>
+	<dbconnection>
+		<Server>kvartetDBserver</Server>
+		<Uid>kvartetAdmin</Uid>
+		<Pwd>1</Pwd>
+		<Database>kvartet_new</Database>
+		<charset>utf8</charset>
+	</dbconnection>
+</root>

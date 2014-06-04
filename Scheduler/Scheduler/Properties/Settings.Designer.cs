@@ -22,14 +22,5 @@ namespace Scheduler.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server=kvartetMySQL;Uid=kvartetAdmin;Pwd=KvArTeT;Database=kvartet_new;")]
-        public string ConnectionString {
-            get {
-                return ((string)(this["ConnectionString"]));
-            }
-        }
     }
 }

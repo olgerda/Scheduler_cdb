@@ -61,8 +61,6 @@ namespace Scheduler
             {
                 Database = database;
             }
-            
-
         }
 
         void Init()

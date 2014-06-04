@@ -22,7 +22,13 @@ namespace Scheduler_DBobjects
         {
             entityFactory = new Scheduler_InterfacesRealisations.EntityFactory();
 
+            var SqlConnectionNode = System.Xml.Linq.XDocument.Load("config.xml").Descendants("dbconnection").First();
+            string connString = String.Empty;
+
+            connString = String.Join(";",SqlConnectionNode.Descendants().Select(n => String.Format("{0}={1}", n.Name, n.Value)).ToArray());
+
             dbconnector = entityFactory.NewDBConnector();
+            dbconnector.ConnectionString = connString;
 
             if (dbconnector.CheckDBConnection(out errMsg))
             {
