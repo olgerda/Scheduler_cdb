@@ -102,7 +102,7 @@ namespace Scheduler_InterfacesRealisations
                 }
                 else
                 {
-                    return receptionTimeInterval.Interval() + Environment.NewLine + specialist.Name + Environment.NewLine + specialisation + Environment.NewLine + client.Name;
+                    return receptionTimeInterval.Interval() + Environment.NewLine + specialist.Name + Environment.NewLine + specialisation + Environment.NewLine + client.Name + Environment.NewLine + client.Telephones.FirstOrDefault();
                 }
             }
         }

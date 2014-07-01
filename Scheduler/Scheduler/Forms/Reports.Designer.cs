@@ -31,8 +31,9 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.date2 = new System.Windows.Forms.DateTimePicker();
             this.date1 = new System.Windows.Forms.DateTimePicker();
-            this.btnCreateReportClient = new System.Windows.Forms.Button();
-            this.btnCreateReportSpecialist = new System.Windows.Forms.Button();
+            this.btnCreateReport = new System.Windows.Forms.Button();
+            this.cmbReportKindSelect = new System.Windows.Forms.ComboBox();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,33 +64,40 @@
             this.date1.TabIndex = 0;
             this.date1.CloseUp += new System.EventHandler(this.date1_ValueChanged);
             // 
-            // btnCreateReportClient
+            // btnCreateReport
             // 
-            this.btnCreateReportClient.Location = new System.Drawing.Point(12, 90);
-            this.btnCreateReportClient.Name = "btnCreateReportClient";
-            this.btnCreateReportClient.Size = new System.Drawing.Size(213, 25);
-            this.btnCreateReportClient.TabIndex = 2;
-            this.btnCreateReportClient.Text = "Сформировать отчёт по клиентам";
-            this.btnCreateReportClient.UseVisualStyleBackColor = true;
-            this.btnCreateReportClient.Click += new System.EventHandler(this.btnCreateReport_Click);
+            this.btnCreateReport.Location = new System.Drawing.Point(12, 148);
+            this.btnCreateReport.Name = "btnCreateReport";
+            this.btnCreateReport.Size = new System.Drawing.Size(213, 25);
+            this.btnCreateReport.TabIndex = 2;
+            this.btnCreateReport.Text = "Сформировать отчёт";
+            this.btnCreateReport.UseVisualStyleBackColor = true;
+            this.btnCreateReport.Click += new System.EventHandler(this.btnCreateReport_Click);
             // 
-            // btnCreateReportSpecialist
+            // cmbReportKindSelect
             // 
-            this.btnCreateReportSpecialist.Location = new System.Drawing.Point(12, 121);
-            this.btnCreateReportSpecialist.Name = "btnCreateReportSpecialist";
-            this.btnCreateReportSpecialist.Size = new System.Drawing.Size(213, 23);
-            this.btnCreateReportSpecialist.TabIndex = 3;
-            this.btnCreateReportSpecialist.Text = "Сформировать отчёт по специалистам";
-            this.btnCreateReportSpecialist.UseVisualStyleBackColor = true;
-            this.btnCreateReportSpecialist.Click += new System.EventHandler(this.btnCreateReportSpecialist_Click);
+            this.cmbReportKindSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbReportKindSelect.Items.AddRange(new object[] {
+            "Отчёт по специалистам",
+            "Отчёт по кабинетам",
+            "Отчёт по специализациям"});
+            this.cmbReportKindSelect.Location = new System.Drawing.Point(12, 89);
+            this.cmbReportKindSelect.Name = "cmbReportKindSelect";
+            this.cmbReportKindSelect.Size = new System.Drawing.Size(213, 21);
+            this.cmbReportKindSelect.TabIndex = 3;
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.FileName = "report.csv";
+            this.saveFileDialog1.Filter = "Excel csv|*.csv";
             // 
             // Reports
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(240, 151);
-            this.Controls.Add(this.btnCreateReportSpecialist);
-            this.Controls.Add(this.btnCreateReportClient);
+            this.ClientSize = new System.Drawing.Size(240, 178);
+            this.Controls.Add(this.cmbReportKindSelect);
+            this.Controls.Add(this.btnCreateReport);
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -107,7 +115,8 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DateTimePicker date2;
         private System.Windows.Forms.DateTimePicker date1;
-        private System.Windows.Forms.Button btnCreateReportClient;
-        private System.Windows.Forms.Button btnCreateReportSpecialist;
+        private System.Windows.Forms.Button btnCreateReport;
+        private System.Windows.Forms.ComboBox cmbReportKindSelect;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }

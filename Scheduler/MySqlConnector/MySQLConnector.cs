@@ -873,6 +873,59 @@ namespace MySqlConnector
             return result;
         }
 
+
+        List<Scheduler_DBobjects_Intefraces.IEntity> Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.GetReceptionsBetweenDates(DateTime startDate, DateTime endDate)
+        {
+            List<Scheduler_DBobjects_Intefraces.IEntity> result = new List<Scheduler_DBobjects_Intefraces.IEntity>();
+            var connection = OpenConnection();
+
+            List<receptionsWithIds> tempResults = new List<receptionsWithIds>();
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandText = "select idreceptions, clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate from receptions where timedate between @startdate and @enddate";
+                cmd.Parameters.AddWithValue("@startdate", startDate.Date);
+                cmd.Parameters.AddWithValue("@enddate", endDate.Date);
+                cmd.Prepare();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        tempResults.Add(new receptionsWithIds()
+                        {
+                            ownid = reader.GetInt32("idreceptions"),
+                            clientid = reader.GetInt32("clientid"),
+                            spectid = reader.GetInt32("specialistid"),
+                            specnid = reader.GetInt32("specializationid"),
+                            cabid = reader.GetInt32("cabinetid"),
+                            isrented = reader.GetInt32("isrented"),
+                            timestart = reader.GetTimeSpan("timestart"),
+                            timeend = reader.GetTimeSpan("timeend"),
+                            date = reader.GetDateTime("timedate")
+                        });
+                    }
+                }
+            }
+
+            foreach (var recpt in tempResults)
+            {
+                var current = entityFactory.NewEntity();
+                current.ID = recpt.ownid;
+                current.Client = GetClientById(recpt.clientid, connection);
+                current.Specialist = GetSpecialistById(recpt.spectid, connection);
+                current.Specialization = GetSpecializationById(recpt.specnid, connection);
+                current.Cabinet = GetCabinetById(recpt.cabid, connection);
+                current.Rent = recpt.isrented == 1;
+                var timeinterval = entityFactory.NewTimeInterval();
+                timeinterval.SetStartEnd(recpt.date.Date.Add(recpt.timestart), recpt.date.Date.Add(recpt.timeend));
+                current.ReceptionTimeInterval = timeinterval;
+                result.Add(current);
+            }
+            CloseConnection(connection);
+
+            return result;
+        }
+
         void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddReception(Scheduler_DBobjects_Intefraces.IEntity reception)
         {
             var connection = OpenConnection();
@@ -1341,5 +1394,7 @@ namespace MySqlConnector
                 connectionString = value;
             }
         }
+
+
     }
 }

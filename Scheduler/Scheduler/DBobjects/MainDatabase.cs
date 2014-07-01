@@ -53,6 +53,11 @@ namespace Scheduler_DBobjects
             return dbconnector.GetReceptionsFromDate(date);
         }
 
+        List<Scheduler_DBobjects_Intefraces.IEntity> Scheduler_DBobjects_Intefraces.IMainDataBase.SelectReceptionsBetweenDates(DateTime startDate, DateTime endDate)
+        {
+            return dbconnector.GetReceptionsBetweenDates(startDate, endDate);
+        }
+
         Scheduler_Forms_Interfaces.ISpecialistList Scheduler_DBobjects_Intefraces.IMainDataBase.SpecialistList
         {
             get
@@ -121,5 +126,7 @@ namespace Scheduler_DBobjects
         {
             errMsg = null;
         }
+
+
     }
 }

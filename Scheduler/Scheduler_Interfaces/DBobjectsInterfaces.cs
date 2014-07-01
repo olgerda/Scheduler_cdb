@@ -12,6 +12,8 @@ namespace Scheduler_DBobjects_Intefraces
     public interface IMainDataBase
     {
         List<IEntity> SelectReceptionsFromDate(DateTime date);
+        List<IEntity> SelectReceptionsBetweenDates(DateTime startDate, DateTime endDate);
+
         void AddReception(IEntity reception);
         void RemoveReception(IEntity reception);
         void UpdateReception(IEntity reception);
@@ -75,6 +77,8 @@ namespace Scheduler_DBobjects_Intefraces
         ICabinetList AllCabinets();
 
         List<IEntity> GetReceptionsFromDate(DateTime date);
+        List<IEntity> GetReceptionsBetweenDates(DateTime startDate, DateTime endDate);
+
         List<IReception> GetReceptionsForClient(IClient client);
 
         void AddReception(IEntity reception);
