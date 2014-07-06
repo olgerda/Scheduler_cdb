@@ -30,7 +30,7 @@ CREATE TABLE `cabinet` (
   `availability` int(10) unsigned zerofill NOT NULL,
   PRIMARY KEY (`idcabinet`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,8 +45,9 @@ CREATE TABLE `clients` (
   `name` tinytext,
   `comment` text,
   `blacklisted` tinyint(3) unsigned zerofill DEFAULT NULL,
+  `price` int(10) unsigned zerofill NOT NULL,
   PRIMARY KEY (`idclients`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +68,7 @@ CREATE TABLE `receptions` (
   `timeend` time NOT NULL,
   `timedate` date NOT NULL,
   PRIMARY KEY (`idreceptions`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -114,8 +115,8 @@ CREATE TABLE `specializations2specialist` (
   PRIMARY KEY (`idspecializations2specialist`),
   KEY `specializationkey_idx` (`specialization`),
   KEY `specialistkey_idx` (`specialist`),
-  CONSTRAINT `specializationkey` FOREIGN KEY (`specialization`) REFERENCES `specializations` (`idspecializations`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `specialistkey` FOREIGN KEY (`specialist`) REFERENCES `specialists` (`idspecialists`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `specialistkey` FOREIGN KEY (`specialist`) REFERENCES `specialists` (`idspecialists`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `specializationkey` FOREIGN KEY (`specialization`) REFERENCES `specializations` (`idspecializations`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -132,7 +133,7 @@ CREATE TABLE `telephones` (
   PRIMARY KEY (`idtelephones`),
   UNIQUE KEY `idtelephones_UNIQUE` (`idtelephones`),
   UNIQUE KEY `telephonescol_UNIQUE` (`telephonescol`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +152,7 @@ CREATE TABLE `telephones2clients` (
   KEY `clientidkey_idx` (`clid`),
   CONSTRAINT `clidkey` FOREIGN KEY (`clid`) REFERENCES `clients` (`idclients`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `telidkey` FOREIGN KEY (`telid`) REFERENCES `telephones` (`idtelephones`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,35 +162,30 @@ CREATE TABLE `telephones2clients` (
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`%` PROCEDURE `CleanupTelephones`()
-BEGIN
-DECLARE finish INTEGER DEFAULT 0;
-DECLARE currentTelId INTEGER;
-DECLARE idcount INTEGER DEFAULT 0;
-
-DECLARE telCursor CURSOR FOR
-SELECT idtelephones FROM telephones;
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET finish = 1;
-
-OPEN telCursor;
-fetch telCursor into currentTelId;
-
-WHILE finish = 0 DO
-SELECT COUNT(*) INTO idcount FROM telephones2clients WHERE telid = currentTelId;
-
-IF idcount = 0 then
-DELETE FROM telephones WHERE idtelephones = currentTelId;
-END IF;
-
-fetch telCursor into currentTelId;
-END while;
-CLOSE telCursor;
+CREATE DEFINER=`kvartetAdmin`@`%` PROCEDURE `CleanupTelephones`()
+BEGIN
+DECLARE finish INTEGER DEFAULT 0;
+DECLARE currentTelId INTEGER;
+DECLARE idcount INTEGER DEFAULT 0;
+DECLARE telCursor CURSOR FOR
+SELECT idtelephones FROM telephones;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET finish = 1;
+OPEN telCursor;
+fetch telCursor into currentTelId;
+WHILE finish = 0 DO
+SELECT COUNT(*) INTO idcount FROM telephones2clients WHERE telid = currentTelId;
+IF idcount = 0 then
+DELETE FROM telephones WHERE idtelephones = currentTelId;
+END IF;
+fetch telCursor into currentTelId;
+END while;
+CLOSE telCursor;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -206,4 +202,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-25 22:21:40
+-- Dump completed on 2014-07-06 23:10:44

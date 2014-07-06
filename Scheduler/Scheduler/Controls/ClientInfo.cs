@@ -25,9 +25,6 @@ namespace Scheduler_Controls
         public ClientInfo()
         {
             InitializeComponent();
-
-            lstTelephones.DisplayMember = "FormattedTelephoneNumber";
-            lstTelephones.ValueMember = "FormattedTelephoneNumber";
         }
 
         public ClientInfo(IClient client, IFactory entityFactory)
@@ -80,6 +77,8 @@ namespace Scheduler_Controls
 
             chkBlackList.Checked = client.BlackListed;
 
+            txtPrice.Text = client.Price.ToString();
+
         }
 
         bool SomethingChanged()
@@ -91,8 +90,8 @@ namespace Scheduler_Controls
                 client.Name != txtFIO.Text ||
                 client.Comment != txtComment.Text ||
                 client.BlackListed != chkBlackList.Checked ||
+                client.Price != Convert.ToInt32(txtPrice.Text) ||
                 !client.Telephones.SequenceEqual(lstTelephones.Items.Cast<string>());
-            //client.Telephones.SequenceEqual(lstTelephones.Items.Cast<ITelephone>().Select(f => f.TelephoneNumber));
         }
 
         private void btnRemoveTelephone_Click(object sender, EventArgs e)
@@ -117,13 +116,8 @@ namespace Scheduler_Controls
                 if (f.ShowDialog() == DialogResult.OK &&
                     !String.IsNullOrWhiteSpace(f.number) &&
                     !lstTelephones.Items.Cast<string>().ToList().Contains(f.number))
-                //!lstTelephones.Items.Cast<ITelephone>().Select(t => t.TelephoneNumber).ToList().Contains(f.number))
                 {
                     lstTelephones.Items.Add(f.number);
-                    //                     ITelephone tel = entityFactory.NewTelephone();
-                    //                     tel.TelephoneNumber = f.number;
-                    //                     lstTelephones.Items.Add(tel);
-                    //                     lstTelephones.SelectedItem = tel;
                 }
             }
         }
@@ -159,13 +153,9 @@ namespace Scheduler_Controls
             client.Comment = txtComment.Text;
 
             client.Telephones = new HashSet<string>(lstTelephones.Items.Cast<string>());
-            //             var telListToRemove = client.Telephones.Except(telList);
-            //             var telListToAdd = telList.Except(client.Telephones);
-            // 
-            //             foreach (var s in telListToRemove.Union(telListToRemove))
-            //                 client.Telephone = s;
 
             client.BlackListed = chkBlackList.Checked;
+            client.Price = Convert.ToInt32(txtPrice.Text);
 
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));
@@ -176,45 +166,5 @@ namespace Scheduler_Controls
             lstReceptions.Items.Clear();
             lstReceptions.Items.AddRange(client.GetReceptions().Select(r => r.DisplayString).ToArray());
         }
-
-
-        //         private class TelephoneNumberImpl : ITelephone
-        //         {
-        //             string telNumber;
-        // 
-        //             public TelephoneNumberImpl(string telNum)
-        //             {
-        //                 TelephoneNumber = telNum;
-        //             }
-        // 
-        //             public string TelephoneNumber
-        //             {
-        //                 get
-        //                 {
-        //                     return telNumber;
-        //                 }
-        //                 set
-        //                 {
-        //                     if (value.All(c => Char.IsDigit(c)))
-        //                     {
-        //                         telNumber = value;
-        //                         if (telNumber.Length == 10)
-        //                             telNumber = "7" + telNumber;
-        //                     }
-        //                 }
-        //             }
-        // 
-        //             public string FormattedTelephoneNumber
-        //             {
-        //                 get 
-        //                 {
-        //                     if (String.IsNullOrWhiteSpace(telNumber))
-        //                         return String.Empty;
-        //                     if (telNumber.Length < 11)
-        //                         return telNumber;
-        //                     return "+" + telNumber[0] + "(" + telNumber.Substring(1, 3) + ")" + telNumber.Substring(4, 3) + "-" + telNumber.Substring(7);
-        //                 }
-        //             }
-        //         }
     }
 }

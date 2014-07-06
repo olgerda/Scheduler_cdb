@@ -75,12 +75,13 @@ namespace MySqlConnector
                     listInsertedTelephonesId.Add(cmd.LastInsertedId);
                 }
 
-                query = @"insert into clients (name, comment, blacklisted) values (@name, @comment, @blacklisted)";
+                query = @"insert into clients (name, comment, blacklisted, price) values (@name, @comment, @blacklisted, @price)";
                 cmd.CommandText = query;
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@name", client.Name);
                 cmd.Parameters.AddWithValue("@comment", client.Comment);
                 cmd.Parameters.AddWithValue("@blacklisted", client.BlackListed ? 1 : 0);
+                cmd.Parameters.AddWithValue("@price", client.Price);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
                 long InsertedClientId = cmd.LastInsertedId;
@@ -135,7 +136,7 @@ namespace MySqlConnector
                 return result;
             var connection = existedConnection ?? OpenConnection();
 
-            string query = "select idclients, name, comment, blacklisted from clients where idclients = @id";
+            string query = "select idclients, name, comment, blacklisted, price from clients where idclients = @id";
 
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(query, connection))
             {
@@ -150,6 +151,7 @@ namespace MySqlConnector
                         result.ID = reader.GetInt32("idclients");
                         result.Comment = reader.GetString("comment");
                         result.BlackListed = reader.GetInt32("blacklisted") != 0;
+                        result.Price = reader.GetInt32("price");
                         result.ReceptionListFuncition(GetReceptionsForClient);
                     }
                 }
@@ -185,6 +187,7 @@ namespace MySqlConnector
             bool needRemoveTelephones = telsOnlyInOld.Count > 0;
             var telsOnlyInNew = client.Telephones.Except(oldClient.Telephones).ToList();
             bool needAddTelephones = telsOnlyInNew.Count > 0;
+            bool needChangePrice = oldClient.Price != client.Price;
 
             var connection = OpenConnection();
 
@@ -270,6 +273,14 @@ namespace MySqlConnector
                     cmd.Parameters.Clear();
                     cmd.ExecuteNonQuery();
                 }
+                if (needChangePrice)
+                {
+                    cmd.CommandText = "update clients set price = @price where idclients = " + client.ID.ToString();
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@price", client.Price);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             CloseConnection(connection);
@@ -281,7 +292,7 @@ namespace MySqlConnector
             //columns are: idclients, name, comment, blacklisted
             var connection = OpenConnection();
 
-            string query = "select idclients, name, comment, blacklisted from clients";
+            string query = "select idclients, name, comment, blacklisted, price from clients";
 
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(query, connection))
             {
@@ -295,6 +306,7 @@ namespace MySqlConnector
                         current.ID = reader.GetInt32("idclients");
                         current.Comment = reader.GetString("comment");
                         current.BlackListed = reader.GetInt32("blacklisted") != 0;
+                        current.Price = reader.GetInt32("price");
                         current.ReceptionListFuncition(GetReceptionsForClient);
                         clientList.Add(current);
                     }

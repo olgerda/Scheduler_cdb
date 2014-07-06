@@ -42,11 +42,15 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.chkBlackList = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtPrice = new System.Windows.Forms.TextBox();
             this.grpMain.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMain
             // 
+            this.grpMain.Controls.Add(this.groupBox1);
             this.grpMain.Controls.Add(this.btnLoadReceptions);
             this.grpMain.Controls.Add(this.label2);
             this.grpMain.Controls.Add(this.label1);
@@ -141,7 +145,7 @@
             this.txtComment.Location = new System.Drawing.Point(85, 135);
             this.txtComment.Multiline = true;
             this.txtComment.Name = "txtComment";
-            this.txtComment.Size = new System.Drawing.Size(308, 45);
+            this.txtComment.Size = new System.Drawing.Size(229, 45);
             this.txtComment.TabIndex = 3;
             // 
             // lstTelephones
@@ -187,6 +191,24 @@
             this.chkBlackList.Text = "RedList";
             this.chkBlackList.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.txtPrice);
+            this.groupBox1.Location = new System.Drawing.Point(317, 135);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(77, 40);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Стоимость";
+            // 
+            // txtPrice
+            // 
+            this.txtPrice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPrice.Location = new System.Drawing.Point(3, 16);
+            this.txtPrice.Name = "txtPrice";
+            this.txtPrice.Size = new System.Drawing.Size(71, 20);
+            this.txtPrice.TabIndex = 0;
+            // 
             // ClientInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -198,6 +220,8 @@
             this.Size = new System.Drawing.Size(400, 265);
             this.grpMain.ResumeLayout(false);
             this.grpMain.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -218,5 +242,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox chkBlackList;
         private System.Windows.Forms.Button btnLoadReceptions;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox txtPrice;
     }
 }

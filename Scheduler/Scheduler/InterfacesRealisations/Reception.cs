@@ -102,7 +102,13 @@ namespace Scheduler_InterfacesRealisations
                 }
                 else
                 {
-                    return receptionTimeInterval.Interval() + Environment.NewLine + specialist.Name + Environment.NewLine + specialisation + Environment.NewLine + client.Name + Environment.NewLine + client.Telephones.FirstOrDefault();
+                    return String.Join(Environment.NewLine,
+                        receptionTimeInterval.Interval(), 
+                        specialist.Name,
+                        client.Name, 
+                        client.Telephones.FirstOrDefault(),
+                        client.Price,
+                        specialisation);
                 }
             }
         }
@@ -117,12 +123,6 @@ namespace Scheduler_InterfacesRealisations
             get { return Convert.ToInt32(Math.Truncate(receptionTimeInterval.EndDate.TimeOfDay.TotalMinutes)); }
         }
 
-        //         ulong CalendarControl3_Interfaces.IEntity2ControlInterface.ID
-        //         {
-        //             get { return Convert.ToUInt64(id); }
-        //         }
-
-
         bool CalendarControl3_Interfaces.IEntity2ControlInterface.IsIntersectWith(CalendarControl3_Interfaces.IEntity2ControlInterface second)
         {
             CalendarControl3_Interfaces.IEntity2ControlInterface theThis = this as CalendarControl3_Interfaces.IEntity2ControlInterface;
@@ -130,23 +130,10 @@ namespace Scheduler_InterfacesRealisations
             bool bottomIntersect = theThis.BottomLevel < second.BottomLevel && theThis.BottomLevel > second.TopLevel;
             return topIntersect || bottomIntersect;
         }
-        // 
-        //         int Scheduler_Controls_Interfaces.IHaveID.ID
-        //         {
-        //             get
-        //             {
-        //                 return id;
-        //             }
-        //             set
-        //             {
-        //                 id = value; RaisePropertyChanged("ID");
-        //             }
-        //         }
-
 
         string Scheduler_Controls_Interfaces.IReception.DisplayString
         {
-            get { return receptionTimeInterval.Date.ToShortDateString() + " " + receptionTimeInterval.Interval() + " " + specialist.Name + " " + specialisation + " " + cabinet.Name; }
+            get { return String.Join(" ", receptionTimeInterval.Date.ToShortDateString(), receptionTimeInterval.Interval(), specialist.Name, specialisation, cabinet.Name); }
         }
 
         void Scheduler_DBobjects_Intefraces.IEntity.SetDatabase(Scheduler_DBobjects_Intefraces.IMainDataBase db)

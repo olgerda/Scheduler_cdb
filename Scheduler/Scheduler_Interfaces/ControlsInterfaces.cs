@@ -38,6 +38,8 @@ namespace Scheduler_Controls_Interfaces
 
         bool BlackListed { get; set; }
 
+        int Price { get; set; }
+
         HashSet<string> Telephones { get; set; }
         /// <summary>
         /// Проверить, входит ли переданный телефон в список телефонов клиента.

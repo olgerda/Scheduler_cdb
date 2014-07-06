@@ -58,7 +58,7 @@ namespace Scheduler_Forms
             customAutoComplete.AddRange(lstClientList.Items.Cast<IClient>().SelectMany(c => c.Telephones).ToArray());
             txtTelephone.AutoCompleteCustomSource = customAutoComplete;
 
-            
+
             clientInfoCard.EntityFactory = entityFactory;
         }
 
@@ -134,15 +134,37 @@ namespace Scheduler_Forms
 
             if (result != null) //если значение не установилось - пользователь отменил закрытие.
             {
-                grpSelectClient.Visible = true;
-                grpSelectClient.Enabled = true;
-                grpEditMode.Visible = false;
-                grpEditMode.Enabled = false;
-                clientInfoCard.Enabled = false;
-
+                foreach (var tel in result.Telephones)
+                {
+                    var existClient = ClientList.FindClientByPartialTelephone(tel);
+                    if (existClient != null && existClient.Telephones.Contains(tel))
+                    {
+                        var dlgResult = MessageBox.Show(
+                            String.Format("Один из введённых телефонных номеров уже присутсвует в базе данных: телефон <{0}> приписан клиенту с именем <{1}>.{2}" +
+                            "Использовать запись уже существующего клиента?{2}(Нет - создать запись с дублирующимся телефоном." +
+                            "ВНИМАНИЕ! Поиск по номеру телефона выдает первую найденную запись!)", tel, existClient.Name, Environment.NewLine),
+                            "Телефон уже внесён в базу", MessageBoxButtons.YesNoCancel);
+                        switch (dlgResult)
+                        {
+                            case System.Windows.Forms.DialogResult.Yes:
+                                result = existClient;
+                                break;
+                            case System.Windows.Forms.DialogResult.No:
+                                break;
+                            default:
+                                return result;
+                        }
+                    }
+                }
                 if (!clientList.List.Contains(result))
                 {
-                    //clientList.List.Add(result);
+
+                    grpSelectClient.Visible = true;
+                    grpSelectClient.Enabled = true;
+                    grpEditMode.Visible = false;
+                    grpEditMode.Enabled = false;
+                    clientInfoCard.Enabled = false;
+
                     clientList.Add(result);
                 }
                 lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
@@ -204,10 +226,10 @@ namespace Scheduler_Forms
         {
             if (e.Control && e.KeyCode == Keys.Delete && lstClientList.SelectedIndex != -1)
             {
-                if (MessageBox.Show("Вы уверены, что хотите удалить пользователя\n" + ((INamedEntity)lstClientList.SelectedItem).Name + "\nиз базы?\nОтменить удаление невозможно!", 
-                    "Удаление пользователя из Базы", 
-                    MessageBoxButtons.YesNo, 
-                    MessageBoxIcon.Exclamation, 
+                if (MessageBox.Show("Вы уверены, что хотите удалить пользователя\n" + ((INamedEntity)lstClientList.SelectedItem).Name + "\nиз базы?\nОтменить удаление невозможно!",
+                    "Удаление пользователя из Базы",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Exclamation,
                     MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.No)
                     return;
                 try
@@ -228,20 +250,20 @@ namespace Scheduler_Forms
 
         private void txtField_KeyDown(object sender, KeyEventArgs e)
         {
-//             var source = sender as TextBox;
-//             if (source == null)
-//                 return;
-// 
-//             if (e.KeyCode == Keys.Enter && !String.IsNullOrWhiteSpace(source.Text))
-//             {
-//                 IClient curClient;
-//                 curClient = source == txtClientName ? clientList.List.FirstOrDefault(c => c.Name == source.Text)
-//                     : ClientList.List.FirstOrDefault(c => c.Telephones.Contains(source.Text));
-//                 if (curClient != null)
-//                     lstClientList.SelectedItem = curClient;
-//                 else
-//                     lstClientList.SelectedIndex = -1;
-//             }
+            //             var source = sender as TextBox;
+            //             if (source == null)
+            //                 return;
+            // 
+            //             if (e.KeyCode == Keys.Enter && !String.IsNullOrWhiteSpace(source.Text))
+            //             {
+            //                 IClient curClient;
+            //                 curClient = source == txtClientName ? clientList.List.FirstOrDefault(c => c.Name == source.Text)
+            //                     : ClientList.List.FirstOrDefault(c => c.Telephones.Contains(source.Text));
+            //                 if (curClient != null)
+            //                     lstClientList.SelectedItem = curClient;
+            //                 else
+            //                     lstClientList.SelectedIndex = -1;
+            //             }
         }
 
 
