@@ -97,7 +97,7 @@ namespace Scheduler_Forms
             //тут логика показа формы с выбором клиента
             using (FindClientCard FindClientForm = new FindClientCard(clientList, entityFactory))
             {
-                FindClientForm.SelectedClient = clientList.FindClientByPartialTelephone(e.Telephone) ?? clientList.FindClientByPartialName(e.Name);
+                FindClientForm.SelectedClient = clientList.FindClientByTelephone(e.Telephone) ?? clientList.FindClientByPartialName(e.Name);
                 FindClientForm.ShowDialog();
                 currentReception.Client = FindClientForm.SelectedClient;
                 if (currentReception.Client != null)

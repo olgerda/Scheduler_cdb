@@ -136,12 +136,12 @@ namespace Scheduler_Forms
             {
                 foreach (var tel in result.Telephones)
                 {
-                    var existClient = ClientList.FindClientByPartialTelephone(tel);
-                    if (existClient != null && existClient.Telephones.Contains(tel))
+                    var existClient = ClientList.FindClientByTelephone(tel, false);
+                    if (existClient != null && existClient != result)
                     {
                         var dlgResult = MessageBox.Show(
                             String.Format("Один из введённых телефонных номеров уже присутсвует в базе данных: телефон <{0}> приписан клиенту с именем <{1}>.{2}" +
-                            "Использовать запись уже существующего клиента?{2}(Нет - создать запись с дублирующимся телефоном." +
+                            "Использовать запись уже существующего клиента?{2}(Нет - создать запись с дублирующимся телефоном.{2}" +
                             "ВНИМАНИЕ! Поиск по номеру телефона выдает первую найденную запись!)", tel, existClient.Name, Environment.NewLine),
                             "Телефон уже внесён в базу", MessageBoxButtons.YesNoCancel);
                         switch (dlgResult)
@@ -155,7 +155,21 @@ namespace Scheduler_Forms
                                 return result;
                         }
                     }
+
+                    if (existClient == result)
+                    {
+                        grpSelectClient.Visible = true;
+                        grpSelectClient.Enabled = true;
+                        grpEditMode.Visible = false;
+                        grpEditMode.Enabled = false;
+                        clientInfoCard.Enabled = false;
+
+                        lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
+                        lstClientList.SelectedItem = result;
+                        return result;
+                    }
                 }
+
                 if (!clientList.List.Contains(result))
                 {
 

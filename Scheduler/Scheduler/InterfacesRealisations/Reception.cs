@@ -107,7 +107,7 @@ namespace Scheduler_InterfacesRealisations
                         specialist.Name,
                         client.Name, 
                         client.Telephones.FirstOrDefault(),
-                        client.Price,
+                        client.Price + " р.",
                         specialisation);
                 }
             }

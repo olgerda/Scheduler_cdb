@@ -139,10 +139,11 @@ namespace Scheduler_InterfacesRealisations
             return result;
         }
 
-        Scheduler_Controls_Interfaces.IClient Scheduler_Forms_Interfaces.IClientList.FindClientByPartialTelephone(string partialName)
+        Scheduler_Controls_Interfaces.IClient Scheduler_Forms_Interfaces.IClientList.FindClientByTelephone(string Tel, bool partial)
         {
             Scheduler_Controls_Interfaces.IClient result;
-            result = this.List.FirstOrDefault(c => c.Telephones.FirstOrDefault(t => t.StartsWith(partialName)) != default(string));
+            result = partial ? this.List.FirstOrDefault(c => c.Telephones.FirstOrDefault(t => t.StartsWith(Tel)) != default(string)) :
+                this.List.FirstOrDefault(c => c.Telephones.FirstOrDefault(t => t == Tel) != default(string));
             return result;
         }
 

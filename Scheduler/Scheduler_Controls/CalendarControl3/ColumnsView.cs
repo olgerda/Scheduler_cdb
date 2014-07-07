@@ -141,6 +141,20 @@ namespace CalendarControl3
                 SolidBrush drawBrush = new SolidBrush(Color.Black);
                 PointF drawPoint;
 
+                //infocolumn
+                var descriptions_ = table.GetDescripptionsToValueLevels();
+                SortedDictionary<int, string> descriptions = new SortedDictionary<int, string>(descriptions_);
+                foreach (var pair in descriptions)
+                {
+                    var y = tableTop + ScaleLevelsToControl(pair.Key);
+                    if (y > tableTop && y < tableBottom)
+                        e.Graphics.DrawLine(new Pen(Brushes.LightSeaGreen), 0f, y, RealTableWidth, y);
+                    //if (y < tableTop) y = tableTop;
+                    if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
+                    drawPoint = new PointF(2f, y);
+                    e.Graphics.DrawString(pair.Value, drawFont, drawBrush, drawPoint);
+                }
+
                 //maincolumns
                 var columns = table.Columns;
                 for (int i = hScrollBar1.Value; i < hScrollBar1.Value + columnsOnControl; i++)
@@ -157,19 +171,7 @@ namespace CalendarControl3
                 e.Graphics.DrawLine(new Pen(Brushes.Black), 0, 0, RealTableWidth, 0); //верхняя граница шапки
                 e.Graphics.DrawLine(new Pen(Brushes.Black), 0, tableBottom - 1, RealTableWidth, tableBottom - 1); //нижняя граница
 
-                //infocolumn
-                var descriptions_ = table.GetDescripptionsToValueLevels();
-                SortedDictionary<int, string> descriptions = new SortedDictionary<int, string>(descriptions_);
-                foreach (var pair in descriptions)
-                {
-                    var y = tableTop + ScaleLevelsToControl(pair.Key);
-                    if (y > tableTop && y < tableBottom)
-                        e.Graphics.DrawLine(new Pen(Brushes.LightSeaGreen), 0f, y, RealTableWidth, y);
-                    //if (y < tableTop) y = tableTop;
-                    if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
-                    drawPoint = new PointF(2f, y);
-                    e.Graphics.DrawString(pair.Value, drawFont, drawBrush, drawPoint);
-                }
+
                 //                descriptions.Sort(CompareByInt);
                 //                 switch (descriptions.Count)
                 //                 {

@@ -54,7 +54,7 @@ namespace Scheduler_Forms_Interfaces
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns>null если ничего похожего не найдено.</returns>
-        Scheduler_Controls_Interfaces.IClient FindClientByPartialTelephone(string partialName);
+        Scheduler_Controls_Interfaces.IClient FindClientByTelephone(string Tel, bool partial = true);
         
         //IClientList Copy();
     }
