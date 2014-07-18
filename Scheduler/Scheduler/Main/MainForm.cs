@@ -26,8 +26,7 @@ namespace Scheduler
             set
             {
                 schedule_date = value;
-                FirstLoad();
-                calendarControl.Table = receptionEntitiesTable;
+                ReloadEntities();
             }
         }
 
@@ -92,27 +91,27 @@ namespace Scheduler
         void calendarControl_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
-            IEntity ent = ((CalendarControl3.ColumnsView)sender).GetEntityOnClick(e.Location) as IEntity;
+            IEntity ent = calendarControl.GetEntityOnClick() as IEntity;
             using (ReceptionInfoEdit receptionEditForm = new ReceptionInfoEdit())
             {
                 if (ent == null)
                 {
                     ent = database.EntityFactory.NewEntity();
-                    ent.Cabinet = database.CabinetList.List.Find(x => x.Name == calendarControl.GetColumnNameOnClick(e.Location));
+                    ent.Cabinet = database.CabinetList.List.Find(x => x.Name == calendarControl.GetColumnNameOnClick());
 
-                    IEntity nearestTopEntity = (calendarControl.GetNearestTopEntity(e.Location) as IEntity);
-                    int nearestTopEntityBottomLevel = nearestTopEntity == null ? 0 : nearestTopEntity.BottomLevel;
+                    IEntity nearestTopEntity = (calendarControl.GetNearestTopEntity() as IEntity);
+                    int nearestTopEntityBottomLevel = nearestTopEntity == null ? -1 : nearestTopEntity.BottomLevel;
                     int clickLevel = calendarControl.GetVerticalValueOfClick(e.Location);
                     int nearestLevel = clickLevel;
                     try
                     {
-                        nearestLevel = receptionEntitiesTable.GetDescripptionsToValueLevels().Keys.Select(i => (int)i).Where(i => i <= clickLevel).Max();
+                        nearestLevel = receptionEntitiesTable.GetDescripptionsToValueLevels().Keys.Where(i => i <= clickLevel).Max();
                     }
                     catch (InvalidOperationException)
                     {
                     }
 
-                    var maximum = Math.Max(nearestTopEntityBottomLevel, nearestLevel);
+                    var maximum = Math.Max(Math.Max(nearestTopEntityBottomLevel, nearestLevel), receptionEntitiesTable.MinValue);
                     var timeInterval = database.EntityFactory.NewTimeInterval();
                     timeInterval.StartDate = schedule_date + receptionEntitiesTable.ConvertLevelToTime(maximum).TimeOfDay;
                     timeInterval.EndDate = timeInterval.StartDate + new TimeSpan(1, 0, 0);
@@ -123,7 +122,6 @@ namespace Scheduler
                     if (receptionEditForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
                         database.AddReception(ent);
-                        //receptionEntitiesTable.Columns.Find(c => c.Name == ent.Cabinet.Name).Entities.Add(ent);
                     }
                 }
                 else
@@ -155,11 +153,11 @@ namespace Scheduler
         {
             receptionEntitiesTable = database.EntityFactory.NewTable();
             ITimeInterval workday = database.EntityFactory.NewTimeInterval();
-            workday.SetStartEnd(new DateTime(1, 1, 1, 6, 0, 0), new DateTime(1, 1, 1, 21, 0, 0));
+            workday.SetStartEnd(new DateTime(1, 1, 1, 10, 0, 0), new DateTime(1, 1, 1, 22, 0, 0));
             receptionEntitiesTable.WorkTimeInterval = workday;
 
-            Dictionary<DateTime, string> descriprions = new Dictionary<DateTime, string>(16);
-            for (int i = 6; i <= 21; i++)
+            Dictionary<DateTime, string> descriprions = new Dictionary<DateTime, string>(13);
+            for (int i = 10; i <= 22; i++)
             {
                 DateTime date = new DateTime(1, 1, 1, i, 0, 0);
                 descriprions.Add(date, date.ToShortTimeString());
@@ -167,11 +165,8 @@ namespace Scheduler
 
             receptionEntitiesTable.SetInfoColumnDescriptions(descriprions);
 
-            var dummy = database.EntityFactory.NewEntity();
-            dummy.SetDatabase(database);
-            dummy = null;
-
-
+            database.EntityFactory.NewEntity().SetDatabase(database);
+            
             ReloadColumns();
             ReloadEntities();
         }
@@ -265,8 +260,7 @@ namespace Scheduler
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            schedule_date = dateTimePicker1.Value;
-            ReloadEntities();
+            ScheduleDate = dateTimePicker1.Value.Date;
         }
 
         private void сформироватьОтчетToolStripMenuItem_Click(object sender, EventArgs e)
@@ -280,13 +274,12 @@ namespace Scheduler
         private void btnCreteFile_Click(object sender, EventArgs e)
         {
 
-            using (SaveFileDialog save = new SaveFileDialog() { Filter = "bmp (*.bmp)|*.bmp|jpeg (*.jpeg)|*.jpeg" })
+            using (SaveFileDialog save = new SaveFileDialog() { Filter = "jpeg (*.jpeg)|*.jpeg|bmp (*.bmp)|*.bmp", FileName = DateTime.Today.ToString("yyyy-MM-dd") })
             {
                 if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     using (System.Drawing.Bitmap bmp = calendarControl.GenerateBitmap())
                     {
-                        //calendarControl.DrawToBitmap(bmp, calendarControl.ClientRectangle);
                         bmp.Save(save.FileName, save.FilterIndex == 1 ? System.Drawing.Imaging.ImageFormat.Bmp : System.Drawing.Imaging.ImageFormat.Jpeg);
                     }
                 }

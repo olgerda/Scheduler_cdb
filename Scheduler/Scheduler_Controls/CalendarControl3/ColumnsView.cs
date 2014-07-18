@@ -58,6 +58,16 @@ namespace CalendarControl3
         private ToolTip tt;
 
         /// <summary>
+        /// Координаты последнего клика по контролу. Заполняется в обработчике клика.
+        /// </summary>
+        private struct ClickCoords
+        {
+            public int level;
+            public int column;
+        }
+        private ClickCoords LastClick;
+
+        /// <summary>
         /// Основа таблицы, по которой строится контрол. Может изменяться в процессе существования контрола под воздействием внешних раздражителей.
         /// </summary>
         ITable2ControlInterface table;
@@ -76,6 +86,7 @@ namespace CalendarControl3
 
         public ColumnsView()
         {
+            LastClick = new ClickCoords() { level = -1, column = -1};
             InitializeComponent();
             this.MinimumSize = new Size(minimumColumnWidth + infoColumnWidth, 500);
         }
@@ -340,29 +351,32 @@ namespace CalendarControl3
             return hScrollBar1.Value + relativeNumber;
         }
 
-        public IEntity2ControlInterface GetNearestTopEntity(Point click)
+        public IEntity2ControlInterface GetNearestTopEntity()
         {
-            return null;
+            if (LastClick.column == -1 || LastClick.level == -1 || table.Columns[LastClick.column].Entities.Count == 0) 
+                return null;
+            IEntity2ControlInterface result = table.Columns[LastClick.column].Entities
+                .OrderByDescending(e => e.BottomLevel)
+                .Where(e => e.BottomLevel <= LastClick.level)
+                .FirstOrDefault();
+
+            return result;
         }
 
-        public IEntity2ControlInterface GetEntityOnClick(Point click)
+        public IEntity2ControlInterface GetEntityOnClick()
         {
-            int level = GetVerticalValueOfClick(click);
-            int columnNumber = GetAbsoluteColumnNumberOfClick(click);
-            if (level < 0 || columnNumber < 0 || table.ColumnCount < 1) return null;
-            foreach (var entity in table.Columns[columnNumber].Entities)
+            if (LastClick.level < 0 || LastClick.column < 0 || table.ColumnCount < 1) return null;
+            foreach (var entity in table.Columns[LastClick.column].Entities)
             {
-                if (entity.TopLevel < level && level < entity.BottomLevel) return entity;
+                if (entity.TopLevel < LastClick.level && LastClick.level < entity.BottomLevel) return entity;
             }
             return null;
         }
 
-        public string GetColumnNameOnClick(Point click)
+        public string GetColumnNameOnClick()
         {
-            int level = GetVerticalValueOfClick(click);
-            int columnNumber = GetAbsoluteColumnNumberOfClick(click);
-            if (level < 0 || columnNumber < 0) return null;
-            return table.Columns[columnNumber].Name;
+            if (LastClick.level < 0 || LastClick.column < 0) return null;
+            return table.Columns[LastClick.column].Name;
         }
         #endregion
 
@@ -395,9 +409,12 @@ namespace CalendarControl3
 
         private void MouseClickHandler(object sender, MouseEventArgs e)
         {
+            LastClick.column = GetAbsoluteColumnNumberOfClick(e.Location);
+            LastClick.level = GetVerticalValueOfClick(e.Location);
+
             if (e.Button == MouseButtons.Right)
             { //покажем подсказку по этому месту
-                IEntity2ControlInterface clicked = GetEntityOnClick(e.Location);
+                IEntity2ControlInterface clicked = GetEntityOnClick();
                 if (clicked != null)
                 {
                     if (tt == null)
