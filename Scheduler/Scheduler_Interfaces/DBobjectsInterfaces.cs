@@ -85,6 +85,9 @@ namespace Scheduler_DBobjects_Intefraces
         void UpdateReception(IEntity reception);
         void RemoveReception(IEntity reception);
 
+        //int GetPriceForSpecialistClientPair(int spid, int clid);
+        //void SetOrUpdatePriceForSpecialistClientPair(int spid, int clid, int price);
+
         void MakeBackup(string filename);
         void RestoreBackup(string filename);
 

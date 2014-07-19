@@ -38,7 +38,7 @@ namespace Scheduler_Controls_Interfaces
 
         bool BlackListed { get; set; }
 
-        int Price { get; set; }
+        //int Price { get; set; }
 
         HashSet<string> Telephones { get; set; }
         /// <summary>
@@ -96,6 +96,8 @@ namespace Scheduler_Controls_Interfaces
         ICabinet Cabinet { get; set; }
         string Specialization { get; set; }
         bool Rent { get; set; }
+
+        int Price { get; set; }
 
         /// <summary>
         /// Проверить данные на валидность.

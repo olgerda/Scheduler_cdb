@@ -77,7 +77,7 @@ namespace Scheduler_Controls
 
             chkBlackList.Checked = client.BlackListed;
 
-            txtPrice.Text = client.Price.ToString();
+            //txtPrice.Text = client.Price.ToString();
 
         }
 
@@ -90,7 +90,7 @@ namespace Scheduler_Controls
                 client.Name != txtFIO.Text ||
                 client.Comment != txtComment.Text ||
                 client.BlackListed != chkBlackList.Checked ||
-                client.Price != Convert.ToInt32(txtPrice.Text) ||
+                //client.Price != Convert.ToInt32(txtPrice.Text) ||
                 !client.Telephones.SequenceEqual(lstTelephones.Items.Cast<string>());
         }
 
@@ -155,7 +155,7 @@ namespace Scheduler_Controls
             client.Telephones = new HashSet<string>(lstTelephones.Items.Cast<string>());
 
             client.BlackListed = chkBlackList.Checked;
-            client.Price = Convert.ToInt32(txtPrice.Text);
+            //client.Price = Convert.ToInt32(txtPrice.Text);
 
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));

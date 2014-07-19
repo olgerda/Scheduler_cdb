@@ -13,6 +13,8 @@ namespace Scheduler_InterfacesRealisations
         Scheduler_Controls_Interfaces.ICabinet cabinet;
         string specialisation;
         bool isRented;
+        
+        int price;
 
         static Scheduler_DBobjects_Intefraces.IMainDataBase database;
 
@@ -107,7 +109,7 @@ namespace Scheduler_InterfacesRealisations
                         specialist.Name,
                         client.Name, 
                         client.Telephones.FirstOrDefault(),
-                        client.Price + " р.",
+                        //client.Price + " р.",
                         specialisation);
                 }
             }
@@ -142,5 +144,19 @@ namespace Scheduler_InterfacesRealisations
                 database = db;
         }
 
+
+
+        int Scheduler_Controls_Interfaces.IReception.Price
+        {
+            get
+            {
+                return price;
+            }
+            set
+            {
+                price = value;
+                RaisePropertyChanged("Price");
+            }
+        }
     }
 }

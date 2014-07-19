@@ -12,7 +12,7 @@ namespace Scheduler_InterfacesRealisations
         bool blacklisted;
         HashSet<string> telephones;
         string name;
-        int price;
+        //int price;
         //public delegate List<Scheduler_Controls_Interfaces.IReception> GetReceptions(Scheduler_Controls_Interfaces.IClient client);
 
         Scheduler_Controls_Interfaces.GetClientReceptionsList getreceptions;
@@ -26,7 +26,7 @@ namespace Scheduler_InterfacesRealisations
             telephones = new HashSet<string>();
             blacklisted = false;
             getreceptions = null;
-            price = 0;
+            //price = 0;
         }
 
         string Scheduler_Controls_Interfaces.IClient.Comment
@@ -105,17 +105,17 @@ namespace Scheduler_InterfacesRealisations
         }
 
 
-        int Scheduler_Controls_Interfaces.IClient.Price
-        {
-            get
-            {
-                return price;
-            }
-            set
-            {
-                price = value;
-            }
-        }
+        //int Scheduler_Controls_Interfaces.IClient.Price
+        //{
+        //    get
+        //    {
+        //        return price;
+        //    }
+        //    set
+        //    {
+        //        price = value;
+        //    }
+        //}
     }
 
     public class ClientList : CommonList<Scheduler_Controls_Interfaces.IClient>, Scheduler_Forms_Interfaces.IClientList

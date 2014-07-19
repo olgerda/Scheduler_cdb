@@ -75,13 +75,13 @@ namespace MySqlConnector
                     listInsertedTelephonesId.Add(cmd.LastInsertedId);
                 }
 
-                query = @"insert into clients (name, comment, blacklisted, price) values (@name, @comment, @blacklisted, @price)";
+                query = @"insert into clients (name, comment, blacklisted) values (@name, @comment, @blacklisted)";
                 cmd.CommandText = query;
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@name", client.Name);
                 cmd.Parameters.AddWithValue("@comment", client.Comment);
                 cmd.Parameters.AddWithValue("@blacklisted", client.BlackListed ? 1 : 0);
-                cmd.Parameters.AddWithValue("@price", client.Price);
+                //cmd.Parameters.AddWithValue("@price", client.Price);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
                 long InsertedClientId = cmd.LastInsertedId;
@@ -136,7 +136,7 @@ namespace MySqlConnector
                 return result;
             var connection = existedConnection ?? OpenConnection();
 
-            string query = "select idclients, name, comment, blacklisted, price from clients where idclients = @id";
+            string query = "select idclients, name, comment, blacklisted from clients where idclients = @id";
 
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(query, connection))
             {
@@ -151,7 +151,7 @@ namespace MySqlConnector
                         result.ID = reader.GetInt32("idclients");
                         result.Comment = reader.GetString("comment");
                         result.BlackListed = reader.GetInt32("blacklisted") != 0;
-                        result.Price = reader.GetInt32("price");
+                        //result.Price = reader.GetInt32("price");
                         result.ReceptionListFuncition(GetReceptionsForClient);
                     }
                 }
@@ -187,7 +187,7 @@ namespace MySqlConnector
             bool needRemoveTelephones = telsOnlyInOld.Count > 0;
             var telsOnlyInNew = client.Telephones.Except(oldClient.Telephones).ToList();
             bool needAddTelephones = telsOnlyInNew.Count > 0;
-            bool needChangePrice = oldClient.Price != client.Price;
+            //bool needChangePrice = oldClient.Price != client.Price;
 
             var connection = OpenConnection();
 
@@ -273,14 +273,14 @@ namespace MySqlConnector
                     cmd.Parameters.Clear();
                     cmd.ExecuteNonQuery();
                 }
-                if (needChangePrice)
-                {
-                    cmd.CommandText = "update clients set price = @price where idclients = " + client.ID.ToString();
-                    cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@price", client.Price);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
-                }
+                //if (needChangePrice)
+                //{
+                //    cmd.CommandText = "update clients set price = @price where idclients = " + client.ID.ToString();
+                //    cmd.Parameters.Clear();
+                //    cmd.Parameters.AddWithValue("@price", client.Price);
+                //    cmd.Prepare();
+                //    cmd.ExecuteNonQuery();
+                //}
             }
 
             CloseConnection(connection);
@@ -292,7 +292,7 @@ namespace MySqlConnector
             //columns are: idclients, name, comment, blacklisted
             var connection = OpenConnection();
 
-            string query = "select idclients, name, comment, blacklisted, price from clients";
+            string query = "select idclients, name, comment, blacklisted from clients";
 
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(query, connection))
             {
@@ -306,7 +306,7 @@ namespace MySqlConnector
                         current.ID = reader.GetInt32("idclients");
                         current.Comment = reader.GetString("comment");
                         current.BlackListed = reader.GetInt32("blacklisted") != 0;
-                        current.Price = reader.GetInt32("price");
+                        //current.Price = reader.GetInt32("price");
                         current.ReceptionListFuncition(GetReceptionsForClient);
                         clientList.Add(current);
                     }
@@ -878,6 +878,7 @@ namespace MySqlConnector
                 var timeinterval = entityFactory.NewTimeInterval();
                 timeinterval.SetStartEnd(recpt.date.Date.Add(recpt.timestart), recpt.date.Date.Add(recpt.timeend));
                 current.ReceptionTimeInterval = timeinterval;
+                current.Price = GetPriceForSpecialistClientPair(current.Specialist, current.Client, connection);
                 result.Add(current);
             }
             CloseConnection(connection);
@@ -931,6 +932,7 @@ namespace MySqlConnector
                 var timeinterval = entityFactory.NewTimeInterval();
                 timeinterval.SetStartEnd(recpt.date.Date.Add(recpt.timestart), recpt.date.Date.Add(recpt.timeend));
                 current.ReceptionTimeInterval = timeinterval;
+                current.Price = GetPriceForSpecialistClientPair(current.Specialist, current.Client, connection);
                 result.Add(current);
             }
             CloseConnection(connection);
@@ -972,7 +974,11 @@ namespace MySqlConnector
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
                 reception.ID = Convert.ToInt32(cmd.LastInsertedId);
+
+                
             }
+
+            AddOrUpdatePriceForSpecialistClientPair(reception.Specialist, reception.Client, reception.Price, connection);
 
             CloseConnection(connection);
         }
@@ -1001,6 +1007,8 @@ namespace MySqlConnector
                 oldReception.ReceptionTimeInterval.Date != reception.ReceptionTimeInterval.Date ||
                 oldReception.ReceptionTimeInterval.StartDate != reception.ReceptionTimeInterval.StartDate ||
                 oldReception.ReceptionTimeInterval.EndDate != reception.ReceptionTimeInterval.EndDate;
+
+            bool needUpdatePrice = oldReception.Price != reception.Price;
 
             var connection = OpenConnection();
 
@@ -1075,6 +1083,11 @@ namespace MySqlConnector
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
                 }
+
+                if (needUpdatePrice)
+                {
+                    AddOrUpdatePriceForSpecialistClientPair(reception.Specialist, reception.Client, reception.Price, connection);
+                }
             }
 
             CloseConnection(connection);
@@ -1125,6 +1138,7 @@ namespace MySqlConnector
                 var timeinterval = entityFactory.NewTimeInterval();
                 timeinterval.SetStartEnd(temp.date.Date.Add(temp.timestart), temp.date.Date.Add(temp.timeend));
                 result.ReceptionTimeInterval = timeinterval;
+                result.Price = GetPriceForSpecialistClientPair(result.Specialist, result.Client, connection);
             }
             CloseConnection(connection);
 
@@ -1199,6 +1213,7 @@ namespace MySqlConnector
                 var timeinterval = entityFactory.NewTimeInterval();
                 timeinterval.SetStartEnd(recpt.date.Date.Add(recpt.timestart), recpt.date.Date.Add(recpt.timeend));
                 current.ReceptionTimeInterval = timeinterval;
+                current.Price = GetPriceForSpecialistClientPair(current.Specialist, current.Client, connection);
                 result.Add(current);
             }
             CloseConnection(connection);
@@ -1408,5 +1423,84 @@ namespace MySqlConnector
         }
 
 
+
+        #region PriceWorkaround
+
+
+        static int GetPriceForSpecialistClientPair(Scheduler_Controls_Interfaces.ISpecialist spec, 
+            Scheduler_Controls_Interfaces.IClient client, 
+            MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
+        {
+            if (spec == null || spec.ID == 0)
+                return -1;
+            var connection = existedConnection ?? OpenConnection();
+
+            int result = 0;
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandText = "select price from specialist2clientprice where specid=@spid and clid=@clid";
+                cmd.Parameters.AddWithValue("@spid", spec.ID);
+
+                int clid = client == null ? -100 : client.ID;
+                cmd.Parameters.AddWithValue("@clid", clid);
+
+                cmd.Prepare();
+
+                result = (int)cmd.ExecuteScalar();
+                
+            }
+
+            if (existedConnection == null)
+                CloseConnection(connection);
+
+            return result;
+        }
+
+        static void AddOrUpdatePriceForSpecialistClientPair(Scheduler_Controls_Interfaces.ISpecialist spec, 
+            Scheduler_Controls_Interfaces.IClient client,
+            int newPrice = 0,
+            MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
+        {
+            if (spec == null || spec.ID == 0)
+                return;
+            var connection = existedConnection ?? OpenConnection();
+
+            object result = null;
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandText = "select id from specialist2clientprice where specid=@spid and clid=@clid";
+                cmd.Parameters.AddWithValue("@spid", spec.ID);
+
+                int clid = client == null ? -100 : client.ID;
+                cmd.Parameters.AddWithValue("@clid", clid);
+
+                cmd.Prepare();
+
+                result = cmd.ExecuteScalar();
+
+                if (result == null)
+                { //insert
+                    cmd.CommandText = "insert into specialist2clientprice (specid, clid, price) values (@spid, @clid, @price)";
+                }
+                else
+                { //update
+                    cmd.CommandText = "update specialist2clientprice set price=@price where specid=@spid and clid=@clid";
+                }
+
+                cmd.Parameters.AddWithValue("@price", newPrice);
+
+                cmd.Prepare();
+
+                cmd.ExecuteNonQuery();
+
+            }
+
+            if (existedConnection == null)
+                CloseConnection(connection);
+        }
+
+        #endregion
     }
 }
