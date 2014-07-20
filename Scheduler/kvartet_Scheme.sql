@@ -30,7 +30,7 @@ CREATE TABLE `cabinet` (
   `availability` int(10) unsigned zerofill NOT NULL,
   PRIMARY KEY (`idcabinet`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,9 +45,8 @@ CREATE TABLE `clients` (
   `name` tinytext,
   `comment` text,
   `blacklisted` tinyint(3) unsigned zerofill DEFAULT NULL,
-  `price` int(10) unsigned zerofill NOT NULL,
   PRIMARY KEY (`idclients`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +67,7 @@ CREATE TABLE `receptions` (
   `timeend` time NOT NULL,
   `timedate` date NOT NULL,
   PRIMARY KEY (`idreceptions`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,16 +78,12 @@ DROP TABLE IF EXISTS `specialist2clientprice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `specialist2clientprice` (
-  `idspecialist2clientcost` int(11) NOT NULL,
+  `idspecialist2clientcost` int(11) NOT NULL AUTO_INCREMENT,
   `specid` int(11) NOT NULL,
   `clid` int(11) NOT NULL,
   `price` int(10) unsigned zerofill NOT NULL DEFAULT '0000000000',
-  PRIMARY KEY (`idspecialist2clientcost`),
-  KEY `specidkey_idx` (`specid`),
-  KEY `clidkey_idx` (`clid`),
-  CONSTRAINT `specidkey2` FOREIGN KEY (`specid`) REFERENCES `specialists` (`idspecialists`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `clidkey2` FOREIGN KEY (`clid`) REFERENCES `clients` (`idclients`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`idspecialist2clientcost`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,7 +98,7 @@ CREATE TABLE `specialists` (
   `name` text,
   `notworking` tinyint(3) unsigned zerofill NOT NULL,
   PRIMARY KEY (`idspecialists`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +113,7 @@ CREATE TABLE `specializations` (
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`idspecializations`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +132,7 @@ CREATE TABLE `specializations2specialist` (
   KEY `specialistkey_idx` (`specialist`),
   CONSTRAINT `specialistkey` FOREIGN KEY (`specialist`) REFERENCES `specialists` (`idspecialists`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `specializationkey` FOREIGN KEY (`specialization`) REFERENCES `specializations` (`idspecializations`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,7 +148,7 @@ CREATE TABLE `telephones` (
   PRIMARY KEY (`idtelephones`),
   UNIQUE KEY `idtelephones_UNIQUE` (`idtelephones`),
   UNIQUE KEY `telephonescol_UNIQUE` (`telephonescol`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -172,7 +167,7 @@ CREATE TABLE `telephones2clients` (
   KEY `clientidkey_idx` (`clid`),
   CONSTRAINT `clidkey` FOREIGN KEY (`clid`) REFERENCES `clients` (`idclients`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `telidkey` FOREIGN KEY (`telid`) REFERENCES `telephones` (`idtelephones`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,4 +234,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-07-19 17:52:46
+-- Dump completed on 2014-07-20 13:38:14

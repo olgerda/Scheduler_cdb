@@ -33,8 +33,8 @@
             this.cmbSpecialist = new System.Windows.Forms.ComboBox();
             this.btnCreateChildReception = new System.Windows.Forms.Button();
             this.btnCancelReception = new System.Windows.Forms.Button();
-            this.cmbSpecialisation = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cmbCabinet = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.dateTimeEnd = new System.Windows.Forms.DateTimePicker();
             this.dateTimeStart = new System.Windows.Forms.DateTimePicker();
@@ -47,14 +47,19 @@
             this.txtClientName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.cmbCabinet = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cmbSpecialisation = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.numericPrice = new System.Windows.Forms.NumericUpDown();
             this.grpMain.SuspendLayout();
             this.pnlClient.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericPrice)).BeginInit();
             this.SuspendLayout();
             // 
             // grpMain
             // 
+            this.grpMain.Controls.Add(this.numericPrice);
+            this.grpMain.Controls.Add(this.label7);
             this.grpMain.Controls.Add(this.btnShowClientCard);
             this.grpMain.Controls.Add(this.cmbSpecialist);
             this.grpMain.Controls.Add(this.btnCreateChildReception);
@@ -79,9 +84,9 @@
             // 
             // btnShowClientCard
             // 
-            this.btnShowClientCard.Location = new System.Drawing.Point(322, 10);
+            this.btnShowClientCard.Location = new System.Drawing.Point(370, 10);
             this.btnShowClientCard.Name = "btnShowClientCard";
-            this.btnShowClientCard.Size = new System.Drawing.Size(266, 23);
+            this.btnShowClientCard.Size = new System.Drawing.Size(220, 23);
             this.btnShowClientCard.TabIndex = 18;
             this.btnShowClientCard.Text = "Показать/выбрать карту клиента";
             this.btnShowClientCard.UseVisualStyleBackColor = true;
@@ -90,9 +95,9 @@
             // cmbSpecialist
             // 
             this.cmbSpecialist.FormattingEnabled = true;
-            this.cmbSpecialist.Location = new System.Drawing.Point(79, 38);
+            this.cmbSpecialist.Location = new System.Drawing.Point(74, 38);
             this.cmbSpecialist.Name = "cmbSpecialist";
-            this.cmbSpecialist.Size = new System.Drawing.Size(217, 21);
+            this.cmbSpecialist.Size = new System.Drawing.Size(222, 21);
             this.cmbSpecialist.TabIndex = 9;
             this.cmbSpecialist.SelectedIndexChanged += new System.EventHandler(this.cmbSpecialist_SelectedIndexChanged);
             // 
@@ -116,22 +121,22 @@
             this.btnCancelReception.UseVisualStyleBackColor = true;
             this.btnCancelReception.Click += new System.EventHandler(this.btnCancelReception_Click);
             // 
-            // cmbSpecialisation
+            // label6
             // 
-            this.cmbSpecialisation.FormattingEnabled = true;
-            this.cmbSpecialisation.Location = new System.Drawing.Point(100, 52);
-            this.cmbSpecialisation.Name = "cmbSpecialisation";
-            this.cmbSpecialisation.Size = new System.Drawing.Size(186, 21);
-            this.cmbSpecialisation.TabIndex = 11;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 65);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(49, 13);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Кабинет";
             // 
-            // label5
+            // cmbCabinet
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 55);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(86, 13);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "Специализация";
+            this.cmbCabinet.FormattingEnabled = true;
+            this.cmbCabinet.Location = new System.Drawing.Point(74, 62);
+            this.cmbCabinet.Name = "cmbCabinet";
+            this.cmbCabinet.Size = new System.Drawing.Size(222, 21);
+            this.cmbCabinet.TabIndex = 14;
             // 
             // label4
             // 
@@ -212,26 +217,26 @@
             this.pnlClient.Controls.Add(this.label3);
             this.pnlClient.Controls.Add(this.label5);
             this.pnlClient.Controls.Add(this.cmbSpecialisation);
-            this.pnlClient.Location = new System.Drawing.Point(302, 36);
+            this.pnlClient.Location = new System.Drawing.Point(370, 36);
             this.pnlClient.Name = "pnlClient";
-            this.pnlClient.Size = new System.Drawing.Size(288, 80);
+            this.pnlClient.Size = new System.Drawing.Size(220, 80);
             this.pnlClient.TabIndex = 24;
             // 
             // txtTelephone
             // 
-            this.txtTelephone.Location = new System.Drawing.Point(100, 26);
+            this.txtTelephone.Location = new System.Drawing.Point(61, 26);
             this.txtTelephone.Mask = "+0 (999) 000-0000";
             this.txtTelephone.Name = "txtTelephone";
-            this.txtTelephone.Size = new System.Drawing.Size(186, 20);
+            this.txtTelephone.Size = new System.Drawing.Size(156, 20);
             this.txtTelephone.TabIndex = 8;
             this.txtTelephone.Text = "7";
             this.txtTelephone.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             // 
             // txtClientName
             // 
-            this.txtClientName.Location = new System.Drawing.Point(77, 2);
+            this.txtClientName.Location = new System.Drawing.Point(61, 2);
             this.txtClientName.Name = "txtClientName";
-            this.txtClientName.Size = new System.Drawing.Size(209, 20);
+            this.txtClientName.Size = new System.Drawing.Size(156, 20);
             this.txtClientName.TabIndex = 5;
             // 
             // label2
@@ -239,35 +244,57 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(3, 5);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(73, 13);
+            this.label2.Size = new System.Drawing.Size(43, 13);
             this.label2.TabIndex = 6;
-            this.label2.Text = "Имя клиента";
+            this.label2.Text = "Клиент";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(3, 29);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 13);
+            this.label3.Size = new System.Drawing.Size(52, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Телефон клиента";
+            this.label3.Text = "Телефон";
             // 
-            // cmbCabinet
+            // label5
             // 
-            this.cmbCabinet.FormattingEnabled = true;
-            this.cmbCabinet.Location = new System.Drawing.Point(79, 62);
-            this.cmbCabinet.Name = "cmbCabinet";
-            this.cmbCabinet.Size = new System.Drawing.Size(217, 21);
-            this.cmbCabinet.TabIndex = 14;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(3, 55);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(86, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Специализация";
             // 
-            // label6
+            // cmbSpecialisation
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 65);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(49, 13);
-            this.label6.TabIndex = 15;
-            this.label6.Text = "Кабинет";
+            this.cmbSpecialisation.FormattingEnabled = true;
+            this.cmbSpecialisation.Location = new System.Drawing.Point(95, 52);
+            this.cmbSpecialisation.Name = "cmbSpecialisation";
+            this.cmbSpecialisation.Size = new System.Drawing.Size(122, 21);
+            this.cmbSpecialisation.TabIndex = 11;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(302, 41);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(62, 13);
+            this.label7.TabIndex = 26;
+            this.label7.Text = "Стоимость";
+            // 
+            // numericPrice
+            // 
+            this.numericPrice.Location = new System.Drawing.Point(302, 62);
+            this.numericPrice.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.numericPrice.Name = "numericPrice";
+            this.numericPrice.Size = new System.Drawing.Size(62, 20);
+            this.numericPrice.TabIndex = 27;
+            this.numericPrice.ThousandsSeparator = true;
             // 
             // ReceptionInfo
             // 
@@ -282,6 +309,7 @@
             this.grpMain.PerformLayout();
             this.pnlClient.ResumeLayout(false);
             this.pnlClient.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericPrice)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -309,5 +337,7 @@
         private System.Windows.Forms.DateTimePicker dateTimeStart;
         private System.Windows.Forms.DateTimePicker dateDate;
         private System.Windows.Forms.Panel pnlClient;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown numericPrice;
     }
 }

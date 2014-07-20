@@ -38,6 +38,9 @@ namespace Scheduler_DBobjects
                 cabinetList = dbconnector.AllCabinets();
             }
 
+            entityFactory.NewClient().ReceptionListFuncition(dbconnector.GetReceptionsForClient);
+            entityFactory.NewSpecialist().CostsFunction(dbconnector.GetCostsForSpecialist);
+
         }
 
         string Scheduler_DBobjects_Intefraces.IMainDataBase.ErrorString

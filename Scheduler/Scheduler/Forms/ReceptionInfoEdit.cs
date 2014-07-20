@@ -62,8 +62,8 @@ namespace Scheduler_Forms
                 receptionNew.Specialization = e.Entity.Specialization;
                 receptionNew.Rent = e.Entity.Rent;
                 receptionNew.ReceptionTimeInterval = entityFactory.NewTimeInterval();
-                receptionNew.ReceptionTimeInterval.StartDate = DateTime.Now;
-                receptionNew.ReceptionTimeInterval.EndDate = DateTime.Now + new TimeSpan(1, 0, 0);
+                receptionNew.ReceptionTimeInterval.StartDate = DateTime.Now.Date + TimeSpan.FromHours(DateTime.Now.TimeOfDay.Hours);
+                receptionNew.ReceptionTimeInterval.EndDate = receptionNew.ReceptionTimeInterval.StartDate + TimeSpan.FromHours(1);
 
                 childForm.Reception = receptionNew;
                 childForm.receptionInfoCard.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CloneExist;
@@ -80,12 +80,9 @@ namespace Scheduler_Forms
 
         void receptionInfoCard_OnSaveChanges(object source, SaveChangesEventArgs<IReception> e)
         {
-
-            //var temp = receptionInfoCard.Reception;
             if (e.Entity != null)
             {
                 doNothing = true;
-                //Reception = e.Entity;
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
                 doNothing = false;

@@ -24,8 +24,6 @@ namespace Scheduler_Controls_Interfaces
     public interface INamedEntity: IHaveID
     {
         string Name { get; set; }
-
-        //string ToString();
     }
 
     public delegate List<IReception> GetClientReceptionsList(IClient client);
@@ -38,8 +36,6 @@ namespace Scheduler_Controls_Interfaces
 
         bool BlackListed { get; set; }
 
-        //int Price { get; set; }
-
         HashSet<string> Telephones { get; set; }
         /// <summary>
         /// Проверить, входит ли переданный телефон в список телефонов клиента.
@@ -47,19 +43,20 @@ namespace Scheduler_Controls_Interfaces
         /// <param name="telNumber">Строка с номером телефона.</param>
         /// <returns>true если входит.</returns>
         bool CheckTelephone(string telNumber);
-        // 
-        //         /// <summary>
-        //         /// Добавляет (если ещё нет) или удаляет (если уже есть) номер телефона.
-        //         /// </summary>
-        //         string Telephone { set; }
 
+        /// <summary>
+        /// Получить список посещений данного клиента.
+        /// </summary>
+        /// <returns></returns>
         List<IReception> GetReceptions();
+
         /// <summary>
         /// Установить функцию получения списка посещений данного клиента.
         /// </summary>
         void ReceptionListFuncition(GetClientReceptionsList func);
     }
 
+    public delegate Dictionary<int, int> GetCosts(ISpecialist spec);
     /// <summary>
     /// Интерфейс специалиста.
     /// </summary>
@@ -69,11 +66,9 @@ namespace Scheduler_Controls_Interfaces
 
         HashSet<string> Specialisations { get; set; }
 
-        //         /// <summary>
-        //         /// Добавляет (если ещё нет) или удаляет (если уже есть) специализацию.
-        //         /// </summary>
-        //         string Specialisation { set; }
+        Dictionary<int, int> GetCosts();
 
+        void CostsFunction(GetCosts func);
     }
 
     /// <summary>

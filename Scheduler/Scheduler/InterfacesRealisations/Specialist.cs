@@ -11,6 +11,8 @@ namespace Scheduler_InterfacesRealisations
         HashSet<string> specialisations;
         bool notworking;
 
+        static Scheduler_Controls_Interfaces.GetCosts getConstsFunction;
+
         public Specialist()
         {
             name = String.Empty;
@@ -57,37 +59,32 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        public override string /*Scheduler_Controls_Interfaces.INamedEntity.*/ToString()
+        public override string ToString()
         {
             return name;
         }
 
-//         int Scheduler_Controls_Interfaces.IHaveID.ID
-//         {
-//             get
-//             {
-//                 return id;
-//             }
-//             set
-//             {
-//                 id = value;
-//                 RaisePropertyChanged("ID");
-//             }
-//         }
+        Dictionary<int, int> Scheduler_Controls_Interfaces.ISpecialist.GetCosts()
+        {
+            return getConstsFunction == null ? new Dictionary<int, int>() : getConstsFunction(this);
+        }
+
+        void Scheduler_Controls_Interfaces.ISpecialist.CostsFunction(Scheduler_Controls_Interfaces.GetCosts func)
+        {
+            if (getConstsFunction == null) 
+                getConstsFunction = func;
+        }
     }
 
     public class SpecialistList : CommonList<Scheduler_Controls_Interfaces.ISpecialist>, Scheduler_Forms_Interfaces.ISpecialistList
     {
-        //List<Scheduler_Controls_Interfaces.ISpecialist> list;
 
         public SpecialistList(): base()
         {
-            //list = new List<Scheduler_Controls_Interfaces.ISpecialist>();
         }
 
         SpecialistList(SpecialistList old): base(old)
         {
-            //list = new List<Scheduler_Controls_Interfaces.ISpecialist>(old.list);
         }
 
         Scheduler_Controls_Interfaces.ISpecialist Scheduler_Forms_Interfaces.ISpecialistList.FindSpecialistByPartialName(string partialName)
@@ -96,16 +93,6 @@ namespace Scheduler_InterfacesRealisations
             result = this.List.FirstOrDefault(s => s.Name.StartsWith(partialName));
             return result;
         }
-
-//         List<Scheduler_Controls_Interfaces.ISpecialist> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist>.List
-//         {
-//             get { return list; }
-//         }
-
-//         Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist>.Copy()
-//         {
-//             return new SpecialistList(this);
-//         }
 
         public override Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ISpecialist> Copy()
         {

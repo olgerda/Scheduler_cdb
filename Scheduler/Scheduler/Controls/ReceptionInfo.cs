@@ -20,6 +20,8 @@ namespace Scheduler_Controls
 
         private IClient clientOnReception = null;
 
+        private Dictionary<int, int> currentSpecialistCosts;
+
         private static IReception dummyReception = null;
 
         public static IReception DummyReception
@@ -133,8 +135,6 @@ namespace Scheduler_Controls
         {
             get
             {
-                //                 clientOnReception.Name = txtClientName.Text;
-                //                 clientOnReception.Telephones.Add(txtTelephone.Text);
                 return clientOnReception;
             }
             set
@@ -168,11 +168,7 @@ namespace Scheduler_Controls
                         btnShowClientCard.Enabled = false;
                     break;
                 case ShowModes.ReadExist:
-                    if (reception != null &&
-                        reception.ReceptionTimeInterval.StartDate < DateTime.Today - new TimeSpan(1, 0, 0, 0))
-                        btnCancelReception.Enabled = false;
-                    else
-                        btnCancelReception.Enabled = true;
+                    btnCancelReception.Enabled = true;
                     btnCreateChildReception.Enabled = true;
                     btnShowClientCard.Enabled = true;
                     break;
@@ -184,36 +180,19 @@ namespace Scheduler_Controls
             if (cabinetList != null)
             {
                 cmbCabinet.DataSource = cabinetList.ToList();
-                //                 if (reception.Cabinet != null && cabinetList.Any(f => reception.Cabinet == f))
-                //                     cmbCabinet.SelectedItem = reception.Cabinet.Name;
-
                 cmbCabinet.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                //                 cmbCabinet.Items.Clear();
-                //                 cmbCabinet.Items.AddRange(cabinetList.ToArray());
             }
 
             if (specialisationList != null)
             {
                 cmbSpecialisation.DataSource = specialisationList.ToList();
-
-                //                 if (!String.IsNullOrWhiteSpace(reception.Specialization) && specialisationList.Any(s => s == reception.Specialization))
-                //                     cmbSpecialisation.SelectedItem = reception.Specialization;
-
                 cmbSpecialisation.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                //                 cmbSpecialisation.Items.Clear();
-                //                 cmbSpecialisation.Items.AddRange(specialisationList.ToArray());
             }
 
             if (specialistList != null)
             {
                 cmbSpecialist.DataSource = specialistList.ToList();
-
-                //                 if (reception.Specialist != null && specialistList.Any(s => reception.Specialist == s))
-                //                     cmbSpecialist.SelectedItem = reception.Specialist;
-
                 cmbSpecialist.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                //                 cmbSpecialist.Items.Clear();
-                //                 cmbSpecialist.Items.AddRange(specialistList.ToArray());
             }
         }
 
@@ -224,28 +203,25 @@ namespace Scheduler_Controls
 
             RenewLists();
 
-            //txtClientName.Text = reception.Client.Name;
             chkRent.Checked = reception.Rent;
             dateDate.Value = reception.ReceptionTimeInterval.Date;
             dateTimeStart.Value = reception.ReceptionTimeInterval.StartDate;
             dateTimeEnd.Value = reception.ReceptionTimeInterval.EndDate;
 
-            if (reception.Cabinet != null/* && cabinetList.Any(f => reception.Cabinet == f)*/)
+            if (reception.Cabinet != null)
                 cmbCabinet.SelectedItem = reception.Cabinet;
-            if (reception.Specialist != null/* && specialistList.Any(s => reception.Specialist == s)*/)
+            if (reception.Specialist != null)
                 cmbSpecialist.SelectedItem = reception.Specialist;
-            if (!String.IsNullOrWhiteSpace(reception.Specialization)/* && specialisationList.Any(s => s == reception.Specialization)*/)
+            if (!String.IsNullOrWhiteSpace(reception.Specialization))
                 cmbSpecialisation.SelectedItem = reception.Specialization;
+            else
+                if (reception.Specialist != null && reception.Specialist.Specialisations.FirstOrDefault() != null)
+                    cmbSpecialisation.SelectedItem = reception.Specialist.Specialisations.First();
 
-            //txtTelephone.Text = reception.Client.Telephones.FirstOrDefault();
+            numericPrice.Value = reception.Price;
+
             ClientOnReception = reception.Client;
         }
-
-        //         private void button1_Click(object sender, EventArgs e)
-        //         {
-        //             if (SomethingChanged())
-        //                 SaveChanges();
-        //         }
 
         bool SomethingChanged()
         {
@@ -256,13 +232,13 @@ namespace Scheduler_Controls
                 reception.Rent != chkRent.Checked ||
                 (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Cabinet != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)cmbCabinet.SelectedItem ||
                 (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Specialist != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)cmbSpecialist.SelectedItem ||
-
+                reception.Price != Convert.ToInt32(numericPrice.Value) ||
                 reception.ReceptionTimeInterval.Date != dateDate.Value ||
                 reception.ReceptionTimeInterval.StartDate != dateTimeStart.Value ||
                 reception.ReceptionTimeInterval.EndDate != dateTimeEnd.Value ||
                 (!chkRent.Checked &&
                     (
-                        reception.Specialization != cmbSpecialisation.SelectedText ||
+                        reception.Specialization != cmbSpecialisation.SelectedItem.ToString() ||
                         (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Client != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)clientOnReception
                     )
                 );
@@ -280,13 +256,25 @@ namespace Scheduler_Controls
                 return;
             }
             dummyReception.ID = reception.ID;
-            dummyReception.Client = ClientOnReception;
+            
             dummyReception.Rent = chkRent.Checked;
+            if (chkRent.Checked)
+            {
+                dummyReception.Client = null;
+                dummyReception.Specialization = null;
+            }
+            else
+            {
+                dummyReception.Client = ClientOnReception;
+                dummyReception.Specialization = (String)cmbSpecialisation.SelectedItem;
+            }
+
             dummyReception.Cabinet = (ICabinet)cmbCabinet.SelectedItem;
             dummyReception.Specialist = (ISpecialist)cmbSpecialist.SelectedItem;
-            dummyReception.Specialization = (string)cmbSpecialisation.SelectedItem;
+            
             dummyReception.ReceptionTimeInterval.StartDate = dateTimeStart.Value;
             dummyReception.ReceptionTimeInterval.EndDate = dateTimeEnd.Value;
+            dummyReception.Price = Convert.ToInt32(numericPrice.Value);
 
             string errorMessage = dummyReception.Validate();
             if (errorMessage == null)
@@ -299,6 +287,7 @@ namespace Scheduler_Controls
                 reception.Specialist = dummyReception.Specialist;
                 reception.Specialization = dummyReception.Specialization;
                 reception.ReceptionTimeInterval = dummyReception.ReceptionTimeInterval;
+                reception.Price = dummyReception.Price;
 
                 if (OnSaveChanges != null)
                     OnSaveChanges(this, new SaveChangesEventArgs<IReception>(reception));
@@ -319,12 +308,15 @@ namespace Scheduler_Controls
         {
             pnlClient.Enabled = !chkRent.Checked;
             btnShowClientCard.Enabled = !chkRent.Checked;
+            ActualizePrice();
         }
 
         private void btnShowClientCard_Click(object sender, EventArgs e)
         {
             if (OnShowClientsButtonClicked != null)
                 OnShowClientsButtonClicked(this, new ShowClientsEventsArgs(txtClientName.Text, txtTelephone.Text));
+            
+            ActualizePrice();
         }
 
         private void btnCreateChildReception_Click(object sender, EventArgs e)
@@ -335,18 +327,41 @@ namespace Scheduler_Controls
 
         private void btnCancelReception_Click(object sender, EventArgs e)
         {
-            if (DateTime.Today.Date - reception.ReceptionTimeInterval.Date < TimeSpan.FromDays(1))
+            if (DateTime.Today.Date - reception.ReceptionTimeInterval.Date < TimeSpan.FromDays(1) ||
+                MessageBox.Show("Данный приём уже в прошлом. Всё-равно удалить?", "Прошедший приём.", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (OnCancelReceptionClicked != null)
                     OnCancelReceptionClicked(this, new CancelReceptionEventArgs(reception));
             }
-            else
-                MessageBox.Show("Данный приём уже в прошлом.","Прошедший приём.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
         }
 
         private void cmbSpecialist_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cmbSpecialist.SelectedIndex == -1)
+                return;
+            ISpecialist currentSpec = (ISpecialist)cmbSpecialist.SelectedItem;
+            currentSpecialistCosts = currentSpec.GetCosts();
 
+            cmbSpecialisation.DataSource = null;
+            cmbSpecialisation.Items.Clear();
+            cmbSpecialisation.DataSource = currentSpec.Specialisations.ToArray();
+
+            ActualizePrice();
+        }
+
+        void ActualizePrice()
+        {
+            if (chkRent.Checked)
+            {
+                if (currentSpecialistCosts.ContainsKey(-100))
+                    numericPrice.Value = currentSpecialistCosts[-100];
+            }
+            else
+            {
+                if (clientOnReception != null && currentSpecialistCosts.ContainsKey(clientOnReception.ID))
+                    numericPrice.Value = currentSpecialistCosts[clientOnReception.ID];
+            }
         }
 
         private void btnCommit_Click(object sender, EventArgs e)

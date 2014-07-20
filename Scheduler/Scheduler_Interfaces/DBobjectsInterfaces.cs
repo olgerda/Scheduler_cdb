@@ -80,6 +80,7 @@ namespace Scheduler_DBobjects_Intefraces
         List<IEntity> GetReceptionsBetweenDates(DateTime startDate, DateTime endDate);
 
         List<IReception> GetReceptionsForClient(IClient client);
+        Dictionary<int, int> GetCostsForSpecialist(ISpecialist spec);
 
         void AddReception(IEntity reception);
         void UpdateReception(IEntity reception);

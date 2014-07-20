@@ -100,7 +100,10 @@ namespace Scheduler_InterfacesRealisations
             {
                 if (isRented)
                 {
-                    return receptionTimeInterval.Interval() + Environment.NewLine + specialist;
+                    return String.Join(Environment.NewLine,
+                        receptionTimeInterval.Interval(),
+                        specialist.Name,
+                        price + " руб.");
                 }
                 else
                 {
@@ -109,7 +112,7 @@ namespace Scheduler_InterfacesRealisations
                         specialist.Name,
                         client.Name, 
                         client.Telephones.FirstOrDefault(),
-                        //client.Price + " р.",
+                        price + " руб.",
                         specialisation);
                 }
             }

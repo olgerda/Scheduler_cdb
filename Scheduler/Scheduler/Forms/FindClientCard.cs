@@ -99,6 +99,7 @@ namespace Scheduler_Forms
                 txtClientName.Text = selectedClient.Name;
                 txtTelephone.Text = String.IsNullOrEmpty(selectedClient.Telephones.FirstOrDefault(t => t.StartsWith(txtTelephone.Text))) ? selectedClient.Telephones.FirstOrDefault()
                     : selectedClient.Telephones.FirstOrDefault(t => t.StartsWith(txtTelephone.Text));
+                lstClientList.SelectedItem = selectedClient;
                 doNothingNow = false;
                 clientInfoCard.Client = selectedClient;
             }
