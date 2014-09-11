@@ -43,7 +43,6 @@ namespace Scheduler_Forms
         {
             if (MessageBox.Show("Вы действительно хотите отменить запись?", "Удаление записи.", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
                 return;
-            //currentReception.Dispose();
             this.DialogResult = System.Windows.Forms.DialogResult.Abort;
             doNothing = true;
             this.Close();
@@ -69,11 +68,12 @@ namespace Scheduler_Forms
                 childForm.receptionInfoCard.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CloneExist;
                 if (childForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    doNothing = true;
-                    Reception = childForm.Reception;
-                    this.DialogResult = System.Windows.Forms.DialogResult.Yes;
-                    this.Close();
-                    doNothing = false;
+                    receptionNew.CommitToDatabase();
+                    //doNothing = true;
+                    //Reception = childForm.Reception;
+                    //this.DialogResult = System.Windows.Forms.DialogResult.Yes;
+                    //this.Close();
+                    //doNothing = false;
                 }
             }
         }

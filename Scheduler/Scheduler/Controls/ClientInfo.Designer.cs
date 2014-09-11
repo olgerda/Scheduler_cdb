@@ -135,6 +135,7 @@
             this.lstReceptions.Name = "lstReceptions";
             this.lstReceptions.Size = new System.Drawing.Size(308, 82);
             this.lstReceptions.TabIndex = 4;
+            this.lstReceptions.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstReceptions_MouseDoubleClick);
             // 
             // txtComment
             // 

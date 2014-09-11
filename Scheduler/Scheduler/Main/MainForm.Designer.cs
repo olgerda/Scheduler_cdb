@@ -56,6 +56,7 @@ namespace Scheduler
             this.помощьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.инструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.контактыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             ((System.ComponentModel.ISupportInitialize)(this.mainView)).BeginInit();
             this.mainView.Panel2.SuspendLayout();
             this.mainView.SuspendLayout();
@@ -76,20 +77,22 @@ namespace Scheduler
             // 
             // mainView.Panel2
             // 
+            this.mainView.Panel2.Controls.Add(this.monthCalendar1);
             this.mainView.Panel2.Controls.Add(this.btnCreteFile);
             this.mainView.Panel2.Controls.Add(this.dateTimePicker1);
             this.mainView.Panel2.Controls.Add(this.label1);
-            this.mainView.Panel2MinSize = 157;
+            this.mainView.Panel2MinSize = 50;
             this.mainView.Size = new System.Drawing.Size(832, 407);
-            this.mainView.SplitterDistance = 670;
+            this.mainView.SplitterDistance = 650;
             this.mainView.TabIndex = 3;
+            this.mainView.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.mainView_SplitterMoved);
             // 
             // btnCreteFile
             // 
             this.btnCreteFile.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnCreteFile.Location = new System.Drawing.Point(0, 384);
             this.btnCreteFile.Name = "btnCreteFile";
-            this.btnCreteFile.Size = new System.Drawing.Size(158, 23);
+            this.btnCreteFile.Size = new System.Drawing.Size(178, 23);
             this.btnCreteFile.TabIndex = 8;
             this.btnCreteFile.Text = "Выгрузить в файл";
             this.btnCreteFile.UseVisualStyleBackColor = true;
@@ -97,15 +100,15 @@ namespace Scheduler
             // 
             // dateTimePicker1
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(3, 28);
+            this.dateTimePicker1.Location = new System.Drawing.Point(11, 28);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(146, 20);
+            this.dateTimePicker1.Size = new System.Drawing.Size(164, 20);
             this.dateTimePicker1.TabIndex = 7;
             this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(3, 9);
+            this.label1.Location = new System.Drawing.Point(8, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(90, 16);
             this.label1.TabIndex = 4;
@@ -231,6 +234,15 @@ namespace Scheduler
             this.контактыToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.контактыToolStripMenuItem.Text = "Контакты";
             // 
+            // monthCalendar1
+            // 
+            this.monthCalendar1.FirstDayOfWeek = System.Windows.Forms.Day.Monday;
+            this.monthCalendar1.Location = new System.Drawing.Point(9, 227);
+            this.monthCalendar1.MaxSelectionCount = 1;
+            this.monthCalendar1.Name = "monthCalendar1";
+            this.monthCalendar1.TabIndex = 9;
+            this.monthCalendar1.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar1_DateChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -270,5 +282,6 @@ namespace Scheduler
         private System.Windows.Forms.ToolStripMenuItem специальностиToolStripMenuItem;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Button btnCreteFile;
+        private System.Windows.Forms.MonthCalendar monthCalendar1;
 	}
 }

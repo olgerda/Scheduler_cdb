@@ -92,6 +92,8 @@ namespace Scheduler_Controls_Interfaces
         string Specialization { get; set; }
         bool Rent { get; set; }
 
+        void CommitToDatabase();
+
         int Price { get; set; }
 
         /// <summary>

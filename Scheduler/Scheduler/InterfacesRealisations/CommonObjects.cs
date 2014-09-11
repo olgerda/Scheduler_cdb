@@ -8,24 +8,11 @@ namespace Scheduler_InterfacesRealisations
 {
     public abstract class CommonObjectWithNotify : Scheduler_Controls_Interfaces.IDummy, Scheduler_Controls_Interfaces.IHaveID
     {
-        //         event System.ComponentModel.PropertyChangedEventHandler innerPropertyChanged;
-        //         event System.ComponentModel.PropertyChangedEventHandler System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-        //         {
-        //             add { innerPropertyChanged = value; }
-        //             remove { innerPropertyChanged = null; }
-        //         }
-
         bool iAmChanged = false;
-
-
 
         public void RaisePropertyChanged(string caller)
         {
             iAmChanged = true;
-            //             if (innerPropertyChanged == null)
-            //                 return;
-            // 
-            //             innerPropertyChanged(this, new PropertyChangedEventArgs(caller));
         }
 
         public bool IAmChanged
@@ -52,26 +39,6 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        public bool Equals(Scheduler_Controls_Interfaces.IHaveID other)
-        {
-            if (other == null)
-                return false;
-            return this.ID == other.ID;
-        }
-
-        public override bool Equals(object obj)
-        {
-            CommonObjectWithNotify t = obj as CommonObjectWithNotify;
-            if (t == null)
-                return false;
-            return this.ID == t.ID;
-        }
-
-        public override int GetHashCode()
-        {
-            return ID;
-        }
-
         public static bool operator ==(CommonObjectWithNotify a, CommonObjectWithNotify b)
         {
             // If both are null, or both are same instance, return true.
@@ -95,7 +62,19 @@ namespace Scheduler_InterfacesRealisations
             return !(a == b);
         }
 
-        public int CompareTo(object obj)
+        int Scheduler_Controls_Interfaces.IHaveID.ID
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
+
+        int IComparable.CompareTo(object obj)
         {
             if (obj == null)
                 return 1;
@@ -104,9 +83,15 @@ namespace Scheduler_InterfacesRealisations
             if (other == null)
                 return 1;
 
-            return this.ID.CompareTo(other.ID);
+            return (this as Scheduler_Controls_Interfaces.IHaveID).ID.CompareTo((other as Scheduler_Controls_Interfaces.IHaveID).ID);
         }
 
+        bool IEquatable<Scheduler_Controls_Interfaces.IHaveID>.Equals(Scheduler_Controls_Interfaces.IHaveID other)
+        {
+            if (other == null)
+                return false;
+            return (this as Scheduler_Controls_Interfaces.IHaveID).ID == (other as Scheduler_Controls_Interfaces.IHaveID).ID;
+        }
     }
 
     public abstract class CommonList<T> : Scheduler_Forms_Interfaces.IEntityList<T> where T : Scheduler_Controls_Interfaces.IDummy

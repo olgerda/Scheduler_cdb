@@ -18,7 +18,7 @@ namespace Scheduler
         /// <summary>
         /// Дата, на которую строится расписание.
         /// </summary>
-        private DateTime schedule_date = DateTime.Today;
+        private DateTime schedule_date = DateTime.Today.Date;
 
         public DateTime ScheduleDate
         {
@@ -31,6 +31,11 @@ namespace Scheduler
         }
 
         /// <summary>
+        /// глушилка действий, чтоб события друг-друга не закольцовывали
+        /// </summary>
+        private bool doNothing = false;
+
+        /// <summary>
         /// Таблица, хранящая в себе посещения на текущую дату
         /// </summary>
         ITable receptionEntitiesTable;
@@ -41,10 +46,7 @@ namespace Scheduler
 
         public MainForm()
         {
-
             InitializeComponent();
-
-            //Init();
         }
 
         public MainForm(IMainDataBase database)
@@ -65,6 +67,7 @@ namespace Scheduler
         void Init()
         {
             FirstLoad();
+            dateTimePicker1.Value = schedule_date;
             calendarControl = new CalendarControl3.ColumnsView();
             calendarControl.Dock = DockStyle.Fill;
             mainView.Panel1.Controls.Add(calendarControl);
@@ -138,9 +141,9 @@ namespace Scheduler
                         case System.Windows.Forms.DialogResult.OK:
                             database.UpdateReception(ent);
                             break;
-                        case System.Windows.Forms.DialogResult.Yes:
-                            database.AddReception((IEntity)receptionEditForm.Reception);
-                            break;
+                        //case System.Windows.Forms.DialogResult.Yes:
+                        //    database.AddReception((IEntity)receptionEditForm.Reception);
+                        //    break;
                     }
                 }
 
@@ -258,9 +261,14 @@ namespace Scheduler
             this.Close();
         }
 
+
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
+            doNothing = true;
             ScheduleDate = dateTimePicker1.Value.Date;
+            monthCalendar1.SetDate(ScheduleDate);
+            doNothing = false;
+            
         }
 
         private void сформироватьОтчетToolStripMenuItem_Click(object sender, EventArgs e)
@@ -285,6 +293,17 @@ namespace Scheduler
                 }
             }
 
+        }
+
+        private void mainView_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+
+        }
+
+        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            if (!doNothing)
+                dateTimePicker1.Value = e.Start;
         }
 
 

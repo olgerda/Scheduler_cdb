@@ -77,7 +77,7 @@ namespace Scheduler_Controls
 
             chkBlackList.Checked = client.BlackListed;
 
-            //txtPrice.Text = client.Price.ToString();
+            lstReceptions.Items.Clear();
 
         }
 
@@ -90,7 +90,6 @@ namespace Scheduler_Controls
                 client.Name != txtFIO.Text ||
                 client.Comment != txtComment.Text ||
                 client.BlackListed != chkBlackList.Checked ||
-                //client.Price != Convert.ToInt32(txtPrice.Text) ||
                 !client.Telephones.SequenceEqual(lstTelephones.Items.Cast<string>());
         }
 
@@ -155,7 +154,6 @@ namespace Scheduler_Controls
             client.Telephones = new HashSet<string>(lstTelephones.Items.Cast<string>());
 
             client.BlackListed = chkBlackList.Checked;
-            //client.Price = Convert.ToInt32(txtPrice.Text);
 
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));
@@ -164,7 +162,25 @@ namespace Scheduler_Controls
         private void btnLoadReceptions_Click(object sender, EventArgs e)
         {
             lstReceptions.Items.Clear();
-            lstReceptions.Items.AddRange(client.GetReceptions().Select(r => r.DisplayString).ToArray());
+            lstReceptions.Items.AddRange(client.GetReceptions().ToArray());
+        }
+
+        private void lstReceptions_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (lstReceptions.SelectedIndex == -1)
+                return;
+            ShowReceptionEditForm((IReception)lstReceptions.SelectedItem);
+        }
+
+        void ShowReceptionEditForm(IReception reception2Edit)
+        {
+            using (Scheduler_Forms.ReceptionInfoEdit receptionForm = new Scheduler_Forms.ReceptionInfoEdit())
+            {
+                receptionForm.Mode = ReceptionInfo.ShowModes.ReadExist;
+                receptionForm.Reception = reception2Edit;
+                if (receptionForm.ShowDialog() == DialogResult.OK)
+                    reception2Edit.CommitToDatabase();
+            }
         }
     }
 }

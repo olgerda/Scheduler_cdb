@@ -22,7 +22,6 @@ namespace Scheduler_InterfacesRealisations
             comment = String.Empty;
             telephones = new HashSet<string>();
             blacklisted = false;
-            getreceptions = null;
         }
 
         string Scheduler_Controls_Interfaces.IClient.Comment

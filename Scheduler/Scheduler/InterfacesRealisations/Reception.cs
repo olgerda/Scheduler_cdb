@@ -13,7 +13,7 @@ namespace Scheduler_InterfacesRealisations
         Scheduler_Controls_Interfaces.ICabinet cabinet;
         string specialisation;
         bool isRented;
-        
+
         int price;
 
         static Scheduler_DBobjects_Intefraces.IMainDataBase database;
@@ -88,7 +88,7 @@ namespace Scheduler_InterfacesRealisations
                 if (receptionsIntersectedWith.Count != 0)
                     result += "Время посещения пересекается с другими: " + Environment.NewLine;
                 foreach (var r in receptionsIntersectedWith)
-                    result += r.DisplayString + Environment.NewLine;//r.ReceptionTimeInterval.Interval() + Environment.NewLine;
+                    result += r.DisplayString + Environment.NewLine;
             }
 
             return result == String.Empty ? null : result;
@@ -141,6 +141,11 @@ namespace Scheduler_InterfacesRealisations
             get { return String.Join(" ", receptionTimeInterval.Date.ToShortDateString(), receptionTimeInterval.Interval(), specialist.Name, specialisation, cabinet.Name); }
         }
 
+        public override string ToString()
+        {
+            return ((Scheduler_Controls_Interfaces.IReception)this).DisplayString;
+        }
+
         void Scheduler_DBobjects_Intefraces.IEntity.SetDatabase(Scheduler_DBobjects_Intefraces.IMainDataBase db)
         {
             if (database == null)
@@ -161,5 +166,25 @@ namespace Scheduler_InterfacesRealisations
                 RaisePropertyChanged("Price");
             }
         }
+
+
+        void Scheduler_Controls_Interfaces.IReception.CommitToDatabase()
+        {
+            if (IAmChanged)
+            {
+                if (ID == 0)
+                    database.AddReception(this);
+                else
+                    database.UpdateReception(this);
+            }
+
+        }
+
+        bool Scheduler_Controls_Interfaces.IDummy.IAmChanged
+        {
+            get { return (this).IAmChanged; }
+            
+        }
+
     }
 }
