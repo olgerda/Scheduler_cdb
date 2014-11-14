@@ -211,7 +211,16 @@ namespace Scheduler_Controls
             if (reception.Cabinet != null)
                 cmbCabinet.SelectedItem = reception.Cabinet;
             if (reception.Specialist != null)
-                cmbSpecialist.SelectedItem = reception.Specialist; ///// FIX ME: присваиваие не работает!!!! ИСПРАВИТЬ!
+            {
+                foreach (var spec in cmbSpecialist.Items.Cast<ISpecialist>())
+                {
+                    if (spec.Equals(reception.Specialist))
+                    {
+                        cmbSpecialist.SelectedItem = spec;
+                        break;
+                    }
+                }
+            }
             if (!String.IsNullOrWhiteSpace(reception.Specialization))
                 cmbSpecialisation.SelectedItem = reception.Specialization;
             else
