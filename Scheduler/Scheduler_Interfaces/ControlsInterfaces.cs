@@ -34,6 +34,10 @@ namespace Scheduler_Controls_Interfaces
     {
         string Comment { get; set; }
 
+        TimeSpan GenerallyTime { get; set; }
+
+        int GenerallyPrice { get; set; }
+
         bool BlackListed { get; set; }
 
         HashSet<string> Telephones { get; set; }

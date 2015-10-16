@@ -59,9 +59,10 @@ namespace Scheduler_Forms
                 receptionNew.Cabinet = e.Entity.Cabinet;
                 receptionNew.Specialist = e.Entity.Specialist;
                 receptionNew.Specialization = e.Entity.Specialization;
+                receptionNew.Price = e.Entity.Price;
                 receptionNew.Rent = e.Entity.Rent;
                 receptionNew.ReceptionTimeInterval = entityFactory.NewTimeInterval();
-                receptionNew.ReceptionTimeInterval.StartDate = DateTime.Now.Date + TimeSpan.FromHours(DateTime.Now.TimeOfDay.Hours);
+                receptionNew.ReceptionTimeInterval.StartDate = e.Entity.Client == null ? e.Entity.ReceptionTimeInterval.StartDate : DateTime.Now.Date + e.Entity.Client.GenerallyTime;
                 receptionNew.ReceptionTimeInterval.EndDate = receptionNew.ReceptionTimeInterval.StartDate + TimeSpan.FromHours(1);
 
                 childForm.Reception = receptionNew;
@@ -190,7 +191,7 @@ namespace Scheduler_Forms
             if (!doNothing)
             {
 
-                var temp = receptionInfoCard.Reception; 
+                var temp = receptionInfoCard.Reception;
                 doNothing = true;
                 if (temp == null)
                     e.Cancel = true;

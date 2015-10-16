@@ -250,7 +250,9 @@ namespace Scheduler_Controls
                         reception.Specialization != cmbSpecialisation.SelectedItem.ToString() ||
                         (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Client != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)clientOnReception
                     )
-                );
+                ) ||
+                reception.Price != (int)numericPrice.Value
+                ;
 
         }
 
@@ -265,7 +267,7 @@ namespace Scheduler_Controls
                 return;
             }
             dummyReception.ID = reception.ID;
-            
+
             dummyReception.Rent = chkRent.Checked;
             if (chkRent.Checked)
             {
@@ -280,31 +282,35 @@ namespace Scheduler_Controls
 
             dummyReception.Cabinet = (ICabinet)cmbCabinet.SelectedItem;
             dummyReception.Specialist = (ISpecialist)cmbSpecialist.SelectedItem;
-            
+
             dummyReception.ReceptionTimeInterval.StartDate = dateTimeStart.Value;
             dummyReception.ReceptionTimeInterval.EndDate = dateTimeEnd.Value;
             dummyReception.Price = Convert.ToInt32(numericPrice.Value);
 
             string errorMessage = dummyReception.Validate();
-            if (errorMessage == null)
+
+            if (errorMessage != null)
             {
-                doNothing = true;
-
-                reception.Client = dummyReception.Client;
-                reception.Rent = dummyReception.Rent;
-                reception.Cabinet = dummyReception.Cabinet;
-                reception.Specialist = dummyReception.Specialist;
-                reception.Specialization = dummyReception.Specialization;
-                reception.ReceptionTimeInterval = dummyReception.ReceptionTimeInterval;
-                reception.Price = dummyReception.Price;
-
-                if (OnSaveChanges != null)
-                    OnSaveChanges(this, new SaveChangesEventArgs<IReception>(reception));
-                doNothing = false;
+                MessageBox.Show(errorMessage, "Ошибка при сохранении результатов.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            MessageBox.Show(errorMessage, "Ошибка при сохранении результатов.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            doNothing = true;
+
+            reception.Client = dummyReception.Client;
+            reception.Rent = dummyReception.Rent;
+            reception.Cabinet = dummyReception.Cabinet;
+            reception.Specialist = dummyReception.Specialist;
+            reception.Specialization = dummyReception.Specialization;
+            reception.ReceptionTimeInterval = dummyReception.ReceptionTimeInterval;
+            reception.Price = dummyReception.Price;
+
+            if (OnSaveChanges != null)
+                OnSaveChanges(this, new SaveChangesEventArgs<IReception>(reception));
+            doNothing = false;
+            return;
+
+
         }
 
         private void dateDate_ValueChanged(object sender, EventArgs e)
@@ -324,7 +330,7 @@ namespace Scheduler_Controls
         {
             if (OnShowClientsButtonClicked != null)
                 OnShowClientsButtonClicked(this, new ShowClientsEventsArgs(txtClientName.Text, txtTelephone.Text));
-            
+
             ActualizePrice();
         }
 
@@ -368,8 +374,11 @@ namespace Scheduler_Controls
             }
             else
             {
-                if (clientOnReception != null && currentSpecialistCosts.ContainsKey(clientOnReception.ID))
-                    numericPrice.Value = currentSpecialistCosts[clientOnReception.ID];
+                if (clientOnReception != null)
+                    if (currentSpecialistCosts.ContainsKey(clientOnReception.ID))
+                        numericPrice.Value = currentSpecialistCosts[clientOnReception.ID];
+                    else
+                        numericPrice.Value = clientOnReception.GenerallyPrice;
             }
         }
 

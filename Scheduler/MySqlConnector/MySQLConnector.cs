@@ -12,7 +12,7 @@ namespace MySqlConnector
 
         public MySQLConnector(Scheduler_Common_Interfaces.IFactory entityFactor)
         {
-            entityFactory = entityFactor;
+            entityFactory = entityFactor;            
         }
 
         static MySql.Data.MySqlClient.MySqlConnection OpenConnection()
@@ -98,6 +98,18 @@ namespace MySqlConnector
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
                 }
+
+                if (client.GenerallyPrice != 0 || client.GenerallyTime != default(TimeSpan))
+                {
+                    query = @"insert into clientGenerallyParams (clientId, generallyTime, generallyPrice) values (@clId, @gT, @gP)";
+                    cmd.CommandText = query;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@clId", InsertedClientId);
+                    cmd.Parameters.AddWithValue("@gT", client.GenerallyTime);
+                    cmd.Parameters.AddWithValue("@gP", client.GenerallyPrice);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                }
             }
             CloseConnection(connection);
         }
@@ -122,6 +134,12 @@ namespace MySqlConnector
                 }
                 cmd.CommandText = "call CleanupTelephones()";
                 cmd.Parameters.Clear();
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = "delete from clientGenerallyParams where clientId = @clid";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@clid", client.ID);
+                cmd.Prepare();
                 cmd.ExecuteNonQuery();
 
             }
@@ -152,7 +170,11 @@ namespace MySqlConnector
                         result.BlackListed = reader.GetInt32("blacklisted") != 0;
                     }
                 }
-
+                
+                //result may be empty here!!!
+                if (result == null)
+                    return result;
+                
                 query = "select t.telephonescol from telephones t, telephones2clients t2c where t2c.clid = @clid and t2c.telid = t.idtelephones;";
                 cmd.CommandText = query;
                 cmd.Parameters.Clear();
@@ -163,6 +185,20 @@ namespace MySqlConnector
                     while (reader.Read())
                     {
                         result.Telephones.Add(reader.GetString("telephonescol"));
+                    }
+                }
+
+                query = "select generallyTime, generallyPrice from clientGenerallyParams where clientId = @clId";
+                cmd.CommandText = query;
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@clId", result.ID);
+                cmd.Prepare();
+                using (MySql.Data.MySqlClient.MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        result.GenerallyTime = reader.GetTimeSpan("generallyTime");
+                        result.GenerallyPrice = reader.GetInt32("generallyPrice");
                     }
                 }
             }
@@ -185,6 +221,9 @@ namespace MySqlConnector
             var telsOnlyInNew = client.Telephones.Except(oldClient.Telephones).ToList();
             bool needAddTelephones = telsOnlyInNew.Count > 0;
 
+            bool needUpdateGenerallyTime = oldClient.GenerallyTime != client.GenerallyTime;
+            bool needUpdateGenerallyPrice = oldClient.GenerallyPrice != client.GenerallyPrice;
+
             var connection = OpenConnection();
 
             //clients columns are: idclients, name, comment, blacklisted
@@ -194,24 +233,27 @@ namespace MySqlConnector
             {
                 if (needUpdateName)
                 {
-                    cmd.CommandText = "update clients set name = @name where idclients = " + client.ID.ToString();
+                    cmd.CommandText = "update clients set name = @name where idclients = @clId";
                     cmd.Parameters.AddWithValue("@name", client.Name);
+                    cmd.Parameters.AddWithValue("@clId", client.ID);
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
                 }
                 if (needUpdateComment)
                 {
-                    cmd.CommandText = "update clients set comment = @comment where idclients = " + client.ID.ToString();
+                    cmd.CommandText = "update clients set comment = @comment where idclients = @clId";
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@comment", client.Comment);
+                    cmd.Parameters.AddWithValue("@clId", client.ID);
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
                 }
                 if (needUpdateBL)
                 {
-                    cmd.CommandText = "update clients set blacklisted = @bl where idclients = " + client.ID.ToString();
+                    cmd.CommandText = "update clients set blacklisted = @bl where idclients = @clId";
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@bl", client.BlackListed ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@clId", client.ID);
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
                 }
@@ -269,6 +311,18 @@ namespace MySqlConnector
                     cmd.Parameters.Clear();
                     cmd.ExecuteNonQuery();
                 }
+
+                if (needUpdateGenerallyPrice || needUpdateGenerallyTime)
+                {
+                    //cmd.CommandText = "update clientGenerallyParams set generallyTime = @gT, generallyPrice= @gP where clientId = @clId";
+                    cmd.CommandText = "insert into clientGenerallyParams (generallyTime, generallyPrice, clientId) values (@gT, @gP, @clId) on duplicate key update idclientGenerallyParams=LAST_INSERT_ID(idclientGenerallyParams);";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@gT", client.GenerallyTime);
+                    cmd.Parameters.AddWithValue("@gP", client.GenerallyPrice);
+                    cmd.Parameters.AddWithValue("@clId", client.ID);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             CloseConnection(connection);
@@ -314,6 +368,26 @@ namespace MySqlConnector
                         }
                     }
                 }
+
+                query = "select generallyTime, generallyPrice from clientGenerallyParams where clientId = @clId;";
+                cmd.CommandText = query;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add("@clId", MySql.Data.MySqlClient.MySqlDbType.Int32);
+
+                foreach (var client in clientList)
+                {
+                    cmd.Parameters["@clId"].Value = client.ID;
+                    cmd.Prepare();
+                    using (MySql.Data.MySqlClient.MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            client.GenerallyTime = reader.GetTimeSpan("generallyTime");
+                            client.GenerallyPrice = reader.GetInt32("generallyPrice");
+                        }
+                    }
+                }
+
 
             }
             CloseConnection(connection);
@@ -1397,6 +1471,10 @@ namespace MySqlConnector
                 if (conn != null && conn.State == System.Data.ConnectionState.Open)
                     CloseConnection(conn);
             }
+
+            if (result)
+                UPDATEDB_IfNeeded();
+
             return result;
         }
 
@@ -1519,6 +1597,38 @@ namespace MySqlConnector
                 CloseConnection(connection);
         }
 
+        #endregion
+
+        #region DB Updates
+        public void UPDATEDB_IfNeeded()
+        {
+            var connection = OpenConnection();
+            bool need_addTable_clientGenerallyParams = false;
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandText = "show tables like '%clientGenerallyParams%'";
+                need_addTable_clientGenerallyParams = !cmd.ExecuteReader().HasRows;
+            }
+            CloseConnection(connection);
+
+            if (need_addTable_clientGenerallyParams)
+                UPDATEDB_addTable_clientGenerallyParams();
+        }
+
+        static void UPDATEDB_addTable_clientGenerallyParams()
+        {
+            var connection = OpenConnection();
+
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandText = "CREATE TABLE `clientGenerallyParams` (  `idclientGenerallyParams` INT NOT NULL AUTO_INCREMENT,  `clientId` INT ZEROFILL NOT NULL,  `generallyTime` TIME NOT NULL,  `generallyPrice` INT ZEROFILL NOT NULL,  PRIMARY KEY (`idclientGenerallyParams`),  UNIQUE INDEX `idclientGenerallyParams_UNIQUE` (`idclientGenerallyParams` ASC),  UNIQUE INDEX `clientId_UNIQUE` (`clientId` ASC));";
+                cmd.ExecuteNonQuery();                
+            }
+
+            CloseConnection(connection);
+        }
         #endregion
     }
 }

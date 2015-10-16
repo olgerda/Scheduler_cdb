@@ -42,11 +42,20 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.chkBlackList = new System.Windows.Forms.CheckBox();
+            this.dateGenerallyTime = new System.Windows.Forms.DateTimePicker();
+            this.numGenerallyPrice = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.grpMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGenerallyPrice)).BeginInit();
             this.SuspendLayout();
             // 
             // grpMain
             // 
+            this.grpMain.Controls.Add(this.label6);
+            this.grpMain.Controls.Add(this.label5);
+            this.grpMain.Controls.Add(this.numGenerallyPrice);
+            this.grpMain.Controls.Add(this.dateGenerallyTime);
             this.grpMain.Controls.Add(this.btnLoadReceptions);
             this.grpMain.Controls.Add(this.label2);
             this.grpMain.Controls.Add(this.label1);
@@ -142,7 +151,7 @@
             this.txtComment.Location = new System.Drawing.Point(85, 135);
             this.txtComment.Multiline = true;
             this.txtComment.Name = "txtComment";
-            this.txtComment.Size = new System.Drawing.Size(308, 45);
+            this.txtComment.Size = new System.Drawing.Size(308, 20);
             this.txtComment.TabIndex = 3;
             // 
             // lstTelephones
@@ -188,6 +197,52 @@
             this.chkBlackList.Text = "RedList";
             this.chkBlackList.UseVisualStyleBackColor = true;
             // 
+            // dateGenerallyTime
+            // 
+            this.dateGenerallyTime.CustomFormat = "HH:mm";
+            this.dateGenerallyTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateGenerallyTime.Location = new System.Drawing.Point(122, 158);
+            this.dateGenerallyTime.Name = "dateGenerallyTime";
+            this.dateGenerallyTime.ShowUpDown = true;
+            this.dateGenerallyTime.Size = new System.Drawing.Size(51, 20);
+            this.dateGenerallyTime.TabIndex = 22;
+            this.dateGenerallyTime.Value = new System.DateTime(2014, 2, 2, 10, 0, 0, 0);
+            // 
+            // numGenerallyPrice
+            // 
+            this.numGenerallyPrice.Location = new System.Drawing.Point(318, 158);
+            this.numGenerallyPrice.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numGenerallyPrice.Name = "numGenerallyPrice";
+            this.numGenerallyPrice.Size = new System.Drawing.Size(75, 20);
+            this.numGenerallyPrice.TabIndex = 23;
+            this.numGenerallyPrice.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 160);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(110, 13);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "Стандартное время:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(180, 160);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(132, 13);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "Стандартная стоимость:";
+            // 
             // ClientInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -199,6 +254,7 @@
             this.Size = new System.Drawing.Size(400, 265);
             this.grpMain.ResumeLayout(false);
             this.grpMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGenerallyPrice)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -219,5 +275,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox chkBlackList;
         private System.Windows.Forms.Button btnLoadReceptions;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.NumericUpDown numGenerallyPrice;
+        private System.Windows.Forms.DateTimePicker dateGenerallyTime;
     }
 }

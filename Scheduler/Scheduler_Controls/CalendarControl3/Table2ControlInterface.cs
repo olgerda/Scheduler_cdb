@@ -23,7 +23,7 @@ namespace CalendarControl3_Interfaces
         /// Получить значение, от которого отталкиваться при отрисовке до нижнего края.
         /// </summary>
         /// <returns></returns>
-        int MaxValue { get;}
+        int MaxValue { get; }
 
         /// <summary>
         /// Получить список описаний, которые будут отображены в левом столбце как легенда к строкам таблицы.
@@ -36,22 +36,17 @@ namespace CalendarControl3_Interfaces
         /// </summary>
         /// <returns></returns>
         List<IColumn2ControlInterface> Columns { get; }
-
-        //event EventHandler Changed;
     }
 
     public interface IColumn2ControlInterface
     {
         string Name { get; set; }
         List<IEntity2ControlInterface> Entities { get; }
-        //event EventHandler Changed;
     }
 
     public interface IEntity2ControlInterface
     {
-        //bool oneStringToShow;
         string StringToShow { get; }
-        //List<string> StringsToShow();
         /// <summary>
         /// Получить верхнюю границу отрисовки сущности.
         /// </summary>
@@ -62,18 +57,7 @@ namespace CalendarControl3_Interfaces
         /// <returns></returns>
         int BottomLevel { get; }
 
-        /// <summary>
-        /// Получить объект, относящийся к данной сущности.
-        /// </summary>
-        /// <returns></returns>
-        //object GetObject();
-
-        //ulong ID { get; }
-
         bool IsIntersectWith(IEntity2ControlInterface second);
-        //event EventHandler Changed;
-
-        //System.Drawing.Color DrawColor { get; set; }
     }
 
 }

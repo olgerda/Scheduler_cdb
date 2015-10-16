@@ -77,6 +77,9 @@ namespace Scheduler_Controls
 
             chkBlackList.Checked = client.BlackListed;
 
+            dateGenerallyTime.Value = new DateTime(2014, 01, 01) + client.GenerallyTime;
+            numGenerallyPrice.Value = client.GenerallyPrice;
+
             lstReceptions.Items.Clear();
 
         }
@@ -90,7 +93,10 @@ namespace Scheduler_Controls
                 client.Name != txtFIO.Text ||
                 client.Comment != txtComment.Text ||
                 client.BlackListed != chkBlackList.Checked ||
-                !client.Telephones.SequenceEqual(lstTelephones.Items.Cast<string>());
+                !client.Telephones.SequenceEqual(lstTelephones.Items.Cast<string>()) ||
+                client.GenerallyPrice != (int)numGenerallyPrice.Value ||
+                client.GenerallyTime != dateGenerallyTime.Value.TimeOfDay
+                ;
         }
 
         private void btnRemoveTelephone_Click(object sender, EventArgs e)
@@ -154,6 +160,9 @@ namespace Scheduler_Controls
             client.Telephones = new HashSet<string>(lstTelephones.Items.Cast<string>());
 
             client.BlackListed = chkBlackList.Checked;
+
+            client.GenerallyTime = dateGenerallyTime.Value.TimeOfDay;
+            client.GenerallyPrice = (int)numGenerallyPrice.Value;
 
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));

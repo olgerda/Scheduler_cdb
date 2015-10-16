@@ -160,7 +160,7 @@ namespace Scheduler
             receptionEntitiesTable.WorkTimeInterval = workday;
 
             Dictionary<DateTime, string> descriprions = new Dictionary<DateTime, string>(13);
-            for (int i = 10; i <= 22; i++)
+            for (int i = 10; i <= 22; i++) //дикий хардкод, переписать на что-то вразумительное 
             {
                 DateTime date = new DateTime(1, 1, 1, i, 0, 0);
                 descriprions.Add(date, date.ToShortTimeString());

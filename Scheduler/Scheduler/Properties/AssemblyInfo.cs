@@ -3,6 +3,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Resources;
 
 #endregion
 
@@ -14,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("dadys")]
 [assembly: AssemblyProduct("Scheduler")]
-[assembly: AssemblyCopyright("Copyright 2013")]
+[assembly: AssemblyCopyright("Copyright 2014 dadymax")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -28,5 +29,6 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can use the default the Revision and 
 // Build Numbers by using the '*' as shown below:
-[assembly: AssemblyVersion("1.0.0.1")]
-[assembly: AssemblyFileVersionAttribute("1.1.1.1")]
+[assembly: AssemblyVersion("1.0.2.1")]
+[assembly: AssemblyFileVersionAttribute("1.1.2.1")]
+[assembly: NeutralResourcesLanguageAttribute("ru")]

@@ -8,10 +8,18 @@ namespace Scheduler_InterfacesRealisations
 {
     public class Client : CommonObjectWithNotify, Scheduler_Controls_Interfaces.IClient
     {
+        struct GeneralParams
+        {
+            public TimeSpan GenerallyTime;
+            public int GenerallyPrice;
+        }
+
         string comment;
         bool blacklisted;
         HashSet<string> telephones;
         string name;
+
+        GeneralParams generalParams;
 
         static Scheduler_Controls_Interfaces.GetClientReceptionsList getreceptions;
 
@@ -71,10 +79,10 @@ namespace Scheduler_InterfacesRealisations
 
         List<Scheduler_Controls_Interfaces.IReception> Scheduler_Controls_Interfaces.IClient.GetReceptions()
         {
-                if (getreceptions != null)
-                    return getreceptions(this);
-                else
-                    return new List<Scheduler_Controls_Interfaces.IReception>();
+            if (getreceptions != null)
+                return getreceptions(this);
+            else
+                return new List<Scheduler_Controls_Interfaces.IReception>();
         }
 
         string Scheduler_Controls_Interfaces.INamedEntity.Name
@@ -95,18 +103,46 @@ namespace Scheduler_InterfacesRealisations
             if (getreceptions == null)
                 getreceptions = func;
         }
+
+
+        TimeSpan Scheduler_Controls_Interfaces.IClient.GenerallyTime
+        {
+            get
+            {
+                return generalParams.GenerallyTime;
+            }
+            set
+            {
+                generalParams = new GeneralParams() { GenerallyTime = value, GenerallyPrice = generalParams.GenerallyPrice };
+            }
+        }
+
+        int Scheduler_Controls_Interfaces.IClient.GenerallyPrice
+        {
+            get
+            {
+                return generalParams.GenerallyPrice;
+            }
+            set
+            {
+                generalParams = new GeneralParams() { GenerallyTime = generalParams.GenerallyTime, GenerallyPrice = value };
+            }
+        }
+
     }
 
     public class ClientList : CommonList<Scheduler_Controls_Interfaces.IClient>, Scheduler_Forms_Interfaces.IClientList
     {
         //List<Scheduler_Controls_Interfaces.IClient> list;
 
-        public ClientList(): base()
+        public ClientList()
+            : base()
         {
             //list = new List<Scheduler_Controls_Interfaces.IClient>();
         }
 
-        ClientList(ClientList old): base(old)
+        ClientList(ClientList old)
+            : base(old)
         {
             //list = new List<Scheduler_Controls_Interfaces.IClient>(old.list);
         }
@@ -126,15 +162,15 @@ namespace Scheduler_InterfacesRealisations
             return result;
         }
 
-//         List<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.List
-//         {
-//             get { return list; }
-//         }
+        //         List<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.List
+        //         {
+        //             get { return list; }
+        //         }
 
-//         Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.Copy()
-//         {
-//             return new ClientList(this);
-//         }
+        //         Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.Copy()
+        //         {
+        //             return new ClientList(this);
+        //         }
 
         public override Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient> Copy()
         {

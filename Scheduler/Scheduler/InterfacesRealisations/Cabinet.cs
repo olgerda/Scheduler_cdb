@@ -10,24 +10,26 @@ namespace Scheduler_InterfacesRealisations
     {
         //List<Scheduler_Controls_Interfaces.ICabinet> list;
 
-        public CabinetList(): base()
+        public CabinetList()
+            : base()
         {
             //list = new List<Scheduler_Controls_Interfaces.ICabinet>();
         }
 
-        CabinetList(CabinetList cablist2copy) : base(cablist2copy)
+        CabinetList(CabinetList cablist2copy)
+            : base(cablist2copy)
         {
         }
-// 
-//         List<Scheduler_Controls_Interfaces.ICabinet> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet>.List
-//         {
-//             get { return list; }
-//         }
+        // 
+        //         List<Scheduler_Controls_Interfaces.ICabinet> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet>.List
+        //         {
+        //             get { return list; }
+        //         }
 
-//         Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet>.Copy()
-//         {
-//             return new CabinetList(this);
-//         }
+        //         Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet>.Copy()
+        //         {
+        //             return new CabinetList(this);
+        //         }
 
         public override Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.ICabinet> Copy()
         {
@@ -35,7 +37,7 @@ namespace Scheduler_InterfacesRealisations
         }
     }
 
-    public class Cabinet: CommonObjectWithNotify, Scheduler_Controls_Interfaces.ICabinet
+    public class Cabinet : CommonObjectWithNotify, Scheduler_Controls_Interfaces.ICabinet
     {
         //public UInt16 id;
         private string name;
@@ -82,10 +84,10 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-//         public int ID
-//         {
-//             get { return id; }
-//             set { id = value; RaisePropertyChanged("ID"); }
-//         }
+        //         public int ID
+        //         {
+        //             get { return id; }
+        //             set { id = value; RaisePropertyChanged("ID"); }
+        //         }
     }
 }

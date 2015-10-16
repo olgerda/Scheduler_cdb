@@ -11,7 +11,7 @@ namespace Scheduler_InterfacesRealisations
         HashSet<string> specialisations;
         bool notworking;
 
-        static Scheduler_Controls_Interfaces.GetCosts getConstsFunction;
+        static Scheduler_Controls_Interfaces.GetCosts getCostsFunction;
 
         public Specialist()
         {
@@ -66,24 +66,26 @@ namespace Scheduler_InterfacesRealisations
 
         Dictionary<int, int> Scheduler_Controls_Interfaces.ISpecialist.GetCosts()
         {
-            return getConstsFunction == null ? new Dictionary<int, int>() : getConstsFunction(this);
+            return getCostsFunction == null ? new Dictionary<int, int>() : getCostsFunction(this);
         }
 
         void Scheduler_Controls_Interfaces.ISpecialist.CostsFunction(Scheduler_Controls_Interfaces.GetCosts func)
         {
-            if (getConstsFunction == null) 
-                getConstsFunction = func;
+            if (getCostsFunction == null)
+                getCostsFunction = func;
         }
     }
 
     public class SpecialistList : CommonList<Scheduler_Controls_Interfaces.ISpecialist>, Scheduler_Forms_Interfaces.ISpecialistList
     {
 
-        public SpecialistList(): base()
+        public SpecialistList()
+            : base()
         {
         }
 
-        SpecialistList(SpecialistList old): base(old)
+        SpecialistList(SpecialistList old)
+            : base(old)
         {
         }
 
