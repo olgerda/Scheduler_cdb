@@ -41,6 +41,8 @@ namespace Scheduler_Controls_Interfaces
         bool BlackListed { get; set; }
 
         HashSet<string> Telephones { get; set; }
+
+        string Administrator { get; set; }
         /// <summary>
         /// Проверить, входит ли переданный телефон в список телефонов клиента.
         /// </summary>
@@ -95,6 +97,7 @@ namespace Scheduler_Controls_Interfaces
         ICabinet Cabinet { get; set; }
         string Specialization { get; set; }
         bool Rent { get; set; }
+        string Administrator { get; set; }
 
         void CommitToDatabase();
 

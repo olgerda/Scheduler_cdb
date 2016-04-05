@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Scheduler_Controls_Interfaces;
 
 namespace Scheduler_InterfacesRealisations
 {
@@ -13,6 +14,7 @@ namespace Scheduler_InterfacesRealisations
         Scheduler_Controls_Interfaces.ICabinet cabinet;
         string specialisation;
         bool isRented;
+        string administrator;
 
         int price;
 
@@ -186,5 +188,17 @@ namespace Scheduler_InterfacesRealisations
             
         }
 
+        string IReception.Administrator
+        {
+            get
+            {
+                return administrator ?? String.Empty;
+            }
+
+            set
+            {
+                administrator = value;
+            }
+        }
     }
 }

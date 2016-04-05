@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             this.grpMain = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.numGenerallyPrice = new System.Windows.Forms.NumericUpDown();
+            this.dateGenerallyTime = new System.Windows.Forms.DateTimePicker();
             this.btnLoadReceptions = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,16 +46,16 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.chkBlackList = new System.Windows.Forms.CheckBox();
-            this.dateGenerallyTime = new System.Windows.Forms.DateTimePicker();
-            this.numGenerallyPrice = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtAdministrator = new System.Windows.Forms.TextBox();
             this.grpMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGenerallyPrice)).BeginInit();
             this.SuspendLayout();
             // 
             // grpMain
             // 
+            this.grpMain.Controls.Add(this.txtAdministrator);
+            this.grpMain.Controls.Add(this.label7);
             this.grpMain.Controls.Add(this.label6);
             this.grpMain.Controls.Add(this.label5);
             this.grpMain.Controls.Add(this.numGenerallyPrice);
@@ -76,6 +80,52 @@
             this.grpMain.TabIndex = 0;
             this.grpMain.TabStop = false;
             this.grpMain.Text = "Карточка клиента";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(180, 160);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(132, 13);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "Стандартная стоимость:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 160);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(110, 13);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "Стандартное время:";
+            // 
+            // numGenerallyPrice
+            // 
+            this.numGenerallyPrice.Location = new System.Drawing.Point(318, 158);
+            this.numGenerallyPrice.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numGenerallyPrice.Name = "numGenerallyPrice";
+            this.numGenerallyPrice.Size = new System.Drawing.Size(75, 20);
+            this.numGenerallyPrice.TabIndex = 23;
+            this.numGenerallyPrice.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            // 
+            // dateGenerallyTime
+            // 
+            this.dateGenerallyTime.CustomFormat = "HH:mm";
+            this.dateGenerallyTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateGenerallyTime.Location = new System.Drawing.Point(122, 158);
+            this.dateGenerallyTime.Name = "dateGenerallyTime";
+            this.dateGenerallyTime.ShowUpDown = true;
+            this.dateGenerallyTime.Size = new System.Drawing.Size(51, 20);
+            this.dateGenerallyTime.TabIndex = 22;
+            this.dateGenerallyTime.Value = new System.DateTime(2014, 2, 2, 10, 0, 0, 0);
             // 
             // btnLoadReceptions
             // 
@@ -142,7 +192,7 @@
             this.lstReceptions.HorizontalScrollbar = true;
             this.lstReceptions.Location = new System.Drawing.Point(85, 47);
             this.lstReceptions.Name = "lstReceptions";
-            this.lstReceptions.Size = new System.Drawing.Size(308, 82);
+            this.lstReceptions.Size = new System.Drawing.Size(308, 56);
             this.lstReceptions.TabIndex = 4;
             this.lstReceptions.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstReceptions_MouseDoubleClick);
             // 
@@ -190,58 +240,28 @@
             // chkBlackList
             // 
             this.chkBlackList.AutoSize = true;
-            this.chkBlackList.Location = new System.Drawing.Point(9, 99);
+            this.chkBlackList.Location = new System.Drawing.Point(9, 92);
             this.chkBlackList.Name = "chkBlackList";
             this.chkBlackList.Size = new System.Drawing.Size(62, 17);
             this.chkBlackList.TabIndex = 12;
             this.chkBlackList.Text = "RedList";
             this.chkBlackList.UseVisualStyleBackColor = true;
             // 
-            // dateGenerallyTime
+            // label7
             // 
-            this.dateGenerallyTime.CustomFormat = "HH:mm";
-            this.dateGenerallyTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateGenerallyTime.Location = new System.Drawing.Point(122, 158);
-            this.dateGenerallyTime.Name = "dateGenerallyTime";
-            this.dateGenerallyTime.ShowUpDown = true;
-            this.dateGenerallyTime.Size = new System.Drawing.Size(51, 20);
-            this.dateGenerallyTime.TabIndex = 22;
-            this.dateGenerallyTime.Value = new System.DateTime(2014, 2, 2, 10, 0, 0, 0);
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 112);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(86, 13);
+            this.label7.TabIndex = 26;
+            this.label7.Text = "Администратор";
             // 
-            // numGenerallyPrice
+            // txtAdministrator
             // 
-            this.numGenerallyPrice.Location = new System.Drawing.Point(318, 158);
-            this.numGenerallyPrice.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numGenerallyPrice.Name = "numGenerallyPrice";
-            this.numGenerallyPrice.Size = new System.Drawing.Size(75, 20);
-            this.numGenerallyPrice.TabIndex = 23;
-            this.numGenerallyPrice.Value = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 160);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(110, 13);
-            this.label5.TabIndex = 24;
-            this.label5.Text = "Стандартное время:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(180, 160);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(132, 13);
-            this.label6.TabIndex = 25;
-            this.label6.Text = "Стандартная стоимость:";
+            this.txtAdministrator.Location = new System.Drawing.Point(92, 109);
+            this.txtAdministrator.Name = "txtAdministrator";
+            this.txtAdministrator.Size = new System.Drawing.Size(301, 20);
+            this.txtAdministrator.TabIndex = 27;
             // 
             // ClientInfo
             // 
@@ -279,5 +299,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numGenerallyPrice;
         private System.Windows.Forms.DateTimePicker dateGenerallyTime;
+        private System.Windows.Forms.TextBox txtAdministrator;
+        private System.Windows.Forms.Label label7;
     }
 }

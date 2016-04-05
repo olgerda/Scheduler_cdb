@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using Scheduler_Controls_Interfaces;
 
 namespace Scheduler_InterfacesRealisations
 {
@@ -18,6 +19,7 @@ namespace Scheduler_InterfacesRealisations
         bool blacklisted;
         HashSet<string> telephones;
         string name;
+        string administrator;
 
         GeneralParams generalParams;
 
@@ -129,6 +131,18 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
+        string IClient.Administrator
+        {
+            get
+            {
+                return administrator ?? String.Empty;
+            }
+
+            set
+            {
+                administrator = value;
+            }
+        }
     }
 
     public class ClientList : CommonList<Scheduler_Controls_Interfaces.IClient>, Scheduler_Forms_Interfaces.IClientList

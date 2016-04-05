@@ -55,7 +55,7 @@ namespace MySqlConnector
         #region Clients and Telephones
         void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddClient(Scheduler_Controls_Interfaces.IClient client)
         {
-            //clients columns are: idclients, name, comment, blacklisted
+            //clients columns are: idclients, name, comment, blacklisted, administrator
             //telephones columns: idtelephones, telephonescol
             //telephones2clients columns: idtelephones2clients, telid, clid
             var connection = OpenConnection();
@@ -75,12 +75,13 @@ namespace MySqlConnector
                     listInsertedTelephonesId.Add(cmd.LastInsertedId);
                 }
 
-                query = @"insert into clients (name, comment, blacklisted) values (@name, @comment, @blacklisted)";
+                query = @"insert into clients (name, comment, blacklisted, administrator) values (@name, @comment, @blacklisted, @administrator)";
                 cmd.CommandText = query;
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@name", client.Name);
                 cmd.Parameters.AddWithValue("@comment", client.Comment);
                 cmd.Parameters.AddWithValue("@blacklisted", client.BlackListed ? 1 : 0);
+                cmd.Parameters.AddWithValue("@administrator", client.Administrator);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
                 long InsertedClientId = cmd.LastInsertedId;
@@ -153,7 +154,7 @@ namespace MySqlConnector
                 return result;
             var connection = existedConnection ?? OpenConnection();
 
-            string query = "select idclients, name, comment, blacklisted from clients where idclients = @id";
+            string query = "select idclients, name, comment, blacklisted, administrator from clients where idclients = @id";
 
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(query, connection))
             {
@@ -168,6 +169,7 @@ namespace MySqlConnector
                         result.ID = reader.GetInt32("idclients");
                         result.Comment = reader.GetString("comment");
                         result.BlackListed = reader.GetInt32("blacklisted") != 0;
+                        result.Administrator = reader.GetString("administrator");
                     }
                 }
                 
@@ -216,6 +218,7 @@ namespace MySqlConnector
             bool needUpdateName = oldClient.Name != client.Name;
             bool needUpdateComment = oldClient.Comment != client.Comment;
             bool needUpdateBL = oldClient.BlackListed != client.BlackListed;
+            bool needUpdateAdministrator = oldClient.Administrator != client.Administrator;
             var telsOnlyInOld = oldClient.Telephones.Except(client.Telephones).ToList();
             bool needRemoveTelephones = telsOnlyInOld.Count > 0;
             var telsOnlyInNew = client.Telephones.Except(oldClient.Telephones).ToList();
@@ -226,7 +229,7 @@ namespace MySqlConnector
 
             var connection = OpenConnection();
 
-            //clients columns are: idclients, name, comment, blacklisted
+            //clients columns are: idclients, name, comment, blacklisted, administrator
             //telephones columns: idtelephones, telephonescol
             //telephones2clients columns: idtelephones2clients, telid, clid
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("", connection))
@@ -253,6 +256,14 @@ namespace MySqlConnector
                     cmd.CommandText = "update clients set blacklisted = @bl where idclients = @clId";
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@bl", client.BlackListed ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@clId", client.ID);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                }
+                if (needUpdateAdministrator)
+                {
+                    cmd.CommandText = "update clients set administrator = @administrator where idclients = @clId";
+                    cmd.Parameters.AddWithValue("@administrator", client.Administrator);
                     cmd.Parameters.AddWithValue("@clId", client.ID);
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
@@ -334,7 +345,7 @@ namespace MySqlConnector
             //columns are: idclients, name, comment, blacklisted
             var connection = OpenConnection();
 
-            string query = "select idclients, name, comment, blacklisted from clients";
+            string query = "select idclients, name, comment, blacklisted, administrator from clients";
 
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(query, connection))
             {
@@ -348,6 +359,7 @@ namespace MySqlConnector
                         current.ID = reader.GetInt32("idclients");
                         current.Comment = reader.GetString("comment");
                         current.BlackListed = reader.GetInt32("blacklisted") != 0;
+                        current.Administrator = reader.GetString("administrator");
                         clientList.Add(current);
                     }
                 }
@@ -892,6 +904,7 @@ namespace MySqlConnector
             public TimeSpan timestart;
             public TimeSpan timeend;
             public DateTime date;
+            public string administrator;
         }
 
         List<Scheduler_DBobjects_Intefraces.IEntity> Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.GetReceptionsFromDate(DateTime date)
@@ -903,7 +916,7 @@ namespace MySqlConnector
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
             {
                 cmd.Connection = connection;
-                cmd.CommandText = "select idreceptions, clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate from receptions where timedate = @date";
+                cmd.CommandText = "select idreceptions, clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate, administrator from receptions where timedate = @date";
                 cmd.Parameters.AddWithValue("@date", date.Date);
                 cmd.Prepare();
                 using (var reader = cmd.ExecuteReader())
@@ -920,7 +933,8 @@ namespace MySqlConnector
                             isrented = reader.GetInt32("isrented"),
                             timestart = reader.GetTimeSpan("timestart"),
                             timeend = reader.GetTimeSpan("timeend"),
-                            date = reader.GetDateTime("timedate")
+                            date = reader.GetDateTime("timedate"),
+                            administrator = reader.GetString("administrator")                            
                         });
                     }
                 }
@@ -939,6 +953,7 @@ namespace MySqlConnector
                 timeinterval.SetStartEnd(recpt.date.Date.Add(recpt.timestart), recpt.date.Date.Add(recpt.timeend));
                 current.ReceptionTimeInterval = timeinterval;
                 current.Price = GetPriceForSpecialistClientPair(current.Specialist, current.Client, connection);
+                current.Administrator = recpt.administrator;
                 result.Add(current);
             }
             CloseConnection(connection);
@@ -956,7 +971,7 @@ namespace MySqlConnector
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
             {
                 cmd.Connection = connection;
-                cmd.CommandText = "select idreceptions, clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate from receptions where timedate between @startdate and @enddate";
+                cmd.CommandText = "select idreceptions, clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate, administrator from receptions where timedate between @startdate and @enddate";
                 cmd.Parameters.AddWithValue("@startdate", startDate.Date);
                 cmd.Parameters.AddWithValue("@enddate", endDate.Date);
                 cmd.Prepare();
@@ -974,7 +989,8 @@ namespace MySqlConnector
                             isrented = reader.GetInt32("isrented"),
                             timestart = reader.GetTimeSpan("timestart"),
                             timeend = reader.GetTimeSpan("timeend"),
-                            date = reader.GetDateTime("timedate")
+                            date = reader.GetDateTime("timedate"),
+                            administrator = reader.GetString("administrator")
                         });
                     }
                 }
@@ -993,6 +1009,7 @@ namespace MySqlConnector
                 timeinterval.SetStartEnd(recpt.date.Date.Add(recpt.timestart), recpt.date.Date.Add(recpt.timeend));
                 current.ReceptionTimeInterval = timeinterval;
                 current.Price = GetPriceForSpecialistClientPair(current.Specialist, current.Client, connection);
+                current.Administrator = recpt.administrator;
                 result.Add(current);
             }
             CloseConnection(connection);
@@ -1017,13 +1034,14 @@ namespace MySqlConnector
                 }
 
                 cmd.Parameters.Clear();
-                cmd.CommandText = "insert into receptions (clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate) values (@cnt, @sst, @cab, @son, @r, @ts, @te, @td)";
+                cmd.CommandText = "insert into receptions (clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate, administrator) values (@cnt, @sst, @cab, @son, @r, @ts, @te, @td, @adm)";
                 cmd.Parameters.AddWithValue("@sst", reception.Specialist.ID);
                 cmd.Parameters.AddWithValue("@cab", reception.Cabinet.ID);
                 cmd.Parameters.AddWithValue("@r", reception.Rent ? 1 : 0);
                 cmd.Parameters.AddWithValue("@ts", reception.ReceptionTimeInterval.StartDate.TimeOfDay);
                 cmd.Parameters.AddWithValue("@te", reception.ReceptionTimeInterval.EndDate.TimeOfDay);
                 cmd.Parameters.AddWithValue("@td", reception.ReceptionTimeInterval.Date);
+                cmd.Parameters.AddWithValue("@adm", reception.Administrator);
 
                 //                 int? tmp = null;
                 //                 if (reception.Client != null)
@@ -1069,6 +1087,8 @@ namespace MySqlConnector
                 oldReception.ReceptionTimeInterval.EndDate != reception.ReceptionTimeInterval.EndDate;
 
             bool needUpdatePrice = oldReception.Price != reception.Price;
+
+            bool needUpdateAdministrator = oldReception.Administrator != reception.Administrator;
 
             var connection = OpenConnection();
 
@@ -1122,6 +1142,16 @@ namespace MySqlConnector
                     cmd.ExecuteNonQuery();
                 }
 
+                if (needUpdateAdministrator)
+                {
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "update receptions set administrator = @adm where idreceptions = @rcptid";
+                    cmd.Parameters.AddWithValue("@adm", reception.Administrator);
+                    cmd.Parameters.AddWithValue("@rcptid", reception.ID);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                }
+
                 if (needUpdateSpecialization)
                 {
                     cmd.Parameters.Clear();
@@ -1165,7 +1195,7 @@ namespace MySqlConnector
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
             {
                 cmd.Connection = connection;
-                cmd.CommandText = "select idreceptions, clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate from receptions where idreceptions = @rcptid";
+                cmd.CommandText = "select idreceptions, clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate, administrator from receptions where idreceptions = @rcptid";
                 cmd.Parameters.AddWithValue("@rcptid", id);
                 cmd.Prepare();
                 using (var reader = cmd.ExecuteReader())
@@ -1182,6 +1212,7 @@ namespace MySqlConnector
                         temp.timestart = reader.GetTimeSpan("timestart");
                         temp.timeend = reader.GetTimeSpan("timeend");
                         temp.date = reader.GetDateTime("timedate");
+                        temp.administrator = reader.GetString("administrator");
                     }
                 }
             }
@@ -1199,6 +1230,7 @@ namespace MySqlConnector
                 timeinterval.SetStartEnd(temp.date.Date.Add(temp.timestart), temp.date.Date.Add(temp.timeend));
                 result.ReceptionTimeInterval = timeinterval;
                 result.Price = GetPriceForSpecialistClientPair(result.Specialist, result.Client, connection);
+                result.Administrator = temp.administrator;
             }
             CloseConnection(connection);
 
@@ -1238,7 +1270,7 @@ namespace MySqlConnector
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
             {
                 cmd.Connection = connection;
-                cmd.CommandText = "select idreceptions, clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate from receptions where clientid = @clid";
+                cmd.CommandText = "select idreceptions, clientid, specialistid, cabinetid, specializationid, isrented, timestart, timeend, timedate, administrator from receptions where clientid = @clid";
                 cmd.Parameters.AddWithValue("@clid", client.ID);
                 cmd.Prepare();
                 using (var reader = cmd.ExecuteReader())
@@ -1255,7 +1287,8 @@ namespace MySqlConnector
                             isrented = reader.GetInt32("isrented"),
                             timestart = reader.GetTimeSpan("timestart"),
                             timeend = reader.GetTimeSpan("timeend"),
-                            date = reader.GetDateTime("timedate")
+                            date = reader.GetDateTime("timedate"),
+                            administrator = reader.GetString("administrator")
                         });
                     }
                 }
@@ -1274,6 +1307,7 @@ namespace MySqlConnector
                 timeinterval.SetStartEnd(recpt.date.Date.Add(recpt.timestart), recpt.date.Date.Add(recpt.timeend));
                 current.ReceptionTimeInterval = timeinterval;
                 current.Price = GetPriceForSpecialistClientPair(current.Specialist, current.Client, connection);
+                current.Administrator = recpt.administrator;
                 result.Add(current);
             }
             CloseConnection(connection);
@@ -1604,16 +1638,26 @@ namespace MySqlConnector
         {
             var connection = OpenConnection();
             bool need_addTable_clientGenerallyParams = false;
+            bool need_alterTable_addAdministratorFieldToClientAndReception = false;
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
             {
                 cmd.Connection = connection;
                 cmd.CommandText = "show tables like '%clientGenerallyParams%'";
-                need_addTable_clientGenerallyParams = !cmd.ExecuteReader().HasRows;
+                var reader = cmd.ExecuteReader();
+                need_addTable_clientGenerallyParams = !reader.HasRows;
+                reader.Close();
+                
+                cmd.CommandText = "select `COLUMN_NAME` from `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='kvartet_new' AND `TABLE_NAME`='clients' AND `COLUMN_NAME` like '%administrator%'";
+                reader = cmd.ExecuteReader();
+                need_alterTable_addAdministratorFieldToClientAndReception = !reader.HasRows;
+                reader.Close();
             }
             CloseConnection(connection);
 
             if (need_addTable_clientGenerallyParams)
                 UPDATEDB_addTable_clientGenerallyParams();
+            if (need_alterTable_addAdministratorFieldToClientAndReception)
+                UPDATEDB_alterTables_addAdministratorFieldToClientAndReception();
         }
 
         static void UPDATEDB_addTable_clientGenerallyParams()
@@ -1625,6 +1669,22 @@ namespace MySqlConnector
                 cmd.Connection = connection;
                 cmd.CommandText = "CREATE TABLE `clientGenerallyParams` (  `idclientGenerallyParams` INT NOT NULL AUTO_INCREMENT,  `clientId` INT ZEROFILL NOT NULL,  `generallyTime` TIME NOT NULL,  `generallyPrice` INT ZEROFILL NOT NULL,  PRIMARY KEY (`idclientGenerallyParams`),  UNIQUE INDEX `idclientGenerallyParams_UNIQUE` (`idclientGenerallyParams` ASC),  UNIQUE INDEX `clientId_UNIQUE` (`clientId` ASC));";
                 cmd.ExecuteNonQuery();                
+            }
+
+            CloseConnection(connection);
+        }
+
+        static void UPDATEDB_alterTables_addAdministratorFieldToClientAndReception()
+        {
+            var connection = OpenConnection();
+
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandText = "ALTER TABLE `receptions` ADD COLUMN administrator TINYTEXT NOT NULL;";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "ALTER TABLE `clients` ADD COLUMN administrator TINYTEXT NOT NULL; ";
+                cmd.ExecuteNonQuery();
             }
 
             CloseConnection(connection);

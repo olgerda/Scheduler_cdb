@@ -144,6 +144,7 @@ namespace Scheduler_Controls
                     return;
                 txtClientName.Text = clientOnReception.Name;
                 txtTelephone.Text = clientOnReception.Telephones.FirstOrDefault();
+                txtAdministrator.Text = clientOnReception.Administrator;
             }
         }
 
@@ -229,6 +230,8 @@ namespace Scheduler_Controls
 
             numericPrice.Value = reception.Price;
 
+            txtAdministrator.Text = reception.Administrator;
+
             ClientOnReception = reception.Client;
         }
 
@@ -251,7 +254,8 @@ namespace Scheduler_Controls
                         (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Client != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)clientOnReception
                     )
                 ) ||
-                reception.Price != (int)numericPrice.Value
+                reception.Price != (int)numericPrice.Value ||
+                reception.Administrator != txtAdministrator.Text;
                 ;
 
         }
@@ -287,6 +291,8 @@ namespace Scheduler_Controls
             dummyReception.ReceptionTimeInterval.EndDate = dateTimeEnd.Value;
             dummyReception.Price = Convert.ToInt32(numericPrice.Value);
 
+            dummyReception.Administrator = txtAdministrator.Text;
+
             string errorMessage = dummyReception.Validate();
 
             if (errorMessage != null)
@@ -304,6 +310,7 @@ namespace Scheduler_Controls
             reception.Specialization = dummyReception.Specialization;
             reception.ReceptionTimeInterval = dummyReception.ReceptionTimeInterval;
             reception.Price = dummyReception.Price;
+            reception.Administrator = dummyReception.Administrator;
 
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<IReception>(reception));

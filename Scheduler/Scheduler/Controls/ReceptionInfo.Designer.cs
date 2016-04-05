@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.grpMain = new System.Windows.Forms.GroupBox();
+            this.numericPrice = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
             this.btnShowClientCard = new System.Windows.Forms.Button();
             this.cmbSpecialist = new System.Windows.Forms.ComboBox();
             this.btnCreateChildReception = new System.Windows.Forms.Button();
@@ -49,15 +51,17 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.cmbSpecialisation = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.numericPrice = new System.Windows.Forms.NumericUpDown();
+            this.txtAdministrator = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.grpMain.SuspendLayout();
-            this.pnlClient.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericPrice)).BeginInit();
+            this.pnlClient.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMain
             // 
+            this.grpMain.Controls.Add(this.txtAdministrator);
+            this.grpMain.Controls.Add(this.label8);
             this.grpMain.Controls.Add(this.numericPrice);
             this.grpMain.Controls.Add(this.label7);
             this.grpMain.Controls.Add(this.btnShowClientCard);
@@ -82,6 +86,28 @@
             this.grpMain.TabStop = false;
             this.grpMain.Text = "Карточка записи";
             // 
+            // numericPrice
+            // 
+            this.numericPrice.Location = new System.Drawing.Point(302, 62);
+            this.numericPrice.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.numericPrice.Name = "numericPrice";
+            this.numericPrice.Size = new System.Drawing.Size(62, 20);
+            this.numericPrice.TabIndex = 27;
+            this.numericPrice.ThousandsSeparator = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(302, 41);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(62, 13);
+            this.label7.TabIndex = 26;
+            this.label7.Text = "Стоимость";
+            // 
             // btnShowClientCard
             // 
             this.btnShowClientCard.Location = new System.Drawing.Point(370, 10);
@@ -103,9 +129,9 @@
             // 
             // btnCreateChildReception
             // 
-            this.btnCreateChildReception.Location = new System.Drawing.Point(9, 93);
+            this.btnCreateChildReception.Location = new System.Drawing.Point(9, 122);
             this.btnCreateChildReception.Name = "btnCreateChildReception";
-            this.btnCreateChildReception.Size = new System.Drawing.Size(167, 23);
+            this.btnCreateChildReception.Size = new System.Drawing.Size(168, 23);
             this.btnCreateChildReception.TabIndex = 16;
             this.btnCreateChildReception.Text = "Назначить следующий приём";
             this.btnCreateChildReception.UseVisualStyleBackColor = true;
@@ -113,7 +139,7 @@
             // 
             // btnCancelReception
             // 
-            this.btnCancelReception.Location = new System.Drawing.Point(196, 93);
+            this.btnCancelReception.Location = new System.Drawing.Point(183, 122);
             this.btnCancelReception.Name = "btnCancelReception";
             this.btnCancelReception.Size = new System.Drawing.Size(103, 23);
             this.btnCancelReception.TabIndex = 17;
@@ -135,7 +161,7 @@
             this.cmbCabinet.FormattingEnabled = true;
             this.cmbCabinet.Location = new System.Drawing.Point(74, 62);
             this.cmbCabinet.Name = "cmbCabinet";
-            this.cmbCabinet.Size = new System.Drawing.Size(222, 21);
+            this.cmbCabinet.Size = new System.Drawing.Size(125, 21);
             this.cmbCabinet.TabIndex = 14;
             // 
             // label4
@@ -181,9 +207,9 @@
             // 
             // btnCommit
             // 
-            this.btnCommit.Location = new System.Drawing.Point(9, 122);
+            this.btnCommit.Location = new System.Drawing.Point(302, 122);
             this.btnCommit.Name = "btnCommit";
-            this.btnCommit.Size = new System.Drawing.Size(579, 23);
+            this.btnCommit.Size = new System.Drawing.Size(286, 23);
             this.btnCommit.TabIndex = 19;
             this.btnCommit.Text = "Сохранить изменения";
             this.btnCommit.UseVisualStyleBackColor = true;
@@ -274,27 +300,21 @@
             this.cmbSpecialisation.Size = new System.Drawing.Size(122, 21);
             this.cmbSpecialisation.TabIndex = 11;
             // 
-            // label7
+            // txtAdministrator
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(302, 41);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(62, 13);
-            this.label7.TabIndex = 26;
-            this.label7.Text = "Стоимость";
+            this.txtAdministrator.Location = new System.Drawing.Point(92, 93);
+            this.txtAdministrator.Name = "txtAdministrator";
+            this.txtAdministrator.Size = new System.Drawing.Size(272, 20);
+            this.txtAdministrator.TabIndex = 29;
             // 
-            // numericPrice
+            // label8
             // 
-            this.numericPrice.Location = new System.Drawing.Point(302, 62);
-            this.numericPrice.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.numericPrice.Name = "numericPrice";
-            this.numericPrice.Size = new System.Drawing.Size(62, 20);
-            this.numericPrice.TabIndex = 27;
-            this.numericPrice.ThousandsSeparator = true;
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 96);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(86, 13);
+            this.label8.TabIndex = 28;
+            this.label8.Text = "Администратор";
             // 
             // ReceptionInfo
             // 
@@ -307,9 +327,9 @@
             this.Size = new System.Drawing.Size(595, 150);
             this.grpMain.ResumeLayout(false);
             this.grpMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericPrice)).EndInit();
             this.pnlClient.ResumeLayout(false);
             this.pnlClient.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericPrice)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -339,5 +359,7 @@
         private System.Windows.Forms.Panel pnlClient;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown numericPrice;
+        private System.Windows.Forms.TextBox txtAdministrator;
+        private System.Windows.Forms.Label label8;
     }
 }

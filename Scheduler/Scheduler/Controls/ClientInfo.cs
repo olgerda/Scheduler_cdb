@@ -80,8 +80,9 @@ namespace Scheduler_Controls
             dateGenerallyTime.Value = new DateTime(2014, 01, 01) + client.GenerallyTime;
             numGenerallyPrice.Value = client.GenerallyPrice;
 
-            lstReceptions.Items.Clear();
+            txtAdministrator.Text = client.Administrator;
 
+            lstReceptions.Items.Clear();
         }
 
         bool SomethingChanged()
@@ -95,7 +96,8 @@ namespace Scheduler_Controls
                 client.BlackListed != chkBlackList.Checked ||
                 !client.Telephones.SequenceEqual(lstTelephones.Items.Cast<string>()) ||
                 client.GenerallyPrice != (int)numGenerallyPrice.Value ||
-                client.GenerallyTime != dateGenerallyTime.Value.TimeOfDay
+                client.GenerallyTime != dateGenerallyTime.Value.TimeOfDay ||
+                client.Administrator != txtAdministrator.Text
                 ;
         }
 
@@ -133,7 +135,7 @@ namespace Scheduler_Controls
                 SaveChanges();
             else
                 if (OnSaveChanges != null)
-                    OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));
+                OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));
         }
 
         /// <summary>
@@ -163,6 +165,8 @@ namespace Scheduler_Controls
 
             client.GenerallyTime = dateGenerallyTime.Value.TimeOfDay;
             client.GenerallyPrice = (int)numGenerallyPrice.Value;
+
+            client.Administrator = txtAdministrator.Text;
 
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));
