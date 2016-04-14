@@ -144,7 +144,7 @@ namespace Scheduler_Controls
                     return;
                 txtClientName.Text = clientOnReception.Name;
                 txtTelephone.Text = clientOnReception.Telephones.FirstOrDefault();
-                txtAdministrator.Text = clientOnReception.Administrator;
+                //txtAdministrator.Text = clientOnReception.Administrator;
             }
         }
 

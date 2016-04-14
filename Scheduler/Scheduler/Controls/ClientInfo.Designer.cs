@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.grpMain = new System.Windows.Forms.GroupBox();
+            this.txtAdministrator = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.numGenerallyPrice = new System.Windows.Forms.NumericUpDown();
@@ -46,8 +48,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.chkBlackList = new System.Windows.Forms.CheckBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtAdministrator = new System.Windows.Forms.TextBox();
             this.grpMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGenerallyPrice)).BeginInit();
             this.SuspendLayout();
@@ -80,6 +80,24 @@
             this.grpMain.TabIndex = 0;
             this.grpMain.TabStop = false;
             this.grpMain.Text = "Карточка клиента";
+            // 
+            // txtAdministrator
+            // 
+            this.txtAdministrator.Location = new System.Drawing.Point(92, 109);
+            this.txtAdministrator.Name = "txtAdministrator";
+            this.txtAdministrator.Size = new System.Drawing.Size(301, 20);
+            this.txtAdministrator.TabIndex = 27;
+            this.txtAdministrator.Visible = false;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 112);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(86, 13);
+            this.label7.TabIndex = 26;
+            this.label7.Text = "Администратор";
+            this.label7.Visible = false;
             // 
             // label6
             // 
@@ -192,7 +210,7 @@
             this.lstReceptions.HorizontalScrollbar = true;
             this.lstReceptions.Location = new System.Drawing.Point(85, 47);
             this.lstReceptions.Name = "lstReceptions";
-            this.lstReceptions.Size = new System.Drawing.Size(308, 56);
+            this.lstReceptions.Size = new System.Drawing.Size(308, 82);
             this.lstReceptions.TabIndex = 4;
             this.lstReceptions.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstReceptions_MouseDoubleClick);
             // 
@@ -246,22 +264,6 @@
             this.chkBlackList.TabIndex = 12;
             this.chkBlackList.Text = "RedList";
             this.chkBlackList.UseVisualStyleBackColor = true;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 112);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(86, 13);
-            this.label7.TabIndex = 26;
-            this.label7.Text = "Администратор";
-            // 
-            // txtAdministrator
-            // 
-            this.txtAdministrator.Location = new System.Drawing.Point(92, 109);
-            this.txtAdministrator.Name = "txtAdministrator";
-            this.txtAdministrator.Size = new System.Drawing.Size(301, 20);
-            this.txtAdministrator.TabIndex = 27;
             // 
             // ClientInfo
             // 
