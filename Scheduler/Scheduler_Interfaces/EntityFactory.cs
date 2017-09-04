@@ -23,10 +23,10 @@ namespace Scheduler_Common_Interfaces
         ITelephone NewTelephone();
         ITimeInterval NewTimeInterval();
 
-        Scheduler_DBobjects_Intefraces.IMainDataBase NewMainDataBase();
-        Scheduler_DBobjects_Intefraces.Scheduler_DBconnector NewDBConnector();
-        Scheduler_DBobjects_Intefraces.ITable NewTable();
-        Scheduler_DBobjects_Intefraces.IColumn NewColumn();
-        Scheduler_DBobjects_Intefraces.IEntity NewEntity();
+        IMainDataBase NewMainDataBase();
+        Scheduler_DBconnectorIntefrace NewDBConnector();
+        ITable NewTable();
+        IColumn NewColumn();
+        IEntity NewEntity();
     }
 }

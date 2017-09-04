@@ -147,18 +147,15 @@ namespace Scheduler_InterfacesRealisations
 
     public class ClientList : CommonList<Scheduler_Controls_Interfaces.IClient>, Scheduler_Forms_Interfaces.IClientList
     {
-        //List<Scheduler_Controls_Interfaces.IClient> list;
 
         public ClientList()
             : base()
         {
-            //list = new List<Scheduler_Controls_Interfaces.IClient>();
         }
 
         ClientList(ClientList old)
             : base(old)
         {
-            //list = new List<Scheduler_Controls_Interfaces.IClient>(old.list);
         }
 
         Scheduler_Controls_Interfaces.IClient Scheduler_Forms_Interfaces.IClientList.FindClientByPartialName(string partialName)
@@ -175,16 +172,6 @@ namespace Scheduler_InterfacesRealisations
                 this.List.FirstOrDefault(c => c.Telephones.FirstOrDefault(t => t == Tel) != default(string));
             return result;
         }
-
-        //         List<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.List
-        //         {
-        //             get { return list; }
-        //         }
-
-        //         Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient> Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient>.Copy()
-        //         {
-        //             return new ClientList(this);
-        //         }
 
         public override Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient> Copy()
         {

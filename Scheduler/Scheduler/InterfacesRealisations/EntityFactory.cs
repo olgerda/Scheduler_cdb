@@ -93,9 +93,20 @@ namespace Scheduler_InterfacesRealisations
             return new Scheduler_DBobjects.MainDatabase();
         }
 
-        public Scheduler_DBobjects_Intefraces.Scheduler_DBconnector NewDBConnector()
+        public Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace NewDBConnector()
         {
-            return new MySqlConnector.MySQLConnector(this);
+            //TODO: implement code to switch connectors
+            var connectorFileName = Scheduler.Properties.Settings.Default.DbConnectorFile;
+            var file = System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory,
+                connectorFileName, System.IO.SearchOption.TopDirectoryOnly);
+            if (file.Length != 1)
+                throw new OverflowException("There " + (file.Length == 0 ? "none" : "more than one") + " DbConnectorFile found in directory " + AppDomain.CurrentDomain.BaseDirectory);
+            var t = System.Reflection.Assembly.LoadFile(file[0])
+                .GetExportedTypes()
+                .First(x => typeof(Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace).IsAssignableFrom(x));
+            
+            return (Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)(Activator.CreateInstance(t, this));
+            //return new MySqlConnector.MySQLConnector(this);
         }
 
         public Scheduler_DBobjects_Intefraces.ITable NewTable()

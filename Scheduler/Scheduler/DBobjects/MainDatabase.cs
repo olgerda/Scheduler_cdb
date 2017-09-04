@@ -14,7 +14,7 @@ namespace Scheduler_DBobjects
         Scheduler_Controls_Interfaces.ISpecializationList specializationList;
         Scheduler_Forms_Interfaces.ICabinetList cabinetList;
 
-        Scheduler_DBobjects_Intefraces.Scheduler_DBconnector dbconnector;
+        Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace dbconnector;
 
         string errMsg;
 
@@ -25,10 +25,11 @@ namespace Scheduler_DBobjects
             var SqlConnectionNode = System.Xml.Linq.XDocument.Load("config.xml").Descendants("dbconnection").First();
             string connString = String.Empty;
 
-            connString = String.Join(";",SqlConnectionNode.Descendants().Select(n => String.Format("{0}={1}", n.Name, n.Value)).ToArray());
+            connString = String.Join(";", SqlConnectionNode.Descendants().Select(n => String.Format("{0}={1}", n.Name, n.Value)).ToArray());
 
             dbconnector = entityFactory.NewDBConnector();
-            dbconnector.ConnectionString = connString;
+            if (String.IsNullOrWhiteSpace(dbconnector.ConnectionString))
+                dbconnector.ConnectionString = connString;
 
             if (dbconnector.CheckDBConnection(out errMsg))
             {
@@ -117,12 +118,26 @@ namespace Scheduler_DBobjects
 
         void Scheduler_DBobjects_Intefraces.IMainDataBase.MakeBackup(string filename)
         {
-            dbconnector.MakeBackup(filename);
+            try
+            {
+                dbconnector.MakeBackup(filename);
+            }
+            catch (Exception e)
+            {
+                errMsg = e.Message;
+            }
         }
 
         void Scheduler_DBobjects_Intefraces.IMainDataBase.RestoreBackup(string filename)
         {
-            dbconnector.RestoreBackup(filename);
+            try
+            {
+                dbconnector.RestoreBackup(filename);
+            }
+            catch (Exception e)
+            {
+                errMsg = e.Message;
+            }
         }
 
         void Scheduler_DBobjects_Intefraces.IMainDataBase.ClearErrorString()

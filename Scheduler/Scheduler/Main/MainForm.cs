@@ -209,6 +209,11 @@ namespace Scheduler
                 if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     database.MakeBackup(dlg.FileName);
             }
+            if (database.ErrorString != null)
+            {
+                MessageBox.Show(database.ErrorString, "DB Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                database.ClearErrorString();
+            }
         }
 
         private void развернутьРезервнуюКопиюToolStripMenuItem_Click(object sender, EventArgs e)
@@ -219,6 +224,11 @@ namespace Scheduler
                 dlg.FilterIndex = 1;
                 if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     database.RestoreBackup(dlg.FileName);
+            }
+            if (database.ErrorString != null)
+            {
+                MessageBox.Show(database.ErrorString, "DB Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                database.ClearErrorString();
             }
         }
 

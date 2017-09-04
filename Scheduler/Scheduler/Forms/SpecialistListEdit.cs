@@ -122,8 +122,8 @@ namespace Scheduler_Forms
                 if (!specList.List.Contains(result))
                 {
                     specList.Add(result);
-                    lstSpecialistList.DataSource = specList.List.Cast<INamedEntity>().ToList();
                 }
+                lstSpecialistList.DataSource = specList.List.Cast<INamedEntity>().ToList();
                 lstSpecialistList.SelectedItem = result;
             }
             return result;

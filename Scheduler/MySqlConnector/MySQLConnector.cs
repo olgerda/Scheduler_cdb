@@ -7,12 +7,10 @@ namespace MySqlConnector
 {
     public class MySQLConnector : Scheduler_DBobjects_Intefraces.Scheduler_DBconnector
     {
-        static Scheduler_Common_Interfaces.IFactory entityFactory;
         static string connectionString;
 
-        public MySQLConnector(Scheduler_Common_Interfaces.IFactory entityFactor)
-        {
-            entityFactory = entityFactor;            
+        public MySQLConnector(Scheduler_Common_Interfaces.IFactory entityFactor) : base (entityFactor)
+        {           
         }
 
         static MySql.Data.MySqlClient.MySqlConnection OpenConnection()
@@ -39,7 +37,7 @@ namespace MySqlConnector
         }
 
         //Close connection
-        static private void CloseConnection(MySql.Data.MySqlClient.MySqlConnection connection)
+        private static void CloseConnection(MySql.Data.MySqlClient.MySqlConnection connection)
         {
             try
             {
@@ -53,7 +51,7 @@ namespace MySqlConnector
         }
 
         #region Clients and Telephones
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddClient(Scheduler_Controls_Interfaces.IClient client)
+        public override void AddClient(Scheduler_Controls_Interfaces.IClient client)
         {
             //clients columns are: idclients, name, comment, blacklisted, administrator
             //telephones columns: idtelephones, telephonescol
@@ -115,7 +113,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveClient(Scheduler_Controls_Interfaces.IClient client)
+        public override void RemoveClient(Scheduler_Controls_Interfaces.IClient client)
         {
             var connection = OpenConnection();
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
@@ -147,7 +145,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        private static Scheduler_Controls_Interfaces.IClient GetClientById(int id, MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
+        private Scheduler_Controls_Interfaces.IClient GetClientById(int id, MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
         {
             Scheduler_Controls_Interfaces.IClient result = null;
             if (id == 0)
@@ -164,7 +162,7 @@ namespace MySqlConnector
                 {
                     if (reader.Read())
                     {
-                        result = entityFactory.NewClient();
+                        result = EntityFactory.NewClient();
                         result.Name = reader.GetString("name");
                         result.ID = reader.GetInt32("idclients");
                         result.Comment = reader.GetString("comment");
@@ -210,7 +208,7 @@ namespace MySqlConnector
             return result;
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.UpdateClientData(Scheduler_Controls_Interfaces.IClient client)
+        public override void UpdateClientData(Scheduler_Controls_Interfaces.IClient client)
         {
             var oldClient = GetClientById(client.ID);
             if (oldClient == null)
@@ -339,7 +337,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        Scheduler_Forms_Interfaces.IClientList Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AllClients()
+        protected override Scheduler_Forms_Interfaces.IClientList AllClientsInternal()
         {
             List<Scheduler_Controls_Interfaces.IClient> clientList = new List<Scheduler_Controls_Interfaces.IClient>();
             //columns are: idclients, name, comment, blacklisted
@@ -354,7 +352,7 @@ namespace MySqlConnector
                 {
                     while (reader.Read())
                     {
-                        Scheduler_Controls_Interfaces.IClient current = entityFactory.NewClient();
+                        Scheduler_Controls_Interfaces.IClient current = EntityFactory.NewClient();
                         current.Name = reader.GetString("name");
                         current.ID = reader.GetInt32("idclients");
                         current.Comment = reader.GetString("comment");
@@ -404,17 +402,18 @@ namespace MySqlConnector
             }
             CloseConnection(connection);
 
-            var result = entityFactory.NewClientList();
-            result.List.AddRange(clientList);
-            result.OnItemAdded += ListItemAddHandler;
-            result.OnItemRemoved += ListItemRemoveHandler;
-            result.OnItemChanged += ListItemChangedHandler;
-            return result;
+            //var result = EntityFactory.NewClientList();
+            //result.List.AddRange(clientList);
+            //result.OnItemAdded += ListItemAddHandler;
+            //result.OnItemRemoved += ListItemRemoveHandler;
+            //result.OnItemChanged += ListItemChangedHandler;
+            //return result;
+            return AllClients(clientList, ListItemAddHandler, ListItemChangedHandler, ListItemRemoveHandler);
         }
         #endregion
 
         #region Specialists
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist)
+        public override void AddSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist)
         {
             var connection = OpenConnection();
 
@@ -456,7 +455,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist)
+        public override void RemoveSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist)
         {
             var connection = OpenConnection();
 
@@ -479,7 +478,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.UpdateSpecialistData(Scheduler_Controls_Interfaces.ISpecialist specialist)
+        public override void UpdateSpecialistData(Scheduler_Controls_Interfaces.ISpecialist specialist)
         {
             var oldSpec = GetSpecialistById(specialist.ID);
             if (oldSpec == null)
@@ -571,7 +570,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        static Scheduler_Controls_Interfaces.ISpecialist GetSpecialistById(int id, MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
+        Scheduler_Controls_Interfaces.ISpecialist GetSpecialistById(int id, MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
         {
             if (id == 0)
                 return null;
@@ -589,7 +588,7 @@ namespace MySqlConnector
                 {
                     if (reader.Read())
                     {
-                        result = entityFactory.NewSpecialist();
+                        result = EntityFactory.NewSpecialist();
                         result.ID = id;
                         result.Name = reader.GetString("name");
                         result.NotWorking = reader.GetInt32("notworking") == 1;
@@ -614,11 +613,11 @@ namespace MySqlConnector
             return result;
         }
 
-        Scheduler_Forms_Interfaces.ISpecialistList Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AllSpecialists()
+        protected override Scheduler_Forms_Interfaces.ISpecialistList AllSpecialistsInternal()
         {
             var connection = OpenConnection();
 
-            Scheduler_Forms_Interfaces.ISpecialistList result = entityFactory.NewSpecialistList();
+            Scheduler_Forms_Interfaces.ISpecialistList result = EntityFactory.NewSpecialistList();
 
             using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand())
             {
@@ -629,7 +628,7 @@ namespace MySqlConnector
                 {
                     while (reader.Read())
                     {
-                        var currentSpec = entityFactory.NewSpecialist();
+                        var currentSpec = EntityFactory.NewSpecialist();
                         currentSpec.ID = reader.GetInt32("idspecialists");
                         currentSpec.Name = reader.GetString("name");
                         currentSpec.NotWorking = reader.GetInt32("notworking") == 1;
@@ -662,7 +661,7 @@ namespace MySqlConnector
         #endregion
 
         #region Specializations
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddSpecialization(string specialization)
+        public override void AddSpecialization(string specialization)
         {
             var connection = OpenConnection();
 
@@ -678,7 +677,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveSpecialization(string specialization)
+        public override void RemoveSpecialization(string specialization)
         {
             var connection = OpenConnection();
 
@@ -722,9 +721,9 @@ namespace MySqlConnector
             return result;
         }
 
-        Scheduler_Controls_Interfaces.ISpecializationList Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AllSpecializations()
+        public override Scheduler_Controls_Interfaces.ISpecializationList AllSpecializations()
         {
-            var resultList = entityFactory.NewSpecializationList();
+            var resultList = EntityFactory.NewSpecializationList();
 
             var connection = OpenConnection();
 
@@ -750,7 +749,7 @@ namespace MySqlConnector
         #endregion Specializations
 
         #region Cabinets
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet)
+        public override void AddCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet)
         {
             var connection = OpenConnection();
 
@@ -767,7 +766,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet)
+        public override void RemoveCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet)
         {
             var connection = OpenConnection();
 
@@ -792,7 +791,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.UpdateCabinetData(Scheduler_Controls_Interfaces.ICabinet cabinet)
+        public override void UpdateCabinetData(Scheduler_Controls_Interfaces.ICabinet cabinet)
         {
             var oldCabinet = GetCabinetById(cabinet.ID);
             if (oldCabinet == null)
@@ -829,7 +828,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        static Scheduler_Controls_Interfaces.ICabinet GetCabinetById(int id, MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
+        Scheduler_Controls_Interfaces.ICabinet GetCabinetById(int id, MySql.Data.MySqlClient.MySqlConnection existedConnection = null)
         {
             if (id == 0)
                 return null;
@@ -846,7 +845,7 @@ namespace MySqlConnector
                 {
                     if (reader.Read())
                     {
-                        result = entityFactory.NewCabinet();
+                        result = EntityFactory.NewCabinet();
                         result.ID = id;
                         result.Name = reader.GetString("name");
                         result.Availability = reader.GetInt32("availability") == 1;
@@ -859,9 +858,9 @@ namespace MySqlConnector
             return result;
         }
 
-        Scheduler_Forms_Interfaces.ICabinetList Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AllCabinets()
+        protected override Scheduler_Forms_Interfaces.ICabinetList AllCabinetsInternal()
         {
-            var resultList = entityFactory.NewCabinetList();
+            var resultList = EntityFactory.NewCabinetList();
 
             var connection = OpenConnection();
 
@@ -873,7 +872,7 @@ namespace MySqlConnector
                 {
                     while (reader.Read())
                     {
-                        var currentCabinet = entityFactory.NewCabinet();
+                        var currentCabinet = EntityFactory.NewCabinet();
                         currentCabinet.ID = reader.GetInt32("idcabinet");
                         currentCabinet.Name = reader.GetString("name");
                         currentCabinet.Availability = reader.GetInt32("availability") == 1;
@@ -907,7 +906,7 @@ namespace MySqlConnector
             public string administrator;
         }
 
-        List<Scheduler_DBobjects_Intefraces.IEntity> Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.GetReceptionsFromDate(DateTime date)
+        public override List<Scheduler_DBobjects_Intefraces.IEntity> GetReceptionsFromDate(DateTime date)
         {
             List<Scheduler_DBobjects_Intefraces.IEntity> result = new List<Scheduler_DBobjects_Intefraces.IEntity>();
             var connection = OpenConnection();
@@ -942,14 +941,14 @@ namespace MySqlConnector
 
             foreach (var recpt in tempResults)
             {
-                var current = entityFactory.NewEntity();
+                var current = EntityFactory.NewEntity();
                 current.ID = recpt.ownid;
                 current.Client = GetClientById(recpt.clientid, connection);
                 current.Specialist = GetSpecialistById(recpt.spectid, connection);
                 current.Specialization = GetSpecializationById(recpt.specnid, connection);
                 current.Cabinet = GetCabinetById(recpt.cabid, connection);
                 current.Rent = recpt.isrented == 1;
-                var timeinterval = entityFactory.NewTimeInterval();
+                var timeinterval = EntityFactory.NewTimeInterval();
                 timeinterval.SetStartEnd(recpt.date.Date.Add(recpt.timestart), recpt.date.Date.Add(recpt.timeend));
                 current.ReceptionTimeInterval = timeinterval;
                 current.Price = GetPriceForSpecialistClientPair(current.Specialist, current.Client, connection);
@@ -962,7 +961,7 @@ namespace MySqlConnector
         }
 
 
-        List<Scheduler_DBobjects_Intefraces.IEntity> Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.GetReceptionsBetweenDates(DateTime startDate, DateTime endDate)
+        public override List<Scheduler_DBobjects_Intefraces.IEntity> GetReceptionsBetweenDates(DateTime startDate, DateTime endDate)
         {
             List<Scheduler_DBobjects_Intefraces.IEntity> result = new List<Scheduler_DBobjects_Intefraces.IEntity>();
             var connection = OpenConnection();
@@ -998,14 +997,14 @@ namespace MySqlConnector
 
             foreach (var recpt in tempResults)
             {
-                var current = entityFactory.NewEntity();
+                var current = EntityFactory.NewEntity();
                 current.ID = recpt.ownid;
                 current.Client = GetClientById(recpt.clientid, connection);
                 current.Specialist = GetSpecialistById(recpt.spectid, connection);
                 current.Specialization = GetSpecializationById(recpt.specnid, connection);
                 current.Cabinet = GetCabinetById(recpt.cabid, connection);
                 current.Rent = recpt.isrented == 1;
-                var timeinterval = entityFactory.NewTimeInterval();
+                var timeinterval = EntityFactory.NewTimeInterval();
                 timeinterval.SetStartEnd(recpt.date.Date.Add(recpt.timestart), recpt.date.Date.Add(recpt.timeend));
                 current.ReceptionTimeInterval = timeinterval;
                 current.Price = GetPriceForSpecialistClientPair(current.Specialist, current.Client, connection);
@@ -1017,7 +1016,7 @@ namespace MySqlConnector
             return result;
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.AddReception(Scheduler_DBobjects_Intefraces.IEntity reception)
+        public override void AddReception(Scheduler_DBobjects_Intefraces.IEntity reception)
         {
             var connection = OpenConnection();
 
@@ -1061,7 +1060,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.UpdateReception(Scheduler_DBobjects_Intefraces.IEntity reception)
+        public override void UpdateReception(Scheduler_DBobjects_Intefraces.IEntity reception)
         {
             var oldReception = GetReceptionById(reception.ID);
             if (oldReception == null)
@@ -1073,11 +1072,9 @@ namespace MySqlConnector
             bool needUpdateRent = oldReception.Rent != reception.Rent;
             //тут есть проблема - если клиент не задан, то жопа нас встречает!
 
-            bool needUpdateClient = false;// = oldReception.Client.ID != reception.Client.ID;
-            needUpdateClient =
-                oldReception.Client == null && reception.Client != null ||
-                oldReception.Client != null && reception.Client == null ||
-                (oldReception.Client != null && reception.Client != null && oldReception.Client.ID != reception.Client.ID);
+            var needUpdateClient = oldReception.Client == null && reception.Client != null ||
+                                    oldReception.Client != null && reception.Client == null ||
+                                    (oldReception.Client != null && reception.Client != null && oldReception.Client.ID != reception.Client.ID);
 
             bool needUpdateSpecialization = oldReception.Specialization != reception.Specialization;
 
@@ -1183,7 +1180,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        Scheduler_DBobjects_Intefraces.IEntity GetReceptionById(int id)
+        public Scheduler_DBobjects_Intefraces.IEntity GetReceptionById(int id)
         {
             if (id == 0)
                 return null;
@@ -1219,14 +1216,14 @@ namespace MySqlConnector
 
             if (somethingreaded)
             {
-                result = entityFactory.NewEntity();
+                result = EntityFactory.NewEntity();
                 result.ID = temp.ownid;
                 result.Client = GetClientById(temp.clientid, connection);
                 result.Specialist = GetSpecialistById(temp.spectid, connection);
                 result.Specialization = GetSpecializationById(temp.specnid, connection);
                 result.Cabinet = GetCabinetById(temp.cabid, connection);
                 result.Rent = temp.isrented == 1;
-                var timeinterval = entityFactory.NewTimeInterval();
+                var timeinterval = EntityFactory.NewTimeInterval();
                 timeinterval.SetStartEnd(temp.date.Date.Add(temp.timestart), temp.date.Date.Add(temp.timeend));
                 result.ReceptionTimeInterval = timeinterval;
                 result.Price = GetPriceForSpecialistClientPair(result.Specialist, result.Client, connection);
@@ -1237,7 +1234,7 @@ namespace MySqlConnector
             return result;
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RemoveReception(Scheduler_DBobjects_Intefraces.IEntity reception)
+        public override void RemoveReception(Scheduler_DBobjects_Intefraces.IEntity reception)
         {
             var connection = OpenConnection();
 
@@ -1261,7 +1258,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        public static List<Scheduler_Controls_Interfaces.IReception> GetReceptionsForClient(Scheduler_Controls_Interfaces.IClient client)
+        public override List<Scheduler_Controls_Interfaces.IReception> GetReceptionsForClient(Scheduler_Controls_Interfaces.IClient client)
         {
             List<Scheduler_DBobjects_Intefraces.IEntity> result = new List<Scheduler_DBobjects_Intefraces.IEntity>();
             var connection = OpenConnection();
@@ -1296,14 +1293,14 @@ namespace MySqlConnector
 
             foreach (var recpt in tempResults)
             {
-                var current = entityFactory.NewEntity();
+                var current = EntityFactory.NewEntity();
                 current.ID = recpt.ownid;
                 current.Client = client;
                 current.Specialist = GetSpecialistById(recpt.spectid, connection);
                 current.Specialization = GetSpecializationById(recpt.specnid, connection);
                 current.Cabinet = GetCabinetById(recpt.cabid, connection);
                 current.Rent = recpt.isrented == 1;
-                var timeinterval = entityFactory.NewTimeInterval();
+                var timeinterval = EntityFactory.NewTimeInterval();
                 timeinterval.SetStartEnd(recpt.date.Date.Add(recpt.timestart), recpt.date.Date.Add(recpt.timeend));
                 current.ReceptionTimeInterval = timeinterval;
                 current.Price = GetPriceForSpecialistClientPair(current.Specialist, current.Client, connection);
@@ -1315,12 +1312,12 @@ namespace MySqlConnector
             return result.Cast<Scheduler_Controls_Interfaces.IReception>().ToList();
         }
 
-        List<Scheduler_Controls_Interfaces.IReception> Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.GetReceptionsForClient(Scheduler_Controls_Interfaces.IClient client)
-        {
-            return GetReceptionsForClient(client);
-        }
+        //public List<Scheduler_Controls_Interfaces.IReception> GetReceptionsForClient(Scheduler_Controls_Interfaces.IClient client)
+        //{
+        //    return MySQLConnector.GetReceptionsForClient(client);
+        //}
 
-        Dictionary<int, int> Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.GetCostsForSpecialist(Scheduler_Controls_Interfaces.ISpecialist spec)
+        public override Dictionary<int, int> GetCostsForSpecialist(Scheduler_Controls_Interfaces.ISpecialist spec)
         {
             return GetPriceForSpecialist(spec);
         }
@@ -1333,28 +1330,28 @@ namespace MySqlConnector
             Scheduler_Controls_Interfaces.IClient client = item as Scheduler_Controls_Interfaces.IClient;
             if (client != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).AddClient(client);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).AddClient(client);
                 return;
             }
 
             Scheduler_Controls_Interfaces.ISpecialist specialist = item as Scheduler_Controls_Interfaces.ISpecialist;
             if (specialist != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).AddSpecialist(specialist);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).AddSpecialist(specialist);
                 return;
             }
 
             Scheduler_Controls_Interfaces.ICabinet cabinet = item as Scheduler_Controls_Interfaces.ICabinet;
             if (cabinet != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).AddCabinet(cabinet);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).AddCabinet(cabinet);
                 return;
             }
 
             string specialization = item as string;
             if (specialization != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).AddSpecialization(specialization);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).AddSpecialization(specialization);
                 return;
             }
 
@@ -1365,28 +1362,28 @@ namespace MySqlConnector
             Scheduler_Controls_Interfaces.IClient client = item as Scheduler_Controls_Interfaces.IClient;
             if (client != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).RemoveClient(client);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).RemoveClient(client);
                 return;
             }
 
             Scheduler_Controls_Interfaces.ISpecialist specialist = item as Scheduler_Controls_Interfaces.ISpecialist;
             if (specialist != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).RemoveSpecialist(specialist);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).RemoveSpecialist(specialist);
                 return;
             }
 
             Scheduler_Controls_Interfaces.ICabinet cabinet = item as Scheduler_Controls_Interfaces.ICabinet;
             if (cabinet != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).RemoveCabinet(cabinet);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).RemoveCabinet(cabinet);
                 return;
             }
 
             string specialization = item as string;
             if (specialization != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).RemoveSpecialization(specialization);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).RemoveSpecialization(specialization);
                 return;
             }
         }
@@ -1396,40 +1393,28 @@ namespace MySqlConnector
             Scheduler_Controls_Interfaces.IClient client = item as Scheduler_Controls_Interfaces.IClient;
             if (client != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).UpdateClientData(client);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).UpdateClientData(client);
                 return;
             }
 
             Scheduler_Controls_Interfaces.ISpecialist specialist = item as Scheduler_Controls_Interfaces.ISpecialist;
             if (specialist != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).UpdateSpecialistData(specialist);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).UpdateSpecialistData(specialist);
                 return;
             }
 
             Scheduler_Controls_Interfaces.ICabinet cabinet = item as Scheduler_Controls_Interfaces.ICabinet;
             if (cabinet != null)
             {
-                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnector)this).UpdateCabinetData(cabinet);
+                ((Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace)this).UpdateCabinetData(cabinet);
                 return;
             }
         }
 
         #endregion
 
-        Scheduler_Common_Interfaces.IFactory Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.EntityFactory
-        {
-            get
-            {
-                return entityFactory;
-            }
-            set
-            {
-                entityFactory = value;
-            }
-        }
-
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.MakeBackup(string filename)
+        public override void MakeBackup(string filename)
         {
             if (System.IO.File.Exists(filename))
                 return;
@@ -1445,7 +1430,7 @@ namespace MySqlConnector
             CloseConnection(connection);
         }
 
-        void Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.RestoreBackup(string filename)
+        public override void RestoreBackup(string filename)
         {
             if (!System.IO.File.Exists(filename))
                 return;
@@ -1463,7 +1448,7 @@ namespace MySqlConnector
         }
 
 
-        bool Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.CheckDBConnection(out string message)
+        public override bool CheckDBConnection(out string message)
         {
             bool result = true;
             message = null;
@@ -1513,7 +1498,7 @@ namespace MySqlConnector
         }
 
 
-        string Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.ConnectionString
+        public override string ConnectionString
         {
             get
             {
@@ -1545,7 +1530,7 @@ namespace MySqlConnector
                 cmd.CommandText = "select price from specialist2clientprice where specid=@spid and clid=@clid";
                 cmd.Parameters.AddWithValue("@spid", spec.ID);
 
-                int clid = client == null ? -100 : client.ID;
+                int clid = client == null ? CLIENTRENTID : client.ID;
                 cmd.Parameters.AddWithValue("@clid", clid);
 
                 cmd.Prepare();
@@ -1603,7 +1588,7 @@ namespace MySqlConnector
                 cmd.CommandText = "select idspecialist2clientcost from specialist2clientprice where specid=@spid and clid=@clid";
                 cmd.Parameters.AddWithValue("@spid", spec.ID);
 
-                int clid = client == null ? -100 : client.ID;
+                int clid = client == null ? CLIENTRENTID : client.ID;
                 cmd.Parameters.AddWithValue("@clid", clid);
 
                 cmd.Prepare();
@@ -1647,7 +1632,7 @@ namespace MySqlConnector
                 need_addTable_clientGenerallyParams = !reader.HasRows;
                 reader.Close();
                 
-                cmd.CommandText = "select `COLUMN_NAME` from `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='kvartet_new' AND `TABLE_NAME`='clients' AND `COLUMN_NAME` like '%administrator%'";
+                cmd.CommandText = "select `COLUMN_NAME` from `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='Scheduler' AND `TABLE_NAME`='clients' AND `COLUMN_NAME` like '%administrator%'";
                 reader = cmd.ExecuteReader();
                 need_alterTable_addAdministratorFieldToClientAndReception = !reader.HasRows;
                 reader.Close();

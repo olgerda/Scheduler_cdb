@@ -62,6 +62,24 @@ namespace Scheduler_InterfacesRealisations
             return !(a == b);
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            var test = obj as CommonObjectWithNotify;
+            return test != null && this == test;
+        }
+
+        protected bool Equals(CommonObjectWithNotify other)
+        {
+            return id == other.id;
+        }
+
+        public override int GetHashCode()
+        {
+            return id;
+        }
+
         int Scheduler_Controls_Interfaces.IHaveID.ID
         {
             get
@@ -94,7 +112,7 @@ namespace Scheduler_InterfacesRealisations
         }
     }
 
-    public abstract class CommonList<T> : Scheduler_Forms_Interfaces.IEntityList<T> where T : Scheduler_Controls_Interfaces.IDummy
+    public abstract class CommonList<T> : Scheduler_Forms_Interfaces.IEntityList<T> where T : Scheduler_Controls_Interfaces.IDummy, Scheduler_Controls_Interfaces.IHaveID
     {
         private List<T> list;
 
@@ -102,12 +120,12 @@ namespace Scheduler_InterfacesRealisations
         public event Scheduler_Forms_Interfaces.ItemRemovedHandler OnItemRemoved;
         public event Scheduler_Forms_Interfaces.ItemChangedHandler OnItemChanged;
 
-        public CommonList()
+        protected CommonList()
         {
             list = new List<T>();
         }
 
-        public CommonList(CommonList<T> oldlist)
+        protected CommonList(CommonList<T> oldlist)
         {
             list = new List<T>(oldlist.List);
             OnItemAdded += oldlist.OnItemAdded;
@@ -143,8 +161,15 @@ namespace Scheduler_InterfacesRealisations
         public void ValidateAndUpdate()
         {
             if (OnItemChanged != null)
+            {
                 foreach (var item in list.Where(i => i.IAmChanged))
-                    OnItemChanged(item);
+                {
+                    if (item.ID == 0)
+                        OnItemAdded(item);
+                    else
+                        OnItemChanged(item);
+                }
+            }
         }
 
         public abstract Scheduler_Forms_Interfaces.IEntityList<T> Copy();

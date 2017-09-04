@@ -20,7 +20,7 @@ namespace Scheduler_Controls
 
         private IClient clientOnReception = null;
 
-        private Dictionary<int, int> currentSpecialistCosts;
+        private Dictionary<int, int> currentSpecialistCosts = new Dictionary<int, int>();
 
         private static IReception dummyReception = null;
 
@@ -376,8 +376,8 @@ namespace Scheduler_Controls
         {
             if (chkRent.Checked)
             {
-                if (currentSpecialistCosts.ContainsKey(-100))
-                    numericPrice.Value = currentSpecialistCosts[-100];
+                if (currentSpecialistCosts.ContainsKey(Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.CLIENTRENTID))
+                    numericPrice.Value = currentSpecialistCosts[Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.CLIENTRENTID];
             }
             else
             {

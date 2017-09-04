@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CalendarControl3_Interfaces;
+using Scheduler_Common_Interfaces;
 using Scheduler_Controls_Interfaces;
 using Scheduler_Forms_Interfaces;
-using Scheduler_Common_Interfaces;
 
 namespace Scheduler_DBobjects_Intefraces
 {
@@ -49,31 +47,31 @@ namespace Scheduler_DBobjects_Intefraces
 
     public interface IEntity : IEntity2ControlInterface, IReception
     {
-        void SetDatabase(Scheduler_DBobjects_Intefraces.IMainDataBase db);
+        void SetDatabase(IMainDataBase db);
     }
 
-    public interface Scheduler_DBconnector
+    public interface Scheduler_DBconnectorIntefrace
     {
-        Scheduler_Common_Interfaces.IFactory EntityFactory { get; set; }
+        IFactory EntityFactory { get; set; }
         string ConnectionString { get; set; }
 
-        void AddClient(Scheduler_Controls_Interfaces.IClient client);
-        void UpdateClientData(Scheduler_Controls_Interfaces.IClient client);
-        void RemoveClient(Scheduler_Controls_Interfaces.IClient client);
+        void AddClient(IClient client);
+        void UpdateClientData(IClient client);
+        void RemoveClient(IClient client);
         IClientList AllClients();
 
-        void AddSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist);
-        void UpdateSpecialistData(Scheduler_Controls_Interfaces.ISpecialist specialist);
-        void RemoveSpecialist(Scheduler_Controls_Interfaces.ISpecialist specialist);
+        void AddSpecialist(ISpecialist specialist);
+        void UpdateSpecialistData(ISpecialist specialist);
+        void RemoveSpecialist(ISpecialist specialist);
         ISpecialistList AllSpecialists();
 
         void AddSpecialization(string specialization);
         void RemoveSpecialization(string specialization);
         ISpecializationList AllSpecializations();
 
-        void AddCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet);
-        void UpdateCabinetData(Scheduler_Controls_Interfaces.ICabinet cabinet);
-        void RemoveCabinet(Scheduler_Controls_Interfaces.ICabinet cabinet);
+        void AddCabinet(ICabinet cabinet);
+        void UpdateCabinetData(ICabinet cabinet);
+        void RemoveCabinet(ICabinet cabinet);
         ICabinetList AllCabinets();
 
         List<IEntity> GetReceptionsFromDate(DateTime date);
@@ -93,5 +91,73 @@ namespace Scheduler_DBobjects_Intefraces
         void RestoreBackup(string filename);
 
         bool CheckDBConnection(out string message);
+    }
+
+    public abstract class Scheduler_DBconnector : Scheduler_DBconnectorIntefrace
+    {
+        public const int CLIENTRENTID = -100;
+        protected IClientList clientList;
+        protected ISpecialistList specialistList;
+        protected ICabinetList cabinetList;
+        protected Scheduler_DBconnector(IFactory factory)
+        {
+            EntityFactory = factory;
+        }
+        public IFactory EntityFactory { get; set; }
+
+        public abstract string ConnectionString { get; set; }
+        public abstract void AddClient(IClient client);
+        public abstract void UpdateClientData(IClient client);
+        public abstract void RemoveClient(IClient client);
+
+        public IClientList AllClients()
+        {
+            return (clientList ?? (clientList = AllClientsInternal()));
+        }
+
+        protected abstract IClientList AllClientsInternal();
+        protected IClientList AllClients(IEnumerable<IClient> list, ItemAddedHandler added, ItemChangedHandler changed, ItemRemovedHandler removed)
+        {
+            var result = EntityFactory.NewClientList();
+            result.List.AddRange(list);
+
+            result.OnItemAdded += added;
+            result.OnItemRemoved += removed;
+            result.OnItemChanged += changed;
+            return result;
+        }
+
+        public abstract void AddSpecialist(ISpecialist specialist);
+        public abstract void UpdateSpecialistData(ISpecialist specialist);
+        public abstract void RemoveSpecialist(ISpecialist specialist);
+
+        public ISpecialistList AllSpecialists()
+        {
+            return (specialistList ?? (specialistList = AllSpecialistsInternal()));
+        }
+
+        protected abstract ISpecialistList AllSpecialistsInternal();
+        public abstract void AddSpecialization(string specialization);
+        public abstract void RemoveSpecialization(string specialization);
+        public abstract ISpecializationList AllSpecializations();
+        public abstract void AddCabinet(ICabinet cabinet);
+        public abstract void UpdateCabinetData(ICabinet cabinet);
+        public abstract void RemoveCabinet(ICabinet cabinet);
+
+        public ICabinetList AllCabinets()
+        {
+            return cabinetList ?? (cabinetList = AllCabinetsInternal());
+        }
+        protected abstract ICabinetList AllCabinetsInternal();
+        public abstract List<IEntity> GetReceptionsFromDate(DateTime date);
+        public abstract List<IEntity> GetReceptionsBetweenDates(DateTime startDate, DateTime endDate);
+        public abstract List<IReception> GetReceptionsForClient(IClient client);
+        public abstract Dictionary<int, int> GetCostsForSpecialist(ISpecialist spec);
+        public abstract void AddReception(IEntity reception);
+        public abstract void UpdateReception(IEntity reception);
+        public abstract void RemoveReception(IEntity reception);
+        public abstract void MakeBackup(string filename);
+        public abstract void RestoreBackup(string filename);
+        public abstract bool CheckDBConnection(out string message);
     }
 }

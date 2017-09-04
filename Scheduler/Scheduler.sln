@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scheduler", "Scheduler\Scheduler.csproj", "{0A15E2C2-845D-4A5B-B4AC-3E9B7F2C590E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalendarControl3", "Scheduler_Controls\CalendarControl3\CalendarControl3.csproj", "{C14311FB-8AA9-4536-9476-B41E50BBD4CD}"
@@ -8,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySqlConnector", "MySqlConnector\MySqlConnector.csproj", "{DD5BE090-725B-4BF6-A8D3-4FA8BD2E0392}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scheduler_Interfaces", "Scheduler_Interfaces\Scheduler_Interfaces.csproj", "{D1A24643-FACE-4675-899D-70E02AC564F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF6Connector", "SQLiteConnector\EF6Connector.csproj", "{1816EC07-BC61-453D-BAF7-921AE36A1F62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +63,18 @@ Global
 		{D1A24643-FACE-4675-899D-70E02AC564F6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D1A24643-FACE-4675-899D-70E02AC564F6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D1A24643-FACE-4675-899D-70E02AC564F6}.Release|x86.ActiveCfg = Release|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Debug|x86.Build.0 = Debug|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Release|x86.ActiveCfg = Release|Any CPU
+		{1816EC07-BC61-453D-BAF7-921AE36A1F62}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
