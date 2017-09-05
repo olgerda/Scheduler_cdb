@@ -12,29 +12,29 @@ namespace EF6Connector.Model
         [Key]
         public int idreceptions { get; set; }
 
-        [Column(TypeName = "uint")]
+        //[Column(TypeName = "uint")]
         public long clientid { get; set; }
 
-        [Column(TypeName = "uint")]
+        //[Column(TypeName = "uint")]
         public long specialistid { get; set; }
 
-        [Column(TypeName = "uint")]
+        //[Column(TypeName = "uint")]
         public long cabinetid { get; set; }
 
-        [Column(TypeName = "uint")]
+        //[Column(TypeName = "uint")]
         public long specializationid { get; set; }
 
         public byte isrented { get; set; }
 
-        public TimeSpan timestart { get; set; }
+        public long timestart { get; set; }
 
-        public TimeSpan timeend { get; set; }
+        public long timeend { get; set; }
 
-        [Column(TypeName = "date")]
+        //[Column(TypeName = "date")]
         public DateTime timedate { get; set; }
 
-        [Column(TypeName = "tinytext")]
-        [StringLength(255)]
+        //[Column(TypeName = "tinytext")]
+        //[StringLength(255)]
         public string administrator { get; set; }
     }
 }

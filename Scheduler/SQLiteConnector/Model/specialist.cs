@@ -18,8 +18,8 @@ namespace EF6Connector.Model
         [Key]
         public int idspecialists { get; set; }
 
-        [Column(TypeName = "text")]
-        [StringLength(65535)]
+        //[Column(TypeName = "text")]
+        //[StringLength(65535)]
         public string name { get; set; }
 
         public byte notworking { get; set; }

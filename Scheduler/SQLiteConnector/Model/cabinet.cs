@@ -13,10 +13,10 @@ namespace EF6Connector.Model
         public int idcabinet { get; set; }
 
         [Required]
-        [StringLength(45)]
+        //[StringLength(45)]
         public string name { get; set; }
 
-        [Column(TypeName = "uint")]
+        //[Column(TypeName = "uint")]
         public long availability { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace EF6Connector.Model
         public int idtelephones { get; set; }
 
         [Required]
-        [StringLength(20)]
+        //[StringLength(20)]
         public string telephonescol { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

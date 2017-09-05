@@ -12,12 +12,13 @@ namespace EF6Connector.Model
         [Key]
         public int idclientGenerallyParams { get; set; }
 
-        [Column(TypeName = "uint")]
+        //[Column(TypeName = "uint")]
         public long clientId { get; set; }
 
-        public TimeSpan generallyTime { get; set; }
+        public long generallyTime { get; set; }
+    
 
-        [Column(TypeName = "uint")]
+        //[Column(TypeName = "uint")]
         public long generallyPrice { get; set; }
     }
 }

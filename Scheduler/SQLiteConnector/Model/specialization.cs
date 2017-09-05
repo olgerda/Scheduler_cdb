@@ -18,7 +18,7 @@ namespace EF6Connector.Model
         [Key]
         public int idspecializations { get; set; }
 
-        [StringLength(50)]
+        //[StringLength(50)]
         public string name { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

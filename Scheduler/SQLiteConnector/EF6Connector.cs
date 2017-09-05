@@ -82,7 +82,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             {
                 clientId = obj.idclients,
                 generallyPrice = client.GenerallyPrice,
-                generallyTime = client.GenerallyTime
+                generallyTime = client.GenerallyTime.Ticks
             });
             context.SaveChanges();
             client.ID = obj.idclients;
@@ -131,7 +131,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             TelephoneWOLinksCleanup();
 
             cliGenerallParams.generallyPrice = client.GenerallyPrice;
-            cliGenerallParams.generallyTime = client.GenerallyTime;
+            cliGenerallParams.generallyTime = client.GenerallyTime.Ticks;
 
             context.SaveChanges();
         }
@@ -182,7 +182,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 client.Administrator = dbcli.administrator;
                 client.Telephones = new HashSet<string>(dbcli.telephones);
                 client.GenerallyPrice = (int)generallParams.generallyPrice;
-                client.GenerallyTime = generallParams.generallyTime;
+                client.GenerallyTime = TimeSpan.FromTicks(generallParams.generallyTime);
 
                 list.Add(client);
             };
@@ -464,8 +464,8 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             }
             dbreception.specializationid = specid;
             dbreception.timedate = reception.ReceptionTimeInterval.Date;
-            dbreception.timestart = reception.ReceptionTimeInterval.StartDate.TimeOfDay;
-            dbreception.timeend = reception.ReceptionTimeInterval.EndDate.TimeOfDay;
+            dbreception.timestart = reception.ReceptionTimeInterval.StartDate.TimeOfDay.Ticks;
+            dbreception.timeend = reception.ReceptionTimeInterval.EndDate.TimeOfDay.Ticks;
 
             context.receptions.Add(dbreception);
 
@@ -497,8 +497,8 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             }
             dbreception.specializationid = specid;
             dbreception.timedate = reception.ReceptionTimeInterval.Date;
-            dbreception.timestart = reception.ReceptionTimeInterval.StartDate.TimeOfDay;
-            dbreception.timeend = reception.ReceptionTimeInterval.EndDate.TimeOfDay;
+            dbreception.timestart = reception.ReceptionTimeInterval.StartDate.TimeOfDay.Ticks;
+            dbreception.timeend = reception.ReceptionTimeInterval.EndDate.TimeOfDay.Ticks;
 
             var currentSpecClientPrice =
                 context.specialist2clientprice.FirstOrDefault(
@@ -659,12 +659,15 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             ent.Specialization = context.specializations.FirstOrDefault(x => x.idspecializations == dbreception.specializationid)?.name ?? "NONE";
 
             var timeinterval = EntityFactory.NewTimeInterval();
-            timeinterval.SetStartEnd(dbreception.timedate.Date.Add(dbreception.timestart), dbreception.timedate.Date.Add(dbreception.timeend));
+            timeinterval.SetStartEnd(dbreception.timedate.Date.Add(TimeSpan.FromTicks(dbreception.timestart)), dbreception.timedate.Date.Add(TimeSpan.FromTicks(dbreception.timeend)));
             ent.ReceptionTimeInterval = timeinterval;
             //TODO: тут плохо пахнет
-            ent.Price = (int)(context.specialist2clientprice
-                .FirstOrDefault(x => x.clid == ent.Client.ID && x.specid == ent.Specialist.ID)?
-                .price ?? 0);
+            if (ent.Client == null)
+                ent.Price = 0;
+            else
+                ent.Price = (int)(context.specialist2clientprice
+                    .FirstOrDefault(x => x.clid == ent.Client.ID && x.specid == ent.Specialist.ID)?
+                    .price ?? ent.Client.GenerallyPrice);
             return ent;
         }
 

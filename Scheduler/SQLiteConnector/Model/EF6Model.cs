@@ -4,18 +4,42 @@ namespace EF6Connector.Model
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
+    using SQLite.CodeFirst;
+
+    public enum EFTYPES
+    {
+        SQLITE,
+        MYSQL,
+        SQLCOMPACT,
+        NONE
+    }
 
     public partial class EF6Model : DbContext
     {
+        public static EFTYPES UsedEFdb = EFTYPES.NONE;
         public EF6Model()
+#if EF_SQLITE
             : base("name=EF6ModelSQLite")
+#elif EF_MYSQL
+            : base("name=EF6ModelMySql")
+#elif EF_SQLCOMPACT
+            : base("name=EF6ModelSQLCompact")
+#endif
         {
             //Action<Type> noop = _ => { };
             //var typesToCopy = new Type[]
             //    {typeof(MySql.Data.Entity.MySqlLogger)};
             //foreach (var t in typesToCopy)
             //    noop(t);
-            
+            UsedEFdb = EFTYPES.
+#if EF_SQLITE
+                    SQLITE
+#elif EF_MYSQL
+                    MYSQL
+#elif EF_SQLCOMPACT
+                    SQLCOMPACT
+#endif
+                ;
         }
 
         public virtual DbSet<cabinet> cabinets { get; set; }
@@ -78,7 +102,26 @@ namespace EF6Connector.Model
                 .WithOptional(e => e.telephone)
                 .HasForeignKey(e => e.telid)
                 .WillCascadeOnDelete();
+
+#if EF_SQLITE
+            var sqliteConnectionInitializer = new DbInitializer(modelBuilder);
+            Database.SetInitializer(sqliteConnectionInitializer);
+#endif
         }
+
+#if EF_SQLITE
+        public class DbInitializer : SQLite.CodeFirst.SqliteCreateDatabaseIfNotExists<EF6Model>
+        {
+            public DbInitializer(DbModelBuilder builder) : base(builder)
+            {
+
+            }
+            protected override void Seed(EF6Model context)
+            {
+
+            }
+        }
+#endif
     }
-    
+
 }

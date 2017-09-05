@@ -16,7 +16,7 @@ namespace EF6Connector.Model
 
         public int clid { get; set; }
 
-        [Column(TypeName = "uint")]
+        //[Column(TypeName = "uint")]
         public long price { get; set; }
     }
 }
