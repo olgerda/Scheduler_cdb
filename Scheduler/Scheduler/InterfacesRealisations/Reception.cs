@@ -8,13 +8,12 @@ namespace Scheduler_InterfacesRealisations
 {
     public class Reception : CommonObjectWithNotify, Scheduler_DBobjects_Intefraces.IEntity
     {
-        Scheduler_Controls_Interfaces.ITimeInterval receptionTimeInterval;
-        Scheduler_Controls_Interfaces.IClient client;
-        Scheduler_Controls_Interfaces.ISpecialist specialist;
-        Scheduler_Controls_Interfaces.ICabinet cabinet;
+        ITimeInterval receptionTimeInterval;
+        IClient client;
+        ISpecialist specialist;
+        ICabinet cabinet;
         string specialisation;
         bool isRented;
-        string administrator;
 
         int price;
 
@@ -22,44 +21,44 @@ namespace Scheduler_InterfacesRealisations
 
         //int id;
 
-        Scheduler_Controls_Interfaces.ITimeInterval Scheduler_Controls_Interfaces.IReception.ReceptionTimeInterval
+        public ITimeInterval ReceptionTimeInterval
         {
             get { return receptionTimeInterval; }
             set { receptionTimeInterval = value; RaisePropertyChanged("ReceptionTimeInterval"); }
         }
 
-        Scheduler_Controls_Interfaces.IClient Scheduler_Controls_Interfaces.IReception.Client
+        public IClient Client
         {
             get { return client; }
             set { client = value; RaisePropertyChanged("Client"); }
         }
 
-        Scheduler_Controls_Interfaces.ISpecialist Scheduler_Controls_Interfaces.IReception.Specialist
+        public ISpecialist Specialist
         {
             get { return specialist; }
 
             set { specialist = value; RaisePropertyChanged("Specialist"); }
         }
 
-        Scheduler_Controls_Interfaces.ICabinet Scheduler_Controls_Interfaces.IReception.Cabinet
+        public ICabinet Cabinet
         {
             get { return cabinet; }
             set { cabinet = value; RaisePropertyChanged("Cabinet"); }
         }
 
-        string Scheduler_Controls_Interfaces.IReception.Specialization
+        public string Specialization
         {
             get { return specialisation; }
             set { specialisation = value; RaisePropertyChanged("Specialization"); }
         }
 
-        bool Scheduler_Controls_Interfaces.IReception.Rent
+        public bool Rent
         {
             get { return isRented; }
             set { isRented = value; RaisePropertyChanged("Rent"); }
         }
 
-        string Scheduler_Controls_Interfaces.IReception.Validate()
+        public string Validate()
         {
             string result = String.Empty;
             if (receptionTimeInterval == null)
@@ -89,7 +88,7 @@ namespace Scheduler_InterfacesRealisations
                     receptionsIntersectedWith.Add(r);
                 if (receptionsIntersectedWith.Count != 0)
                     result += "Время посещения пересекается с другими: " + Environment.NewLine;
-                foreach (var r in receptionsIntersectedWith)
+                foreach (var r in receptionsIntersectedWith.Take(3))
                     result += r.DisplayString + Environment.NewLine;
             }
 
@@ -110,9 +109,9 @@ namespace Scheduler_InterfacesRealisations
                 else
                 {
                     return String.Join(Environment.NewLine,
-                        receptionTimeInterval.Interval(), 
+                        receptionTimeInterval.Interval(),
                         specialist.Name,
-                        client.Name, 
+                        client.Name,
                         client.Telephones.FirstOrDefault(),
                         price + " руб.",
                         specialisation);
@@ -138,14 +137,14 @@ namespace Scheduler_InterfacesRealisations
             return topIntersect || bottomIntersect;
         }
 
-        string Scheduler_Controls_Interfaces.IReception.DisplayString
+        public string DisplayString
         {
             get { return String.Join(" ", receptionTimeInterval.Date.ToShortDateString(), receptionTimeInterval.Interval(), specialist.Name, specialisation, cabinet.Name); }
         }
 
         public override string ToString()
         {
-            return ((Scheduler_Controls_Interfaces.IReception)this).DisplayString;
+            return ((IReception)this).DisplayString;
         }
 
         void Scheduler_DBobjects_Intefraces.IEntity.SetDatabase(Scheduler_DBobjects_Intefraces.IMainDataBase db)
@@ -156,7 +155,7 @@ namespace Scheduler_InterfacesRealisations
 
 
 
-        int Scheduler_Controls_Interfaces.IReception.Price
+        public int Price
         {
             get
             {
@@ -170,7 +169,7 @@ namespace Scheduler_InterfacesRealisations
         }
 
 
-        void Scheduler_Controls_Interfaces.IReception.CommitToDatabase()
+        public void CommitToDatabase()
         {
             if (IAmChanged)
             {
@@ -182,22 +181,65 @@ namespace Scheduler_InterfacesRealisations
 
         }
 
-        bool Scheduler_Controls_Interfaces.IDummy.IAmChanged
+        private string _administrator;
+        public string Administrator
         {
-            get { return (this).IAmChanged; }
-            
+            get { return _administrator; }
+            set
+            {
+                _administrator = value;
+                RaisePropertyChanged();
+            }
         }
 
-        string IReception.Administrator
+        private bool _specialRent;
+        public bool SpecialRent
+        {
+            get { return _specialRent; }
+            set
+            {
+                _specialRent = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _receptionDidNotTakePlace;
+        public bool ReceptionDidNotTakePlace
+        {
+            get { return _receptionDidNotTakePlace; }
+
+            set
+            {
+                _receptionDidNotTakePlace = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _comment;
+        public string Comment
+        {
+            get { return _comment; }
+
+            set
+            {
+                _comment = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _commentOnlyReception;
+        public bool CommentOnlyReception
         {
             get
             {
-                return administrator ?? String.Empty;
+                return _commentOnlyReception;
+
             }
 
             set
             {
-                administrator = value;
+                _commentOnlyReception = value;
+                RaisePropertyChanged();
             }
         }
     }

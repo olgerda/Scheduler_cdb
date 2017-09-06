@@ -64,17 +64,15 @@ namespace Scheduler_Forms
                 receptionNew.ReceptionTimeInterval = entityFactory.NewTimeInterval();
                 receptionNew.ReceptionTimeInterval.StartDate = e.Entity.Client == null ? e.Entity.ReceptionTimeInterval.StartDate : DateTime.Now.Date + e.Entity.Client.GenerallyTime;
                 receptionNew.ReceptionTimeInterval.EndDate = receptionNew.ReceptionTimeInterval.StartDate + TimeSpan.FromHours(1);
+                receptionNew.Comment = e.Entity.Comment;
+                receptionNew.Administrator = e.Entity.Administrator;
+                receptionNew.SpecialRent = e.Entity.SpecialRent;
 
                 childForm.Reception = receptionNew;
                 childForm.receptionInfoCard.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CloneExist;
                 if (childForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     receptionNew.CommitToDatabase();
-                    //doNothing = true;
-                    //Reception = childForm.Reception;
-                    //this.DialogResult = System.Windows.Forms.DialogResult.Yes;
-                    //this.Close();
-                    //doNothing = false;
                 }
             }
         }
@@ -199,11 +197,6 @@ namespace Scheduler_Forms
                     Reception = temp;
                 doNothing = false;
             }
-        }
-
-        private void receptionInfoCard_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void ReceptionInfoEdit_KeyDown(object sender, KeyEventArgs e)

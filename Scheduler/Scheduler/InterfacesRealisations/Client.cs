@@ -7,7 +7,7 @@ using Scheduler_Controls_Interfaces;
 
 namespace Scheduler_InterfacesRealisations
 {
-    public class Client : CommonObjectWithNotify, Scheduler_Controls_Interfaces.IClient
+    public class Client : CommonObjectWithNotify, IClient
     {
         struct GeneralParams
         {
@@ -23,7 +23,7 @@ namespace Scheduler_InterfacesRealisations
 
         GeneralParams generalParams;
 
-        static Scheduler_Controls_Interfaces.GetClientReceptionsList getreceptions;
+        static GetClientReceptionsList getreceptions;
 
 
         public Client()
@@ -34,7 +34,7 @@ namespace Scheduler_InterfacesRealisations
             blacklisted = false;
         }
 
-        string Scheduler_Controls_Interfaces.IClient.Comment
+        public string Comment
         {
             get
             {
@@ -47,7 +47,7 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        bool Scheduler_Controls_Interfaces.IClient.BlackListed
+        public bool BlackListed
         {
             get
             {
@@ -60,7 +60,7 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        HashSet<string> Scheduler_Controls_Interfaces.IClient.Telephones
+        public HashSet<string> Telephones
         {
             get
             {
@@ -73,21 +73,21 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        bool Scheduler_Controls_Interfaces.IClient.CheckTelephone(string telNumber)
+        public bool CheckTelephone(string telNumber)
         {
             return telephones.Contains(telNumber);
         }
 
 
-        List<Scheduler_Controls_Interfaces.IReception> Scheduler_Controls_Interfaces.IClient.GetReceptions()
+        public List<IReception> GetReceptions()
         {
             if (getreceptions != null)
                 return getreceptions(this);
             else
-                return new List<Scheduler_Controls_Interfaces.IReception>();
+                return new List<IReception>();
         }
 
-        string Scheduler_Controls_Interfaces.INamedEntity.Name
+        public string Name
         {
             get
             {
@@ -100,14 +100,28 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        void Scheduler_Controls_Interfaces.IClient.ReceptionListFuncition(Scheduler_Controls_Interfaces.GetClientReceptionsList func)
+        public void ReceptionListFuncition(GetClientReceptionsList func)
         {
             if (getreceptions == null)
                 getreceptions = func;
         }
 
+        public object Clone()
+        {
+            return new Client()
+            {
+                administrator = this.administrator,
+                blacklisted = blacklisted,
+                comment = comment,
+                generalParams = generalParams,
+                name = name,
+                telephones = new HashSet<string>(telephones),
+                Balance = Balance,
+                NeedSMS = NeedSMS
+            };
+        }
 
-        TimeSpan Scheduler_Controls_Interfaces.IClient.GenerallyTime
+        public TimeSpan GenerallyTime
         {
             get
             {
@@ -119,7 +133,7 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        int Scheduler_Controls_Interfaces.IClient.GenerallyPrice
+        public int GenerallyPrice
         {
             get
             {
@@ -131,7 +145,7 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        string IClient.Administrator
+        public string Administrator
         {
             get
             {
@@ -143,9 +157,13 @@ namespace Scheduler_InterfacesRealisations
                 administrator = value;
             }
         }
+
+        public int Balance { get; set; }
+
+        public bool NeedSMS { get; set; }
     }
 
-    public class ClientList : CommonList<Scheduler_Controls_Interfaces.IClient>, Scheduler_Forms_Interfaces.IClientList
+    public class ClientList : CommonList<IClient>, Scheduler_Forms_Interfaces.IClientList
     {
 
         public ClientList()
@@ -158,22 +176,22 @@ namespace Scheduler_InterfacesRealisations
         {
         }
 
-        Scheduler_Controls_Interfaces.IClient Scheduler_Forms_Interfaces.IClientList.FindClientByPartialName(string partialName)
+        IClient Scheduler_Forms_Interfaces.IClientList.FindClientByPartialName(string partialName)
         {
-            Scheduler_Controls_Interfaces.IClient result;
+            IClient result;
             result = this.List.FirstOrDefault(c => c.Name.StartsWith(partialName));
             return result;
         }
 
-        Scheduler_Controls_Interfaces.IClient Scheduler_Forms_Interfaces.IClientList.FindClientByTelephone(string Tel, bool partial)
+        IClient Scheduler_Forms_Interfaces.IClientList.FindClientByTelephone(string Tel, bool partial)
         {
-            Scheduler_Controls_Interfaces.IClient result;
+            IClient result;
             result = partial ? this.List.FirstOrDefault(c => c.Telephones.FirstOrDefault(t => t.StartsWith(Tel)) != default(string)) :
                 this.List.FirstOrDefault(c => c.Telephones.FirstOrDefault(t => t == Tel) != default(string));
             return result;
         }
 
-        public override Scheduler_Forms_Interfaces.IEntityList<Scheduler_Controls_Interfaces.IClient> Copy()
+        public override Scheduler_Forms_Interfaces.IEntityList<IClient> Copy()
         {
             return new ClientList(this);
         }

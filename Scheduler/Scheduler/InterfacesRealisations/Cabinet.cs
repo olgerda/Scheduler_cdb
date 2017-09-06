@@ -72,6 +72,11 @@ namespace Scheduler_InterfacesRealisations
             return name.GetHashCode();
         }
 
+        public object Clone()
+        {
+            return new Cabinet() {name = this.name, availability = availability};
+        }
+
         public bool Availability
         {
             get

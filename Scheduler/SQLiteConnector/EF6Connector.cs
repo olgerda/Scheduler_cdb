@@ -52,7 +52,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             var obj = new client()
             {
                 name = client.Name,
-                blacklisted = (byte)(client.BlackListed ? 1 : 0),
+                blacklisted = client.BlackListed,
                 comment = client.Comment,
                 administrator = client.Administrator
             };
@@ -98,7 +98,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 throw new NullReferenceException($"Client with id <{client.ID}> not found.");
             }
 
-            cli.blacklisted = (byte)(client.BlackListed ? 1 : 0);
+            cli.blacklisted = client.BlackListed;
             cli.comment = client.Comment;
             cli.name = client.Name;
             cli.administrator = client.Administrator;
@@ -175,7 +175,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 var generallParams = context.clientgenerallyparams
                     .First(x => x.clientId == dbcli.idclients);
                 var client = EntityFactory.NewClient();
-                client.BlackListed = dbcli.blacklisted == 1;
+                client.BlackListed = dbcli.blacklisted;
                 client.Comment = dbcli.comment;
                 client.ID = dbcli.idclients;
                 client.Name = dbcli.name;
@@ -455,7 +455,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             dbreception.administrator = reception.Administrator;
             dbreception.cabinetid = reception.Cabinet.ID;
             dbreception.clientid = reception.Client?.ID ?? CLIENTRENTID;
-            dbreception.isrented = reception.Rent.ToByte();
+            dbreception.isrented = reception.Rent;
             dbreception.specialistid = reception.Specialist.ID;
             var specid = 0;
             if (!reception.Rent)
@@ -488,7 +488,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             dbreception.clientid = reception.Client?.ID ?? CLIENTRENTID;
             dbreception.administrator = reception.Administrator;
             dbreception.cabinetid = reception.Cabinet.ID;
-            dbreception.isrented = reception.Rent.ToByte();
+            dbreception.isrented = reception.Rent;
             dbreception.specialistid = reception.Specialist.ID;
             var specid = 0;
             if (!reception.Rent)
@@ -654,7 +654,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             ent.Cabinet = GetByID<ICabinet>(dbreception.cabinetid);
             ent.Client = dbreception.clientid == CLIENTRENTID ? null : GetByID<IClient>(dbreception.clientid);
             ent.ID = dbreception.idreceptions;
-            ent.Rent = dbreception.isrented == 1;
+            ent.Rent = dbreception.isrented;
             ent.Specialist = GetByID<ISpecialist>(dbreception.specialistid);
             ent.Specialization = context.specializations.FirstOrDefault(x => x.idspecializations == dbreception.specializationid)?.name ?? "NONE";
 

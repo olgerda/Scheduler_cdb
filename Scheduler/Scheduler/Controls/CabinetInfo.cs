@@ -21,9 +21,8 @@ namespace Scheduler_Controls
             InitializeComponent();
         }
 
-        public CabinetInfo(ICabinet cab)
+        public CabinetInfo(ICabinet cab) : this()
         {
-            InitializeComponent();
             this.cab = cab;
             InitializeCabinetInfo();
         }

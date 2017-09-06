@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel;
 
 namespace Scheduler_Controls_Interfaces
 {
@@ -21,7 +22,7 @@ namespace Scheduler_Controls_Interfaces
     /// <summary>
     /// Коренной интерфейс для сущностей, имеющих имя/название.
     /// </summary>
-    public interface INamedEntity: IHaveID
+    public interface INamedEntity: IHaveID, INotifyPropertyChanged, ICloneable
     {
         string Name { get; set; }
     }
@@ -32,17 +33,32 @@ namespace Scheduler_Controls_Interfaces
     /// </summary>
     public interface IClient : INamedEntity, IDummy
     {
+        [Description("Комментарий")]
         string Comment { get; set; }
 
+        [Description("Стандартное время приёма")]
         TimeSpan GenerallyTime { get; set; }
 
+        [Description("Стандартная стоимость приёма")]
         int GenerallyPrice { get; set; }
 
+        [Description("Баланс")]
+        int Balance { get; set; }
+
+        [Description("В чёрном списке")]
         bool BlackListed { get; set; }
 
+        [Description("Необходимость оповещения через СМС")]
+        bool NeedSMS { get; set; }
+
+
+        [Description("Телефоны")]
         HashSet<string> Telephones { get; set; }
 
+        [Description("Администратор")]
         string Administrator { get; set; }
+
+
         /// <summary>
         /// Проверить, входит ли переданный телефон в список телефонов клиента.
         /// </summary>
@@ -68,20 +84,23 @@ namespace Scheduler_Controls_Interfaces
     /// </summary>
     public interface ISpecialist : INamedEntity, IDummy
     {
+        [Description("Не работает")]
         bool NotWorking { get; set; }
 
+        [Description("Специальности")]
         HashSet<string> Specialisations { get; set; }
-
+        
         Dictionary<int, int> GetCosts();
 
         void CostsFunction(GetCosts func);
     }
-
+    
     /// <summary>
     /// Интерфейс кабинета.
     /// </summary>
     public interface ICabinet : INamedEntity, IDummy
     {
+        [Description("Доступность для планирования")]
         bool Availability { get; set; }
     }
 
@@ -91,16 +110,44 @@ namespace Scheduler_Controls_Interfaces
     /// </summary>
     public interface IReception : IDummy, IHaveID
     {
+        [Description("Интервал приёма")]
         ITimeInterval ReceptionTimeInterval { get; set; }
+
+        [Description("Клиент на приёме")]
         IClient Client { get; set; }
+
+        [Description("Специалист на приёме")]
         ISpecialist Specialist { get; set; }
+
+        [Description("Кабинет приёма")]
         ICabinet Cabinet { get; set; }
+
+        [Description("Специализация")]
         string Specialization { get; set; }
+
+        [Description("Аренда")]
         bool Rent { get; set; }
+
+        [Description("Специальная аренда")]
+        bool SpecialRent { get; set; }
+
+        [Description("Приём не состоялся")]
+        bool ReceptionDidNotTakePlace { get; set; }
+
+
+        [Description("Администратор")]
         string Administrator { get; set; }
+
+        [Description("Комментарий")]
+        string Comment { get; set; }
+
+        [Description("Только комментарий")]
+        bool CommentOnlyReception { get; set; }
+
 
         void CommitToDatabase();
 
+        [Description("Стоимость приёма")]
         int Price { get; set; }
 
         /// <summary>

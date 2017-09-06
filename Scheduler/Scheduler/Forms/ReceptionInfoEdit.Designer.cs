@@ -42,7 +42,6 @@
             this.receptionInfoCard.Reception = null;
             this.receptionInfoCard.Size = new System.Drawing.Size(595, 150);
             this.receptionInfoCard.TabIndex = 0;
-            this.receptionInfoCard.Load += new System.EventHandler(this.receptionInfoCard_Load);
             // 
             // ReceptionInfoEdit
             // 

@@ -24,7 +24,8 @@ namespace EF6Connector.Model
         //[Column(TypeName = "uint")]
         public long specializationid { get; set; }
 
-        public byte isrented { get; set; }
+        public bool isrented { get; set; }
+        public bool isSpecialRent { get; set; }
 
         public long timestart { get; set; }
 
@@ -36,5 +37,11 @@ namespace EF6Connector.Model
         //[Column(TypeName = "tinytext")]
         //[StringLength(255)]
         public string administrator { get; set; }
+
+        public bool receptionDidNotTakePlace { get; set; }
+
+        
+
+        public string comment { get; set; }
     }
 }

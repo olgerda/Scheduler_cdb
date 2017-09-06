@@ -74,7 +74,7 @@ namespace Scheduler
             calendarControl.Table = receptionEntitiesTable;
             calendarControl.MouseClick += new MouseEventHandler(calendarControl_MouseClick);
 
-            Rectangle screenRectangle=RectangleToScreen(this.ClientRectangle);
+            Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRectangle.Top - this.Top;
             this.MinimumSize = new System.Drawing.Size(calendarControl.MinimumSize.Width + mainView.Panel2MinSize, calendarControl.MinimumSize.Height + mainView.Location.Y + titleHeight + 20);
 
@@ -141,9 +141,9 @@ namespace Scheduler
                         case System.Windows.Forms.DialogResult.OK:
                             database.UpdateReception(ent);
                             break;
-                        //case System.Windows.Forms.DialogResult.Yes:
-                        //    database.AddReception((IEntity)receptionEditForm.Reception);
-                        //    break;
+                            //case System.Windows.Forms.DialogResult.Yes:
+                            //    database.AddReception((IEntity)receptionEditForm.Reception);
+                            //    break;
                     }
                 }
 
@@ -169,7 +169,7 @@ namespace Scheduler
             receptionEntitiesTable.SetInfoColumnDescriptions(descriprions);
 
             database.EntityFactory.NewEntity().SetDatabase(database);
-            
+
             ReloadColumns();
             ReloadEntities();
         }
@@ -278,7 +278,7 @@ namespace Scheduler
             ScheduleDate = dateTimePicker1.Value.Date;
             monthCalendar1.SetDate(ScheduleDate);
             doNothing = false;
-            
+
         }
 
         private void сформироватьОтчетToolStripMenuItem_Click(object sender, EventArgs e)
@@ -316,7 +316,9 @@ namespace Scheduler
                 dateTimePicker1.Value = e.Start;
         }
 
+        private void контактыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
-
+        }
     }
 }

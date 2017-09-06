@@ -6,13 +6,16 @@ using System.ComponentModel;
 
 namespace Scheduler_InterfacesRealisations
 {
-    public abstract class CommonObjectWithNotify : Scheduler_Controls_Interfaces.IDummy, Scheduler_Controls_Interfaces.IHaveID
+    public abstract class CommonObjectWithNotify : Scheduler_Controls_Interfaces.IDummy, Scheduler_Controls_Interfaces.IHaveID, INotifyPropertyChanged
     {
+        //https://stackoverflow.com/questions/30141045/two-ways-databinding-in-winforms
+        //https://stackoverflow.com/questions/1334815/how-to-bind-controls-two-properties-to-two-object-properties-properly
         bool iAmChanged = false;
 
-        public void RaisePropertyChanged(string caller)
+        public void RaisePropertyChanged(string caller = null)
         {
             iAmChanged = true;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
         }
 
         public bool IAmChanged
@@ -27,17 +30,9 @@ namespace Scheduler_InterfacesRealisations
 
         int id = 0;
 
-        public int ID
-        {
-            get
-            {
-                return id;
-            }
-            set
-            {
-                id = value;
-            }
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public int ID { get; set; }
 
         public static bool operator ==(CommonObjectWithNotify a, CommonObjectWithNotify b)
         {
@@ -80,17 +75,17 @@ namespace Scheduler_InterfacesRealisations
             return id;
         }
 
-        int Scheduler_Controls_Interfaces.IHaveID.ID
-        {
-            get
-            {
-                return id;
-            }
-            set
-            {
-                id = value;
-            }
-        }
+        //int Scheduler_Controls_Interfaces.IHaveID.ID
+        //{
+        //    get
+        //    {
+        //        return id;
+        //    }
+        //    set
+        //    {
+        //        id = value;
+        //    }
+        //}
 
         int IComparable.CompareTo(object obj)
         {

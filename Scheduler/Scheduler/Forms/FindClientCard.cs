@@ -12,6 +12,8 @@ using Scheduler_Common_Interfaces;
 
 namespace Scheduler_Forms
 {
+    //подсветка строк
+    //https://stackoverflow.com/questions/91747/background-color-of-a-listbox-item-winforms
     public partial class FindClientCard : Form
     {
         IClientList clientList;

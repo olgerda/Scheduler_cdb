@@ -54,34 +54,34 @@ namespace Scheduler_Controls
             InitializeComponent();
         }
 
-        public ReceptionInfo(ShowModes mode = ShowModes.CreateNew)
-        {
-            InitializeComponent();
-            this.mode = mode;
-            SetMode();
-        }
+        //public ReceptionInfo(ShowModes mode = ShowModes.CreateNew)
+        //{
+        //    InitializeComponent();
+        //    this.mode = mode;
+        //    SetMode();
+        //}
 
-        public ReceptionInfo(IEnumerable<ICabinet> cabinetList, IEnumerable<ISpecialist> specialistList, IEnumerable<string> specialisationList, ShowModes mode = ShowModes.CreateNew)
-        {
-            InitializeComponent();
-            this.mode = mode;
-            SetMode();
-            this.cabinetList = cabinetList;
-            this.specialistList = specialistList;
-            this.specialisationList = specialisationList;
-        }
+        //public ReceptionInfo(IEnumerable<ICabinet> cabinetList, IEnumerable<ISpecialist> specialistList, IEnumerable<string> specialisationList, ShowModes mode = ShowModes.CreateNew)
+        //{
+        //    InitializeComponent();
+        //    this.mode = mode;
+        //    SetMode();
+        //    this.cabinetList = cabinetList;
+        //    this.specialistList = specialistList;
+        //    this.specialisationList = specialisationList;
+        //}
 
-        public ReceptionInfo(IEnumerable<ICabinet> cabinetList, IEnumerable<ISpecialist> specialistList, IEnumerable<string> specialisationList, IReception reception, ShowModes mode = ShowModes.CreateNew)
-        {
-            InitializeComponent();
-            this.mode = mode;
-            SetMode();
-            this.cabinetList = cabinetList;
-            this.specialistList = specialistList;
-            this.specialisationList = specialisationList;
-            this.reception = reception;
-            InitializeReceptionInfo();
-        }
+        //public ReceptionInfo(IEnumerable<ICabinet> cabinetList, IEnumerable<ISpecialist> specialistList, IEnumerable<string> specialisationList, IReception reception, ShowModes mode = ShowModes.CreateNew)
+        //{
+        //    InitializeComponent();
+        //    this.mode = mode;
+        //    SetMode();
+        //    this.cabinetList = cabinetList;
+        //    this.specialistList = specialistList;
+        //    this.specialisationList = specialisationList;
+        //    this.reception = reception;
+        //    InitializeReceptionInfo();
+        //}
 
         public void UpdateLists(IEnumerable<ICabinet> cabinetList, IEnumerable<ISpecialist> specialistList, IEnumerable<string> specialisationList)
         {
@@ -143,7 +143,7 @@ namespace Scheduler_Controls
                 if (clientOnReception == null)
                     return;
                 txtClientName.Text = clientOnReception.Name;
-                txtTelephone.Text = clientOnReception.Telephones.FirstOrDefault();
+                txtTelephone.Text = clientOnReception.Telephones.FirstOrDefault() ?? String.Empty;
                 //txtAdministrator.Text = clientOnReception.Administrator;
             }
         }
@@ -226,13 +226,17 @@ namespace Scheduler_Controls
                 cmbSpecialisation.SelectedItem = reception.Specialization;
             else
                 if (reception.Specialist != null && reception.Specialist.Specialisations.FirstOrDefault() != null)
-                    cmbSpecialisation.SelectedItem = reception.Specialist.Specialisations.First();
+                cmbSpecialisation.SelectedItem = reception.Specialist.Specialisations.First();
 
             numericPrice.Value = reception.Price;
 
             txtAdministrator.Text = reception.Administrator;
 
             ClientOnReception = reception.Client;
+
+            chkReceptionDidNotTakePlace.Checked = reception.ReceptionDidNotTakePlace;
+            txtComment.Text = reception.Comment;
+            chkSpecialRent.Checked = reception.SpecialRent;
         }
 
         bool SomethingChanged()
@@ -255,8 +259,12 @@ namespace Scheduler_Controls
                     )
                 ) ||
                 reception.Price != (int)numericPrice.Value ||
-                reception.Administrator != txtAdministrator.Text;
-                ;
+                reception.Administrator != txtAdministrator.Text ||
+                chkReceptionDidNotTakePlace.Checked != reception.ReceptionDidNotTakePlace ||
+                txtComment.Text != reception.Comment ||
+                chkSpecialRent.Checked != reception.SpecialRent;
+
+            ;
 
         }
 
@@ -312,6 +320,10 @@ namespace Scheduler_Controls
             reception.Price = dummyReception.Price;
             reception.Administrator = dummyReception.Administrator;
 
+            reception.ReceptionDidNotTakePlace = chkReceptionDidNotTakePlace.Checked;
+            reception.Comment = txtComment.Text;
+            reception.SpecialRent = chkSpecialRent.Checked;
+
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<IReception>(reception));
             doNothing = false;
@@ -328,8 +340,8 @@ namespace Scheduler_Controls
 
         private void chkRent_CheckedChanged(object sender, EventArgs e)
         {
-            pnlClient.Enabled = !chkRent.Checked;
-            btnShowClientCard.Enabled = !chkRent.Checked;
+            //pnlClient.Enabled = !chkRent.Checked;
+            //btnShowClientCard.Enabled = !chkRent.Checked;
             ActualizePrice();
         }
 
@@ -393,5 +405,6 @@ namespace Scheduler_Controls
         {
             SaveChanges();
         }
+
     }
 }

@@ -38,6 +38,7 @@ namespace Scheduler
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainView = new System.Windows.Forms.SplitContainer();
+            this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.btnCreteFile = new System.Windows.Forms.Button();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
@@ -56,7 +57,6 @@ namespace Scheduler
             this.помощьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.инструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.контактыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             ((System.ComponentModel.ISupportInitialize)(this.mainView)).BeginInit();
             this.mainView.Panel2.SuspendLayout();
             this.mainView.SuspendLayout();
@@ -86,6 +86,15 @@ namespace Scheduler
             this.mainView.SplitterDistance = 650;
             this.mainView.TabIndex = 3;
             this.mainView.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.mainView_SplitterMoved);
+            // 
+            // monthCalendar1
+            // 
+            this.monthCalendar1.FirstDayOfWeek = System.Windows.Forms.Day.Monday;
+            this.monthCalendar1.Location = new System.Drawing.Point(9, 227);
+            this.monthCalendar1.MaxSelectionCount = 1;
+            this.monthCalendar1.Name = "monthCalendar1";
+            this.monthCalendar1.TabIndex = 9;
+            this.monthCalendar1.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar1_DateChanged);
             // 
             // btnCreteFile
             // 
@@ -225,23 +234,15 @@ namespace Scheduler
             // инструкцииToolStripMenuItem
             // 
             this.инструкцииToolStripMenuItem.Name = "инструкцииToolStripMenuItem";
-            this.инструкцииToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.инструкцииToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.инструкцииToolStripMenuItem.Text = "Инструкции";
             // 
             // контактыToolStripMenuItem
             // 
             this.контактыToolStripMenuItem.Name = "контактыToolStripMenuItem";
-            this.контактыToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.контактыToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.контактыToolStripMenuItem.Text = "Контакты";
-            // 
-            // monthCalendar1
-            // 
-            this.monthCalendar1.FirstDayOfWeek = System.Windows.Forms.Day.Monday;
-            this.monthCalendar1.Location = new System.Drawing.Point(9, 227);
-            this.monthCalendar1.MaxSelectionCount = 1;
-            this.monthCalendar1.Name = "monthCalendar1";
-            this.monthCalendar1.TabIndex = 9;
-            this.monthCalendar1.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar1_DateChanged);
+            this.контактыToolStripMenuItem.Click += new System.EventHandler(this.контактыToolStripMenuItem_Click);
             // 
             // MainForm
             // 

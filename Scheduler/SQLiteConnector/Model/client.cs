@@ -26,7 +26,11 @@ namespace EF6Connector.Model
         //[StringLength(65535)]
         public string comment { get; set; }
 
-        public byte? blacklisted { get; set; }
+        public string email { get; set; }
+
+        public bool blacklisted { get; set; }
+
+        public int balance { get; set; } 
 
 
         //[Column(TypeName = "tinytext")]

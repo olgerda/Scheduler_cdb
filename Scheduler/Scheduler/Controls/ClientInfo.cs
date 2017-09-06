@@ -77,12 +77,15 @@ namespace Scheduler_Controls
 
             chkBlackList.Checked = client.BlackListed;
 
-            dateGenerallyTime.Value = new DateTime(2014, 01, 01) + client.GenerallyTime;
+            dateGenerallyTime.Value = DateTime.Now.Add(client.GenerallyTime);
             numGenerallyPrice.Value = client.GenerallyPrice;
 
             txtAdministrator.Text = client.Administrator;
+            chkSMS.Checked = client.NeedSMS;
+            numBalance.Value = client.Balance;
 
             lstReceptions.Items.Clear();
+            //btnLoadReceptions.PerformClick();
         }
 
         bool SomethingChanged()
@@ -97,7 +100,9 @@ namespace Scheduler_Controls
                 !client.Telephones.SequenceEqual(lstTelephones.Items.Cast<string>()) ||
                 client.GenerallyPrice != (int)numGenerallyPrice.Value ||
                 client.GenerallyTime != dateGenerallyTime.Value.TimeOfDay ||
-                client.Administrator != txtAdministrator.Text
+                client.Administrator != txtAdministrator.Text ||
+                client.Balance != (int)numBalance.Value ||
+                client.NeedSMS != chkSMS.Checked
                 ;
         }
 
@@ -116,10 +121,10 @@ namespace Scheduler_Controls
 
             using (AddTelNumber f = new AddTelNumber())
             {
-                f.StartPosition = FormStartPosition.Manual;
-                Point p = btnAddTelephone.PointToScreen(btnAddTelephone.Location);
-                p.Y -= this.Height;
-                f.Location = p;
+                //f.StartPosition = FormStartPosition.Manual;
+                //Point p = btnAddTelephone.PointToScreen(btnAddTelephone.Location);
+                //p.Y -= this.Height;
+                //f.Location = p;
                 if (f.ShowDialog() == DialogResult.OK &&
                     !String.IsNullOrWhiteSpace(f.number) &&
                     !lstTelephones.Items.Cast<string>().ToList().Contains(f.number))
@@ -168,6 +173,9 @@ namespace Scheduler_Controls
 
             client.Administrator = txtAdministrator.Text;
 
+            client.Balance = (int)numBalance.Value;
+            client.NeedSMS = chkSMS.Checked;
+
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));
         }
@@ -195,5 +203,6 @@ namespace Scheduler_Controls
                     reception2Edit.CommitToDatabase();
             }
         }
+        
     }
 }

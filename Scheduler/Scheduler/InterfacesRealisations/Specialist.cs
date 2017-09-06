@@ -74,6 +74,11 @@ namespace Scheduler_InterfacesRealisations
             if (getCostsFunction == null)
                 getCostsFunction = func;
         }
+
+        public object Clone()
+        {
+            return new Specialist() { name = name, notworking = notworking, specialisations = new HashSet<string>(specialisations) };
+        }
     }
 
     public class SpecialistList : CommonList<Scheduler_Controls_Interfaces.ISpecialist>, Scheduler_Forms_Interfaces.ISpecialistList

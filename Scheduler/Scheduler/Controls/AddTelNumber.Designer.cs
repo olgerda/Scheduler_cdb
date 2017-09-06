@@ -70,15 +70,15 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(124, 81);
+            this.ClientSize = new System.Drawing.Size(114, 101);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.maskedTextBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.MaximumSize = new System.Drawing.Size(130, 105);
+            this.MaximumSize = new System.Drawing.Size(130, 140);
             this.MinimumSize = new System.Drawing.Size(130, 105);
             this.Name = "AddTelNumber";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "AddTelNumber";
             this.ResumeLayout(false);
             this.PerformLayout();
