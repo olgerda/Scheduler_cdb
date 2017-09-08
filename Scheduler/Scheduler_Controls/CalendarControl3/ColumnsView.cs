@@ -72,6 +72,29 @@ namespace CalendarControl3
         /// </summary>
         ITable2ControlInterface table;
 
+        class BrushPenPair
+        {
+            public BrushPenPair(Color color)
+            {
+                Brush = new SolidBrush(color);
+                Pen = new Pen(color);
+            }
+            public Brush Brush { get; private set; }
+            public Pen Pen { get; private set; }
+        }
+
+        private static Dictionary<Color, BrushPenPair> coloredCache =
+            new Dictionary<Color, BrushPenPair>();
+
+        private static Func<Color, Color, BrushPenPair> getBrushPenFromCache = (color, defaultColor) =>
+        {
+            if (color == default(Color))
+                color = defaultColor;
+            if (!coloredCache.ContainsKey(color))
+                coloredCache.Add(color, new BrushPenPair(color));
+            return coloredCache[color];
+        };
+
         public ITable2ControlInterface Table
         {
             get { return table; }
@@ -86,7 +109,7 @@ namespace CalendarControl3
 
         public ColumnsView()
         {
-            LastClick = new ClickCoords() { level = -1, column = -1};
+            LastClick = new ClickCoords() { level = -1, column = -1 };
             InitializeComponent();
             this.MinimumSize = new Size(minimumColumnWidth + infoColumnWidth, 500);
         }
@@ -128,9 +151,6 @@ namespace CalendarControl3
             hScrollBar1.Value = 0;
             hScrollBar1.Maximum = table.ColumnCount > 0 ? table.ColumnCount - 1 : 0;
             hScrollBar1.LargeChange = columnsOnControl;
-
-
-            //toolTip.ShowAlways = true;
         }
 
         /// <summary>
@@ -148,8 +168,10 @@ namespace CalendarControl3
             { // если создали по правилам (вместе с таблицей) - отрисовываем.
 
                 int currentLeft = infoColumnWidth;
-                Font drawFont = new Font("Arial", 10);
-                SolidBrush drawBrush = new SolidBrush(Color.Black);
+                Font drawFont = table.Font ?? new Font("Arial", 10);
+                var drawTextBrush = getBrushPenFromCache(table.ColorMain, Color.Black).Brush;
+                var drawBordersPen = getBrushPenFromCache(table.ColorBorder, Color.LightSeaGreen).Pen;
+                var drawTableOuterBorderPen = getBrushPenFromCache(Color.Black, Color.Black).Pen;
                 PointF drawPoint;
 
                 //infocolumn
@@ -159,11 +181,11 @@ namespace CalendarControl3
                 {
                     var y = tableTop + ScaleLevelsToControl(pair.Key);
                     if (y > tableTop && y < tableBottom)
-                        e.Graphics.DrawLine(new Pen(Brushes.LightSeaGreen), 0f, y, RealTableWidth, y);
+                        e.Graphics.DrawLine(drawBordersPen, 0f, y, RealTableWidth, y);
                     //if (y < tableTop) y = tableTop;
                     if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
                     drawPoint = new PointF(2f, y);
-                    e.Graphics.DrawString(pair.Value, drawFont, drawBrush, drawPoint);
+                    e.Graphics.DrawString(pair.Value, drawFont, drawTextBrush, drawPoint);
                 }
 
                 //maincolumns
@@ -173,37 +195,14 @@ namespace CalendarControl3
                     if (i > columns.Count - 1) break;
                     PaintColumn(e.Graphics, columns[i], currentLeft, oneColumnWidth, tableBottom);
                     drawPoint = new PointF(currentLeft + 1f, tableTop - drawFont.Height - 1f);
-                    e.Graphics.DrawString(columns[i].Name, drawFont, drawBrush, drawPoint);
+                    e.Graphics.DrawString(columns[i].Name, drawFont, drawTextBrush, drawPoint);
                     currentLeft += oneColumnWidth;
                 }
 
-                e.Graphics.DrawLine(new Pen(Brushes.Black), 0, 0, 0, tableBottom - 1); //левая граница
-                e.Graphics.DrawLine(new Pen(Brushes.Black), 0, tableTop, RealTableWidth, tableTop); //верхняя граница столбцов
-                e.Graphics.DrawLine(new Pen(Brushes.Black), 0, 0, RealTableWidth, 0); //верхняя граница шапки
-                e.Graphics.DrawLine(new Pen(Brushes.Black), 0, tableBottom - 1, RealTableWidth, tableBottom - 1); //нижняя граница
-
-
-                //                descriptions.Sort(CompareByInt);
-                //                 switch (descriptions.Count)
-                //                 {
-                //                     case 0: break;
-                //                     case 1:
-                //                         drawPoint = new PointF(2f, 2f);
-                //                         e.Graphics.DrawString(descriptions[0].ToString(), drawFont, drawBrush, drawPoint);
-                //                         break;
-                //                     default:
-                //                 for (int i = 0; i < descriptions.Count; i++)
-                //                 {
-                //                     var y = ScaleLevelsToControl(descriptions[i].ToInt());
-                //                     if (i != 0 && i != descriptions.Count - 1) //рисуем разделители только у промежуточных
-                //                         e.Graphics.DrawLine(new Pen(Brushes.LightSeaGreen), 0f, y, realTableWidth, y);
-                //                     if (y < tableTop) y = tableTop;
-                //                     if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
-                //                     drawPoint = new PointF(2f, y);
-                //                     e.Graphics.DrawString(descriptions[i].ToString(), drawFont, drawBrush, drawPoint);
-                //                 }
-                //                         break;
-                //                 }
+                e.Graphics.DrawLine(drawTableOuterBorderPen, 0, 0, 0, tableBottom - 1); //левая граница
+                e.Graphics.DrawLine(drawTableOuterBorderPen, 0, tableTop, RealTableWidth, tableTop); //верхняя граница столбцов
+                e.Graphics.DrawLine(drawTableOuterBorderPen, 0, 0, RealTableWidth, 0); //верхняя граница шапки
+                e.Graphics.DrawLine(drawTableOuterBorderPen, 0, tableBottom - 1, RealTableWidth, tableBottom - 1); //нижняя граница
             }
         }
 
@@ -215,16 +214,6 @@ namespace CalendarControl3
             Refresh();
         }
 
-
-        // 
-        //         int CompareByInt(IDescription2ControlInterface x, IDescription2ControlInterface y)
-        //         {
-        //             if (x == null && y == null) return 0;
-        //             if (x == null) return -1;
-        //             if (y == null) return 1;
-        //             return x.ToInt().CompareTo(y.ToInt());
-        //         }
-
         /// <summary>
         /// Отрисовать столбец вместе с содержащимися в нём сущностями.
         /// </summary>
@@ -235,12 +224,16 @@ namespace CalendarControl3
         /// <param name="height">Высота отрисовки столбца.</param>
         void PaintColumn(Graphics g, IColumn2ControlInterface column, int leftside, int width, int height)
         {
+            var pen = getBrushPenFromCache(column.ColorBorder, Color.DarkGreen).Pen;
+
             foreach (var entity in column.Entities)
             {
                 PaintEntity(g, entity, leftside + 1, width - 2);
             }
-            g.DrawLine(new Pen(Brushes.Black), leftside, 0, leftside, height -1); //рисуем левую линию каждого столбца
-            g.DrawLine(new Pen(Brushes.Black), leftside + width, 0, leftside + width, height - 1); //рисуем правую линию
+
+            g.DrawLine(pen, leftside, 0, leftside, height - 1); //рисуем левую линию каждого столбца
+            g.DrawLine(pen, leftside + width, 0, leftside + width, height - 1); //рисуем правую линию
+
         }
 
         /// <summary>
@@ -253,15 +246,19 @@ namespace CalendarControl3
         /// <param name="width">Ширина отрисовки сущности.</param>
         void PaintEntity(Graphics g, IEntity2ControlInterface entity, int leftside, int width)
         {
+            var brushBackground = getBrushPenFromCache(entity.ColorBackground, Color.LightYellow).Brush;
+            var brushBorder = getBrushPenFromCache(entity.ColorBorder, Color.DarkGreen).Brush;
+            var brushText = getBrushPenFromCache(entity.ColorMain, Color.Black).Brush;
+
             //нарисуем сглаженный прямоугольник
             Rectangle entRect = new Rectangle(leftside, tableTop + ScaleLevelsToControl(entity.TopLevel), width, ScaleLevelsToControl(entity.BottomLevel) - ScaleLevelsToControl(entity.TopLevel));
             GraphicsPath entShape = GetBarShape(entRect, 10); //10 - магическое число, смотрится хорошо
-            g.FillPath(Brushes.LightYellow, entShape);
-            g.DrawPath(new Pen(Brushes.DarkGreen, 2f), entShape);
+            g.FillPath(brushBackground, entShape);
+            g.DrawPath(new Pen(brushBorder, 2f), entShape);
 
             //напишем в нём текст
-            Font drawFont = new Font("Arial", 10);
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            Font drawFont = entity.Font ?? new Font("Arial", 10);
+            var drawBrush = brushText;
             RectangleF strRect = new RectangleF((float)entRect.X + 2f, (float)entRect.Y + 2f, entRect.Width - 4f, entRect.Height - 4f);
             StringFormat format = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap);
             format.Alignment = StringAlignment.Center;
@@ -281,6 +278,7 @@ namespace CalendarControl3
             return (int)Math.Floor(dotsToReturn / dotsPerPixel);
         }
 
+        private static GraphicsPath path = new GraphicsPath();
         public static GraphicsPath GetBarShape(Rectangle rect, int cornerRad)
         {
             /*
@@ -292,7 +290,7 @@ namespace CalendarControl3
             int y = rect.Y;
             int width = rect.Width;
             int height = rect.Height;
-            GraphicsPath path = new GraphicsPath();
+            path.ClearMarkers();
             path.AddBezier(x, y + rad, x, y, x + rad, y, x + rad, y);
             path.AddLine(x + rad, y, (x + width) - rad, y);
             path.AddBezier((x + width) - rad, y, x + width, y, x + width, y + rad, x + width, y + rad);
@@ -353,7 +351,7 @@ namespace CalendarControl3
 
         public IEntity2ControlInterface GetNearestTopEntity()
         {
-            if (LastClick.column == -1 || LastClick.level == -1 || table.Columns[LastClick.column].Entities.Count == 0) 
+            if (LastClick.column == -1 || LastClick.level == -1 || table.Columns[LastClick.column].Entities.Count == 0)
                 return null;
             IEntity2ControlInterface result = table.Columns[LastClick.column].Entities
                 .OrderByDescending(e => e.BottomLevel)

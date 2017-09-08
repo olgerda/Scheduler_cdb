@@ -78,7 +78,7 @@
             this.lstClientList.FormattingEnabled = true;
             this.lstClientList.Location = new System.Drawing.Point(9, 99);
             this.lstClientList.Name = "lstClientList";
-            this.lstClientList.Size = new System.Drawing.Size(260, 160);
+            this.lstClientList.Size = new System.Drawing.Size(260, 420);
             this.lstClientList.TabIndex = 11;
             this.lstClientList.SelectedIndexChanged += new System.EventHandler(this.lstClientList_SelectedIndexChanged);
             this.lstClientList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstClientList_KeyDown);
@@ -127,7 +127,7 @@
             this.grpSelectClient.Controls.Add(this.label1);
             this.grpSelectClient.Location = new System.Drawing.Point(5, 10);
             this.grpSelectClient.Name = "grpSelectClient";
-            this.grpSelectClient.Size = new System.Drawing.Size(276, 265);
+            this.grpSelectClient.Size = new System.Drawing.Size(276, 528);
             this.grpSelectClient.TabIndex = 17;
             this.grpSelectClient.TabStop = false;
             this.grpSelectClient.Text = "Поиск/выбор клиента";
@@ -171,23 +171,21 @@
             this.clientInfoCard.Enabled = false;
             this.clientInfoCard.EntityFactory = null;
             this.clientInfoCard.Location = new System.Drawing.Point(287, 10);
-            this.clientInfoCard.MaximumSize = new System.Drawing.Size(400, 265);
-            this.clientInfoCard.MinimumSize = new System.Drawing.Size(400, 265);
+            this.clientInfoCard.MaximumSize = new System.Drawing.Size(400, 0);
+            this.clientInfoCard.MinimumSize = new System.Drawing.Size(400, 528);
             this.clientInfoCard.Name = "clientInfoCard";
-            this.clientInfoCard.Size = new System.Drawing.Size(400, 265);
+            this.clientInfoCard.Size = new System.Drawing.Size(400, 528);
             this.clientInfoCard.TabIndex = 0;
             // 
             // FindClientCard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(694, 281);
+            this.ClientSize = new System.Drawing.Size(689, 541);
             this.Controls.Add(this.grpSelectClient);
             this.Controls.Add(this.clientInfoCard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(700, 305);
-            this.MinimumSize = new System.Drawing.Size(700, 305);
             this.Name = "FindClientCard";
             this.Text = "Поиск карточки клиента";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FindClientCard_FormClosing);

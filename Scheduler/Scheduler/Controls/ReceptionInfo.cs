@@ -46,7 +46,8 @@ namespace Scheduler_Controls
         {
             ReadExist,
             CreateNew,
-            CloneExist
+            CloneExist,
+            CommentOnly
         }
 
         public ReceptionInfo()
@@ -152,6 +153,10 @@ namespace Scheduler_Controls
         {
             doNothing = false;
 
+            var controlsNotForCommentOnly = new Control[] { grpClient, grpOther, grpReceptionParams };
+            foreach (var ctrl in controlsNotForCommentOnly)
+                ctrl.Enabled = true;
+
             switch (mode)
             {
                 case ShowModes.CreateNew:
@@ -172,6 +177,10 @@ namespace Scheduler_Controls
                     btnCancelReception.Enabled = true;
                     btnCreateChildReception.Enabled = true;
                     btnShowClientCard.Enabled = true;
+                    break;
+                case ShowModes.CommentOnly:
+                    foreach (var ctrl in controlsNotForCommentOnly)
+                        ctrl.Enabled = false;
                     break;
             }
         }

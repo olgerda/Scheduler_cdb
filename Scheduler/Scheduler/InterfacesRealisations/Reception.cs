@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Scheduler_Controls_Interfaces;
+using System.Drawing;
 
 namespace Scheduler_InterfacesRealisations
 {
@@ -242,5 +243,14 @@ namespace Scheduler_InterfacesRealisations
                 RaisePropertyChanged();
             }
         }
+
+
+        public Color ColorMain => default(Color);
+
+        public Color ColorBorder => default(Color);
+
+        public Color ColorBackground => default(Color);
+
+        public Font Font => null;
     }
 }

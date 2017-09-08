@@ -320,5 +320,10 @@ namespace Scheduler
         {
 
         }
+
+        private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

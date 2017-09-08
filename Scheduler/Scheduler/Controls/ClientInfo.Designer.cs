@@ -29,41 +29,41 @@
         private void InitializeComponent()
         {
             this.grpMain = new System.Windows.Forms.GroupBox();
-            this.txtAdministrator = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.grpReceptions = new System.Windows.Forms.GroupBox();
+            this.lstReceptions = new System.Windows.Forms.ListBox();
+            this.btnLoadReceptions = new System.Windows.Forms.Button();
+            this.grpComment = new System.Windows.Forms.GroupBox();
+            this.txtComment = new System.Windows.Forms.TextBox();
+            this.grpGeneralParams = new System.Windows.Forms.GroupBox();
             this.numGenerallyPrice = new System.Windows.Forms.NumericUpDown();
             this.dateGenerallyTime = new System.Windows.Forms.DateTimePicker();
-            this.btnLoadReceptions = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnCommit = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.numBalance = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.chkBlackList = new System.Windows.Forms.CheckBox();
+            this.grpContacts = new System.Windows.Forms.GroupBox();
+            this.grpContactsMail = new System.Windows.Forms.GroupBox();
+            this.txtMail = new System.Windows.Forms.TextBox();
+            this.grpContactsTelephones = new System.Windows.Forms.GroupBox();
+            this.lstTelephones = new System.Windows.Forms.ListBox();
+            this.chkSMS = new System.Windows.Forms.CheckBox();
             this.btnRemoveTelephone = new System.Windows.Forms.Button();
             this.btnAddTelephone = new System.Windows.Forms.Button();
-            this.lstReceptions = new System.Windows.Forms.ListBox();
-            this.txtComment = new System.Windows.Forms.TextBox();
-            this.lstTelephones = new System.Windows.Forms.ListBox();
+            this.txtAdministrator = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnCommit = new System.Windows.Forms.Button();
             this.txtFIO = new System.Windows.Forms.TextBox();
-            this.chkBlackList = new System.Windows.Forms.CheckBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.numBalance = new System.Windows.Forms.NumericUpDown();
-            this.chkSMS = new System.Windows.Forms.CheckBox();
-            this.txtMail = new System.Windows.Forms.TextBox();
-            this.grpContacts = new System.Windows.Forms.GroupBox();
-            this.grpContactsTelephones = new System.Windows.Forms.GroupBox();
-            this.grpContactsMail = new System.Windows.Forms.GroupBox();
-            this.grpGeneralParams = new System.Windows.Forms.GroupBox();
-            this.grpComment = new System.Windows.Forms.GroupBox();
-            this.grpReceptions = new System.Windows.Forms.GroupBox();
             this.grpMain.SuspendLayout();
+            this.grpReceptions.SuspendLayout();
+            this.grpComment.SuspendLayout();
+            this.grpGeneralParams.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGenerallyPrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBalance)).BeginInit();
             this.grpContacts.SuspendLayout();
-            this.grpContactsTelephones.SuspendLayout();
             this.grpContactsMail.SuspendLayout();
-            this.grpGeneralParams.SuspendLayout();
-            this.grpComment.SuspendLayout();
-            this.grpReceptions.SuspendLayout();
+            this.grpContactsTelephones.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMain
@@ -80,46 +80,78 @@
             this.grpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpMain.Location = new System.Drawing.Point(0, 0);
             this.grpMain.Name = "grpMain";
-            this.grpMain.Size = new System.Drawing.Size(400, 530);
+            this.grpMain.Size = new System.Drawing.Size(400, 529);
             this.grpMain.TabIndex = 0;
             this.grpMain.TabStop = false;
             this.grpMain.Text = "Карточка клиента";
             // 
-            // txtAdministrator
+            // grpReceptions
             // 
-            this.txtAdministrator.Location = new System.Drawing.Point(92, 425);
-            this.txtAdministrator.Name = "txtAdministrator";
-            this.txtAdministrator.Size = new System.Drawing.Size(301, 20);
-            this.txtAdministrator.TabIndex = 27;
-            this.txtAdministrator.Visible = false;
+            this.grpReceptions.Controls.Add(this.lstReceptions);
+            this.grpReceptions.Controls.Add(this.btnLoadReceptions);
+            this.grpReceptions.Location = new System.Drawing.Point(9, 371);
+            this.grpReceptions.Name = "grpReceptions";
+            this.grpReceptions.Size = new System.Drawing.Size(385, 120);
+            this.grpReceptions.TabIndex = 36;
+            this.grpReceptions.TabStop = false;
+            this.grpReceptions.Text = "Посещения";
             // 
-            // label7
+            // lstReceptions
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 428);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(86, 13);
-            this.label7.TabIndex = 26;
-            this.label7.Text = "Администратор";
-            this.label7.Visible = false;
+            this.lstReceptions.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lstReceptions.FormattingEnabled = true;
+            this.lstReceptions.HorizontalScrollbar = true;
+            this.lstReceptions.Location = new System.Drawing.Point(59, 16);
+            this.lstReceptions.Name = "lstReceptions";
+            this.lstReceptions.Size = new System.Drawing.Size(323, 101);
+            this.lstReceptions.TabIndex = 4;
+            this.lstReceptions.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstReceptions_MouseDoubleClick);
             // 
-            // label6
+            // btnLoadReceptions
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 42);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(132, 13);
-            this.label6.TabIndex = 25;
-            this.label6.Text = "Стандартная стоимость:";
+            this.btnLoadReceptions.Location = new System.Drawing.Point(8, 16);
+            this.btnLoadReceptions.Name = "btnLoadReceptions";
+            this.btnLoadReceptions.Size = new System.Drawing.Size(45, 97);
+            this.btnLoadReceptions.TabIndex = 13;
+            this.btnLoadReceptions.Text = "Загрузить";
+            this.btnLoadReceptions.UseVisualStyleBackColor = true;
+            this.btnLoadReceptions.Click += new System.EventHandler(this.btnLoadReceptions_Click);
             // 
-            // label5
+            // grpComment
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 16);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(110, 13);
-            this.label5.TabIndex = 24;
-            this.label5.Text = "Стандартное время:";
+            this.grpComment.Controls.Add(this.txtComment);
+            this.grpComment.Location = new System.Drawing.Point(8, 288);
+            this.grpComment.Name = "grpComment";
+            this.grpComment.Size = new System.Drawing.Size(386, 77);
+            this.grpComment.TabIndex = 35;
+            this.grpComment.TabStop = false;
+            this.grpComment.Text = "Комментарий";
+            // 
+            // txtComment
+            // 
+            this.txtComment.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtComment.Location = new System.Drawing.Point(3, 16);
+            this.txtComment.Multiline = true;
+            this.txtComment.Name = "txtComment";
+            this.txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtComment.Size = new System.Drawing.Size(380, 58);
+            this.txtComment.TabIndex = 3;
+            // 
+            // grpGeneralParams
+            // 
+            this.grpGeneralParams.Controls.Add(this.numGenerallyPrice);
+            this.grpGeneralParams.Controls.Add(this.dateGenerallyTime);
+            this.grpGeneralParams.Controls.Add(this.label8);
+            this.grpGeneralParams.Controls.Add(this.label5);
+            this.grpGeneralParams.Controls.Add(this.numBalance);
+            this.grpGeneralParams.Controls.Add(this.label6);
+            this.grpGeneralParams.Controls.Add(this.chkBlackList);
+            this.grpGeneralParams.Location = new System.Drawing.Point(8, 44);
+            this.grpGeneralParams.Name = "grpGeneralParams";
+            this.grpGeneralParams.Size = new System.Drawing.Size(386, 64);
+            this.grpGeneralParams.TabIndex = 34;
+            this.grpGeneralParams.TabStop = false;
+            this.grpGeneralParams.Text = "Основные параметры";
             // 
             // numGenerallyPrice
             // 
@@ -149,34 +181,117 @@
             this.dateGenerallyTime.TabIndex = 22;
             this.dateGenerallyTime.Value = new System.DateTime(2014, 2, 2, 10, 0, 0, 0);
             // 
-            // btnLoadReceptions
+            // label8
             // 
-            this.btnLoadReceptions.Location = new System.Drawing.Point(8, 16);
-            this.btnLoadReceptions.Name = "btnLoadReceptions";
-            this.btnLoadReceptions.Size = new System.Drawing.Size(41, 97);
-            this.btnLoadReceptions.TabIndex = 13;
-            this.btnLoadReceptions.Text = "Загрузить";
-            this.btnLoadReceptions.UseVisualStyleBackColor = true;
-            this.btnLoadReceptions.Click += new System.EventHandler(this.btnLoadReceptions_Click);
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(252, 16);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(47, 13);
+            this.label8.TabIndex = 29;
+            this.label8.Text = "Баланс:";
             // 
-            // label1
+            // label5
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 21);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Имя клиента:";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 16);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(110, 13);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "Стандартное время:";
             // 
-            // btnCommit
+            // numBalance
             // 
-            this.btnCommit.Location = new System.Drawing.Point(8, 497);
-            this.btnCommit.Name = "btnCommit";
-            this.btnCommit.Size = new System.Drawing.Size(384, 28);
-            this.btnCommit.TabIndex = 7;
-            this.btnCommit.Text = "Сохранить изменения";
-            this.btnCommit.UseVisualStyleBackColor = true;
-            this.btnCommit.Click += new System.EventHandler(this.btnCommit_Click);
+            this.numBalance.Location = new System.Drawing.Point(305, 12);
+            this.numBalance.Maximum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.numBalance.Name = "numBalance";
+            this.numBalance.Size = new System.Drawing.Size(75, 20);
+            this.numBalance.TabIndex = 28;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 42);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(132, 13);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "Стандартная стоимость:";
+            // 
+            // chkBlackList
+            // 
+            this.chkBlackList.AutoSize = true;
+            this.chkBlackList.Location = new System.Drawing.Point(255, 41);
+            this.chkBlackList.Name = "chkBlackList";
+            this.chkBlackList.Size = new System.Drawing.Size(112, 17);
+            this.chkBlackList.TabIndex = 12;
+            this.chkBlackList.Text = "В чёрном списке";
+            this.chkBlackList.UseVisualStyleBackColor = true;
+            // 
+            // grpContacts
+            // 
+            this.grpContacts.Controls.Add(this.grpContactsMail);
+            this.grpContacts.Controls.Add(this.grpContactsTelephones);
+            this.grpContacts.Location = new System.Drawing.Point(8, 114);
+            this.grpContacts.Name = "grpContacts";
+            this.grpContacts.Size = new System.Drawing.Size(386, 168);
+            this.grpContacts.TabIndex = 33;
+            this.grpContacts.TabStop = false;
+            this.grpContacts.Text = "Контакты";
+            // 
+            // grpContactsMail
+            // 
+            this.grpContactsMail.Controls.Add(this.txtMail);
+            this.grpContactsMail.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.grpContactsMail.Location = new System.Drawing.Point(3, 122);
+            this.grpContactsMail.Name = "grpContactsMail";
+            this.grpContactsMail.Size = new System.Drawing.Size(380, 43);
+            this.grpContactsMail.TabIndex = 35;
+            this.grpContactsMail.TabStop = false;
+            this.grpContactsMail.Text = "Электронная почта";
+            // 
+            // txtMail
+            // 
+            this.txtMail.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtMail.Location = new System.Drawing.Point(3, 16);
+            this.txtMail.Name = "txtMail";
+            this.txtMail.Size = new System.Drawing.Size(374, 20);
+            this.txtMail.TabIndex = 32;
+            // 
+            // grpContactsTelephones
+            // 
+            this.grpContactsTelephones.Controls.Add(this.lstTelephones);
+            this.grpContactsTelephones.Controls.Add(this.chkSMS);
+            this.grpContactsTelephones.Controls.Add(this.btnRemoveTelephone);
+            this.grpContactsTelephones.Controls.Add(this.btnAddTelephone);
+            this.grpContactsTelephones.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpContactsTelephones.Location = new System.Drawing.Point(3, 16);
+            this.grpContactsTelephones.Name = "grpContactsTelephones";
+            this.grpContactsTelephones.Size = new System.Drawing.Size(380, 100);
+            this.grpContactsTelephones.TabIndex = 34;
+            this.grpContactsTelephones.TabStop = false;
+            this.grpContactsTelephones.Text = "Телефоны";
+            // 
+            // lstTelephones
+            // 
+            this.lstTelephones.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lstTelephones.FormattingEnabled = true;
+            this.lstTelephones.Location = new System.Drawing.Point(3, 54);
+            this.lstTelephones.Name = "lstTelephones";
+            this.lstTelephones.Size = new System.Drawing.Size(374, 43);
+            this.lstTelephones.TabIndex = 2;
+            // 
+            // chkSMS
+            // 
+            this.chkSMS.AutoSize = true;
+            this.chkSMS.Location = new System.Drawing.Point(165, 23);
+            this.chkSMS.Name = "chkSMS";
+            this.chkSMS.Size = new System.Drawing.Size(49, 17);
+            this.chkSMS.TabIndex = 30;
+            this.chkSMS.Text = "SMS";
+            this.chkSMS.UseVisualStyleBackColor = true;
             // 
             // btnRemoveTelephone
             // 
@@ -200,35 +315,42 @@
             this.btnAddTelephone.UseVisualStyleBackColor = true;
             this.btnAddTelephone.Click += new System.EventHandler(this.btnAddTelephone_Click);
             // 
-            // lstReceptions
+            // txtAdministrator
             // 
-            this.lstReceptions.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lstReceptions.FormattingEnabled = true;
-            this.lstReceptions.HorizontalScrollbar = true;
-            this.lstReceptions.Location = new System.Drawing.Point(74, 16);
-            this.lstReceptions.Name = "lstReceptions";
-            this.lstReceptions.Size = new System.Drawing.Size(308, 101);
-            this.lstReceptions.TabIndex = 4;
-            this.lstReceptions.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstReceptions_MouseDoubleClick);
+            this.txtAdministrator.Location = new System.Drawing.Point(92, 425);
+            this.txtAdministrator.Name = "txtAdministrator";
+            this.txtAdministrator.Size = new System.Drawing.Size(301, 20);
+            this.txtAdministrator.TabIndex = 27;
+            this.txtAdministrator.Visible = false;
             // 
-            // txtComment
+            // label7
             // 
-            this.txtComment.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtComment.Location = new System.Drawing.Point(3, 16);
-            this.txtComment.Multiline = true;
-            this.txtComment.Name = "txtComment";
-            this.txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtComment.Size = new System.Drawing.Size(380, 58);
-            this.txtComment.TabIndex = 3;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 428);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(86, 13);
+            this.label7.TabIndex = 26;
+            this.label7.Text = "Администратор";
+            this.label7.Visible = false;
             // 
-            // lstTelephones
+            // label1
             // 
-            this.lstTelephones.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lstTelephones.FormattingEnabled = true;
-            this.lstTelephones.Location = new System.Drawing.Point(3, 54);
-            this.lstTelephones.Name = "lstTelephones";
-            this.lstTelephones.Size = new System.Drawing.Size(374, 43);
-            this.lstTelephones.TabIndex = 2;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Имя клиента:";
+            // 
+            // btnCommit
+            // 
+            this.btnCommit.Location = new System.Drawing.Point(8, 497);
+            this.btnCommit.Name = "btnCommit";
+            this.btnCommit.Size = new System.Drawing.Size(384, 28);
+            this.btnCommit.TabIndex = 7;
+            this.btnCommit.Text = "Сохранить изменения";
+            this.btnCommit.UseVisualStyleBackColor = true;
+            this.btnCommit.Click += new System.EventHandler(this.btnCommit_Click);
             // 
             // txtFIO
             // 
@@ -236,129 +358,6 @@
             this.txtFIO.Name = "txtFIO";
             this.txtFIO.Size = new System.Drawing.Size(308, 20);
             this.txtFIO.TabIndex = 1;
-            // 
-            // chkBlackList
-            // 
-            this.chkBlackList.AutoSize = true;
-            this.chkBlackList.Location = new System.Drawing.Point(255, 41);
-            this.chkBlackList.Name = "chkBlackList";
-            this.chkBlackList.Size = new System.Drawing.Size(112, 17);
-            this.chkBlackList.TabIndex = 12;
-            this.chkBlackList.Text = "В чёрном списке";
-            this.chkBlackList.UseVisualStyleBackColor = true;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(252, 16);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(47, 13);
-            this.label8.TabIndex = 29;
-            this.label8.Text = "Баланс:";
-            // 
-            // numBalance
-            // 
-            this.numBalance.Location = new System.Drawing.Point(305, 12);
-            this.numBalance.Maximum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.numBalance.Name = "numBalance";
-            this.numBalance.Size = new System.Drawing.Size(75, 20);
-            this.numBalance.TabIndex = 28;
-            // 
-            // chkSMS
-            // 
-            this.chkSMS.AutoSize = true;
-            this.chkSMS.Location = new System.Drawing.Point(165, 23);
-            this.chkSMS.Name = "chkSMS";
-            this.chkSMS.Size = new System.Drawing.Size(49, 17);
-            this.chkSMS.TabIndex = 30;
-            this.chkSMS.Text = "SMS";
-            this.chkSMS.UseVisualStyleBackColor = true;
-            // 
-            // txtMail
-            // 
-            this.txtMail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtMail.Location = new System.Drawing.Point(3, 16);
-            this.txtMail.Name = "txtMail";
-            this.txtMail.Size = new System.Drawing.Size(374, 20);
-            this.txtMail.TabIndex = 32;
-            this.txtMail.Visible = false;
-            // 
-            // grpContacts
-            // 
-            this.grpContacts.Controls.Add(this.grpContactsMail);
-            this.grpContacts.Controls.Add(this.grpContactsTelephones);
-            this.grpContacts.Location = new System.Drawing.Point(8, 114);
-            this.grpContacts.Name = "grpContacts";
-            this.grpContacts.Size = new System.Drawing.Size(386, 168);
-            this.grpContacts.TabIndex = 33;
-            this.grpContacts.TabStop = false;
-            this.grpContacts.Text = "Контакты";
-            // 
-            // grpContactsTelephones
-            // 
-            this.grpContactsTelephones.Controls.Add(this.lstTelephones);
-            this.grpContactsTelephones.Controls.Add(this.chkSMS);
-            this.grpContactsTelephones.Controls.Add(this.btnRemoveTelephone);
-            this.grpContactsTelephones.Controls.Add(this.btnAddTelephone);
-            this.grpContactsTelephones.Dock = System.Windows.Forms.DockStyle.Top;
-            this.grpContactsTelephones.Location = new System.Drawing.Point(3, 16);
-            this.grpContactsTelephones.Name = "grpContactsTelephones";
-            this.grpContactsTelephones.Size = new System.Drawing.Size(380, 100);
-            this.grpContactsTelephones.TabIndex = 34;
-            this.grpContactsTelephones.TabStop = false;
-            this.grpContactsTelephones.Text = "Телефоны";
-            // 
-            // grpContactsMail
-            // 
-            this.grpContactsMail.Controls.Add(this.txtMail);
-            this.grpContactsMail.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.grpContactsMail.Location = new System.Drawing.Point(3, 122);
-            this.grpContactsMail.Name = "grpContactsMail";
-            this.grpContactsMail.Size = new System.Drawing.Size(380, 43);
-            this.grpContactsMail.TabIndex = 35;
-            this.grpContactsMail.TabStop = false;
-            this.grpContactsMail.Text = "Электронная почта";
-            // 
-            // grpGeneralParams
-            // 
-            this.grpGeneralParams.Controls.Add(this.numGenerallyPrice);
-            this.grpGeneralParams.Controls.Add(this.dateGenerallyTime);
-            this.grpGeneralParams.Controls.Add(this.label8);
-            this.grpGeneralParams.Controls.Add(this.label5);
-            this.grpGeneralParams.Controls.Add(this.numBalance);
-            this.grpGeneralParams.Controls.Add(this.label6);
-            this.grpGeneralParams.Controls.Add(this.chkBlackList);
-            this.grpGeneralParams.Location = new System.Drawing.Point(8, 44);
-            this.grpGeneralParams.Name = "grpGeneralParams";
-            this.grpGeneralParams.Size = new System.Drawing.Size(386, 64);
-            this.grpGeneralParams.TabIndex = 34;
-            this.grpGeneralParams.TabStop = false;
-            this.grpGeneralParams.Text = "Основные параметры";
-            // 
-            // grpComment
-            // 
-            this.grpComment.Controls.Add(this.txtComment);
-            this.grpComment.Location = new System.Drawing.Point(8, 288);
-            this.grpComment.Name = "grpComment";
-            this.grpComment.Size = new System.Drawing.Size(386, 77);
-            this.grpComment.TabIndex = 35;
-            this.grpComment.TabStop = false;
-            this.grpComment.Text = "Комментарий";
-            // 
-            // grpReceptions
-            // 
-            this.grpReceptions.Controls.Add(this.lstReceptions);
-            this.grpReceptions.Controls.Add(this.btnLoadReceptions);
-            this.grpReceptions.Location = new System.Drawing.Point(9, 371);
-            this.grpReceptions.Name = "grpReceptions";
-            this.grpReceptions.Size = new System.Drawing.Size(385, 120);
-            this.grpReceptions.TabIndex = 36;
-            this.grpReceptions.TabStop = false;
-            this.grpReceptions.Text = "Посещения";
             // 
             // ClientInfo
             // 
@@ -368,21 +367,21 @@
             this.MaximumSize = new System.Drawing.Size(400, 0);
             this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "ClientInfo";
-            this.Size = new System.Drawing.Size(400, 530);
+            this.Size = new System.Drawing.Size(400, 529);
             this.grpMain.ResumeLayout(false);
             this.grpMain.PerformLayout();
+            this.grpReceptions.ResumeLayout(false);
+            this.grpComment.ResumeLayout(false);
+            this.grpComment.PerformLayout();
+            this.grpGeneralParams.ResumeLayout(false);
+            this.grpGeneralParams.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGenerallyPrice)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBalance)).EndInit();
             this.grpContacts.ResumeLayout(false);
-            this.grpContactsTelephones.ResumeLayout(false);
-            this.grpContactsTelephones.PerformLayout();
             this.grpContactsMail.ResumeLayout(false);
             this.grpContactsMail.PerformLayout();
-            this.grpGeneralParams.ResumeLayout(false);
-            this.grpGeneralParams.PerformLayout();
-            this.grpComment.ResumeLayout(false);
-            this.grpComment.PerformLayout();
-            this.grpReceptions.ResumeLayout(false);
+            this.grpContactsTelephones.ResumeLayout(false);
+            this.grpContactsTelephones.PerformLayout();
             this.ResumeLayout(false);
 
         }

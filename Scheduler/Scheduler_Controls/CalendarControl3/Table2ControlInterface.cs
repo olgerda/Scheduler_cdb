@@ -9,7 +9,7 @@ namespace CalendarControl3_Interfaces
     /// <summary>
     /// Интерфейс таблицы, по которой может быть построен контрол с отображением сущностей по столбцам со свободным расположением по вертикали.
     /// </summary>
-    public interface ITable2ControlInterface
+    public interface ITable2ControlInterface : ICanCustomizeLook
     {
         /// <summary>
         /// Получить число столбцов для отображения
@@ -38,13 +38,13 @@ namespace CalendarControl3_Interfaces
         List<IColumn2ControlInterface> Columns { get; }
     }
 
-    public interface IColumn2ControlInterface
+    public interface IColumn2ControlInterface : ICanCustomizeLook
     {
         string Name { get; set; }
         List<IEntity2ControlInterface> Entities { get; }
     }
 
-    public interface IEntity2ControlInterface
+    public interface IEntity2ControlInterface : ICanCustomizeLook
     {
         string StringToShow { get; }
         /// <summary>
@@ -59,5 +59,14 @@ namespace CalendarControl3_Interfaces
 
         bool IsIntersectWith(IEntity2ControlInterface second);
     }
+
+    public interface ICanCustomizeLook
+    {
+        System.Drawing.Color ColorMain { get; }
+        System.Drawing.Color ColorBorder { get; }
+        System.Drawing.Color ColorBackground { get; }
+        System.Drawing.Font Font { get; }
+    }
+
 
 }

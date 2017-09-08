@@ -48,6 +48,7 @@ namespace Scheduler_InterfacesRealisations
         {
             name = String.Empty;
             availability = false;
+            _commentOnly = false;
         }
 
         public string Name
@@ -74,7 +75,7 @@ namespace Scheduler_InterfacesRealisations
 
         public object Clone()
         {
-            return new Cabinet() {name = this.name, availability = availability};
+            return new Cabinet() { name = this.name, availability = availability, _commentOnly = _commentOnly };
         }
 
         public bool Availability
@@ -86,6 +87,17 @@ namespace Scheduler_InterfacesRealisations
             set
             {
                 availability = value; RaisePropertyChanged("Availability");
+            }
+        }
+
+        private bool _commentOnly;
+        public bool CommentOnly
+        {
+            get { return _commentOnly; }
+            set
+            {
+                _commentOnly = value;
+                RaisePropertyChanged("");
             }
         }
 

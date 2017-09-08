@@ -102,6 +102,8 @@ namespace Scheduler_Controls_Interfaces
     {
         [Description("Доступность для планирования")]
         bool Availability { get; set; }
+        [Description("Записи только для комментариев")]
+        bool CommentOnly { get; set; }
     }
 
     public delegate void DisposeReception(IHaveID item);

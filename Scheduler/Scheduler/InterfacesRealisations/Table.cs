@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace Scheduler_InterfacesRealisations
 {
@@ -15,13 +16,13 @@ namespace Scheduler_InterfacesRealisations
 
         int minValue;
         int maxValue;
-        
+
         public Table()
         {
             columns = new List<CalendarControl3_Interfaces.IColumn2ControlInterface>();
             workInterval = null;
             descriptions = new Dictionary<int, string>();
-            
+
             minValue = 0;
             maxValue = 0;
         }
@@ -50,8 +51,8 @@ namespace Scheduler_InterfacesRealisations
 
         int Scheduler_DBobjects_Intefraces.ITable.ConvertTimeToLevel(DateTime time)
         {
-            if (workInterval == null || 
-                workInterval.StartDate.TimeOfDay > time.TimeOfDay 
+            if (workInterval == null ||
+                workInterval.StartDate.TimeOfDay > time.TimeOfDay
                 || workInterval.EndDate.TimeOfDay < time.TimeOfDay)
                 return -1;
             return minValue + ConvertTimespanToLevel(time.TimeOfDay);
@@ -101,5 +102,14 @@ namespace Scheduler_InterfacesRealisations
         {
             return Convert.ToInt32(Math.Truncate(input.TotalMinutes));
         }
+
+
+        public Color ColorMain => default(Color);
+
+        public Color ColorBorder => default(Color);
+
+        public Color ColorBackground => default(Color);
+
+        public Font Font => null;
     }
 }

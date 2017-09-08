@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using CalendarControl3_Interfaces;
@@ -116,6 +117,15 @@ namespace CalendarControl3
                 throw new NotImplementedException();
             }
         }
+
+        public Color ColorMain => default(Color);
+
+        public Color ColorBorder => default(Color);
+
+        public Color ColorBackground => default(Color);
+
+        public Font Font => null;
+
     }
 
     public class TestColumn : IColumn2ControlInterface
@@ -132,6 +142,7 @@ namespace CalendarControl3
         public string Name
         {
             get { return name; }
+            set { }
         }
 
         public List<IEntity2ControlInterface> Entities
@@ -140,17 +151,13 @@ namespace CalendarControl3
             get { return entities; }
         }
 
-        string IColumn2ControlInterface.Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public Color ColorMain => default(Color);
+
+        public Color ColorBorder => default(Color);
+
+        public Color ColorBackground => default(Color);
+
+        public Font Font => null;
     }
 
     public class TestEntity : IEntity2ControlInterface
@@ -183,10 +190,10 @@ namespace CalendarControl3
             get { return bLevel; }
         }
 
-//         public object GetObject()
-//         {
-//             return obj;
-//         }
+        //         public object GetObject()
+        //         {
+        //             return obj;
+        //         }
 
 
         public ulong ID
@@ -197,8 +204,17 @@ namespace CalendarControl3
 
         public bool IsIntersectWith(IEntity2ControlInterface second)
         {
-            throw new NotImplementedException();
+            return false;
         }
+
+
+        public Color ColorMain => default(Color);
+
+        public Color ColorBorder => default(Color);
+
+        public Color ColorBackground => default(Color);
+
+        public Font Font => null;
     }
 
     //     public class TestDescription : IDescription2ControlInterface

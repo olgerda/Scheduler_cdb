@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace Scheduler_InterfacesRealisations
 {
@@ -33,5 +34,14 @@ namespace Scheduler_InterfacesRealisations
         {
             get { return entities; }
         }
+
+
+        public Color ColorMain => default(Color);
+
+        public Color ColorBorder => default(Color);
+
+        public Color ColorBackground => default(Color);
+
+        public Font Font => null;
     }
 }
