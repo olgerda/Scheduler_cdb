@@ -13,39 +13,129 @@ namespace Scheduler.Forms
 {
     public partial class SettingsForm : Form
     {
+        public enum ColorChangers
+        {
+            Table,
+            Column,
+            Entity1,
+            Entity2
+        }
+
+
         public SettingsForm()
         {
             InitializeComponent();
             InitTestData();
             columnsControl.Table = testTable;
+
+            colorPicker1.onColorsChanged += () =>
+                {
+                    ChangeColors(colorPicker1.SelectedColors, columnsControl.Table);
+                };
+
+            colorPicker2.onColorsChanged += () =>
+                {
+                    foreach (var column in columnsControl.Table.Columns) ChangeColors(colorPicker2.SelectedColors, column);
+                };
+            colorPicker3.onColorsChanged += () =>
+                {
+                    foreach (var ent in columnsControl.Table.Columns[0].Entities)
+                        ChangeColors(colorPicker3.SelectedColors, ent);
+                };
+            colorPicker4.onColorsChanged += () =>
+                {
+                    foreach (var ent in columnsControl.Table.Columns[1].Entities)
+                        ChangeColors(colorPicker3.SelectedColors, ent);
+                };
+        }
+
+        private Action<Scheduler.Controls.ColorPicker.ControlsColors, ICanCustomizeLook> ChangeColors => (colors, control) =>
+        {
+            control.ColorMain = colors.ColorMain;
+            control.ColorBorder = colors.ColorBorder;
+            control.ColorBackground = colors.ColorBackground;
+            control.Font = colors.Font;
+            columnsControl.Refresh();
+        };
+
+        private void ColorPicker_onColorsChanged(object sender)
+        {
+            Scheduler.Controls.ColorPicker colorPicker = (Scheduler.Controls.ColorPicker)sender;
+            ChangeColors(colorPicker1.SelectedColors, columnsControl.Table);
+
+            foreach (var column in columnsControl.Table.Columns)
+                ChangeColors(colorPicker2.SelectedColors, column);
+
+            foreach (var ent in columnsControl.Table.Columns[0].Entities)
+                ChangeColors(colorPicker3.SelectedColors, ent);
+
+            foreach (var ent in columnsControl.Table.Columns[1].Entities)
+                ChangeColors(colorPicker3.SelectedColors, ent);
+        }
+
+        private Dictionary<ColorChangers, Controls.ColorPicker.ControlsColors> _allColors;
+
+        private Action<Controls.ColorPicker.ControlsColors, Controls.ColorPicker, bool> actualizeColors =
+            (colors, control, fromControl) =>
+            {
+                if (!fromControl)
+                    control.SelectedColors = colors;
+                else
+                    colors = control.SelectedColors;
+            };
+        public Dictionary<ColorChangers, Controls.ColorPicker.ControlsColors> SelectedColorsDictionary
+        {
+            get
+            {
+                actualizeColors(_allColors[ColorChangers.Table], colorPicker1, true);
+                actualizeColors(_allColors[ColorChangers.Column], colorPicker2, true);
+                actualizeColors(_allColors[ColorChangers.Entity1], colorPicker3, true);
+                actualizeColors(_allColors[ColorChangers.Entity2], colorPicker4, true);
+                return _allColors;
+            }
+            set
+            {
+                _allColors = value;
+                RefreshColorPickers();
+            }
+        }
+
+        public void RefreshColorPickers()
+        {
+            actualizeColors(_allColors[ColorChangers.Table], colorPicker1, false);
+            actualizeColors(_allColors[ColorChangers.Column], colorPicker2, false);
+            actualizeColors(_allColors[ColorChangers.Entity1], colorPicker3, false);
+            actualizeColors(_allColors[ColorChangers.Entity2], colorPicker4, false);
         }
 
         private TestTable testTable;
+        private TestTable.TestColumn.TestEntity[] entities;
         void InitTestData()
         {
             testTable = new TestTable();
             testTable.Columns.Add(new TestTable.TestColumn());
             testTable.Columns.Add(new TestTable.TestColumn());
-            testTable.Columns[0].Entities.Add(new TestTable.TestColumn.TestEntity());
-            testTable.Columns[0].Entities.Add(new TestTable.TestColumn.TestEntity());
-            testTable.Columns[1].Entities.Add(new TestTable.TestColumn.TestEntity());
-            testTable.Columns[1].Entities.Add(new TestTable.TestColumn.TestEntity());
+            entities = new TestTable.TestColumn.TestEntity[] { new TestTable.TestColumn.TestEntity(), new TestTable.TestColumn.TestEntity(), new TestTable.TestColumn.TestEntity(), new TestTable.TestColumn.TestEntity() };
+            testTable.Columns[0].Entities.Add(entities[0]);
+            testTable.Columns[0].Entities.Add(entities[1]);
+            testTable.Columns[1].Entities.Add(entities[2]);
+            testTable.Columns[1].Entities.Add(entities[3]);
 
             testTable.Columns[0].Name = "Кабинет1";
             testTable.Columns[1].Name = "Кабинет2";
-            (testTable.Columns[0].Entities[0] as TestTable.TestColumn.TestEntity).StringToShow = $"Информация1{Environment.NewLine}Время 10:00";
-            (testTable.Columns[0].Entities[0] as TestTable.TestColumn.TestEntity).TopLevel = 50;
-            (testTable.Columns[0].Entities[0] as TestTable.TestColumn.TestEntity).BottomLevel = 150;
-            (testTable.Columns[0].Entities[1] as TestTable.TestColumn.TestEntity).StringToShow = $"Информация2{Environment.NewLine}Время 13:00";
-            (testTable.Columns[0].Entities[1] as TestTable.TestColumn.TestEntity).TopLevel = 250;
-            (testTable.Columns[0].Entities[1] as TestTable.TestColumn.TestEntity).BottomLevel = 350;
+            entities[0].StringToShow = $"Информация1{Environment.NewLine}Время 10:00";
+            entities[0].TopLevel = 50;
+            entities[0].BottomLevel = 150;
+            entities[1].StringToShow = $"Информация2{Environment.NewLine}Время 13:00";
+            entities[1].TopLevel = 250;
+            entities[1].BottomLevel = 350;
 
-            (testTable.Columns[1].Entities[0] as TestTable.TestColumn.TestEntity).StringToShow = $"Информация3{Environment.NewLine}Время 11:00";
-            (testTable.Columns[1].Entities[0] as TestTable.TestColumn.TestEntity).TopLevel = 120;
-            (testTable.Columns[1].Entities[0] as TestTable.TestColumn.TestEntity).BottomLevel = 140;
-            (testTable.Columns[1].Entities[1] as TestTable.TestColumn.TestEntity).StringToShow = $"Информация4{Environment.NewLine}Время 12:00";
-            (testTable.Columns[1].Entities[1] as TestTable.TestColumn.TestEntity).TopLevel = 150;
-            (testTable.Columns[1].Entities[1] as TestTable.TestColumn.TestEntity).BottomLevel = 250;
+            entities[2].StringToShow = $"Информация3{Environment.NewLine}Время 11:00";
+            entities[2].TopLevel = 120;
+            entities[2].BottomLevel = 180;
+            entities[3].StringToShow = $"Информация4{Environment.NewLine}Время 12:00";
+            entities[3].TopLevel = 200;
+            entities[3].BottomLevel = 250;
 
         }
     }

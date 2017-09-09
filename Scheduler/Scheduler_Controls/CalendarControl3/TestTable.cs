@@ -118,13 +118,13 @@ namespace CalendarControl3
             }
         }
 
-        public Color ColorMain => default(Color);
+        public Color ColorMain { get; set; }
 
-        public Color ColorBorder => default(Color);
+        public Color ColorBorder { get; set; }
 
-        public Color ColorBackground => default(Color);
+        public Color ColorBackground { get; set; }
 
-        public Font Font => null;
+        public Font Font { get; set; }
 
     }
 
@@ -151,13 +151,13 @@ namespace CalendarControl3
             get { return entities; }
         }
 
-        public Color ColorMain => default(Color);
+        public Color ColorMain { get; set; }
 
-        public Color ColorBorder => default(Color);
+        public Color ColorBorder { get; set; }
 
-        public Color ColorBackground => default(Color);
+        public Color ColorBackground { get; set; }
 
-        public Font Font => null;
+        public Font Font { get; set; }
     }
 
     public class TestEntity : IEntity2ControlInterface
@@ -208,13 +208,13 @@ namespace CalendarControl3
         }
 
 
-        public Color ColorMain => default(Color);
+        public Color ColorMain { get; set; }
 
-        public Color ColorBorder => default(Color);
+        public Color ColorBorder { get; set; }
 
-        public Color ColorBackground => default(Color);
+        public Color ColorBackground { get; set; }
 
-        public Font Font => null;
+        public Font Font { get; set; }
     }
 
     //     public class TestDescription : IDescription2ControlInterface

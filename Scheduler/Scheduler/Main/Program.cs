@@ -26,8 +26,9 @@ namespace Scheduler
             var entity = new Scheduler_InterfacesRealisations.EntityFactory();
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm(entity.NewMainDataBase()));
-		}
+            Application.Run(new MainForm(entity.NewMainDataBase()));
+		    //Application.Run(new Scheduler.Forms.SettingsForm());
+        }
 		
 	}
 }

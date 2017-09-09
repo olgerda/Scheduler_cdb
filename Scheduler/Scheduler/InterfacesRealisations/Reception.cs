@@ -243,14 +243,5 @@ namespace Scheduler_InterfacesRealisations
                 RaisePropertyChanged();
             }
         }
-
-
-        public Color ColorMain => default(Color);
-
-        public Color ColorBorder => default(Color);
-
-        public Color ColorBackground => default(Color);
-
-        public Font Font => null;
     }
 }

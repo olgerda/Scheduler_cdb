@@ -91,7 +91,7 @@ namespace Scheduler
             // monthCalendar1
             // 
             this.monthCalendar1.FirstDayOfWeek = System.Windows.Forms.Day.Monday;
-            this.monthCalendar1.Location = new System.Drawing.Point(9, 227);
+            this.monthCalendar1.Location = new System.Drawing.Point(9, 210);
             this.monthCalendar1.MaxSelectionCount = 1;
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 9;
@@ -236,13 +236,13 @@ namespace Scheduler
             // инструкцииToolStripMenuItem
             // 
             this.инструкцииToolStripMenuItem.Name = "инструкцииToolStripMenuItem";
-            this.инструкцииToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.инструкцииToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.инструкцииToolStripMenuItem.Text = "Инструкции";
             // 
             // контактыToolStripMenuItem
             // 
             this.контактыToolStripMenuItem.Name = "контактыToolStripMenuItem";
-            this.контактыToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.контактыToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.контактыToolStripMenuItem.Text = "Контакты";
             this.контактыToolStripMenuItem.Click += new System.EventHandler(this.контактыToolStripMenuItem_Click);
             // 

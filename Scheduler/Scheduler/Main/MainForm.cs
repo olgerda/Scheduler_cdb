@@ -44,7 +44,7 @@ namespace Scheduler
         IMainDataBase database;
 
         CalendarControl3.ColumnsView calendarControl;
-
+        private Scheduler.Main.ProgramSettings MainSettings;
         public MainForm()
         {
             InitializeComponent();
@@ -53,9 +53,6 @@ namespace Scheduler
         public MainForm(IMainDataBase database)
         {
             InitializeComponent();
-#if DEBUG
-            //настройкиToolStripMenuItem_Click(null, null);
-#endif
 
             if (database.ErrorString != null)
             {
@@ -73,7 +70,7 @@ namespace Scheduler
             FirstLoad();
             dateTimePicker1.Value = schedule_date;
             calendarControl = new CalendarControl3.ColumnsView();
-            
+
             calendarControl.Dock = DockStyle.Fill;
             mainView.Panel1.Controls.Add(calendarControl);
             calendarControl.Table = receptionEntitiesTable;
@@ -163,6 +160,7 @@ namespace Scheduler
             ITimeInterval workday = database.EntityFactory.NewTimeInterval();
             workday.SetStartEnd(new DateTime(1, 1, 1, 10, 0, 0), new DateTime(1, 1, 1, 22, 0, 0));
             receptionEntitiesTable.WorkTimeInterval = workday;
+            MainSettings = new Main.ProgramSettings(workday);
 
             Dictionary<DateTime, string> descriprions = new Dictionary<DateTime, string>(13);
             for (int i = 10; i <= 22; i++) //дикий хардкод, переписать на что-то вразумительное 
@@ -190,7 +188,9 @@ namespace Scheduler
                 receptionEntitiesTable.Columns.Find(x => x.Name == ent.Cabinet.Name).Entities.Add(ent);
             }
             if (calendarControl != null)
+            {
                 calendarControl.Refresh();
+            }
         }
 
         void ReloadColumns()
@@ -330,7 +330,9 @@ namespace Scheduler
         {
             using (var settings = new Scheduler.Forms.SettingsForm())
             {
-                settings.ShowDialog();
+                if (settings.ShowDialog() != DialogResult.OK)
+                    return;
+                MainSettings.ControlsColors = settings.SelectedColorsDictionary;
             }
         }
     }

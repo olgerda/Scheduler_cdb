@@ -43,6 +43,7 @@ namespace Scheduler_DBobjects_Intefraces
     public interface IColumn : IColumn2ControlInterface
     {
         void AddEntity(IEntity entity);
+        bool OnlyComment { get; set; }
     }
 
     public interface IEntity : IEntity2ControlInterface, IReception

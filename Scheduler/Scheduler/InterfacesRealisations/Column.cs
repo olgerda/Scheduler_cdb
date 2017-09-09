@@ -36,12 +36,14 @@ namespace Scheduler_InterfacesRealisations
         }
 
 
-        public Color ColorMain => default(Color);
+        public Color ColorMain { get; set; }
 
-        public Color ColorBorder => default(Color);
+        public Color ColorBorder { get; set; }
 
-        public Color ColorBackground => default(Color);
+        public Color ColorBackground { get; set; }
 
-        public Font Font => null;
+        public Font Font { get; set; }
+
+        public bool OnlyComment { get; set; }
     }
 }

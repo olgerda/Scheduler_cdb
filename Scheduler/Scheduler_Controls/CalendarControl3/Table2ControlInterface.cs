@@ -62,10 +62,10 @@ namespace CalendarControl3_Interfaces
 
     public interface ICanCustomizeLook
     {
-        System.Drawing.Color ColorMain { get; }
-        System.Drawing.Color ColorBorder { get; }
-        System.Drawing.Color ColorBackground { get; }
-        System.Drawing.Font Font { get; }
+        System.Drawing.Color ColorMain { get; set; }
+        System.Drawing.Color ColorBorder { get; set; }
+        System.Drawing.Color ColorBackground { get; set; }
+        System.Drawing.Font Font { get; set; }
     }
 
 

@@ -73,6 +73,8 @@ namespace CalendarControl3
         /// </summary>
         ITable2ControlInterface table;
 
+        private Font _defaultFont = new Font("Arial", 10);
+
         class BrushPenPair
         {
             public BrushPenPair(Color color)
@@ -156,15 +158,21 @@ namespace CalendarControl3
             hScrollBar1.LargeChange = columnsOnControl;
         }
 
-        protected override void OnPaintBackground(PaintEventArgs e)
+        /// <summary>
+        /// Есть острое желание порисовать.
+        /// </summary>
+        /// <param name="e">Инструменты для рисования.</param>
+        protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaintBackground(e);
+            //base.OnPaint(e);
             if (table == null)
             { // в случае умолчательного создания - нифига не делаем.
                 return;
             }
 
-            Font drawFont = table.Font ?? new Font("Arial", 10);
+            // если создали по правилам (вместе с таблицей) - отрисовываем.
+            int currentLeft = infoColumnWidth;
+            Font drawFont = table.Font ?? _defaultFont;
             var drawTextBrush = getBrushPenFromCache(table.ColorMain, Color.Black).Brush;
             var drawBordersPen = getBrushPenFromCache(table.ColorBorder, Color.LightSeaGreen).Pen;
             var drawTableOuterBorderPen = getBrushPenFromCache(Color.Black, Color.Black).Pen;
@@ -183,26 +191,6 @@ namespace CalendarControl3
                 drawPoint = new PointF(2f, y);
                 e.Graphics.DrawString(pair.Value, drawFont, drawTextBrush, drawPoint);
             }
-        }
-        /// <summary>
-        /// Есть острое желание порисовать.
-        /// </summary>
-        /// <param name="e">Инструменты для рисования.</param>
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            //base.OnPaint(e);
-            if (table == null)
-            { // в случае умолчательного создания - нифига не делаем.
-                return;
-            }
-
-            // если создали по правилам (вместе с таблицей) - отрисовываем.
-            int currentLeft = infoColumnWidth;
-            Font drawFont = table.Font ?? new Font("Arial", 10);
-            var drawTextBrush = getBrushPenFromCache(table.ColorMain, Color.Black).Brush;
-            var drawBordersPen = getBrushPenFromCache(table.ColorBorder, Color.LightSeaGreen).Pen;
-            var drawTableOuterBorderPen = getBrushPenFromCache(Color.Black, Color.Black).Pen;
-            PointF drawPoint;
 
             //maincolumns
             var columns = table.Columns;
@@ -224,14 +212,15 @@ namespace CalendarControl3
 
         protected override void OnResize(EventArgs e)
         {
-            //this.Invalidate();
-            MakeTableFromInput();
-
             base.OnResize(e);
-
             Refresh();
         }
 
+        public override void Refresh()
+        {
+            MakeTableFromInput();
+            base.Refresh();
+        }
         /// <summary>
         /// Отрисовать столбец вместе с содержащимися в нём сущностями.
         /// </summary>
@@ -254,6 +243,8 @@ namespace CalendarControl3
 
         }
 
+        StringFormat _format = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap) { Alignment = StringAlignment.Center };
+        private Pen _penToDrawEntityBorder = new Pen(Color.Green, 2f);
         /// <summary>
         /// Отрисовать сущность в виде прямоугольника со сглаженными сторонами и текстом внутри.
         /// Многова-то вызовов ScaleToControl. Надо будет обкумекать, как это порешать. Например, предрассчёт сократит вызовы с 4х до 2х.
@@ -273,14 +264,13 @@ namespace CalendarControl3
             GraphicsPath entShape = GetBarShape(entRect, 10); //10 - магическое число, смотрится хорошо
 
             g.FillPath(brushBackground, entShape);
-            g.DrawPath(new Pen(brushBorder, 2f), entShape);
+            _penToDrawEntityBorder.Brush = brushBorder;
+            g.DrawPath(_penToDrawEntityBorder, entShape);
 
             //напишем в нём текст
-            Font drawFont = entity.Font ?? new Font("Arial", 10);
+            Font drawFont = entity.Font ?? _defaultFont;
             RectangleF strRect = new RectangleF((float)entRect.X + 2f, (float)entRect.Y + 2f, entRect.Width - 4f, entRect.Height - 4f);
-            StringFormat format = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap);
-            format.Alignment = StringAlignment.Center;
-            g.DrawString(entity.StringToShow, drawFont, brushText, strRect, format);
+            g.DrawString(entity.StringToShow, drawFont, brushText, strRect, _format);
         }
 
         /// <summary>

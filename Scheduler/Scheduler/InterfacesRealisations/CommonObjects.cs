@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace Scheduler_InterfacesRealisations
 {
-    public abstract class CommonObjectWithNotify : Scheduler_Controls_Interfaces.IDummy, Scheduler_Controls_Interfaces.IHaveID, INotifyPropertyChanged
+    public abstract class CommonObjectWithNotify : Scheduler_Controls_Interfaces.IDummy, Scheduler_Controls_Interfaces.IHaveID, INotifyPropertyChanged, CalendarControl3_Interfaces.ICanCustomizeLook
     {
         //https://stackoverflow.com/questions/30141045/two-ways-databinding-in-winforms
         //https://stackoverflow.com/questions/1334815/how-to-bind-controls-two-properties-to-two-object-properties-properly
@@ -33,6 +34,14 @@ namespace Scheduler_InterfacesRealisations
         public event PropertyChangedEventHandler PropertyChanged;
 
         public int ID { get; set; }
+
+        public Color ColorMain { get; set; }
+
+        public Color ColorBorder { get; set; }
+
+        public Color ColorBackground { get; set; }
+
+        public Font Font { get; set; }
 
         public static bool operator ==(CommonObjectWithNotify a, CommonObjectWithNotify b)
         {
