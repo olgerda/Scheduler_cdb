@@ -180,6 +180,12 @@
     <Compile Include="Forms\Reports.Designer.cs">
       <DependentUpon>Reports.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="InterfacesRealisations\Column.cs" />
     <Compile Include="DBobjects\MainDatabase.cs" />
     <Compile Include="InterfacesRealisations\CommonObjects.cs" />
@@ -269,6 +275,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Reports.resx">
       <DependentUpon>Reports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SpecialistListEdit.resx">
       <DependentUpon>SpecialistListEdit.cs</DependentUpon>

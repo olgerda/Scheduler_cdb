@@ -8,10 +8,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using CalendarControl3_Interfaces;
+using System.Reflection;
 
 namespace CalendarControl3
 {
-    public partial class ColumnsView : UserControl
+    public partial class ColumnsView : Control
     {
         /// <summary>
         /// Нужно подобрать некое умолчательное минимальное значение, которое нормально для восприятия. В идеале - вынести в настройки.
@@ -83,17 +84,17 @@ namespace CalendarControl3
             public Pen Pen { get; private set; }
         }
 
-        private static Dictionary<Color, BrushPenPair> coloredCache =
+        private Dictionary<Color, BrushPenPair> coloredCache =
             new Dictionary<Color, BrushPenPair>();
 
-        private static Func<Color, Color, BrushPenPair> getBrushPenFromCache = (color, defaultColor) =>
+        private BrushPenPair getBrushPenFromCache(Color color, Color defaultColor)
         {
             if (color == default(Color))
                 color = defaultColor;
             if (!coloredCache.ContainsKey(color))
                 coloredCache.Add(color, new BrushPenPair(color));
             return coloredCache[color];
-        };
+        }
 
         public ITable2ControlInterface Table
         {
@@ -112,6 +113,8 @@ namespace CalendarControl3
             LastClick = new ClickCoords() { level = -1, column = -1 };
             InitializeComponent();
             this.MinimumSize = new Size(minimumColumnWidth + infoColumnWidth, 500);
+            this.SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer |
+                          ControlStyles.AllPaintingInWmPaint, true);
         }
 
         void MakeTableFromInput()
@@ -153,6 +156,34 @@ namespace CalendarControl3
             hScrollBar1.LargeChange = columnsOnControl;
         }
 
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            base.OnPaintBackground(e);
+            if (table == null)
+            { // в случае умолчательного создания - нифига не делаем.
+                return;
+            }
+
+            Font drawFont = table.Font ?? new Font("Arial", 10);
+            var drawTextBrush = getBrushPenFromCache(table.ColorMain, Color.Black).Brush;
+            var drawBordersPen = getBrushPenFromCache(table.ColorBorder, Color.LightSeaGreen).Pen;
+            var drawTableOuterBorderPen = getBrushPenFromCache(Color.Black, Color.Black).Pen;
+            PointF drawPoint;
+
+            //infocolumn
+            var descriptions_ = table.GetDescripptionsToValueLevels();
+            SortedDictionary<int, string> descriptions = new SortedDictionary<int, string>(descriptions_);
+            foreach (var pair in descriptions)
+            {
+                var y = tableTop + ScaleLevelsToControl(pair.Key);
+                if (y > tableTop && y < tableBottom)
+                    e.Graphics.DrawLine(drawBordersPen, 0f, y, RealTableWidth, y);
+                //if (y < tableTop) y = tableTop;
+                if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
+                drawPoint = new PointF(2f, y);
+                e.Graphics.DrawString(pair.Value, drawFont, drawTextBrush, drawPoint);
+            }
+        }
         /// <summary>
         /// Есть острое желание порисовать.
         /// </summary>
@@ -162,55 +193,42 @@ namespace CalendarControl3
             //base.OnPaint(e);
             if (table == null)
             { // в случае умолчательного создания - нифига не делаем.
-
+                return;
             }
-            else
-            { // если создали по правилам (вместе с таблицей) - отрисовываем.
 
-                int currentLeft = infoColumnWidth;
-                Font drawFont = table.Font ?? new Font("Arial", 10);
-                var drawTextBrush = getBrushPenFromCache(table.ColorMain, Color.Black).Brush;
-                var drawBordersPen = getBrushPenFromCache(table.ColorBorder, Color.LightSeaGreen).Pen;
-                var drawTableOuterBorderPen = getBrushPenFromCache(Color.Black, Color.Black).Pen;
-                PointF drawPoint;
+            // если создали по правилам (вместе с таблицей) - отрисовываем.
+            int currentLeft = infoColumnWidth;
+            Font drawFont = table.Font ?? new Font("Arial", 10);
+            var drawTextBrush = getBrushPenFromCache(table.ColorMain, Color.Black).Brush;
+            var drawBordersPen = getBrushPenFromCache(table.ColorBorder, Color.LightSeaGreen).Pen;
+            var drawTableOuterBorderPen = getBrushPenFromCache(Color.Black, Color.Black).Pen;
+            PointF drawPoint;
 
-                //infocolumn
-                var descriptions_ = table.GetDescripptionsToValueLevels();
-                SortedDictionary<int, string> descriptions = new SortedDictionary<int, string>(descriptions_);
-                foreach (var pair in descriptions)
-                {
-                    var y = tableTop + ScaleLevelsToControl(pair.Key);
-                    if (y > tableTop && y < tableBottom)
-                        e.Graphics.DrawLine(drawBordersPen, 0f, y, RealTableWidth, y);
-                    //if (y < tableTop) y = tableTop;
-                    if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
-                    drawPoint = new PointF(2f, y);
-                    e.Graphics.DrawString(pair.Value, drawFont, drawTextBrush, drawPoint);
-                }
-
-                //maincolumns
-                var columns = table.Columns;
-                for (int i = hScrollBar1.Value; i < hScrollBar1.Value + columnsOnControl; i++)
-                {
-                    if (i > columns.Count - 1) break;
-                    PaintColumn(e.Graphics, columns[i], currentLeft, oneColumnWidth, tableBottom);
-                    drawPoint = new PointF(currentLeft + 1f, tableTop - drawFont.Height - 1f);
-                    e.Graphics.DrawString(columns[i].Name, drawFont, drawTextBrush, drawPoint);
-                    currentLeft += oneColumnWidth;
-                }
-
-                e.Graphics.DrawLine(drawTableOuterBorderPen, 0, 0, 0, tableBottom - 1); //левая граница
-                e.Graphics.DrawLine(drawTableOuterBorderPen, 0, tableTop, RealTableWidth, tableTop); //верхняя граница столбцов
-                e.Graphics.DrawLine(drawTableOuterBorderPen, 0, 0, RealTableWidth, 0); //верхняя граница шапки
-                e.Graphics.DrawLine(drawTableOuterBorderPen, 0, tableBottom - 1, RealTableWidth, tableBottom - 1); //нижняя граница
+            //maincolumns
+            var columns = table.Columns;
+            for (int i = hScrollBar1.Value; i < hScrollBar1.Value + columnsOnControl; i++)
+            {
+                if (i > columns.Count - 1) break;
+                PaintColumn(e.Graphics, columns[i], currentLeft, oneColumnWidth, tableBottom);
+                drawPoint = new PointF(currentLeft + 1f, tableTop - drawFont.Height - 1f);
+                e.Graphics.DrawString(columns[i].Name, drawFont, drawTextBrush, drawPoint);
+                currentLeft += oneColumnWidth;
             }
+
+            e.Graphics.DrawLine(drawTableOuterBorderPen, 0, 0, 0, tableBottom - 1); //левая граница
+            e.Graphics.DrawLine(drawTableOuterBorderPen, 0, tableTop, RealTableWidth, tableTop); //верхняя граница столбцов
+            e.Graphics.DrawLine(drawTableOuterBorderPen, 0, 0, RealTableWidth, 0); //верхняя граница шапки
+            e.Graphics.DrawLine(drawTableOuterBorderPen, 0, tableBottom - 1, RealTableWidth, tableBottom - 1); //нижняя граница
+
         }
 
         protected override void OnResize(EventArgs e)
         {
+            //this.Invalidate();
+            MakeTableFromInput();
 
             base.OnResize(e);
-            MakeTableFromInput();
+
             Refresh();
         }
 
@@ -249,10 +267,11 @@ namespace CalendarControl3
             var brushBackground = getBrushPenFromCache(entity.ColorBackground, Color.LightYellow).Brush;
             var brushBorder = getBrushPenFromCache(entity.ColorBorder, Color.DarkGreen).Brush;
             var brushText = getBrushPenFromCache(entity.ColorMain, Color.Black).Brush;
-
+            
             //нарисуем сглаженный прямоугольник
             Rectangle entRect = new Rectangle(leftside, tableTop + ScaleLevelsToControl(entity.TopLevel), width, ScaleLevelsToControl(entity.BottomLevel) - ScaleLevelsToControl(entity.TopLevel));
             GraphicsPath entShape = GetBarShape(entRect, 10); //10 - магическое число, смотрится хорошо
+            
             g.FillPath(brushBackground, entShape);
             g.DrawPath(new Pen(brushBorder, 2f), entShape);
 
@@ -278,8 +297,8 @@ namespace CalendarControl3
             return (int)Math.Floor(dotsToReturn / dotsPerPixel);
         }
 
-        private static GraphicsPath path = new GraphicsPath();
-        public static GraphicsPath GetBarShape(Rectangle rect, int cornerRad)
+        private GraphicsPath path = new GraphicsPath();
+        public GraphicsPath GetBarShape(Rectangle rect, int cornerRad)
         {
             /*
              * Взято тут:

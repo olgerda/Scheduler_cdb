@@ -7,6 +7,7 @@ using Scheduler_Controls_Interfaces;
 using Scheduler_Forms_Interfaces;
 using Scheduler_Forms;
 using Scheduler_DBobjects_Intefraces;
+using System.Reflection;
 
 namespace Scheduler
 {
@@ -52,6 +53,9 @@ namespace Scheduler
         public MainForm(IMainDataBase database)
         {
             InitializeComponent();
+#if DEBUG
+            //настройкиToolStripMenuItem_Click(null, null);
+#endif
 
             if (database.ErrorString != null)
             {
@@ -69,6 +73,7 @@ namespace Scheduler
             FirstLoad();
             dateTimePicker1.Value = schedule_date;
             calendarControl = new CalendarControl3.ColumnsView();
+            
             calendarControl.Dock = DockStyle.Fill;
             mainView.Panel1.Controls.Add(calendarControl);
             calendarControl.Table = receptionEntitiesTable;
@@ -323,7 +328,10 @@ namespace Scheduler
 
         private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            using (var settings = new Scheduler.Forms.SettingsForm())
+            {
+                settings.ShowDialog();
+            }
         }
     }
 }

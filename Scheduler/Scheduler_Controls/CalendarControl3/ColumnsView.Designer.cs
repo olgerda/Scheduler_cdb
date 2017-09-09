@@ -43,7 +43,7 @@
             // 
             // ColumnsView
             // 
-            this.AutoScroll = true;
+            //this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.hScrollBar1);
             this.Name = "ColumnsView";
