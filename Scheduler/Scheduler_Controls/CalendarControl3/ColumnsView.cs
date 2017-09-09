@@ -113,8 +113,8 @@ namespace CalendarControl3
             LastClick = new ClickCoords() { level = -1, column = -1 };
             InitializeComponent();
             this.MinimumSize = new Size(minimumColumnWidth + infoColumnWidth, 500);
-            this.SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer |
-                          ControlStyles.AllPaintingInWmPaint, true);
+            //this.SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer |
+            //              ControlStyles.AllPaintingInWmPaint, true);
         }
 
         void MakeTableFromInput()
@@ -267,21 +267,20 @@ namespace CalendarControl3
             var brushBackground = getBrushPenFromCache(entity.ColorBackground, Color.LightYellow).Brush;
             var brushBorder = getBrushPenFromCache(entity.ColorBorder, Color.DarkGreen).Brush;
             var brushText = getBrushPenFromCache(entity.ColorMain, Color.Black).Brush;
-            
+
             //нарисуем сглаженный прямоугольник
             Rectangle entRect = new Rectangle(leftside, tableTop + ScaleLevelsToControl(entity.TopLevel), width, ScaleLevelsToControl(entity.BottomLevel) - ScaleLevelsToControl(entity.TopLevel));
             GraphicsPath entShape = GetBarShape(entRect, 10); //10 - магическое число, смотрится хорошо
-            
+
             g.FillPath(brushBackground, entShape);
             g.DrawPath(new Pen(brushBorder, 2f), entShape);
 
             //напишем в нём текст
             Font drawFont = entity.Font ?? new Font("Arial", 10);
-            var drawBrush = brushText;
             RectangleF strRect = new RectangleF((float)entRect.X + 2f, (float)entRect.Y + 2f, entRect.Width - 4f, entRect.Height - 4f);
             StringFormat format = new StringFormat(StringFormatFlags.LineLimit | StringFormatFlags.NoWrap);
             format.Alignment = StringAlignment.Center;
-            g.DrawString(entity.StringToShow, drawFont, drawBrush, strRect, format);
+            g.DrawString(entity.StringToShow, drawFont, brushText, strRect, format);
         }
 
         /// <summary>
@@ -297,7 +296,7 @@ namespace CalendarControl3
             return (int)Math.Floor(dotsToReturn / dotsPerPixel);
         }
 
-        private GraphicsPath path = new GraphicsPath();
+        GraphicsPath path = new GraphicsPath(FillMode.Winding);
         public GraphicsPath GetBarShape(Rectangle rect, int cornerRad)
         {
             /*
@@ -309,7 +308,7 @@ namespace CalendarControl3
             int y = rect.Y;
             int width = rect.Width;
             int height = rect.Height;
-            path.ClearMarkers();
+            path.Reset();
             path.AddBezier(x, y + rad, x, y, x + rad, y, x + rad, y);
             path.AddLine(x + rad, y, (x + width) - rad, y);
             path.AddBezier((x + width) - rad, y, x + width, y, x + width, y + rad, x + width, y + rad);
