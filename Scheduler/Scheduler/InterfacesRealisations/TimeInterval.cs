@@ -58,6 +58,8 @@ namespace Scheduler_InterfacesRealisations
         private DateTime startDate;
         private DateTime endDate;
 
+        public event Action NeedUpdateFromNewData;
+
         /// <summary>
         /// Длительность интервала времени.
         /// </summary>
@@ -202,6 +204,11 @@ namespace Scheduler_InterfacesRealisations
         {
             StartDate = startDate;
             EndDate = endDate;
+        }
+
+        public void EnforceUpdateFromNewData()
+        {
+            NeedUpdateFromNewData?.Invoke();
         }
     }
 

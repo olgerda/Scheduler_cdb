@@ -63,6 +63,33 @@ namespace Scheduler
             {
                 Database = database;
             }
+
+
+        }
+
+        private void MainSettings_onSettingsChanged()
+        {
+            receptionEntitiesTable.WorkTimeInterval = MainSettings.TimeInterval;
+
+            receptionEntitiesTable.SetColumnColors(ColumnType.Cabinet,
+                MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Column]);
+
+            receptionEntitiesTable.SetColumnColors(ColumnType.Remarks,
+                MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Column]); //TODO
+
+            receptionEntitiesTable.SetEntityColors(EntityType.Client,
+                MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Entity1]);
+
+            receptionEntitiesTable.SetEntityColors(EntityType.Rent,
+                MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Entity2]);
+
+            receptionEntitiesTable.ColorMain = MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Table]
+                .ColorMain;
+            receptionEntitiesTable.ColorBorder = MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Table]
+                .ColorBorder;
+            receptionEntitiesTable.ColorBackground = MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Table]
+                .ColorBackground;
+            calendarControl?.Refresh();
         }
 
         void Init()
@@ -143,27 +170,26 @@ namespace Scheduler
                         case System.Windows.Forms.DialogResult.OK:
                             database.UpdateReception(ent);
                             break;
-                            //case System.Windows.Forms.DialogResult.Yes:
-                            //    database.AddReception((IEntity)receptionEditForm.Reception);
-                            //    break;
                     }
                 }
 
                 ReloadEntities();
             }
-
         }
 
         void FirstLoad()
         {
             receptionEntitiesTable = database.EntityFactory.NewTable();
             ITimeInterval workday = database.EntityFactory.NewTimeInterval();
-            workday.SetStartEnd(new DateTime(1, 1, 1, 10, 0, 0), new DateTime(1, 1, 1, 22, 0, 0));
+            workday.SetStartEnd(new DateTime(1, 1, 1, 9, 0, 0), new DateTime(1, 1, 1, 22, 0, 0));
             receptionEntitiesTable.WorkTimeInterval = workday;
             MainSettings = new Main.ProgramSettings(workday);
+            MainSettings.onSettingsChanged += MainSettings_onSettingsChanged;
+            MainSettings.FromStrings(Properties.Settings.Default.LegacyColorSettings.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+
 
             Dictionary<DateTime, string> descriprions = new Dictionary<DateTime, string>(13);
-            for (int i = 10; i <= 22; i++) //дикий хардкод, переписать на что-то вразумительное 
+            for (int i = 0; i <= 23; i++) //дикий хардкод, переписать на что-то вразумительное 
             {
                 DateTime date = new DateTime(1, 1, 1, i, 0, 0);
                 descriprions.Add(date, date.ToShortTimeString());
@@ -187,10 +213,8 @@ namespace Scheduler
             {
                 receptionEntitiesTable.Columns.Find(x => x.Name == ent.Cabinet.Name).Entities.Add(ent);
             }
-            if (calendarControl != null)
-            {
-                calendarControl.Refresh();
-            }
+            MainSettings_onSettingsChanged();
+            calendarControl?.Refresh();
         }
 
         void ReloadColumns()
@@ -330,9 +354,12 @@ namespace Scheduler
         {
             using (var settings = new Scheduler.Forms.SettingsForm())
             {
+                settings.SelectedColorsDictionary = MainSettings.ControlsColors;
                 if (settings.ShowDialog() != DialogResult.OK)
                     return;
                 MainSettings.ControlsColors = settings.SelectedColorsDictionary;
+                Properties.Settings.Default.LegacyColorSettings = String.Join(Environment.NewLine, MainSettings.ToStrings());
+                Properties.Settings.Default.Save();
             }
         }
     }

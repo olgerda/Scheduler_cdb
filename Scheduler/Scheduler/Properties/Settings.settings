@@ -5,5 +5,8 @@
     <Setting Name="DbConnectorFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">EF6Connector.dll</Value>
     </Setting>
+    <Setting Name="LegacyColorSettings" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

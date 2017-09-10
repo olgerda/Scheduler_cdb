@@ -178,4 +178,15 @@ namespace Scheduler_InterfacesRealisations
 
         public abstract Scheduler_Forms_Interfaces.IEntityList<T> Copy();
     }
+
+    public class ControlsColors : CalendarControl3_Interfaces.ICanCustomizeLook
+    {
+        public Color ColorBackground { get; set; }
+
+        public Color ColorBorder { get; set; }
+
+        public Color ColorMain { get; set; }
+
+        public Font Font { get; set; }
+    }
 }

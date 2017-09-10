@@ -34,5 +34,17 @@ namespace Scheduler.Properties {
                 this["DbConnectorFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LegacyColorSettings {
+            get {
+                return ((string)(this["LegacyColorSettings"]));
+            }
+            set {
+                this["LegacyColorSettings"] = value;
+            }
+        }
     }
 }

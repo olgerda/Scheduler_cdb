@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using CalendarControl3_Interfaces;
+using Scheduler_DBobjects_Intefraces;
+using Scheduler_Controls_Interfaces;
 
 namespace Scheduler_InterfacesRealisations
 {
-    public class Table : Scheduler_DBobjects_Intefraces.ITable
+    public class Table : ITable
     {
-        Scheduler_Controls_Interfaces.ITimeInterval workInterval;
+        ITimeInterval workInterval;
         TimeSpan duration;
 
-        List<CalendarControl3_Interfaces.IColumn2ControlInterface> columns;
+        List<IColumn2ControlInterface> columns;
         Dictionary<int, string> descriptions;
 
         int minValue;
@@ -19,7 +22,7 @@ namespace Scheduler_InterfacesRealisations
 
         public Table()
         {
-            columns = new List<CalendarControl3_Interfaces.IColumn2ControlInterface>();
+            columns = new List<IColumn2ControlInterface>();
             workInterval = null;
             descriptions = new Dictionary<int, string>();
 
@@ -27,7 +30,7 @@ namespace Scheduler_InterfacesRealisations
             maxValue = 0;
         }
 
-        Scheduler_Controls_Interfaces.ITimeInterval Scheduler_DBobjects_Intefraces.ITable.WorkTimeInterval
+        public ITimeInterval WorkTimeInterval
         {
             get
             {
@@ -42,14 +45,14 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        DateTime Scheduler_DBobjects_Intefraces.ITable.ConvertLevelToTime(int level)
+        public DateTime ConvertLevelToTime(int level)
         {
             if (workInterval == null || level > maxValue || level < minValue)
                 return DateTime.Now;
             return workInterval.StartDate.Date.AddMinutes(level);
         }
 
-        int Scheduler_DBobjects_Intefraces.ITable.ConvertTimeToLevel(DateTime time)
+        public int ConvertTimeToLevel(DateTime time)
         {
             if (workInterval == null ||
                 workInterval.StartDate.TimeOfDay > time.TimeOfDay
@@ -58,12 +61,12 @@ namespace Scheduler_InterfacesRealisations
             return minValue + ConvertTimespanToLevel(time.TimeOfDay);
         }
 
-        int CalendarControl3_Interfaces.ITable2ControlInterface.ColumnCount
+        public int ColumnCount
         {
             get { return columns.Count; }
         }
 
-        int CalendarControl3_Interfaces.ITable2ControlInterface.MinValue
+        public int MinValue
         {
             get { return minValue; }
             set
@@ -73,23 +76,23 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        int CalendarControl3_Interfaces.ITable2ControlInterface.MaxValue
+        public int MaxValue
         {
             get { return maxValue; }
         }
 
-        Dictionary<int, string> CalendarControl3_Interfaces.ITable2ControlInterface.GetDescripptionsToValueLevels()
+        public Dictionary<int, string> GetDescripptionsToValueLevels()
         {
             return descriptions;
         }
 
-        List<CalendarControl3_Interfaces.IColumn2ControlInterface> CalendarControl3_Interfaces.ITable2ControlInterface.Columns
+        public List<IColumn2ControlInterface> Columns
         {
             get { return columns; }
         }
 
 
-        void Scheduler_DBobjects_Intefraces.ITable.SetInfoColumnDescriptions(Dictionary<DateTime, string> descriptions)
+        public void SetInfoColumnDescriptions(Dictionary<DateTime, string> descriptions)
         {
             foreach (var pair in descriptions)
             {
@@ -103,6 +106,43 @@ namespace Scheduler_InterfacesRealisations
             return Convert.ToInt32(Math.Truncate(input.TotalMinutes));
         }
 
+        private void SetColors(ICanCustomizeLook source, ICanCustomizeLook target)
+        {
+            target.ColorBackground = source.ColorBackground;
+            target.ColorBorder = source.ColorBorder;
+            target.ColorMain = source.ColorMain;
+            target.Font = source.Font;
+        }
+
+        public void SetColumnColors(ColumnType columnType, ICanCustomizeLook colors)
+        {
+            switch (columnType)
+            {
+                case ColumnType.Cabinet:
+                    foreach (var col in columns.Cast<IColumn>().Where(x => !x.OnlyComment))
+                        SetColors(colors, col);
+                    break;
+                case ColumnType.Remarks:
+                    foreach (var col in columns.Cast<IColumn>().Where(x => x.OnlyComment))
+                        SetColors(colors, col);
+                    break;
+            }
+        }
+
+        public void SetEntityColors(EntityType entityType, ICanCustomizeLook colors)
+        {
+            switch (entityType)
+            {
+                case EntityType.Client:
+                    foreach (var ent in columns.SelectMany(x => x.Entities).Cast<IEntity>().Where(x => !x.Rent))
+                        SetColors(colors, ent);
+                    break;
+                case EntityType.Rent:
+                    foreach (var ent in columns.SelectMany(x => x.Entities).Cast<IEntity>().Where(x => x.Rent))
+                        SetColors(colors, ent);
+                    break;
+            }
+        }
 
         public Color ColorMain { get; set; }
 

@@ -28,31 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Scheduler.Controls.ColorPicker.ControlsColors controlsColors2 = new Scheduler.Controls.ColorPicker.ControlsColors();
-            Scheduler.Controls.ColorPicker.ControlsColors controlsColors3 = new Scheduler.Controls.ColorPicker.ControlsColors();
-            Scheduler.Controls.ColorPicker.ControlsColors controlsColors4 = new Scheduler.Controls.ColorPicker.ControlsColors();
-            Scheduler.Controls.ColorPicker.ControlsColors controlsColors1 = new Scheduler.Controls.ColorPicker.ControlsColors();
+            Scheduler_InterfacesRealisations.ControlsColors controlsColors1 = new Scheduler_InterfacesRealisations.ControlsColors();
+            Scheduler_InterfacesRealisations.ControlsColors controlsColors2 = new Scheduler_InterfacesRealisations.ControlsColors();
+            Scheduler_InterfacesRealisations.ControlsColors controlsColors3 = new Scheduler_InterfacesRealisations.ControlsColors();
+            Scheduler_InterfacesRealisations.ControlsColors controlsColors4 = new Scheduler_InterfacesRealisations.ControlsColors();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.grpTest = new System.Windows.Forms.GroupBox();
+            this.columnsControl = new CalendarControl3.ColumnsView();
             this.grpColors = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.grpColorsMainTable = new System.Windows.Forms.GroupBox();
-            this.grpColorsColumns = new System.Windows.Forms.GroupBox();
-            this.grpColorsClients = new System.Windows.Forms.GroupBox();
             this.grpColorsArendators = new System.Windows.Forms.GroupBox();
-            this.columnsControl = new CalendarControl3.ColumnsView();
-            this.colorPicker1 = new Scheduler.Controls.ColorPicker();
-            this.colorPicker2 = new Scheduler.Controls.ColorPicker();
-            this.colorPicker3 = new Scheduler.Controls.ColorPicker();
             this.colorPicker4 = new Scheduler.Controls.ColorPicker();
+            this.grpColorsMainTable = new System.Windows.Forms.GroupBox();
+            this.colorPicker1 = new Scheduler.Controls.ColorPicker();
+            this.grpColorsColumns = new System.Windows.Forms.GroupBox();
+            this.colorPicker2 = new Scheduler.Controls.ColorPicker();
+            this.grpColorsClients = new System.Windows.Forms.GroupBox();
+            this.colorPicker3 = new Scheduler.Controls.ColorPicker();
+            this.btnRestoreDefaults = new System.Windows.Forms.Button();
             this.grpTest.SuspendLayout();
             this.grpColors.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.grpColorsArendators.SuspendLayout();
             this.grpColorsMainTable.SuspendLayout();
             this.grpColorsColumns.SuspendLayout();
             this.grpColorsClients.SuspendLayout();
-            this.grpColorsArendators.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -63,6 +64,7 @@
             this.btnSave.TabIndex = 0;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnCancel
             // 
@@ -72,6 +74,7 @@
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // grpTest
             // 
@@ -83,6 +86,17 @@
             this.grpTest.TabIndex = 2;
             this.grpTest.TabStop = false;
             this.grpTest.Text = "Тест";
+            // 
+            // columnsControl
+            // 
+            this.columnsControl.BackColor = System.Drawing.Color.White;
+            this.columnsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.columnsControl.Location = new System.Drawing.Point(3, 16);
+            this.columnsControl.MinimumSize = new System.Drawing.Size(150, 500);
+            this.columnsControl.Name = "columnsControl";
+            this.columnsControl.Size = new System.Drawing.Size(300, 559);
+            this.columnsControl.TabIndex = 0;
+            this.columnsControl.Table = null;
             // 
             // grpColors
             // 
@@ -113,6 +127,31 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(306, 495);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
+            // grpColorsArendators
+            // 
+            this.grpColorsArendators.Controls.Add(this.colorPicker4);
+            this.grpColorsArendators.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpColorsArendators.Location = new System.Drawing.Point(3, 372);
+            this.grpColorsArendators.Name = "grpColorsArendators";
+            this.grpColorsArendators.Size = new System.Drawing.Size(300, 120);
+            this.grpColorsArendators.TabIndex = 3;
+            this.grpColorsArendators.TabStop = false;
+            this.grpColorsArendators.Text = "Записи арендаторов";
+            // 
+            // colorPicker4
+            // 
+            this.colorPicker4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.colorPicker4.Location = new System.Drawing.Point(3, 16);
+            this.colorPicker4.MinimumSize = new System.Drawing.Size(55, 50);
+            this.colorPicker4.Name = "colorPicker4";
+            controlsColors1.ColorBackground = System.Drawing.SystemColors.Control;
+            controlsColors1.ColorBorder = System.Drawing.SystemColors.Control;
+            controlsColors1.ColorMain = System.Drawing.SystemColors.Control;
+            controlsColors1.Font = null;
+            this.colorPicker4.SelectedColors = controlsColors1;
+            this.colorPicker4.Size = new System.Drawing.Size(294, 101);
+            this.colorPicker4.TabIndex = 1;
+            // 
             // grpColorsMainTable
             // 
             this.grpColorsMainTable.Controls.Add(this.colorPicker1);
@@ -123,6 +162,20 @@
             this.grpColorsMainTable.TabIndex = 0;
             this.grpColorsMainTable.TabStop = false;
             this.grpColorsMainTable.Text = "Основная таблица";
+            // 
+            // colorPicker1
+            // 
+            this.colorPicker1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.colorPicker1.Location = new System.Drawing.Point(3, 16);
+            this.colorPicker1.MinimumSize = new System.Drawing.Size(55, 50);
+            this.colorPicker1.Name = "colorPicker1";
+            controlsColors2.ColorBackground = System.Drawing.SystemColors.Control;
+            controlsColors2.ColorBorder = System.Drawing.SystemColors.Control;
+            controlsColors2.ColorMain = System.Drawing.SystemColors.Control;
+            controlsColors2.Font = null;
+            this.colorPicker1.SelectedColors = controlsColors2;
+            this.colorPicker1.Size = new System.Drawing.Size(294, 98);
+            this.colorPicker1.TabIndex = 0;
             // 
             // grpColorsColumns
             // 
@@ -135,6 +188,20 @@
             this.grpColorsColumns.TabStop = false;
             this.grpColorsColumns.Text = "Столбцы";
             // 
+            // colorPicker2
+            // 
+            this.colorPicker2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.colorPicker2.Location = new System.Drawing.Point(3, 16);
+            this.colorPicker2.MinimumSize = new System.Drawing.Size(55, 50);
+            this.colorPicker2.Name = "colorPicker2";
+            controlsColors3.ColorBackground = System.Drawing.SystemColors.Control;
+            controlsColors3.ColorBorder = System.Drawing.SystemColors.Control;
+            controlsColors3.ColorMain = System.Drawing.SystemColors.Control;
+            controlsColors3.Font = null;
+            this.colorPicker2.SelectedColors = controlsColors3;
+            this.colorPicker2.Size = new System.Drawing.Size(294, 98);
+            this.colorPicker2.TabIndex = 1;
+            // 
             // grpColorsClients
             // 
             this.grpColorsClients.Controls.Add(this.colorPicker3);
@@ -146,73 +213,36 @@
             this.grpColorsClients.TabStop = false;
             this.grpColorsClients.Text = "Записи основные";
             // 
-            // grpColorsArendators
-            // 
-            this.grpColorsArendators.Controls.Add(this.colorPicker4);
-            this.grpColorsArendators.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpColorsArendators.Location = new System.Drawing.Point(3, 372);
-            this.grpColorsArendators.Name = "grpColorsArendators";
-            this.grpColorsArendators.Size = new System.Drawing.Size(300, 120);
-            this.grpColorsArendators.TabIndex = 3;
-            this.grpColorsArendators.TabStop = false;
-            this.grpColorsArendators.Text = "Записи арендаторов";
-            // 
-            // columnsControl
-            // 
-            this.columnsControl.BackColor = System.Drawing.Color.White;
-            this.columnsControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.columnsControl.Location = new System.Drawing.Point(3, 16);
-            this.columnsControl.MinimumSize = new System.Drawing.Size(150, 500);
-            this.columnsControl.Name = "columnsControl";
-            this.columnsControl.Size = new System.Drawing.Size(300, 559);
-            this.columnsControl.TabIndex = 0;
-            this.columnsControl.Table = null;
-            // 
-            // colorPicker1
-            // 
-            this.colorPicker1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.colorPicker1.Location = new System.Drawing.Point(3, 16);
-            this.colorPicker1.MinimumSize = new System.Drawing.Size(55, 50);
-            this.colorPicker1.Name = "colorPicker1";
-            this.colorPicker1.SelectedColors = controlsColors2;
-            this.colorPicker1.Size = new System.Drawing.Size(294, 98);
-            this.colorPicker1.TabIndex = 0;
-            // 
-            // colorPicker2
-            // 
-            this.colorPicker2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.colorPicker2.Location = new System.Drawing.Point(3, 16);
-            this.colorPicker2.MinimumSize = new System.Drawing.Size(55, 50);
-            this.colorPicker2.Name = "colorPicker2";
-            this.colorPicker2.SelectedColors = controlsColors3;
-            this.colorPicker2.Size = new System.Drawing.Size(294, 98);
-            this.colorPicker2.TabIndex = 1;
-            // 
             // colorPicker3
             // 
             this.colorPicker3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.colorPicker3.Location = new System.Drawing.Point(3, 16);
             this.colorPicker3.MinimumSize = new System.Drawing.Size(55, 50);
             this.colorPicker3.Name = "colorPicker3";
+            controlsColors4.ColorBackground = System.Drawing.SystemColors.Control;
+            controlsColors4.ColorBorder = System.Drawing.SystemColors.Control;
+            controlsColors4.ColorMain = System.Drawing.SystemColors.Control;
+            controlsColors4.Font = null;
             this.colorPicker3.SelectedColors = controlsColors4;
             this.colorPicker3.Size = new System.Drawing.Size(294, 98);
             this.colorPicker3.TabIndex = 1;
             // 
-            // colorPicker4
+            // btnRestoreDefaults
             // 
-            this.colorPicker4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.colorPicker4.Location = new System.Drawing.Point(3, 16);
-            this.colorPicker4.MinimumSize = new System.Drawing.Size(55, 50);
-            this.colorPicker4.Name = "colorPicker4";
-            this.colorPicker4.SelectedColors = controlsColors1;
-            this.colorPicker4.Size = new System.Drawing.Size(294, 101);
-            this.colorPicker4.TabIndex = 1;
+            this.btnRestoreDefaults.Location = new System.Drawing.Point(116, 558);
+            this.btnRestoreDefaults.Name = "btnRestoreDefaults";
+            this.btnRestoreDefaults.Size = new System.Drawing.Size(96, 32);
+            this.btnRestoreDefaults.TabIndex = 4;
+            this.btnRestoreDefaults.Text = "По умолчанию";
+            this.btnRestoreDefaults.UseVisualStyleBackColor = true;
+            this.btnRestoreDefaults.Click += new System.EventHandler(this.btnRestoreDefaults_Click);
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(648, 602);
+            this.Controls.Add(this.btnRestoreDefaults);
             this.Controls.Add(this.grpColors);
             this.Controls.Add(this.grpTest);
             this.Controls.Add(this.btnCancel);
@@ -223,10 +253,10 @@
             this.grpTest.ResumeLayout(false);
             this.grpColors.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.grpColorsArendators.ResumeLayout(false);
             this.grpColorsMainTable.ResumeLayout(false);
             this.grpColorsColumns.ResumeLayout(false);
             this.grpColorsClients.ResumeLayout(false);
-            this.grpColorsArendators.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -247,5 +277,6 @@
         private Controls.ColorPicker colorPicker1;
         private Controls.ColorPicker colorPicker2;
         private Controls.ColorPicker colorPicker3;
+        private System.Windows.Forms.Button btnRestoreDefaults;
     }
 }

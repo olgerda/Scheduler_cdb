@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CalendarControl3_Interfaces;
+using Scheduler_InterfacesRealisations;
 
 namespace Scheduler.Forms
 {
@@ -21,12 +22,30 @@ namespace Scheduler.Forms
             Entity2
         }
 
+        //TODO: too ugly 
+        private static Scheduler.Main.ProgramSettings __defaultSettings
+        {
+            get
+            {
+                var defset = new Main.ProgramSettings(null);
+                defset.FromStrings(null);
+                return defset;
+            }
+        }
+
+        public static Dictionary<ColorChangers, ControlsColors> DefaultColorsSet => __defaultSettings.ControlsColors;
 
         public SettingsForm()
         {
             InitializeComponent();
             InitTestData();
             columnsControl.Table = testTable;
+
+            Action<Scheduler.Controls.ColorPicker> init = (c) => c.SelectedColors = new ControlsColors();
+            init(colorPicker1);
+            init(colorPicker2);
+            init(colorPicker3);
+            init(colorPicker4);
 
             colorPicker1.onColorsChanged += () =>
                 {
@@ -45,11 +64,11 @@ namespace Scheduler.Forms
             colorPicker4.onColorsChanged += () =>
                 {
                     foreach (var ent in columnsControl.Table.Columns[1].Entities)
-                        ChangeColors(colorPicker3.SelectedColors, ent);
+                        ChangeColors(colorPicker4.SelectedColors, ent);
                 };
         }
 
-        private Action<Scheduler.Controls.ColorPicker.ControlsColors, ICanCustomizeLook> ChangeColors => (colors, control) =>
+        private Action<ControlsColors, ICanCustomizeLook> ChangeColors => (colors, control) =>
         {
             control.ColorMain = colors.ColorMain;
             control.ColorBorder = colors.ColorBorder;
@@ -58,24 +77,9 @@ namespace Scheduler.Forms
             columnsControl.Refresh();
         };
 
-        private void ColorPicker_onColorsChanged(object sender)
-        {
-            Scheduler.Controls.ColorPicker colorPicker = (Scheduler.Controls.ColorPicker)sender;
-            ChangeColors(colorPicker1.SelectedColors, columnsControl.Table);
+        private Dictionary<ColorChangers, ControlsColors> _allColors;
 
-            foreach (var column in columnsControl.Table.Columns)
-                ChangeColors(colorPicker2.SelectedColors, column);
-
-            foreach (var ent in columnsControl.Table.Columns[0].Entities)
-                ChangeColors(colorPicker3.SelectedColors, ent);
-
-            foreach (var ent in columnsControl.Table.Columns[1].Entities)
-                ChangeColors(colorPicker3.SelectedColors, ent);
-        }
-
-        private Dictionary<ColorChangers, Controls.ColorPicker.ControlsColors> _allColors;
-
-        private Action<Controls.ColorPicker.ControlsColors, Controls.ColorPicker, bool> actualizeColors =
+        private Action<ControlsColors, Controls.ColorPicker, bool> actualizeColors =
             (colors, control, fromControl) =>
             {
                 if (!fromControl)
@@ -83,7 +87,8 @@ namespace Scheduler.Forms
                 else
                     colors = control.SelectedColors;
             };
-        public Dictionary<ColorChangers, Controls.ColorPicker.ControlsColors> SelectedColorsDictionary
+
+        public Dictionary<ColorChangers, ControlsColors> SelectedColorsDictionary
         {
             get
             {
@@ -100,7 +105,7 @@ namespace Scheduler.Forms
             }
         }
 
-        public void RefreshColorPickers()
+        private void RefreshColorPickers()
         {
             actualizeColors(_allColors[ColorChangers.Table], colorPicker1, false);
             actualizeColors(_allColors[ColorChangers.Column], colorPicker2, false);
@@ -137,6 +142,25 @@ namespace Scheduler.Forms
             entities[3].TopLevel = 200;
             entities[3].BottomLevel = 250;
 
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+        }
+
+        private void btnRestoreDefaults_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Восстановиьт настройки по умолчанию?", "Настройки по умолчанию", MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                SelectedColorsDictionary = __defaultSettings.ControlsColors;
         }
     }
 

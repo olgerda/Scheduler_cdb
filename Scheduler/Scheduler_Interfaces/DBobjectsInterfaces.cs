@@ -35,9 +35,12 @@ namespace Scheduler_DBobjects_Intefraces
         ITimeInterval WorkTimeInterval { get; set; }
 
         void SetInfoColumnDescriptions(Dictionary<DateTime, string> descriptions);
-
+        
         DateTime ConvertLevelToTime(int level);
         int ConvertTimeToLevel(DateTime time);
+
+        void SetColumnColors(ColumnType columnType, ICanCustomizeLook colors);
+        void SetEntityColors(EntityType entityType, ICanCustomizeLook colors);
     }
 
     public interface IColumn : IColumn2ControlInterface
@@ -92,6 +95,18 @@ namespace Scheduler_DBobjects_Intefraces
         void RestoreBackup(string filename);
 
         bool CheckDBConnection(out string message);
+    }
+
+    public enum ColumnType
+    {
+        Cabinet,
+        Remarks
+    }
+
+    public enum EntityType
+    {
+        Client,
+        Rent
     }
 
     public abstract class Scheduler_DBconnector : Scheduler_DBconnectorIntefrace

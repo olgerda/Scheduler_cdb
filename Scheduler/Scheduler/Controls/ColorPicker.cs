@@ -8,20 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using Scheduler_InterfacesRealisations;
 
 namespace Scheduler.Controls
 {
     
     public partial class ColorPicker : UserControl
     {
-        public class ControlsColors
-        {
-            public Color ColorMain;
-            public Color ColorBackground;
-            public Color ColorBorder;
-            public Font Font;
-        }
-
         private ControlsColors _colors;
         public event Action onColorsChanged;
         public ColorPicker()

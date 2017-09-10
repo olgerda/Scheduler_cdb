@@ -184,8 +184,10 @@ namespace CalendarControl3
             foreach (var pair in descriptions)
             {
                 var y = tableTop + ScaleLevelsToControl(pair.Key);
-                if (y > tableTop && y < tableBottom)
+                if (y >= tableTop && y <= tableBottom)
                     e.Graphics.DrawLine(drawBordersPen, 0f, y, RealTableWidth, y);
+                else
+                    continue;
                 //if (y < tableTop) y = tableTop;
                 if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
                 drawPoint = new PointF(2f, y);

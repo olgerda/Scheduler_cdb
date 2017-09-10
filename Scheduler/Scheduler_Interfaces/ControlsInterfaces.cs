@@ -22,7 +22,7 @@ namespace Scheduler_Controls_Interfaces
     /// <summary>
     /// Коренной интерфейс для сущностей, имеющих имя/название.
     /// </summary>
-    public interface INamedEntity: IHaveID, INotifyPropertyChanged, ICloneable
+    public interface INamedEntity : IHaveID, INotifyPropertyChanged, ICloneable
     {
         string Name { get; set; }
     }
@@ -89,12 +89,12 @@ namespace Scheduler_Controls_Interfaces
 
         [Description("Специальности")]
         HashSet<string> Specialisations { get; set; }
-        
+
         Dictionary<int, int> GetCosts();
 
         void CostsFunction(GetCosts func);
     }
-    
+
     /// <summary>
     /// Интерфейс кабинета.
     /// </summary>
@@ -174,6 +174,8 @@ namespace Scheduler_Controls_Interfaces
         DateTime Date { get; }
         DateTime StartDate { get; set; }
         DateTime EndDate { get; set; }
+        event Action NeedUpdateFromNewData;
+        void EnforceUpdateFromNewData();
     }
 
     public interface ISpecializationList : IDummy
