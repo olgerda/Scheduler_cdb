@@ -43,7 +43,7 @@ namespace Scheduler_Forms
         {
             if (MessageBox.Show("Вы действительно хотите отменить запись?", "Удаление записи.", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
                 return;
-            this.DialogResult = System.Windows.Forms.DialogResult.Abort;
+            this.DialogResult = DialogResult.Abort;
             doNothing = true;
             this.Close();
             doNothing = false;
@@ -82,7 +82,7 @@ namespace Scheduler_Forms
             if (e.Entity != null)
             {
                 doNothing = true;
-                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                this.DialogResult = DialogResult.OK;
                 this.Close();
                 doNothing = false;
             }

@@ -657,6 +657,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             ent.Rent = dbreception.isrented;
             ent.Specialist = GetByID<ISpecialist>(dbreception.specialistid);
             ent.Specialization = context.specializations.FirstOrDefault(x => x.idspecializations == dbreception.specializationid)?.name ?? "NONE";
+            ent.Comment = dbreception.comment ?? "";
 
             var timeinterval = EntityFactory.NewTimeInterval();
             timeinterval.SetStartEnd(dbreception.timedate.Date.Add(TimeSpan.FromTicks(dbreception.timestart)), dbreception.timedate.Date.Add(TimeSpan.FromTicks(dbreception.timeend)));

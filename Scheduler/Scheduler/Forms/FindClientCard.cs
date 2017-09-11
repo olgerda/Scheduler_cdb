@@ -44,7 +44,6 @@ namespace Scheduler_Forms
 
         void Init()
         {
-            //grpEditMode.Location = grpSelectClient.Location;
             doNothingNow = false;
             if (clientList == null)
                 return;
@@ -53,11 +52,11 @@ namespace Scheduler_Forms
             lstClientList.DisplayMember = "Name";
 
             var customAutoComplete = new AutoCompleteStringCollection();
-            customAutoComplete.AddRange(lstClientList.Items.Cast<IClient>().Select(c => c.Name).ToArray());
+            customAutoComplete.AddRange(clientList.List.Select(c => c.Name).ToArray());
             txtClientName.AutoCompleteCustomSource = customAutoComplete;
 
             customAutoComplete = new AutoCompleteStringCollection();
-            customAutoComplete.AddRange(lstClientList.Items.Cast<IClient>().SelectMany(c => c.Telephones).ToArray());
+            customAutoComplete.AddRange(clientList.List.SelectMany(c => c.Telephones).ToArray());
             txtTelephone.AutoCompleteCustomSource = customAutoComplete;
 
 
@@ -175,7 +174,6 @@ namespace Scheduler_Forms
 
                 if (!clientList.List.Contains(result))
                 {
-
                     grpSelectClient.Visible = true;
                     grpSelectClient.Enabled = true;
                     grpEditMode.Visible = false;
@@ -188,7 +186,6 @@ namespace Scheduler_Forms
                 lstClientList.SelectedItem = result;
             }
             return result;
-            //return null;
         }
 
         private void btnEditModeOff_Click(object sender, EventArgs e)
@@ -200,19 +197,13 @@ namespace Scheduler_Forms
         {
             IClient newClient = entityFactory.NewClient();
             ActivateEditMode(newClient);
-            //clientList.List.Add(newClient);
         }
 
         private void lstClientList_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstClientList.SelectedIndex == -1)
                 return;
-            //if (SelectedClient != (IClient)lstClientList.SelectedItem)
             SelectedClient = (IClient)lstClientList.SelectedItem;
-
-            //            clientInfoCard.Client = selectedClient;
-            //             txtClientName.Text = selectedClient.Name;
-            //             txtTelephone.Text = selectedClient.Telephones.FirstOrDefault();
         }
 
         private void txtField_TextChanged(object sender, EventArgs e)
@@ -256,8 +247,8 @@ namespace Scheduler_Forms
                 catch (Exception ex)
                 {
                     if (ex.Message.Substring(0, 4) == "1451")
-                        System.Windows.Forms.MessageBox.Show("Произошла ошибка удаления. Удаляемый клиент используется.", "Удаление невозможно.",
-                            System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Stop);
+                        MessageBox.Show("Произошла ошибка удаления. Удаляемый клиент используется.", "Удаление невозможно.",
+                            MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     else
                         throw ex;
                 }
@@ -267,20 +258,20 @@ namespace Scheduler_Forms
 
         private void txtField_KeyDown(object sender, KeyEventArgs e)
         {
-            //             var source = sender as TextBox;
-            //             if (source == null)
-            //                 return;
-            // 
-            //             if (e.KeyCode == Keys.Enter && !String.IsNullOrWhiteSpace(source.Text))
-            //             {
-            //                 IClient curClient;
-            //                 curClient = source == txtClientName ? clientList.List.FirstOrDefault(c => c.Name == source.Text)
-            //                     : ClientList.List.FirstOrDefault(c => c.Telephones.Contains(source.Text));
-            //                 if (curClient != null)
-            //                     lstClientList.SelectedItem = curClient;
-            //                 else
-            //                     lstClientList.SelectedIndex = -1;
-            //             }
+            var source = sender as TextBox;
+            if (source == null)
+                return;
+
+            if (e.KeyCode == Keys.Enter && !String.IsNullOrWhiteSpace(source.Text))
+            {
+                IClient curClient;
+                curClient = source == txtClientName ? clientList.List.FirstOrDefault(c => c.Name == source.Text)
+                    : ClientList.List.FirstOrDefault(c => c.Telephones.Contains(source.Text));
+                if (curClient != null)
+                    lstClientList.SelectedItem = curClient;
+                else
+                    lstClientList.SelectedIndex = -1;
+            }
         }
 
 

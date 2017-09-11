@@ -19,6 +19,7 @@ namespace Scheduler_Controls
         private IClient client;
 
         public event SaveChangesHandler<IClient> OnSaveChanges;
+        private bool DisableChangeDetection = false;
 
         private IFactory entityFactory;
 
@@ -50,6 +51,8 @@ namespace Scheduler_Controls
             }
             set
             {
+                if (client == value)
+                    return;
                 if (SomethingChanged() && SaveChangesAbort())
                 {
                     return;
@@ -77,7 +80,7 @@ namespace Scheduler_Controls
 
             chkBlackList.Checked = client.BlackListed;
 
-            dateGenerallyTime.Value = DateTime.Now.Add(client.GenerallyTime);
+            dateGenerallyTime.Value = new DateTime(2000, 1, 1).Add(client.GenerallyTime);
             numGenerallyPrice.Value = client.GenerallyPrice;
 
             txtAdministrator.Text = client.Administrator;
@@ -139,8 +142,7 @@ namespace Scheduler_Controls
             if (SomethingChanged())
                 SaveChanges();
             else
-                if (OnSaveChanges != null)
-                OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));
+                OnSaveChanges?.Invoke(this, new SaveChangesEventArgs<IClient>(client));
         }
 
         /// <summary>
@@ -176,8 +178,7 @@ namespace Scheduler_Controls
             client.Balance = (int)numBalance.Value;
             client.NeedSMS = chkSMS.Checked;
 
-            if (OnSaveChanges != null)
-                OnSaveChanges(this, new SaveChangesEventArgs<IClient>(client));
+            OnSaveChanges?.Invoke(this, new SaveChangesEventArgs<IClient>(client));
         }
 
         private void btnLoadReceptions_Click(object sender, EventArgs e)
@@ -203,6 +204,6 @@ namespace Scheduler_Controls
                     reception2Edit.CommitToDatabase();
             }
         }
-        
+
     }
 }

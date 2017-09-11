@@ -105,7 +105,7 @@ namespace Scheduler
 
             Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRectangle.Top - this.Top;
-            this.MinimumSize = new System.Drawing.Size(calendarControl.MinimumSize.Width + mainView.Panel2MinSize, calendarControl.MinimumSize.Height + mainView.Location.Y + titleHeight + 20);
+            this.MinimumSize = new Size(calendarControl.MinimumSize.Width + mainView.Panel2MinSize, calendarControl.MinimumSize.Height + mainView.Location.Y + titleHeight + 20);
 
             ReceptionInfoEdit.SetLists(database.CabinetList, database.SpecialistList, database.SpecializationList, database.ClientList, database.EntityFactory);
         }
@@ -151,7 +151,7 @@ namespace Scheduler
 
                     receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CreateNew;
                     receptionEditForm.Reception = ent;
-                    if (receptionEditForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    if (receptionEditForm.ShowDialog() == DialogResult.OK)
                     {
                         database.AddReception(ent);
                     }
@@ -164,10 +164,10 @@ namespace Scheduler
 
                     switch (dresult)
                     {
-                        case System.Windows.Forms.DialogResult.Abort:
+                        case DialogResult.Abort:
                             database.RemoveReception(ent);
                             break;
-                        case System.Windows.Forms.DialogResult.OK:
+                        case DialogResult.OK:
                             database.UpdateReception(ent);
                             break;
                     }
@@ -189,7 +189,7 @@ namespace Scheduler
 
 
             Dictionary<DateTime, string> descriprions = new Dictionary<DateTime, string>(13);
-            for (int i = 0; i <= 23; i++) //дикий хардкод, переписать на что-то вразумительное 
+            for (int i = 0; i <= 23; i++) //TODO: дикий хардкод, переписать на что-то вразумительное 
             {
                 DateTime date = new DateTime(1, 1, 1, i, 0, 0);
                 descriprions.Add(date, date.ToShortTimeString());
