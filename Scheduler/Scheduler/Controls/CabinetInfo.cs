@@ -53,6 +53,7 @@ namespace Scheduler_Controls
                 return;
             txtName.Text = cab.Name;
             chkAvailable.Checked = cab.Availability;
+            chkCommentOnly.Checked = cab.CommentOnly;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -69,7 +70,8 @@ namespace Scheduler_Controls
             if (cab == null)
                 return false;
             return cab.Availability != chkAvailable.Checked ||
-                cab.Name != txtName.Text;
+                   cab.Name != txtName.Text ||
+                   cab.CommentOnly != chkCommentOnly.Checked;
         }
 
         void SaveChanges()
@@ -78,6 +80,7 @@ namespace Scheduler_Controls
                 return;
             cab.Name = txtName.Text;
             cab.Availability = chkAvailable.Checked;
+            cab.CommentOnly = chkCommentOnly.Checked;
 
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<ICabinet>(cab));

@@ -309,6 +309,9 @@ namespace Scheduler_Controls
             dummyReception.Price = Convert.ToInt32(numericPrice.Value);
 
             dummyReception.Administrator = txtAdministrator.Text;
+            dummyReception.ReceptionDidNotTakePlace = chkReceptionDidNotTakePlace.Checked;
+            dummyReception.SpecialRent = chkSpecialRent.Checked;
+            dummyReception.Comment = txtComment.Text;
 
             string errorMessage = dummyReception.Validate();
 
@@ -332,7 +335,6 @@ namespace Scheduler_Controls
             reception.ReceptionDidNotTakePlace = chkReceptionDidNotTakePlace.Checked;
             reception.Comment = txtComment.Text;
             reception.SpecialRent = chkSpecialRent.Checked;
-
             if (OnSaveChanges != null)
                 OnSaveChanges(this, new SaveChangesEventArgs<IReception>(reception));
             doNothing = false;

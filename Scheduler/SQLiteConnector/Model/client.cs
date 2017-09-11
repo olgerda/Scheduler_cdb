@@ -29,6 +29,7 @@ namespace EF6Connector.Model
         public string email { get; set; }
 
         public bool blacklisted { get; set; }
+        public bool needSms { get; set; }
 
         public int balance { get; set; } 
 

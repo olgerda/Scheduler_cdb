@@ -54,7 +54,10 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 name = client.Name,
                 blacklisted = client.BlackListed,
                 comment = client.Comment,
-                administrator = client.Administrator
+                administrator = client.Administrator,
+                email = client.EMail,
+                balance = client.Balance,
+                needSms = client.NeedSMS
             };
 
             context.clients.Add(obj);
@@ -102,6 +105,9 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             cli.comment = client.Comment;
             cli.name = client.Name;
             cli.administrator = client.Administrator;
+            cli.needSms = client.NeedSMS;
+            cli.email = client.EMail;
+            cli.balance = client.Balance;
 
             var oldCliTelephones = context.telephones2clients.Include("client")
                 .Where(x => x.client.idclients == cli.idclients)
@@ -169,7 +175,10 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                     x.blacklisted,
                     x.comment,
                     x.administrator,
-                    telephones = x.telephones2clients.Select(y => y.telephone.telephonescol)
+                    telephones = x.telephones2clients.Select(y => y.telephone.telephonescol),
+                    x.email,
+                    x.needSms,
+                    x.balance
                 }))
             {
                 var generallParams = context.clientgenerallyparams
@@ -183,6 +192,9 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 client.Telephones = new HashSet<string>(dbcli.telephones);
                 client.GenerallyPrice = (int)generallParams.generallyPrice;
                 client.GenerallyTime = TimeSpan.FromTicks(generallParams.generallyTime);
+                client.Balance = dbcli.balance;
+                client.NeedSMS = dbcli.needSms;
+                client.EMail = dbcli.email;
 
                 list.Add(client);
             };
@@ -349,7 +361,8 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             var dbcab = new cabinet()
             {
                 name = cabinet.Name,
-                availability = cabinet.Availability.ToByte()
+                availability = cabinet.Availability.ToByte(),
+                commentOnly = cabinet.CommentOnly
             };
 
             context.cabinets.Add(dbcab);
@@ -365,6 +378,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 throw new NullReferenceException($"Cabinet with id <{cabinet.ID}> not found in db.");
             dbcab.name = cabinet.Name;
             dbcab.availability = cabinet.Availability.ToByte();
+            dbcab.commentOnly = cabinet.CommentOnly;
             context.SaveChanges();
         }
 
@@ -384,12 +398,13 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             result.OnItemChanged += ListItemChangedHandler;
             result.OnItemRemoved += ListItemRemoveHandler;
 
-            foreach (var dbcab in context.cabinets.Select(x => new { x.idcabinet, x.name, x.availability }).AsEnumerable())
+            foreach (var dbcab in context.cabinets.Select(x => new { x.idcabinet, x.name, x.availability, x.commentOnly }).AsEnumerable())
             {
                 var cab = EntityFactory.NewCabinet();
                 cab.Name = dbcab.name;
                 cab.ID = dbcab.idcabinet;
                 cab.Availability = dbcab.availability == 1;
+                cab.CommentOnly = dbcab.commentOnly;
                 result.Add(cab);
             }
 
@@ -456,6 +471,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             dbreception.cabinetid = reception.Cabinet.ID;
             dbreception.clientid = reception.Client?.ID ?? CLIENTRENTID;
             dbreception.isrented = reception.Rent;
+            dbreception.isSpecialRent = reception.SpecialRent;
             dbreception.specialistid = reception.Specialist.ID;
             var specid = 0;
             if (!reception.Rent)
@@ -466,6 +482,8 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             dbreception.timedate = reception.ReceptionTimeInterval.Date;
             dbreception.timestart = reception.ReceptionTimeInterval.StartDate.TimeOfDay.Ticks;
             dbreception.timeend = reception.ReceptionTimeInterval.EndDate.TimeOfDay.Ticks;
+            dbreception.comment = reception.Comment;
+            dbreception.receptionDidNotTakePlace = reception.ReceptionDidNotTakePlace;
 
             context.receptions.Add(dbreception);
 
@@ -489,6 +507,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             dbreception.administrator = reception.Administrator;
             dbreception.cabinetid = reception.Cabinet.ID;
             dbreception.isrented = reception.Rent;
+            dbreception.isSpecialRent = reception.SpecialRent;
             dbreception.specialistid = reception.Specialist.ID;
             var specid = 0;
             if (!reception.Rent)
@@ -499,6 +518,8 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             dbreception.timedate = reception.ReceptionTimeInterval.Date;
             dbreception.timestart = reception.ReceptionTimeInterval.StartDate.TimeOfDay.Ticks;
             dbreception.timeend = reception.ReceptionTimeInterval.EndDate.TimeOfDay.Ticks;
+            dbreception.comment = reception.Comment;
+            dbreception.receptionDidNotTakePlace = reception.ReceptionDidNotTakePlace;
 
             var currentSpecClientPrice =
                 context.specialist2clientprice.FirstOrDefault(

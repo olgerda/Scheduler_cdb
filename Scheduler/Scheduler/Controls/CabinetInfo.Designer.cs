@@ -29,15 +29,17 @@
         private void InitializeComponent()
         {
             this.grpMain = new System.Windows.Forms.GroupBox();
-            this.chkAvailable = new System.Windows.Forms.CheckBox();
-            this.txtName = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtName = new System.Windows.Forms.TextBox();
+            this.chkAvailable = new System.Windows.Forms.CheckBox();
+            this.chkCommentOnly = new System.Windows.Forms.CheckBox();
             this.grpMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMain
             // 
+            this.grpMain.Controls.Add(this.chkCommentOnly);
             this.grpMain.Controls.Add(this.button1);
             this.grpMain.Controls.Add(this.label1);
             this.grpMain.Controls.Add(this.txtName);
@@ -50,22 +52,15 @@
             this.grpMain.TabStop = false;
             this.grpMain.Text = "Карточка кабинета";
             // 
-            // chkAvailable
+            // button1
             // 
-            this.chkAvailable.AutoSize = true;
-            this.chkAvailable.Location = new System.Drawing.Point(6, 45);
-            this.chkAvailable.Name = "chkAvailable";
-            this.chkAvailable.Size = new System.Drawing.Size(75, 17);
-            this.chkAvailable.TabIndex = 0;
-            this.chkAvailable.Text = "Доступен";
-            this.chkAvailable.UseVisualStyleBackColor = true;
-            // 
-            // txtName
-            // 
-            this.txtName.Location = new System.Drawing.Point(80, 19);
-            this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(234, 20);
-            this.txtName.TabIndex = 1;
+            this.button1.Location = new System.Drawing.Point(186, 39);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(128, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Сохранить изменения";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
             // 
@@ -76,22 +71,39 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Название";
             // 
-            // button1
+            // txtName
             // 
-            this.button1.Location = new System.Drawing.Point(80, 39);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(234, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Сохранить изменения";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.txtName.Location = new System.Drawing.Point(80, 19);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(234, 20);
+            this.txtName.TabIndex = 1;
+            // 
+            // chkAvailable
+            // 
+            this.chkAvailable.AutoSize = true;
+            this.chkAvailable.Location = new System.Drawing.Point(6, 42);
+            this.chkAvailable.Name = "chkAvailable";
+            this.chkAvailable.Size = new System.Drawing.Size(75, 17);
+            this.chkAvailable.TabIndex = 0;
+            this.chkAvailable.Text = "Доступен";
+            this.chkAvailable.UseVisualStyleBackColor = true;
+            // 
+            // chkCommentOnly
+            // 
+            this.chkCommentOnly.AutoSize = true;
+            this.chkCommentOnly.Location = new System.Drawing.Point(80, 42);
+            this.chkCommentOnly.Name = "chkCommentOnly";
+            this.chkCommentOnly.Size = new System.Drawing.Size(92, 17);
+            this.chkCommentOnly.TabIndex = 4;
+            this.chkCommentOnly.Text = "Для записей";
+            this.chkCommentOnly.UseVisualStyleBackColor = true;
             // 
             // CabinetInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.grpMain);
-            this.MaximumSize = new System.Drawing.Size(320, 65);
+            this.MaximumSize = new System.Drawing.Size(320, 0);
             this.MinimumSize = new System.Drawing.Size(320, 65);
             this.Name = "CabinetInfo";
             this.Size = new System.Drawing.Size(320, 65);
@@ -108,5 +120,6 @@
         private System.Windows.Forms.CheckBox chkAvailable;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox chkCommentOnly;
     }
 }

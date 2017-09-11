@@ -51,6 +51,8 @@ namespace Scheduler_Controls_Interfaces
         [Description("Необходимость оповещения через СМС")]
         bool NeedSMS { get; set; }
 
+        [Description("Адрес электронной почты")]
+        string EMail { get; set; }
 
         [Description("Телефоны")]
         HashSet<string> Telephones { get; set; }

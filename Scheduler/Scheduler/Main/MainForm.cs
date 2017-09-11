@@ -149,7 +149,10 @@ namespace Scheduler
                     timeInterval.EndDate = timeInterval.StartDate + new TimeSpan(1, 0, 0);
                     ent.ReceptionTimeInterval = timeInterval;
 
-                    receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CreateNew;
+                    if (ent.CommentOnlyReception)
+                        receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CommentOnly;
+                    else
+                        receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CreateNew;
                     receptionEditForm.Reception = ent;
                     if (receptionEditForm.ShowDialog() == DialogResult.OK)
                     {
@@ -158,7 +161,10 @@ namespace Scheduler
                 }
                 else
                 {
-                    receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.ReadExist;
+                    if (ent.CommentOnlyReception)
+                        receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.CommentOnly;
+                    else
+                        receptionEditForm.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.ReadExist;
                     receptionEditForm.Reception = ent;
                     var dresult = receptionEditForm.ShowDialog();
 

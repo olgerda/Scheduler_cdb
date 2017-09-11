@@ -18,5 +18,7 @@ namespace EF6Connector.Model
 
         //[Column(TypeName = "uint")]
         public long availability { get; set; }
+
+        public bool commentOnly { get; set; }
     }
 }

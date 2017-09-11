@@ -44,7 +44,12 @@ namespace Scheduler_InterfacesRealisations
         public ICabinet Cabinet
         {
             get { return cabinet; }
-            set { cabinet = value; RaisePropertyChanged("Cabinet"); }
+            set
+            {
+                cabinet = value;
+                CommentOnlyReception = cabinet.CommentOnly;
+                RaisePropertyChanged("Cabinet");
+            }
         }
 
         public string Specialization

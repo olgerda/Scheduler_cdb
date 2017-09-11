@@ -22,6 +22,9 @@ namespace Scheduler_InterfacesRealisations
         string administrator;
 
         GeneralParams generalParams;
+        private string _eMail;
+        private bool _needSms;
+        private int _balance;
 
         static GetClientReceptionsList getreceptions;
 
@@ -117,7 +120,8 @@ namespace Scheduler_InterfacesRealisations
                 name = name,
                 telephones = new HashSet<string>(telephones),
                 Balance = Balance,
-                NeedSMS = NeedSMS
+                NeedSMS = NeedSMS,
+                EMail = EMail
             };
         }
 
@@ -158,9 +162,23 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        public int Balance { get; set; }
+        public int Balance
+        {
+            get { return _balance; }
+            set { _balance = value; }
+        }
 
-        public bool NeedSMS { get; set; }
+        public bool NeedSMS
+        {
+            get { return _needSms; }
+            set { _needSms = value; }
+        }
+
+        public string EMail
+        {
+            get { return _eMail; }
+            set { _eMail = value; }
+        }
     }
 
     public class ClientList : CommonList<IClient>, Scheduler_Forms_Interfaces.IClientList
