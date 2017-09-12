@@ -21,6 +21,7 @@ namespace Scheduler_DBobjects_Intefraces
 
         ISpecialistList SpecialistList { get; }
         IClientList ClientList { get; }
+        IClientList ArendatorList { get; }
         ISpecializationList SpecializationList { get; }
         ICabinetList CabinetList { get; }
         IFactory EntityFactory { get; }
@@ -35,7 +36,7 @@ namespace Scheduler_DBobjects_Intefraces
         ITimeInterval WorkTimeInterval { get; set; }
 
         void SetInfoColumnDescriptions(Dictionary<DateTime, string> descriptions);
-        
+
         DateTime ConvertLevelToTime(int level);
         int ConvertTimeToLevel(DateTime time);
 
@@ -63,6 +64,7 @@ namespace Scheduler_DBobjects_Intefraces
         void UpdateClientData(IClient client);
         void RemoveClient(IClient client);
         IClientList AllClients();
+        IClientList AllArendators();
 
         void AddSpecialist(ISpecialist specialist);
         void UpdateSpecialistData(ISpecialist specialist);
@@ -113,6 +115,7 @@ namespace Scheduler_DBobjects_Intefraces
     {
         public const int CLIENTRENTID = -100;
         protected IClientList clientList;
+        protected IClientList arendatorList;
         protected ISpecialistList specialistList;
         protected ICabinetList cabinetList;
         protected Scheduler_DBconnector(IFactory factory)
@@ -131,7 +134,12 @@ namespace Scheduler_DBobjects_Intefraces
             return (clientList ?? (clientList = AllClientsInternal()));
         }
 
-        protected abstract IClientList AllClientsInternal();
+        public IClientList AllArendators()
+        {
+            return (arendatorList ?? (arendatorList = AllClientsInternal(1)));
+        }
+
+        protected abstract IClientList AllClientsInternal(int clientType = 0);
         protected IClientList AllClients(IEnumerable<IClient> list, ItemAddedHandler added, ItemChangedHandler changed, ItemRemovedHandler removed)
         {
             var result = EntityFactory.NewClientList();

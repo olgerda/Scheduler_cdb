@@ -58,6 +58,7 @@ namespace Scheduler
             this.инструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.контактыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.арендаторыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mainView)).BeginInit();
             this.mainView.Panel2.SuspendLayout();
             this.mainView.SuspendLayout();
@@ -165,6 +166,7 @@ namespace Scheduler
             // 
             this.спискиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.клиентыToolStripMenuItem,
+            this.арендаторыToolStripMenuItem,
             this.кабинетыToolStripMenuItem,
             this.специалистыToolStripMenuItem,
             this.специальностиToolStripMenuItem});
@@ -253,6 +255,13 @@ namespace Scheduler
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.настройкиToolStripMenuItem_Click);
             // 
+            // арендаторыToolStripMenuItem
+            // 
+            this.арендаторыToolStripMenuItem.Name = "арендаторыToolStripMenuItem";
+            this.арендаторыToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.арендаторыToolStripMenuItem.Text = "Арендаторы";
+            this.арендаторыToolStripMenuItem.Click += new System.EventHandler(this.арендаторыToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -294,5 +303,6 @@ namespace Scheduler
         private System.Windows.Forms.Button btnCreteFile;
         private System.Windows.Forms.MonthCalendar monthCalendar1;
         private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem арендаторыToolStripMenuItem;
     }
 }

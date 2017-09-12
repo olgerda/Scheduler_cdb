@@ -23,6 +23,7 @@ namespace Scheduler_Forms
         IFactory entityFactory;
 
         bool doNothingNow;
+        private int usingClientType;
 
         public FindClientCard()
         {
@@ -32,9 +33,10 @@ namespace Scheduler_Forms
             Init();
         }
 
-        public FindClientCard(IClientList clientList, IFactory entityFactory)
+        public FindClientCard(IClientList clientList, IFactory entityFactory, int clientType = 0)
         {
             InitializeComponent();
+            usingClientType = clientType;
 
             this.clientList = clientList;
             this.entityFactory = entityFactory;
@@ -94,7 +96,7 @@ namespace Scheduler_Forms
             set
             {
                 selectedClient = value;
-                if (selectedClient == null)
+                if (selectedClient == null || selectedClient.ClientType != usingClientType)
                     return;
                 doNothingNow = true;
                 txtClientName.Text = selectedClient.Name;
@@ -196,6 +198,7 @@ namespace Scheduler_Forms
         private void btnAddClient_Click(object sender, EventArgs e)
         {
             IClient newClient = entityFactory.NewClient();
+            newClient.ClientType = usingClientType;
             ActivateEditMode(newClient);
         }
 
@@ -238,7 +241,7 @@ namespace Scheduler_Forms
                     "Удаление пользователя из Базы",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Exclamation,
-                    MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.No)
+                    MessageBoxDefaultButton.Button2) == DialogResult.No)
                     return;
                 try
                 {

@@ -25,6 +25,7 @@ namespace Scheduler_InterfacesRealisations
         private string _eMail;
         private bool _needSms;
         private int _balance;
+        private int _clientType;
 
         static GetClientReceptionsList getreceptions;
 
@@ -178,6 +179,12 @@ namespace Scheduler_InterfacesRealisations
         {
             get { return _eMail; }
             set { _eMail = value; }
+        }
+
+        public int ClientType
+        {
+            get { return _clientType; }
+            set { _clientType = value; }
         }
     }
 

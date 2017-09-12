@@ -57,7 +57,8 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 administrator = client.Administrator,
                 email = client.EMail,
                 balance = client.Balance,
-                needSms = client.NeedSMS
+                needSms = client.NeedSMS,
+                clientType = client.ClientType
             };
 
             context.clients.Add(obj);
@@ -108,6 +109,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             cli.needSms = client.NeedSMS;
             cli.email = client.EMail;
             cli.balance = client.Balance;
+            cli.clientType = client.ClientType;
 
             var oldCliTelephones = context.telephones2clients.Include("client")
                 .Where(x => x.client.idclients == cli.idclients)
@@ -164,10 +166,10 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             context.telephones.RemoveRange(context.telephones.Where(x => x.telephones2clients.Count == 0));
         }
 
-        protected override IClientList AllClientsInternal()
+        protected override IClientList AllClientsInternal(int clientType = 0)
         {
             List<IClient> list = new List<IClient>();
-            foreach (var dbcli in context.clients.Select(
+            foreach (var dbcli in context.clients.Where(x => x.clientType == clientType).Select(
                 x => new
                 {
                     x.idclients,
@@ -178,7 +180,8 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                     telephones = x.telephones2clients.Select(y => y.telephone.telephonescol),
                     x.email,
                     x.needSms,
-                    x.balance
+                    x.balance,
+                    x.clientType
                 }))
             {
                 var generallParams = context.clientgenerallyparams
@@ -195,6 +198,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 client.Balance = dbcli.balance;
                 client.NeedSMS = dbcli.needSms;
                 client.EMail = dbcli.email;
+                client.ClientType = dbcli.clientType;
 
                 list.Add(client);
             };
@@ -543,6 +547,10 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
         public override void MakeBackup(string filename)
         {
             throw new NotImplementedException("Функция не реализована.");
+            //System.Xml.Serialization.XmlSerializer serializer =
+            //    new System.Xml.Serialization.XmlSerializer(typeof(cabinet[]));
+            //using (var filestream = System.IO.File.CreateText(filename + ".cabinets"))
+            //    serializer.Serialize(filestream, context.cabinets.ToArray());
         }
 
         public override void RestoreBackup(string filename)

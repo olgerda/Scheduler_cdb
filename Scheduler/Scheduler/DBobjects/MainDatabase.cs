@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Scheduler_Forms_Interfaces;
 
 namespace Scheduler_DBobjects
 {
@@ -9,10 +10,11 @@ namespace Scheduler_DBobjects
     {
         Scheduler_Common_Interfaces.IFactory entityFactory;
 
-        Scheduler_Forms_Interfaces.ISpecialistList specialistList;
-        Scheduler_Forms_Interfaces.IClientList clientList;
+        ISpecialistList specialistList;
+        IClientList clientList;
+        IClientList arendatorList;
         Scheduler_Controls_Interfaces.ISpecializationList specializationList;
-        Scheduler_Forms_Interfaces.ICabinetList cabinetList;
+        ICabinetList cabinetList;
 
         Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace dbconnector;
 
@@ -44,7 +46,7 @@ namespace Scheduler_DBobjects
 
         }
 
-        string Scheduler_DBobjects_Intefraces.IMainDataBase.ErrorString
+        public string ErrorString
         {
             get
             {
@@ -52,17 +54,17 @@ namespace Scheduler_DBobjects
             }
         }
 
-        List<Scheduler_DBobjects_Intefraces.IEntity> Scheduler_DBobjects_Intefraces.IMainDataBase.SelectReceptionsFromDate(DateTime date)
+        public List<Scheduler_DBobjects_Intefraces.IEntity> SelectReceptionsFromDate(DateTime date)
         {
             return dbconnector.GetReceptionsFromDate(date);
         }
 
-        List<Scheduler_DBobjects_Intefraces.IEntity> Scheduler_DBobjects_Intefraces.IMainDataBase.SelectReceptionsBetweenDates(DateTime startDate, DateTime endDate)
+        public List<Scheduler_DBobjects_Intefraces.IEntity> SelectReceptionsBetweenDates(DateTime startDate, DateTime endDate)
         {
             return dbconnector.GetReceptionsBetweenDates(startDate, endDate);
         }
 
-        Scheduler_Forms_Interfaces.ISpecialistList Scheduler_DBobjects_Intefraces.IMainDataBase.SpecialistList
+        public ISpecialistList SpecialistList
         {
             get
             {
@@ -70,7 +72,7 @@ namespace Scheduler_DBobjects
             }
         }
 
-        Scheduler_Forms_Interfaces.IClientList Scheduler_DBobjects_Intefraces.IMainDataBase.ClientList
+        public IClientList ClientList
         {
             get
             {
@@ -79,7 +81,7 @@ namespace Scheduler_DBobjects
         }
 
 
-        Scheduler_Controls_Interfaces.ISpecializationList Scheduler_DBobjects_Intefraces.IMainDataBase.SpecializationList
+        public Scheduler_Controls_Interfaces.ISpecializationList SpecializationList
         {
             get
             {
@@ -87,7 +89,7 @@ namespace Scheduler_DBobjects
             }
         }
 
-        Scheduler_Forms_Interfaces.ICabinetList Scheduler_DBobjects_Intefraces.IMainDataBase.CabinetList
+        public ICabinetList CabinetList
         {
             get
             {
@@ -95,9 +97,14 @@ namespace Scheduler_DBobjects
             }
         }
 
-        Scheduler_Common_Interfaces.IFactory Scheduler_DBobjects_Intefraces.IMainDataBase.EntityFactory
+        public Scheduler_Common_Interfaces.IFactory EntityFactory
         {
             get { return entityFactory; }
+        }
+
+        public IClientList ArendatorList
+        {
+            get { return dbconnector.AllArendators(); }
         }
 
         void Scheduler_DBobjects_Intefraces.IMainDataBase.AddReception(Scheduler_DBobjects_Intefraces.IEntity reception)

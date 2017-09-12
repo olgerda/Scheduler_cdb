@@ -31,9 +31,9 @@ namespace EF6Connector.Model
         public bool blacklisted { get; set; }
         public bool needSms { get; set; }
 
-        public int balance { get; set; } 
+        public int balance { get; set; }
 
-
+        public int clientType { get; set; }
         //[Column(TypeName = "tinytext")]
         //[StringLength(255)]
         public string administrator { get; set; }

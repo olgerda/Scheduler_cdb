@@ -359,7 +359,7 @@ namespace Scheduler_Controls
         private void btnShowClientCard_Click(object sender, EventArgs e)
         {
             if (OnShowClientsButtonClicked != null)
-                OnShowClientsButtonClicked(this, new ShowClientsEventsArgs(txtClientName.Text, txtTelephone.Text));
+                OnShowClientsButtonClicked(this, new ShowClientsEventsArgs(txtClientName.Text, txtTelephone.Text, chkRent.Checked));
 
             ActualizePrice();
         }
@@ -397,6 +397,7 @@ namespace Scheduler_Controls
 
         void ActualizePrice()
         {
+            //TODO: check logic
             if (chkRent.Checked)
             {
                 if (currentSpecialistCosts.ContainsKey(Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.CLIENTRENTID))

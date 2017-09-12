@@ -21,6 +21,7 @@ namespace Scheduler_Forms
         static ISpecializationList specializationsList;
         static ICabinetList cabinetList;
         static IClientList clientList;
+        static IClientList arendatorList;
         static IFactory entityFactory;
 
         private bool doNothing;
@@ -90,6 +91,7 @@ namespace Scheduler_Forms
 
         void receptionInfoCard_OnShowClientsButtonClicked(object source, ShowClientsEventsArgs e)
         {
+            IClientList clientList = e.ArendatorList ? ReceptionInfoEdit.arendatorList : ReceptionInfoEdit.clientList;
             //тут логика показа формы с выбором клиента
             using (FindClientCard FindClientForm = new FindClientCard(clientList, entityFactory))
             {
@@ -116,32 +118,7 @@ namespace Scheduler_Forms
                     Init();
             }
         }
-
-        public ISpecialistList SpecialistList
-        {
-            set { specialistList = value; Init(); }
-        }
-
-        public ISpecializationList SpecializationList
-        {
-            set { specializationsList = value; Init(); }
-        }
-
-        public ICabinetList CabinetList
-        {
-            set { cabinetList = value; Init(); }
-        }
-
-        public IClientList ClientList
-        {
-            set { clientList = value; }
-        }
-
-        public IFactory EntityFactory
-        {
-            set { entityFactory = value; }
-        }
-
+        
         public Scheduler_Controls.ReceptionInfo.ShowModes Mode
         {
             get { return mode; }
@@ -153,12 +130,13 @@ namespace Scheduler_Forms
         }
 
         public static void SetLists(ICabinetList cabinetList, ISpecialistList specialistList, ISpecializationList specializationList,
-            IClientList clientList, IFactory entityFactory)
+            IClientList clientList, IClientList arendatorList, IFactory entityFactory)
         {
             ReceptionInfoEdit.cabinetList = cabinetList;
             ReceptionInfoEdit.specialistList = specialistList;
             ReceptionInfoEdit.specializationsList = specializationList;
             ReceptionInfoEdit.clientList = clientList;
+            ReceptionInfoEdit.arendatorList = arendatorList;
             ReceptionInfoEdit.entityFactory = entityFactory;
             if (entityFactory != null)
             {

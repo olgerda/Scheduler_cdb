@@ -28,6 +28,7 @@ namespace Scheduler_Controls_Interfaces
     }
 
     public delegate List<IReception> GetClientReceptionsList(IClient client);
+
     /// <summary>
     /// Интерфейс клиента.
     /// </summary>
@@ -60,6 +61,7 @@ namespace Scheduler_Controls_Interfaces
         [Description("Администратор")]
         string Administrator { get; set; }
 
+        int ClientType { get; set; }
 
         /// <summary>
         /// Проверить, входит ли переданный телефон в список телефонов клиента.
@@ -229,15 +231,18 @@ namespace Scheduler_Controls_Interfaces
     {
         private string name;
         private string telephone;
+        private bool arendatorsList;
 
-        public ShowClientsEventsArgs(string Name = "", string Telephone = "")
+        public ShowClientsEventsArgs(string Name = "", string Telephone = "", bool arendators = false)
         {
             name = Name;
             telephone = Telephone;
+            arendatorsList = arendators;
         }
 
         public string Name { get { return name; } }
         public string Telephone { get { return telephone; } }
+        public bool ArendatorList { get { return arendatorsList; } }
     }
 
     public class CreateChildReceptionEventArgs : SaveChangesEventArgs<IReception>

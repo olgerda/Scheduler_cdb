@@ -107,7 +107,10 @@ namespace Scheduler
             int titleHeight = screenRectangle.Top - this.Top;
             this.MinimumSize = new Size(calendarControl.MinimumSize.Width + mainView.Panel2MinSize, calendarControl.MinimumSize.Height + mainView.Location.Y + titleHeight + 20);
 
-            ReceptionInfoEdit.SetLists(database.CabinetList, database.SpecialistList, database.SpecializationList, database.ClientList, database.EntityFactory);
+            ReceptionInfoEdit.SetLists(cabinetList: database.CabinetList, specialistList: database.SpecialistList,
+                specializationList: database.SpecializationList,
+                entityFactory: database.EntityFactory, clientList: database.ClientList,
+                arendatorList: database.ArendatorList);
         }
 
         public IMainDataBase Database
@@ -126,6 +129,10 @@ namespace Scheduler
             IEntity ent = calendarControl.GetEntityOnClick() as IEntity;
             using (ReceptionInfoEdit receptionEditForm = new ReceptionInfoEdit())
             {
+                //receptionEditForm.SetLists(cabinetList: database.CabinetList, specialistList: database.SpecialistList,
+                //    specializationList: database.SpecializationList,
+                //    entityFactory: database.EntityFactory, clientList: database.ClientList,
+                //    arendatorList: database.ArendatorList);
                 if (ent == null)
                 {
                     ent = database.EntityFactory.NewEntity();
@@ -366,6 +373,14 @@ namespace Scheduler
                 MainSettings.ControlsColors = settings.SelectedColorsDictionary;
                 Properties.Settings.Default.LegacyColorSettings = String.Join(Environment.NewLine, MainSettings.ToStrings());
                 Properties.Settings.Default.Save();
+            }
+        }
+
+        private void арендаторыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (FindClientCard clientsForm = new FindClientCard(database.ArendatorList, database.EntityFactory, 1))
+            {
+                clientsForm.ShowDialog();
             }
         }
     }
