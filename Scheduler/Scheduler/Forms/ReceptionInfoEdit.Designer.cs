@@ -39,14 +39,14 @@
             this.receptionInfoCard.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.ReadExist;
             this.receptionInfoCard.Name = "receptionInfoCard";
             this.receptionInfoCard.Reception = null;
-            this.receptionInfoCard.Size = new System.Drawing.Size(567, 285);
+            this.receptionInfoCard.Size = new System.Drawing.Size(572, 285);
             this.receptionInfoCard.TabIndex = 0;
             // 
             // ReceptionInfoEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(567, 285);
+            this.ClientSize = new System.Drawing.Size(572, 285);
             this.Controls.Add(this.receptionInfoCard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.KeyPreview = true;

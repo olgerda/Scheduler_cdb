@@ -75,8 +75,9 @@
             // 
             // lstClientList
             // 
+            this.lstClientList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.lstClientList.FormattingEnabled = true;
-            this.lstClientList.Location = new System.Drawing.Point(9, 99);
+            this.lstClientList.Location = new System.Drawing.Point(9, 100);
             this.lstClientList.Name = "lstClientList";
             this.lstClientList.Size = new System.Drawing.Size(260, 420);
             this.lstClientList.TabIndex = 11;

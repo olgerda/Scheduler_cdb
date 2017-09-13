@@ -80,7 +80,7 @@
             this.grpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpMain.Location = new System.Drawing.Point(0, 0);
             this.grpMain.Name = "grpMain";
-            this.grpMain.Size = new System.Drawing.Size(400, 529);
+            this.grpMain.Size = new System.Drawing.Size(400, 539);
             this.grpMain.TabIndex = 0;
             this.grpMain.TabStop = false;
             this.grpMain.Text = "Карточка клиента";
@@ -367,7 +367,7 @@
             this.MaximumSize = new System.Drawing.Size(400, 0);
             this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "ClientInfo";
-            this.Size = new System.Drawing.Size(400, 529);
+            this.Size = new System.Drawing.Size(400, 539);
             this.grpMain.ResumeLayout(false);
             this.grpMain.PerformLayout();
             this.grpReceptions.ResumeLayout(false);

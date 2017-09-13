@@ -60,6 +60,7 @@
             this.dateDate = new System.Windows.Forms.DateTimePicker();
             this.dateTimeStart = new System.Windows.Forms.DateTimePicker();
             this.dateTimeEnd = new System.Windows.Forms.DateTimePicker();
+            this.chkArendatorsList = new System.Windows.Forms.CheckBox();
             this.grpMain.SuspendLayout();
             this.grpActions.SuspendLayout();
             this.grpOther.SuspendLayout();
@@ -81,7 +82,7 @@
             this.grpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpMain.Location = new System.Drawing.Point(0, 0);
             this.grpMain.Name = "grpMain";
-            this.grpMain.Size = new System.Drawing.Size(563, 282);
+            this.grpMain.Size = new System.Drawing.Size(570, 282);
             this.grpMain.TabIndex = 0;
             this.grpMain.TabStop = false;
             this.grpMain.Text = "Карточка записи";
@@ -94,7 +95,7 @@
             this.grpActions.Controls.Add(this.btnCancelReception);
             this.grpActions.Location = new System.Drawing.Point(6, 226);
             this.grpActions.Name = "grpActions";
-            this.grpActions.Size = new System.Drawing.Size(552, 50);
+            this.grpActions.Size = new System.Drawing.Size(561, 50);
             this.grpActions.TabIndex = 35;
             this.grpActions.TabStop = false;
             this.grpActions.Text = "Действия";
@@ -131,7 +132,7 @@
             // 
             // btnCancelReception
             // 
-            this.btnCancelReception.Location = new System.Drawing.Point(441, 19);
+            this.btnCancelReception.Location = new System.Drawing.Point(450, 19);
             this.btnCancelReception.Name = "btnCancelReception";
             this.btnCancelReception.Size = new System.Drawing.Size(105, 23);
             this.btnCancelReception.TabIndex = 17;
@@ -153,7 +154,7 @@
             this.grpOther.Controls.Add(this.label5);
             this.grpOther.Location = new System.Drawing.Point(180, 97);
             this.grpOther.Name = "grpOther";
-            this.grpOther.Size = new System.Drawing.Size(378, 121);
+            this.grpOther.Size = new System.Drawing.Size(387, 121);
             this.grpOther.TabIndex = 34;
             this.grpOther.TabStop = false;
             // 
@@ -171,13 +172,13 @@
             this.cmbSpecialist.FormattingEnabled = true;
             this.cmbSpecialist.Location = new System.Drawing.Point(98, 13);
             this.cmbSpecialist.Name = "cmbSpecialist";
-            this.cmbSpecialist.Size = new System.Drawing.Size(274, 21);
+            this.cmbSpecialist.Size = new System.Drawing.Size(283, 21);
             this.cmbSpecialist.TabIndex = 9;
             this.cmbSpecialist.SelectedIndexChanged += new System.EventHandler(this.cmbSpecialist_SelectedIndexChanged);
             // 
             // numericPrice
             // 
-            this.numericPrice.Location = new System.Drawing.Point(310, 67);
+            this.numericPrice.Location = new System.Drawing.Point(319, 67);
             this.numericPrice.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -191,7 +192,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(239, 70);
+            this.label7.Location = new System.Drawing.Point(248, 70);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(65, 13);
             this.label7.TabIndex = 26;
@@ -209,7 +210,7 @@
             // 
             this.txtAdministrator.Location = new System.Drawing.Point(98, 94);
             this.txtAdministrator.Name = "txtAdministrator";
-            this.txtAdministrator.Size = new System.Drawing.Size(274, 20);
+            this.txtAdministrator.Size = new System.Drawing.Size(283, 20);
             this.txtAdministrator.TabIndex = 29;
             // 
             // label8
@@ -235,7 +236,7 @@
             this.cmbSpecialisation.FormattingEnabled = true;
             this.cmbSpecialisation.Location = new System.Drawing.Point(98, 40);
             this.cmbSpecialisation.Name = "cmbSpecialisation";
-            this.cmbSpecialisation.Size = new System.Drawing.Size(274, 21);
+            this.cmbSpecialisation.Size = new System.Drawing.Size(283, 21);
             this.cmbSpecialisation.TabIndex = 11;
             // 
             // label5
@@ -271,9 +272,10 @@
             // 
             this.grpReceptionParams.Controls.Add(this.chkSpecialRent);
             this.grpReceptionParams.Controls.Add(this.chkRent);
+            this.grpReceptionParams.Controls.Add(this.chkArendatorsList);
             this.grpReceptionParams.Location = new System.Drawing.Point(475, 19);
             this.grpReceptionParams.Name = "grpReceptionParams";
-            this.grpReceptionParams.Size = new System.Drawing.Size(83, 72);
+            this.grpReceptionParams.Size = new System.Drawing.Size(92, 72);
             this.grpReceptionParams.TabIndex = 32;
             this.grpReceptionParams.TabStop = false;
             this.grpReceptionParams.Text = "Параметры";
@@ -281,7 +283,7 @@
             // chkSpecialRent
             // 
             this.chkSpecialRent.AutoSize = true;
-            this.chkSpecialRent.Location = new System.Drawing.Point(6, 48);
+            this.chkSpecialRent.Location = new System.Drawing.Point(6, 44);
             this.chkSpecialRent.Name = "chkSpecialRent";
             this.chkSpecialRent.Size = new System.Drawing.Size(58, 17);
             this.chkSpecialRent.TabIndex = 28;
@@ -404,13 +406,25 @@
             this.dateTimeEnd.TabIndex = 22;
             this.dateTimeEnd.Value = new System.DateTime(2014, 2, 2, 13, 51, 0, 0);
             // 
+            // chkArendatorsList
+            // 
+            this.chkArendatorsList.AutoSize = true;
+            this.chkArendatorsList.Enabled = false;
+            this.chkArendatorsList.Location = new System.Drawing.Point(6, 50);
+            this.chkArendatorsList.Name = "chkArendatorsList";
+            this.chkArendatorsList.Size = new System.Drawing.Size(80, 17);
+            this.chkArendatorsList.TabIndex = 29;
+            this.chkArendatorsList.Text = "Арендатор";
+            this.chkArendatorsList.UseVisualStyleBackColor = true;
+            this.chkArendatorsList.Visible = false;
+            // 
             // ReceptionInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.grpMain);
             this.Name = "ReceptionInfo";
-            this.Size = new System.Drawing.Size(563, 282);
+            this.Size = new System.Drawing.Size(570, 282);
             this.grpMain.ResumeLayout(false);
             this.grpActions.ResumeLayout(false);
             this.grpActions.PerformLayout();
@@ -463,5 +477,6 @@
         private System.Windows.Forms.GroupBox grpOther;
         private System.Windows.Forms.GroupBox grpActions;
         private System.Windows.Forms.CheckBox chkReceptionDidNotTakePlace;
+        private System.Windows.Forms.CheckBox chkArendatorsList;
     }
 }

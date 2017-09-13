@@ -37,11 +37,24 @@ namespace Scheduler_Forms
         {
             InitializeComponent();
             usingClientType = clientType;
+            lstClientList.DrawItem += LstClientList_DrawItem;
 
             this.clientList = clientList;
             this.entityFactory = entityFactory;
             clientInfoCard.OnSaveChanges += new SaveChangesHandler<IClient>(clientInfoCard_OnSaveChanges);
             Init();
+        }
+
+        private void LstClientList_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            IClient currentClient = (IClient)lstClientList.Items[e.Index];
+
+            e.DrawBackground();
+            var g = e.Graphics;
+            if (currentClient.BlackListed)
+                g.FillRectangle(Brushes.Red, e.Bounds);
+            g.DrawString(currentClient.Name, e.Font, new SolidBrush(e.ForeColor), new PointF(e.Bounds.X, e.Bounds.Y));
+            e.DrawFocusRectangle();
         }
 
         void Init()

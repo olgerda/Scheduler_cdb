@@ -67,23 +67,26 @@ namespace Scheduler_InterfacesRealisations
         public string Validate()
         {
             string result = String.Empty;
+
             if (receptionTimeInterval == null)
                 result += "Временной интервал не задан." + Environment.NewLine;
-            if (specialist == null)
-                result += "Специалист не задан." + Environment.NewLine;
-
-            if (isRented)
+            if (!CommentOnlyReception)
             {
+                if (specialist == null)
+                    result += "Специалист не задан." + Environment.NewLine;
 
-            }
-            else
-            {
-                if (String.IsNullOrWhiteSpace(specialisation))
-                    result += "Специализация не задана." + Environment.NewLine;
-                if (client == null)
-                    result += "Клиент не задан." + Environment.NewLine;
-            }
+                if (isRented)
+                {
 
+                }
+                else
+                {
+                    if (String.IsNullOrWhiteSpace(specialisation))
+                        result += "Специализация не задана." + Environment.NewLine;
+                    if (client == null)
+                        result += "Клиент не задан." + Environment.NewLine;
+                }
+            }
             if (database != null)
             {
                 List<Scheduler_DBobjects_Intefraces.IEntity> receptionsIntersectedWith = new List<Scheduler_DBobjects_Intefraces.IEntity>();
@@ -105,23 +108,42 @@ namespace Scheduler_InterfacesRealisations
         {
             get
             {
-                if (isRented)
-                {
-                    return String.Join(Environment.NewLine,
-                        receptionTimeInterval.Interval(),
-                        specialist.Name,
-                        price + " руб.");
-                }
+                List<string> result = new List<string>();
+                result.Add(receptionTimeInterval.Interval());
+                if (CommentOnlyReception)
+                    result.Add(Comment);
                 else
                 {
-                    return String.Join(Environment.NewLine,
-                        receptionTimeInterval.Interval(),
-                        specialist.Name,
-                        client.Name,
-                        client.Telephones.FirstOrDefault(),
-                        price + " руб.",
-                        specialisation);
+                    result.Add(specialist.Name);
+                    if (!isRented)
+                    {
+                        result.Add(client.Name);
+                        result.Add((client.NeedSMS ? "SMS " : "") + client.Telephones.FirstOrDefault());
+                    }
+                    result.Add(price + " руб.");
+                    if (!isRented)
+                    {
+                        result.Add(specialisation);
+                    }
                 }
+                return String.Join(Environment.NewLine, result);
+                //if (isRented)
+                //{
+                //    return String.Join(Environment.NewLine,
+                //        receptionTimeInterval.Interval(),
+                //        specialist.Name,
+                //        price + " руб.");
+                //}
+                //else
+                //{
+                //    return String.Join(Environment.NewLine,
+                //        receptionTimeInterval.Interval(),
+                //        specialist.Name,
+                //        client.Name,
+                //        (client.NeedSMS ? "SMS " : "") + client.Telephones.FirstOrDefault(),
+                //        price + " руб.",
+                //        specialisation);
+                //}
             }
         }
 
