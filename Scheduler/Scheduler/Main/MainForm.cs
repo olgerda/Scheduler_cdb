@@ -111,6 +111,7 @@ namespace Scheduler
                 specializationList: database.SpecializationList,
                 entityFactory: database.EntityFactory, clientList: database.ClientList,
                 arendatorList: database.ArendatorList);
+            ReceptionInfoEdit.Database = Database;
         }
 
         public IMainDataBase Database
@@ -127,6 +128,9 @@ namespace Scheduler
         {
             if (e.Button != MouseButtons.Left) return;
             IEntity ent = calendarControl.GetEntityOnClick() as IEntity;
+            string cabname = calendarControl.GetColumnNameOnClick();
+            if (cabname == null)
+                return;
             using (ReceptionInfoEdit receptionEditForm = new ReceptionInfoEdit())
             {
                 //receptionEditForm.SetLists(cabinetList: database.CabinetList, specialistList: database.SpecialistList,
@@ -381,6 +385,15 @@ namespace Scheduler
             using (FindClientCard clientsForm = new FindClientCard(database.ArendatorList, database.EntityFactory, 1))
             {
                 clientsForm.ShowDialog();
+            }
+        }
+
+        private void дежурстваToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var dutyForm = new Scheduler.Forms.SpecialistDutyForm())
+            {
+                dutyForm.SetDatabase(database, database.EntityFactory);
+                dutyForm.ShowDialog();
             }
         }
     }

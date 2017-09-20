@@ -11,6 +11,8 @@ namespace Scheduler_DBobjects_Intefraces
     {
         List<IEntity> SelectReceptionsFromDate(DateTime date);
         List<IEntity> SelectReceptionsBetweenDates(DateTime startDate, DateTime endDate);
+        IEnumerable<ISpecialistDuty> SelectSpecialistDutyFromDate(DateTime date);
+        IEnumerable<DateTime> SelectSpecialistDutyDates(ISpecialist spec);
 
         void AddReception(IEntity reception);
         void RemoveReception(IEntity reception);
@@ -24,6 +26,7 @@ namespace Scheduler_DBobjects_Intefraces
         IClientList ArendatorList { get; }
         ISpecializationList SpecializationList { get; }
         ICabinetList CabinetList { get; }
+        ISpecialistDutyList SpecialistDutyList { get; }
         IFactory EntityFactory { get; }
 
         string ErrorString { get; }
@@ -74,6 +77,7 @@ namespace Scheduler_DBobjects_Intefraces
         void AddSpecialization(string specialization);
         void RemoveSpecialization(string specialization);
         ISpecializationList AllSpecializations();
+        ISpecialistDutyList AllDuty();
 
         void AddCabinet(ICabinet cabinet);
         void UpdateCabinetData(ICabinet cabinet);
@@ -99,6 +103,8 @@ namespace Scheduler_DBobjects_Intefraces
         bool CheckDBConnection(out string message);
     }
 
+
+
     public enum ColumnType
     {
         Cabinet,
@@ -113,11 +119,13 @@ namespace Scheduler_DBobjects_Intefraces
 
     public abstract class Scheduler_DBconnector : Scheduler_DBconnectorIntefrace
     {
-        public const int CLIENTRENTID = -100;
+        public const int DEFAULTCLIENTID = 0;
         protected IClientList clientList;
         protected IClientList arendatorList;
         protected ISpecialistList specialistList;
         protected ICabinetList cabinetList;
+        protected ISpecialistDutyList dutyList;
+
         protected Scheduler_DBconnector(IFactory factory)
         {
             EntityFactory = factory;
@@ -183,5 +191,16 @@ namespace Scheduler_DBobjects_Intefraces
         public abstract void MakeBackup(string filename);
         public abstract void RestoreBackup(string filename);
         public abstract bool CheckDBConnection(out string message);
+
+        public ISpecialistDutyList AllDuty()
+        {
+            return dutyList ?? (dutyList = AllDutyInternal());
+        }
+
+        public abstract void AddSpecialistDuty(ISpecialistDuty dt);
+        public abstract void RemoveSpecialistDuty(ISpecialistDuty dt);
+        public abstract void UpdateSpecialistDuty(ISpecialistDuty dt);
+
+        protected abstract ISpecialistDutyList AllDutyInternal();
     }
 }

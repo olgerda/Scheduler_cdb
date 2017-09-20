@@ -52,6 +52,8 @@ namespace EF6Connector.Model
         public virtual DbSet<specializations2specialist> specializations2specialist { get; set; }
         public virtual DbSet<telephone> telephones { get; set; }
         public virtual DbSet<telephones2clients> telephones2clients { get; set; }
+        public virtual DbSet<specialistDuty> specialistDuties { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -81,6 +83,12 @@ namespace EF6Connector.Model
                 .HasMany(e => e.specializations2specialist)
                 .WithRequired(e => e.specialist1)
                 .HasForeignKey(e => e.specialist)
+                .WillCascadeOnDelete();
+
+            modelBuilder.Entity<specialist>()
+                .HasMany(e => e.specialistDuty)
+                .WithRequired(e => e.specialist)
+                .HasForeignKey(e => e.specialistid)
                 .WillCascadeOnDelete();
 
             modelBuilder.Entity<specialization>()

@@ -1530,7 +1530,7 @@ namespace MySqlConnector
                 cmd.CommandText = "select price from specialist2clientprice where specid=@spid and clid=@clid";
                 cmd.Parameters.AddWithValue("@spid", spec.ID);
 
-                int clid = client == null ? CLIENTRENTID : client.ID;
+                int clid = client == null ? DEFAULTCLIENTID : client.ID;
                 cmd.Parameters.AddWithValue("@clid", clid);
 
                 cmd.Prepare();
@@ -1588,7 +1588,7 @@ namespace MySqlConnector
                 cmd.CommandText = "select idspecialist2clientcost from specialist2clientprice where specid=@spid and clid=@clid";
                 cmd.Parameters.AddWithValue("@spid", spec.ID);
 
-                int clid = client == null ? CLIENTRENTID : client.ID;
+                int clid = client == null ? DEFAULTCLIENTID : client.ID;
                 cmd.Parameters.AddWithValue("@clid", clid);
 
                 cmd.Prepare();

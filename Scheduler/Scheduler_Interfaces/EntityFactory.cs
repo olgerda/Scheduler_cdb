@@ -16,8 +16,10 @@ namespace Scheduler_Common_Interfaces
         ICabinetList NewCabinetList();
         ISpecialist NewSpecialist();
         ISpecialistList NewSpecialistList();
+        ISpecialistDutyList NewSpecialistDutyList();
         ISpecializationList NewSpecializationList();
-        
+
+        ISpecialistDuty NewSpecialistDuty();
         //IReception NewReception();
 
         ITelephone NewTelephone();

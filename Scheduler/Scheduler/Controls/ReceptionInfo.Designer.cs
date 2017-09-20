@@ -50,6 +50,7 @@
             this.grpReceptionParams = new System.Windows.Forms.GroupBox();
             this.chkSpecialRent = new System.Windows.Forms.CheckBox();
             this.chkRent = new System.Windows.Forms.CheckBox();
+            this.chkArendatorsList = new System.Windows.Forms.CheckBox();
             this.grpClient = new System.Windows.Forms.GroupBox();
             this.txtTelephone = new System.Windows.Forms.MaskedTextBox();
             this.txtClientName = new System.Windows.Forms.TextBox();
@@ -60,7 +61,7 @@
             this.dateDate = new System.Windows.Forms.DateTimePicker();
             this.dateTimeStart = new System.Windows.Forms.DateTimePicker();
             this.dateTimeEnd = new System.Windows.Forms.DateTimePicker();
-            this.chkArendatorsList = new System.Windows.Forms.CheckBox();
+            this.cmbSpecialistsOnDuty = new System.Windows.Forms.ComboBox();
             this.grpMain.SuspendLayout();
             this.grpActions.SuspendLayout();
             this.grpOther.SuspendLayout();
@@ -142,6 +143,7 @@
             // 
             // grpOther
             // 
+            this.grpOther.Controls.Add(this.cmbSpecialistsOnDuty);
             this.grpOther.Controls.Add(this.label4);
             this.grpOther.Controls.Add(this.cmbSpecialist);
             this.grpOther.Controls.Add(this.numericPrice);
@@ -169,11 +171,13 @@
             // 
             // cmbSpecialist
             // 
+            this.cmbSpecialist.Enabled = false;
             this.cmbSpecialist.FormattingEnabled = true;
             this.cmbSpecialist.Location = new System.Drawing.Point(98, 13);
             this.cmbSpecialist.Name = "cmbSpecialist";
             this.cmbSpecialist.Size = new System.Drawing.Size(283, 21);
             this.cmbSpecialist.TabIndex = 9;
+            this.cmbSpecialist.Visible = false;
             this.cmbSpecialist.SelectedIndexChanged += new System.EventHandler(this.cmbSpecialist_SelectedIndexChanged);
             // 
             // numericPrice
@@ -301,6 +305,18 @@
             this.chkRent.UseVisualStyleBackColor = true;
             this.chkRent.CheckedChanged += new System.EventHandler(this.chkRent_CheckedChanged);
             // 
+            // chkArendatorsList
+            // 
+            this.chkArendatorsList.AutoSize = true;
+            this.chkArendatorsList.Enabled = false;
+            this.chkArendatorsList.Location = new System.Drawing.Point(6, 50);
+            this.chkArendatorsList.Name = "chkArendatorsList";
+            this.chkArendatorsList.Size = new System.Drawing.Size(80, 17);
+            this.chkArendatorsList.TabIndex = 29;
+            this.chkArendatorsList.Text = "Арендатор";
+            this.chkArendatorsList.UseVisualStyleBackColor = true;
+            this.chkArendatorsList.Visible = false;
+            // 
             // grpClient
             // 
             this.grpClient.Controls.Add(this.txtTelephone);
@@ -406,17 +422,16 @@
             this.dateTimeEnd.TabIndex = 22;
             this.dateTimeEnd.Value = new System.DateTime(2014, 2, 2, 13, 51, 0, 0);
             // 
-            // chkArendatorsList
+            // cmbSpecialistsOnDuty
             // 
-            this.chkArendatorsList.AutoSize = true;
-            this.chkArendatorsList.Enabled = false;
-            this.chkArendatorsList.Location = new System.Drawing.Point(6, 50);
-            this.chkArendatorsList.Name = "chkArendatorsList";
-            this.chkArendatorsList.Size = new System.Drawing.Size(80, 17);
-            this.chkArendatorsList.TabIndex = 29;
-            this.chkArendatorsList.Text = "Арендатор";
-            this.chkArendatorsList.UseVisualStyleBackColor = true;
-            this.chkArendatorsList.Visible = false;
+            this.cmbSpecialistsOnDuty.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSpecialistsOnDuty.FormattingEnabled = true;
+            this.cmbSpecialistsOnDuty.Location = new System.Drawing.Point(98, 13);
+            this.cmbSpecialistsOnDuty.Name = "cmbSpecialistsOnDuty";
+            this.cmbSpecialistsOnDuty.Size = new System.Drawing.Size(283, 21);
+            this.cmbSpecialistsOnDuty.TabIndex = 30;
+            this.cmbSpecialistsOnDuty.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cmbSpecialistsOnDuty_DrawItem);
+            this.cmbSpecialistsOnDuty.SelectedIndexChanged += new System.EventHandler(this.cmbSpecialistsOnDuty_SelectedIndexChanged);
             // 
             // ReceptionInfo
             // 
@@ -478,5 +493,6 @@
         private System.Windows.Forms.GroupBox grpActions;
         private System.Windows.Forms.CheckBox chkReceptionDidNotTakePlace;
         private System.Windows.Forms.CheckBox chkArendatorsList;
+        private System.Windows.Forms.ComboBox cmbSpecialistsOnDuty;
     }
 }

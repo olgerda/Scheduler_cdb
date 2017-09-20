@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using Scheduler_Controls_Interfaces;
 
+using Scheduler_InterfacesRealisations;
+
 namespace Scheduler_Controls
 {
 
@@ -19,6 +21,8 @@ namespace Scheduler_Controls
         private IEnumerable<string> specialisationList;
 
         private IClient clientOnReception = null;
+
+        private SortableList<ISpecialistDuty> todaysSpecialists = new SortableList<ISpecialistDuty>();
 
         private Dictionary<int, int> currentSpecialistCosts = new Dictionary<int, int>();
 
@@ -53,6 +57,7 @@ namespace Scheduler_Controls
         public ReceptionInfo()
         {
             InitializeComponent();
+            cmbSpecialistsOnDuty.DataSource = todaysSpecialists;
         }
 
         //public ReceptionInfo(ShowModes mode = ShowModes.CreateNew)
@@ -97,6 +102,8 @@ namespace Scheduler_Controls
             get { return mode; }
             set { mode = value; SetMode(); }
         }
+
+        public Scheduler_DBobjects_Intefraces.IMainDataBase Database { get; set; }
 
         public IReception Reception
         {
@@ -222,14 +229,18 @@ namespace Scheduler_Controls
                 cmbCabinet.SelectedItem = reception.Cabinet;
             if (reception.Specialist != null)
             {
-                foreach (var spec in cmbSpecialist.Items.Cast<ISpecialist>())
-                {
-                    if (spec.Equals(reception.Specialist))
-                    {
-                        cmbSpecialist.SelectedItem = spec;
-                        break;
-                    }
-                }
+                //foreach (var spec in cmbSpecialist.Items.Cast<ISpecialist>())
+                //{
+                //    if (spec.Equals(reception.Specialist))
+                //    {
+                //        cmbSpecialist.SelectedItem = spec;
+                //        break;
+                //    }
+                //}
+                var spec = cmbSpecialistsOnDuty.Items.Cast<ISpecialistDuty>()
+                    .FirstOrDefault(x => x.Specialist == reception.Specialist);
+                if (spec != null)
+                    cmbSpecialistsOnDuty.SelectedItem = spec;
             }
             if (!String.IsNullOrWhiteSpace(reception.Specialization))
                 cmbSpecialisation.SelectedItem = reception.Specialization;
@@ -256,17 +267,14 @@ namespace Scheduler_Controls
             return
                 reception.Rent != chkRent.Checked ||
                 (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Cabinet != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)cmbCabinet.SelectedItem ||
-                (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Specialist != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)cmbSpecialist.SelectedItem ||
+                //(Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Specialist != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)cmbSpecialist.SelectedItem ||
+                (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Specialist != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)(cmbSpecialistsOnDuty.SelectedItem as ISpecialistDuty).Specialist ||
                 reception.Price != Convert.ToInt32(numericPrice.Value) ||
                 reception.ReceptionTimeInterval.Date != dateDate.Value ||
                 reception.ReceptionTimeInterval.StartDate != dateTimeStart.Value ||
                 reception.ReceptionTimeInterval.EndDate != dateTimeEnd.Value ||
-                (!chkRent.Checked &&
-                    (
-                        reception.Specialization != cmbSpecialisation.SelectedItem.ToString() ||
-                        (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Client != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)clientOnReception
-                    )
-                ) ||
+                reception.Specialization != cmbSpecialisation.SelectedItem.ToString() ||
+                (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Client != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)clientOnReception ||
                 reception.Price != (int)numericPrice.Value ||
                 reception.Administrator != txtAdministrator.Text ||
                 chkReceptionDidNotTakePlace.Checked != reception.ReceptionDidNotTakePlace ||
@@ -290,19 +298,20 @@ namespace Scheduler_Controls
             dummyReception.ID = reception.ID;
 
             dummyReception.Rent = chkRent.Checked;
-            if (chkRent.Checked)
-            {
-                dummyReception.Client = null;
-                dummyReception.Specialization = null;
-            }
-            else
-            {
-                dummyReception.Client = ClientOnReception;
-                dummyReception.Specialization = (String)cmbSpecialisation.SelectedItem;
-            }
+            //if (chkRent.Checked)
+            //{
+            //    dummyReception.Client = null;
+            //    dummyReception.Specialization = null;
+            //}
+            //else
+            //{
+            dummyReception.Client = ClientOnReception;
+            dummyReception.Specialization = (String)cmbSpecialisation.SelectedItem;
+            //}
 
             dummyReception.Cabinet = (ICabinet)cmbCabinet.SelectedItem;
-            dummyReception.Specialist = (ISpecialist)cmbSpecialist.SelectedItem;
+            //dummyReception.Specialist = (ISpecialist)cmbSpecialist.SelectedItem;
+            dummyReception.Specialist = ((ISpecialistDuty)cmbSpecialistsOnDuty.SelectedItem)?.Specialist;
 
             dummyReception.ReceptionTimeInterval.StartDate = dateTimeStart.Value;
             dummyReception.ReceptionTimeInterval.EndDate = dateTimeEnd.Value;
@@ -347,13 +356,20 @@ namespace Scheduler_Controls
         {
             dateTimeStart.Value = dateDate.Value.Date + dateTimeStart.Value.TimeOfDay;
             dateTimeEnd.Value = dateDate.Value.Date + dateTimeEnd.Value.TimeOfDay;
+
+            if (Database != null)
+            {
+                todaysSpecialists.Clear();
+                foreach (var duty in Database.SelectSpecialistDutyFromDate(dateDate.Value.Date))
+                    todaysSpecialists.Add(duty);
+            }
         }
 
         private void chkRent_CheckedChanged(object sender, EventArgs e)
         {
             //pnlClient.Enabled = !chkRent.Checked;
             //btnShowClientCard.Enabled = !chkRent.Checked;
-            ActualizePrice();
+            //ActualizePrice();
         }
 
         private void btnShowClientCard_Click(object sender, EventArgs e)
@@ -397,20 +413,34 @@ namespace Scheduler_Controls
 
         void ActualizePrice()
         {
+            if (reception == null)
+                return;
+
+            if (reception.Price != 0)
+                numericPrice.Value = reception.Price;
+            else if (clientOnReception != null)
+            {
+                if (currentSpecialistCosts.ContainsKey(clientOnReception.ID))
+                    numericPrice.Value = currentSpecialistCosts[clientOnReception.ID];
+                else
+                    numericPrice.Value = clientOnReception.GenerallyPrice;
+            }
+            else numericPrice.Value = 0;
+
             //TODO: check logic
-            if (chkRent.Checked)
-            {
-                if (currentSpecialistCosts.ContainsKey(Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.CLIENTRENTID))
-                    numericPrice.Value = currentSpecialistCosts[Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.CLIENTRENTID];
-            }
-            else
-            {
-                if (clientOnReception != null)
-                    if (currentSpecialistCosts.ContainsKey(clientOnReception.ID))
-                        numericPrice.Value = currentSpecialistCosts[clientOnReception.ID];
-                    else
-                        numericPrice.Value = clientOnReception.GenerallyPrice;
-            }
+            //if (chkRent.Checked)
+            //{
+            //    if (currentSpecialistCosts.ContainsKey(Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.CLIENTRENTID))
+            //        numericPrice.Value = currentSpecialistCosts[Scheduler_DBobjects_Intefraces.Scheduler_DBconnector.CLIENTRENTID];
+            //}
+            //else
+            //{
+            //    if (clientOnReception != null)
+            //        if (currentSpecialistCosts.ContainsKey(clientOnReception.ID))
+            //            numericPrice.Value = currentSpecialistCosts[clientOnReception.ID];
+            //        else
+            //            numericPrice.Value = clientOnReception.GenerallyPrice;
+            //}
         }
 
         private void btnCommit_Click(object sender, EventArgs e)
@@ -418,5 +448,32 @@ namespace Scheduler_Controls
             SaveChanges();
         }
 
+        private void cmbSpecialistsOnDuty_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbSpecialistsOnDuty.SelectedIndex == -1)
+                return;
+            ISpecialist currentSpec = ((ISpecialistDuty)cmbSpecialistsOnDuty.SelectedItem).Specialist;
+            currentSpecialistCosts = currentSpec.GetCosts();
+
+            cmbSpecialisation.DataSource = null;
+            cmbSpecialisation.Items.Clear();
+            cmbSpecialisation.DataSource = currentSpec.Specialisations.ToArray();
+
+            ActualizePrice();
+        }
+
+        private void cmbSpecialistsOnDuty_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index == -1)
+                return;
+            ISpecialistDuty cd = (ISpecialistDuty)cmbSpecialistsOnDuty.Items[e.Index];
+
+            e.DrawBackground();
+            var g = e.Graphics;
+            if (cd.Supplimentary)
+                g.FillRectangle(Brushes.Aquamarine, e.Bounds);
+            g.DrawString(cd.ToString(), e.Font, new SolidBrush(e.ForeColor), new PointF(e.Bounds.X, e.Bounds.Y));
+            e.DrawFocusRectangle();
+        }
     }
 }

@@ -48,6 +48,7 @@ namespace Scheduler
             this.закрытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.спискиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.клиентыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.арендаторыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.кабинетыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.специалистыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.специальностиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,7 +59,7 @@ namespace Scheduler
             this.инструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.контактыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.арендаторыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.дежурстваToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mainView)).BeginInit();
             this.mainView.Panel2.SuspendLayout();
             this.mainView.SuspendLayout();
@@ -169,7 +170,8 @@ namespace Scheduler
             this.арендаторыToolStripMenuItem,
             this.кабинетыToolStripMenuItem,
             this.специалистыToolStripMenuItem,
-            this.специальностиToolStripMenuItem});
+            this.специальностиToolStripMenuItem,
+            this.дежурстваToolStripMenuItem});
             this.спискиToolStripMenuItem.Name = "спискиToolStripMenuItem";
             this.спискиToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
             this.спискиToolStripMenuItem.Text = "Списки";
@@ -180,6 +182,13 @@ namespace Scheduler
             this.клиентыToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.клиентыToolStripMenuItem.Text = "Клиенты";
             this.клиентыToolStripMenuItem.Click += new System.EventHandler(this.клиентыToolStripMenuItem_Click);
+            // 
+            // арендаторыToolStripMenuItem
+            // 
+            this.арендаторыToolStripMenuItem.Name = "арендаторыToolStripMenuItem";
+            this.арендаторыToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.арендаторыToolStripMenuItem.Text = "Арендаторы";
+            this.арендаторыToolStripMenuItem.Click += new System.EventHandler(this.арендаторыToolStripMenuItem_Click);
             // 
             // кабинетыToolStripMenuItem
             // 
@@ -210,6 +219,7 @@ namespace Scheduler
             this.базаДанныхToolStripMenuItem.Name = "базаДанныхToolStripMenuItem";
             this.базаДанныхToolStripMenuItem.Size = new System.Drawing.Size(86, 20);
             this.базаДанныхToolStripMenuItem.Text = "База данных";
+            this.базаДанныхToolStripMenuItem.Visible = false;
             // 
             // сделатьРезервнуюКопиюToolStripMenuItem
             // 
@@ -238,13 +248,13 @@ namespace Scheduler
             // инструкцииToolStripMenuItem
             // 
             this.инструкцииToolStripMenuItem.Name = "инструкцииToolStripMenuItem";
-            this.инструкцииToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.инструкцииToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.инструкцииToolStripMenuItem.Text = "Инструкции";
             // 
             // контактыToolStripMenuItem
             // 
             this.контактыToolStripMenuItem.Name = "контактыToolStripMenuItem";
-            this.контактыToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.контактыToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.контактыToolStripMenuItem.Text = "Контакты";
             this.контактыToolStripMenuItem.Click += new System.EventHandler(this.контактыToolStripMenuItem_Click);
             // 
@@ -255,12 +265,12 @@ namespace Scheduler
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.настройкиToolStripMenuItem_Click);
             // 
-            // арендаторыToolStripMenuItem
+            // дежурстваToolStripMenuItem
             // 
-            this.арендаторыToolStripMenuItem.Name = "арендаторыToolStripMenuItem";
-            this.арендаторыToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.арендаторыToolStripMenuItem.Text = "Арендаторы";
-            this.арендаторыToolStripMenuItem.Click += new System.EventHandler(this.арендаторыToolStripMenuItem_Click);
+            this.дежурстваToolStripMenuItem.Name = "дежурстваToolStripMenuItem";
+            this.дежурстваToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.дежурстваToolStripMenuItem.Text = "Дежурства";
+            this.дежурстваToolStripMenuItem.Click += new System.EventHandler(this.дежурстваToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -304,5 +314,6 @@ namespace Scheduler
         private System.Windows.Forms.MonthCalendar monthCalendar1;
         private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem арендаторыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem дежурстваToolStripMenuItem;
     }
 }

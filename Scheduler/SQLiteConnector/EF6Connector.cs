@@ -12,7 +12,7 @@ using System.Data.Entity;
 
 namespace EF6Connector
 {
-    public class Connector : Scheduler_DBobjects_Intefraces.Scheduler_DBconnector
+    public class Connector : Scheduler_DBconnector
     {
         private EF6Connector.Model.EF6Model context;
         public Connector(IFactory factory) : base(factory)
@@ -473,7 +473,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
 
             dbreception.administrator = reception.Administrator;
             dbreception.cabinetid = reception.Cabinet.ID;
-            dbreception.clientid = reception.Client?.ID ?? CLIENTRENTID;
+            dbreception.clientid = reception.Client?.ID ?? DEFAULTCLIENTID;
             dbreception.isrented = reception.Rent;
             dbreception.isSpecialRent = reception.SpecialRent;
             dbreception.specialistid = reception.Specialist.ID;
@@ -488,6 +488,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             dbreception.timeend = reception.ReceptionTimeInterval.EndDate.TimeOfDay.Ticks;
             dbreception.comment = reception.Comment;
             dbreception.receptionDidNotTakePlace = reception.ReceptionDidNotTakePlace;
+            dbreception.price = reception.Price;
 
             context.receptions.Add(dbreception);
 
@@ -495,7 +496,15 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 context.specialist2clientprice.FirstOrDefault(
                     x => x.specid == dbreception.specialistid && x.clid == dbreception.clientid);
             if (currentSpecClientPrice == null)
-                context.specialist2clientprice.Add(currentSpecClientPrice = new specialist2clientprice());
+            {
+                context.specialist2clientprice.Add(currentSpecClientPrice =
+                    new specialist2clientprice()
+                    {
+                        specid = (int)dbreception.specialistid,
+                        clid = (int)dbreception.clientid
+                    });
+                context.specialist2clientprice.Add(currentSpecClientPrice);
+            }
             currentSpecClientPrice.price = reception.Price;
 
             context.SaveChanges();
@@ -507,29 +516,37 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             var dbreception = context.receptions.FirstOrDefault(x => x.idreceptions == reception.ID);
             if (dbreception == null)
                 throw new Exception($"Reception with id <{reception.ID}> not found in db.");
-            dbreception.clientid = reception.Client?.ID ?? CLIENTRENTID;
+            dbreception.clientid = reception.Client?.ID ?? DEFAULTCLIENTID;
             dbreception.administrator = reception.Administrator;
             dbreception.cabinetid = reception.Cabinet.ID;
             dbreception.isrented = reception.Rent;
             dbreception.isSpecialRent = reception.SpecialRent;
             dbreception.specialistid = reception.Specialist.ID;
             var specid = 0;
-            if (!reception.Rent)
-            {
-                specid = context.specializations.First(x => x.name.Equals(reception.Specialization, StringComparison.OrdinalIgnoreCase)).idspecializations;
-            }
+
+            specid = context.specializations.First(x => x.name.Equals(reception.Specialization, StringComparison.OrdinalIgnoreCase)).idspecializations;
+
             dbreception.specializationid = specid;
             dbreception.timedate = reception.ReceptionTimeInterval.Date;
             dbreception.timestart = reception.ReceptionTimeInterval.StartDate.TimeOfDay.Ticks;
             dbreception.timeend = reception.ReceptionTimeInterval.EndDate.TimeOfDay.Ticks;
             dbreception.comment = reception.Comment;
             dbreception.receptionDidNotTakePlace = reception.ReceptionDidNotTakePlace;
+            dbreception.price = reception.Price;
 
             var currentSpecClientPrice =
                 context.specialist2clientprice.FirstOrDefault(
                     x => x.specid == dbreception.specialistid && x.clid == dbreception.clientid);
             if (currentSpecClientPrice == null)
-                context.specialist2clientprice.Add(currentSpecClientPrice = new specialist2clientprice());
+            {
+                context.specialist2clientprice.Add(currentSpecClientPrice =
+                    new specialist2clientprice()
+                    {
+                        specid = (int)dbreception.specialistid,
+                        clid = (int)dbreception.clientid
+                    });
+                context.specialist2clientprice.Add(currentSpecClientPrice);
+            }
             currentSpecClientPrice.price = reception.Price;
 
             context.SaveChanges();
@@ -574,8 +591,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 return null;
             if (typeof(T) == typeof(IClient))
             {
-                var list = AllClients();
-                result = (T)list.List.First(x => x.ID == id);
+                result = (T)(AllClients().List.FirstOrDefault(x => x.ID == id) ?? AllArendators().List.First(x => x.ID == id));
             }
             else if (typeof(T) == typeof(ISpecialist))
             {
@@ -613,6 +629,13 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 return;
             }
 
+            var dt = item as ISpecialistDuty;
+            if (dt != null)
+            {
+                AddSpecialistDuty(dt);
+                return;
+            }
+
             string specialization = item as string;
             if (specialization != null)
             {
@@ -641,6 +664,13 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             if (cabinet != null)
             {
                 RemoveCabinet(cabinet);
+                return;
+            }
+
+            var dt = item as ISpecialistDuty;
+            if (dt != null)
+            {
+                RemoveSpecialistDuty(dt);
                 return;
             }
 
@@ -674,6 +704,13 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 UpdateCabinetData(cabinet);
                 return;
             }
+
+            var dt = item as ISpecialistDuty;
+            if (dt != null)
+            {
+                UpdateSpecialistDuty(dt);
+                return;
+            }
         }
 
         private IEntity ConvertToEntity(reception dbreception)
@@ -681,27 +718,106 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             var ent = EntityFactory.NewEntity();
             ent.Administrator = dbreception.administrator;
             ent.Cabinet = GetByID<ICabinet>(dbreception.cabinetid);
-            ent.Client = dbreception.clientid == CLIENTRENTID ? null : GetByID<IClient>(dbreception.clientid);
+            ent.Client = dbreception.clientid == DEFAULTCLIENTID ? null : GetByID<IClient>(dbreception.clientid);
             ent.ID = dbreception.idreceptions;
             ent.Rent = dbreception.isrented;
             ent.Specialist = GetByID<ISpecialist>(dbreception.specialistid);
             ent.Specialization = context.specializations.FirstOrDefault(x => x.idspecializations == dbreception.specializationid)?.name ?? "NONE";
             ent.Comment = dbreception.comment ?? "";
+            ent.ReceptionDidNotTakePlace = dbreception.receptionDidNotTakePlace;
 
             var timeinterval = EntityFactory.NewTimeInterval();
             timeinterval.SetStartEnd(dbreception.timedate.Date.Add(TimeSpan.FromTicks(dbreception.timestart)), dbreception.timedate.Date.Add(TimeSpan.FromTicks(dbreception.timeend)));
             ent.ReceptionTimeInterval = timeinterval;
+            ent.Price = dbreception.price ?? 0;
             //TODO: тут плохо пахнет
-            if (ent.Client == null)
-                ent.Price = 0;
-            else
-                ent.Price = (int)(context.specialist2clientprice
-                    .FirstOrDefault(x => x.clid == ent.Client.ID && x.specid == ent.Specialist.ID)?
-                    .price ?? ent.Client.GenerallyPrice);
+            if (ent.Price == 0)
+            {
+                if (ent.Client == null)
+                    ent.Price = 0;
+                else
+                    ent.Price = (int)(context.specialist2clientprice
+                                           .FirstOrDefault(
+                                               x => x.clid == ent.Client.ID && x.specid == ent.Specialist.ID)
+                                           ?
+                                           .price ?? ent.Client.GenerallyPrice);
+            }
             return ent;
         }
 
+        protected override ISpecialistDutyList AllDutyInternal()
+        {
+            var result = EntityFactory.NewSpecialistDutyList();
 
+            foreach (var dbdt in context.specialistDuties.Select(
+                x => new
+                {
+                    x.idspecialistDuty,
+                    x.specialistid,
+                    x.dutytimestart,
+                    x.dutytimeend,
+                    x.supplimentary
+                }))
+            {
+                var dt = EntityFactory.NewSpecialistDuty();
+                dt.Specialist = GetByID<ISpecialist>(dbdt.specialistid);
+                dt.Start = DateTime.FromBinary(dbdt.dutytimestart);
+                dt.End = DateTime.FromBinary(dbdt.dutytimeend);
+                dt.Supplimentary = dbdt.supplimentary;
+                dt.ID = dbdt.idspecialistDuty;
+
+                result.List.Add(dt);
+            };
+
+            result.OnItemAdded += ListItemAddHandler;
+            result.OnItemChanged += ListItemChangedHandler;
+            result.OnItemRemoved += ListItemRemoveHandler;
+
+            return result;
+        }
+
+        public override void AddSpecialistDuty(ISpecialistDuty dt)
+        {
+            if (dt.ID > 0)
+            {
+                //throw new Exception($"При создании нового кабинета идентификатор не может быть положительным! (<{cabinet.ID}>)");
+                return; //this cab already in DB
+            }
+
+            var dbdt = new specialistDuty()
+            {
+                specialistid = dt.Specialist.ID,
+                dutytimestart = dt.Start.ToBinary(),
+                dutytimeend = dt.End.ToBinary(),
+                supplimentary = dt.Supplimentary
+            };
+
+            context.specialistDuties.Add(dbdt);
+
+            context.SaveChanges();
+            dt.ID = dbdt.idspecialistDuty;
+        }
+
+        public override void RemoveSpecialistDuty(ISpecialistDuty dt)
+        {
+            var dbdt = context.specialistDuties.FirstOrDefault(x => x.idspecialistDuty == dt.ID);
+            if (dbdt == null)
+                throw new NullReferenceException($"Cabinet with id <{dt.ID}> not found in db.");
+            context.specialistDuties.Remove(dbdt);
+            context.SaveChanges();
+        }
+
+        public override void UpdateSpecialistDuty(ISpecialistDuty dt)
+        {
+            var dbdt = context.specialistDuties.FirstOrDefault(x => x.idspecialistDuty == dt.ID);
+            if (dbdt == null)
+                throw new NullReferenceException($"Cabinet with id <{dt.ID}> not found in db.");
+            dbdt.specialistid = dt.Specialist.ID;
+            dbdt.supplimentary = dt.Supplimentary;
+            dbdt.dutytimestart = dt.Start.ToBinary();
+            dbdt.dutytimeend = dt.End.ToBinary();
+            context.SaveChanges();
+        }
     }
 
     public static class Extensions

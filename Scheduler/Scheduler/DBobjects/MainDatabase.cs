@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Scheduler_Controls_Interfaces;
+using Scheduler_DBobjects_Intefraces;
 using Scheduler_Forms_Interfaces;
 
 namespace Scheduler_DBobjects
 {
-    public class MainDatabase : Scheduler_DBobjects_Intefraces.IMainDataBase
+    public class MainDatabase : IMainDataBase
     {
         Scheduler_Common_Interfaces.IFactory entityFactory;
 
         ISpecialistList specialistList;
         IClientList clientList;
-        IClientList arendatorList;
+
         Scheduler_Controls_Interfaces.ISpecializationList specializationList;
+        private ISpecialistDutyList specialistDutyList;
         ICabinetList cabinetList;
 
         Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace dbconnector;
@@ -39,6 +42,7 @@ namespace Scheduler_DBobjects
                 specialistList = dbconnector.AllSpecialists();
                 specializationList = dbconnector.AllSpecializations();
                 cabinetList = dbconnector.AllCabinets();
+                specialistDutyList = dbconnector.AllDuty();
             }
 
             entityFactory.NewClient().ReceptionListFuncition(dbconnector.GetReceptionsForClient);
@@ -97,15 +101,12 @@ namespace Scheduler_DBobjects
             }
         }
 
-        public Scheduler_Common_Interfaces.IFactory EntityFactory
-        {
-            get { return entityFactory; }
-        }
+        public Scheduler_Common_Interfaces.IFactory EntityFactory => entityFactory;
 
-        public IClientList ArendatorList
-        {
-            get { return dbconnector.AllArendators(); }
-        }
+        public IClientList ArendatorList => dbconnector.AllArendators();
+
+        public ISpecialistDutyList SpecialistDutyList => specialistDutyList;
+
 
         void Scheduler_DBobjects_Intefraces.IMainDataBase.AddReception(Scheduler_DBobjects_Intefraces.IEntity reception)
         {
@@ -152,6 +153,14 @@ namespace Scheduler_DBobjects
             errMsg = null;
         }
 
+        IEnumerable<ISpecialistDuty> IMainDataBase.SelectSpecialistDutyFromDate(DateTime date)
+        {
+            return specialistDutyList.List.Where(x => x.Start.Date == date.Date);
+        }
 
+        public IEnumerable<DateTime> SelectSpecialistDutyDates(ISpecialist spec)
+        {
+            return specialistDutyList.List.Where(x => x.Specialist == spec).Select(x => x.Start.Date);
+        }
     }
 }

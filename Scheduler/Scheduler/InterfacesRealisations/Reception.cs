@@ -74,18 +74,11 @@ namespace Scheduler_InterfacesRealisations
             {
                 if (specialist == null)
                     result += "Специалист не задан." + Environment.NewLine;
-
-                if (isRented)
-                {
-
-                }
-                else
-                {
-                    if (String.IsNullOrWhiteSpace(specialisation))
+                if (String.IsNullOrWhiteSpace(specialisation))
                         result += "Специализация не задана." + Environment.NewLine;
                     if (client == null)
                         result += "Клиент не задан." + Environment.NewLine;
-                }
+              
             }
             if (database != null)
             {
@@ -109,41 +102,26 @@ namespace Scheduler_InterfacesRealisations
             get
             {
                 List<string> result = new List<string>();
-                result.Add(receptionTimeInterval.Interval());
                 if (CommentOnlyReception)
                     result.Add(Comment);
                 else
                 {
-                    result.Add(specialist.Name);
-                    if (!isRented)
+                    if (client != null)
                     {
                         result.Add(client.Name);
-                        result.Add((client.NeedSMS ? "SMS " : "") + client.Telephones.FirstOrDefault());
+                        result.Add((client.NeedSMS ? "SMS " : "") + client.Telephones?.FirstOrDefault() ?? "");
                     }
+
+                    result.Add(specialist.Name);
+                    
                     result.Add(price + " руб.");
-                    if (!isRented)
+                    if (specialisation != null)
                     {
                         result.Add(specialisation);
                     }
                 }
+                result.Add(receptionTimeInterval.Interval());
                 return String.Join(Environment.NewLine, result);
-                //if (isRented)
-                //{
-                //    return String.Join(Environment.NewLine,
-                //        receptionTimeInterval.Interval(),
-                //        specialist.Name,
-                //        price + " руб.");
-                //}
-                //else
-                //{
-                //    return String.Join(Environment.NewLine,
-                //        receptionTimeInterval.Interval(),
-                //        specialist.Name,
-                //        client.Name,
-                //        (client.NeedSMS ? "SMS " : "") + client.Telephones.FirstOrDefault(),
-                //        price + " руб.",
-                //        specialisation);
-                //}
             }
         }
 

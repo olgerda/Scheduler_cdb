@@ -78,7 +78,7 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>logo16_22.ico</ApplicationIcon>
+    <ApplicationIcon>default apps.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -86,6 +86,23 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
     <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>Full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>None</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -192,9 +209,16 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SpecialistDutyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpecialistDutyForm.Designer.cs">
+      <DependentUpon>SpecialistDutyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="InterfacesRealisations\Column.cs" />
     <Compile Include="DBobjects\MainDatabase.cs" />
     <Compile Include="InterfacesRealisations\CommonObjects.cs" />
+    <Compile Include="InterfacesRealisations\SpecialistDuty.cs" />
     <Compile Include="InterfacesRealisations\Table.cs" />
     <Compile Include="Forms\CabinetListEdit.cs">
       <SubType>Form</SubType>
@@ -289,6 +313,9 @@
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpecialistDutyForm.resx">
+      <DependentUpon>SpecialistDutyForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SpecialistListEdit.resx">
       <DependentUpon>SpecialistListEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -331,6 +358,7 @@
     <Content Include="config.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="default apps.ico" />
     <Content Include="logo16_22.ico" />
   </ItemGroup>
   <ItemGroup />

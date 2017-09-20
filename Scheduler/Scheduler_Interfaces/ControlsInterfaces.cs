@@ -97,6 +97,7 @@ namespace Scheduler_Controls_Interfaces
         Dictionary<int, int> GetCosts();
 
         void CostsFunction(GetCosts func);
+        string ToString();
     }
 
     /// <summary>
@@ -190,6 +191,15 @@ namespace Scheduler_Controls_Interfaces
 
         event Scheduler_Forms_Interfaces.ItemAddedHandler OnItemAdded;
         event Scheduler_Forms_Interfaces.ItemRemovedHandler OnItemRemoved;
+    }
+
+    public interface ISpecialistDuty : IHaveID, IDummy, IComparable<ISpecialistDuty>
+    {
+        DateTime Start { get; set; }
+        DateTime End { get; set; }
+        ISpecialist Specialist { get; set; }
+        bool Supplimentary { get; set; }
+        string ToString();
     }
 
     public interface ITelephone

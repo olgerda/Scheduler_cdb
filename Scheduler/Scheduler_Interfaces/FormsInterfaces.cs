@@ -72,4 +72,9 @@ namespace Scheduler_Forms_Interfaces
     {
         //ICabinetList Copy();
     }
+
+    public interface ISpecialistDutyList : IEntityList<Scheduler_Controls_Interfaces.ISpecialistDuty>
+    {
+        
+    }
 }

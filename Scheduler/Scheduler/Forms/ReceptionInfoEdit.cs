@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Scheduler_Controls_Interfaces;
 using Scheduler_Forms_Interfaces;
 using Scheduler_Common_Interfaces;
+using Scheduler_DBobjects_Intefraces;
 
 namespace Scheduler_Forms
 {
@@ -25,6 +26,7 @@ namespace Scheduler_Forms
         static IFactory entityFactory;
 
         private bool doNothing;
+        private static IMainDataBase _database;
 
         public ReceptionInfoEdit()
         {
@@ -38,6 +40,7 @@ namespace Scheduler_Forms
             receptionInfoCard.OnCancelReceptionClicked += new CancelReceptionHandler(receptionInfoCard_OnCancelReceptionClicked);
 
             receptionInfoCard.Mode = Scheduler_Controls.ReceptionInfo.ShowModes.ReadExist;
+            receptionInfoCard.Database = _database;
         }
 
         void receptionInfoCard_OnCancelReceptionClicked(object source, CancelReceptionEventArgs e)
@@ -118,7 +121,16 @@ namespace Scheduler_Forms
                     Init();
             }
         }
-        
+
+        public static Scheduler_DBobjects_Intefraces.IMainDataBase Database
+        {
+            get { return _database; }
+            set
+            {
+                _database = value;
+            }
+        }
+
         public Scheduler_Controls.ReceptionInfo.ShowModes Mode
         {
             get { return mode; }

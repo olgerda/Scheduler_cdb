@@ -123,5 +123,15 @@ namespace Scheduler_InterfacesRealisations
         {
             return new Reception();
         }
+
+        public ISpecialistDuty NewSpecialistDuty()
+        {
+            return new SpecialistDuty();
+        }
+
+        public ISpecialistDutyList NewSpecialistDutyList()
+        {
+            return new SpecialistDutyList();
+        }
     }
 }

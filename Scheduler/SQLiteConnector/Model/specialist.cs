@@ -26,5 +26,6 @@ namespace EF6Connector.Model
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<specializations2specialist> specializations2specialist { get; set; }
+        public virtual ICollection<specialistDuty> specialistDuty { get; set; }
     }
 }

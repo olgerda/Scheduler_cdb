@@ -39,8 +39,8 @@ namespace EF6Connector.Model
         public string administrator { get; set; }
 
         public bool receptionDidNotTakePlace { get; set; }
-
         
+        public int? price { get; set; }
 
         public string comment { get; set; }
     }
