@@ -476,11 +476,11 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             dbreception.clientid = reception.Client?.ID ?? DEFAULTCLIENTID;
             dbreception.isrented = reception.Rent;
             dbreception.isSpecialRent = reception.SpecialRent;
-            dbreception.specialistid = reception.Specialist.ID;
+            dbreception.specialistid = reception.Specialist?.ID ?? 0;
             var specid = 0;
             if (!reception.Rent)
             {
-                specid = context.specializations.First(x => x.name.Equals(reception.Specialization, StringComparison.OrdinalIgnoreCase)).idspecializations;
+                specid = context.specializations.FirstOrDefault(x => x.name.Equals(reception.Specialization, StringComparison.OrdinalIgnoreCase))?.idspecializations ?? 0;
             }
             dbreception.specializationid = specid;
             dbreception.timedate = reception.ReceptionTimeInterval.Date;

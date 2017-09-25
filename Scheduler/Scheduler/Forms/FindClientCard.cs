@@ -47,6 +47,8 @@ namespace Scheduler_Forms
 
         private void LstClientList_DrawItem(object sender, DrawItemEventArgs e)
         {
+            if (e.Index == -1)
+                return;
             IClient currentClient = (IClient)lstClientList.Items[e.Index];
 
             e.DrawBackground();
@@ -151,40 +153,57 @@ namespace Scheduler_Forms
 
             if (result != null) //если значение не установилось - пользователь отменил закрытие.
             {
-                foreach (var tel in result.Telephones)
+                if (result.Telephones.Count != 0)
                 {
-                    var existClient = ClientList.FindClientByTelephone(tel, false);
-                    if (existClient != null && existClient != result)
+
+                    foreach (var tel in result.Telephones)
                     {
-                        var dlgResult = MessageBox.Show(
-                            String.Format("Один из введённых телефонных номеров уже присутсвует в базе данных: телефон <{0}> приписан клиенту с именем <{1}>.{2}" +
-                            "Использовать запись уже существующего клиента?{2}(Нет - создать запись с дублирующимся телефоном.{2}" +
-                            "ВНИМАНИЕ! Поиск по номеру телефона выдает первую найденную запись!)", tel, existClient.Name, Environment.NewLine),
-                            "Телефон уже внесён в базу", MessageBoxButtons.YesNoCancel);
-                        switch (dlgResult)
+                        var existClient = ClientList.FindClientByTelephone(tel, false);
+                        if (existClient != null && existClient != result)
                         {
-                            case System.Windows.Forms.DialogResult.Yes:
-                                result = existClient;
-                                break;
-                            case System.Windows.Forms.DialogResult.No:
-                                break;
-                            default:
-                                return result;
+                            var dlgResult = MessageBox.Show(
+                                String.Format(
+                                    "Один из введённых телефонных номеров уже присутсвует в базе данных: телефон <{0}> приписан клиенту с именем <{1}>.{2}" +
+                                    "Использовать запись уже существующего клиента?{2}(Нет - создать запись с дублирующимся телефоном.{2}" +
+                                    "ВНИМАНИЕ! Поиск по номеру телефона выдает первую найденную запись!)", tel,
+                                    existClient.Name, Environment.NewLine),
+                                "Телефон уже внесён в базу", MessageBoxButtons.YesNoCancel);
+                            switch (dlgResult)
+                            {
+                                case System.Windows.Forms.DialogResult.Yes:
+                                    result = existClient;
+                                    break;
+                                case System.Windows.Forms.DialogResult.No:
+                                    break;
+                                default:
+                                    return result;
+                            }
+                        }
+
+                        if (existClient == result)
+                        {
+                            grpSelectClient.Visible = true;
+                            grpSelectClient.Enabled = true;
+                            grpEditMode.Visible = false;
+                            grpEditMode.Enabled = false;
+                            clientInfoCard.Enabled = false;
+
+                            lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
+                            lstClientList.SelectedItem = result;
+                            return result;
                         }
                     }
+                }
+                else
+                {
+                    grpSelectClient.Visible = true;
+                    grpSelectClient.Enabled = true;
+                    grpEditMode.Visible = false;
+                    grpEditMode.Enabled = false;
+                    clientInfoCard.Enabled = false;
 
-                    if (existClient == result)
-                    {
-                        grpSelectClient.Visible = true;
-                        grpSelectClient.Enabled = true;
-                        grpEditMode.Visible = false;
-                        grpEditMode.Enabled = false;
-                        clientInfoCard.Enabled = false;
-
-                        lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
-                        lstClientList.SelectedItem = result;
-                        return result;
-                    }
+                    lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
+                    lstClientList.SelectedItem = result;
                 }
 
                 if (!clientList.List.Contains(result))

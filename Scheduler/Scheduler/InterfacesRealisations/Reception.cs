@@ -75,10 +75,10 @@ namespace Scheduler_InterfacesRealisations
                 if (specialist == null)
                     result += "Специалист не задан." + Environment.NewLine;
                 if (String.IsNullOrWhiteSpace(specialisation))
-                        result += "Специализация не задана." + Environment.NewLine;
-                    if (client == null)
-                        result += "Клиент не задан." + Environment.NewLine;
-              
+                    result += "Специализация не задана." + Environment.NewLine;
+                if (client == null)
+                    result += "Клиент не задан." + Environment.NewLine;
+
             }
             if (database != null)
             {
@@ -113,7 +113,7 @@ namespace Scheduler_InterfacesRealisations
                     }
 
                     result.Add(specialist.Name);
-                    
+
                     result.Add(price + " руб.");
                     if (specialisation != null)
                     {
@@ -137,10 +137,37 @@ namespace Scheduler_InterfacesRealisations
 
         bool CalendarControl3_Interfaces.IEntity2ControlInterface.IsIntersectWith(CalendarControl3_Interfaces.IEntity2ControlInterface second)
         {
+            /*
+                --a-b-c-d-- ca>0 cb>0 da>0 db>0
+                --a-b=c-d-- ca>0 cb=0 da>0 db>0
+             --a-c-b-d--
+             --a=c-b-d--
+             --c-a-b-d--
+             --a-c-b=d--
+             --a=c-b=d--
+             --c-a-b=d--
+             --a-c-d-b--
+             --a=c-d-b--
+             --c-a-d-b--
+                --c-a=d-b-- ca<0 cb<0 da=0 db<0
+                --c-d-a-b-- ca<0 cb<0 da<0 db<0
+             */
             CalendarControl3_Interfaces.IEntity2ControlInterface theThis = this as CalendarControl3_Interfaces.IEntity2ControlInterface;
-            bool topIntersect = theThis.TopLevel > second.TopLevel && theThis.TopLevel < second.BottomLevel;
-            bool bottomIntersect = theThis.BottomLevel < second.BottomLevel && theThis.BottomLevel > second.TopLevel;
-            return topIntersect || bottomIntersect;
+
+            var a = theThis.TopLevel;
+            var b = theThis.BottomLevel;
+            var c = second.TopLevel;
+            var d = second.BottomLevel;
+
+            var ca = c - a;
+            var db = d - b;
+            var cb = c - b;
+            var da = d - a;
+            return !(
+                (ca > 0 && cb > 0 && da > 0 && db > 0) ||
+                (ca > 0 && cb == 0 && da > 0 && db > 0) ||
+                (ca < 0 && cb < 0 && da == 0 && db < 0) ||
+                (ca < 0 && cb < 0 && da < 0 && db < 0));
         }
 
         public string DisplayString
