@@ -54,7 +54,7 @@
     <Compile Include="Table2ControlInterface.cs" />
     <Compile Include="TestTable.cs" />
     <Compile Include="ColumnsView.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="ColumnsView.Designer.cs">
       <DependentUpon>ColumnsView.cs</DependentUpon>

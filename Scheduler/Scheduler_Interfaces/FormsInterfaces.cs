@@ -77,4 +77,14 @@ namespace Scheduler_Forms_Interfaces
     {
         
     }
+
+    public interface IAdministratorDutyList : IEntityList<Scheduler_Controls_Interfaces.IAdministratorDuty>
+    {
+
+    }
+
+    public interface IAdministratorList : IEntityList<Scheduler_Controls_Interfaces.IAdministrator>
+    {
+        
+    }
 }

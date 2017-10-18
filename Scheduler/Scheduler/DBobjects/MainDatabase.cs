@@ -13,10 +13,12 @@ namespace Scheduler_DBobjects
         Scheduler_Common_Interfaces.IFactory entityFactory;
 
         ISpecialistList specialistList;
+        private IAdministratorList administratorList;
         IClientList clientList;
 
         Scheduler_Controls_Interfaces.ISpecializationList specializationList;
         private ISpecialistDutyList specialistDutyList;
+        private IAdministratorDutyList administratorDutyList;
         ICabinetList cabinetList;
 
         Scheduler_DBobjects_Intefraces.Scheduler_DBconnectorIntefrace dbconnector;
@@ -40,9 +42,11 @@ namespace Scheduler_DBobjects
             {
                 clientList = dbconnector.AllClients();
                 specialistList = dbconnector.AllSpecialists();
+                administratorList = dbconnector.AllAdministrators();
                 specializationList = dbconnector.AllSpecializations();
                 cabinetList = dbconnector.AllCabinets();
-                specialistDutyList = dbconnector.AllDuty();
+                specialistDutyList = dbconnector.AllSpecDuty();
+                administratorDutyList = dbconnector.AllAdmDuty();
             }
 
             entityFactory.NewClient().ReceptionListFuncition(dbconnector.GetReceptionsForClient);
@@ -107,6 +111,10 @@ namespace Scheduler_DBobjects
 
         public ISpecialistDutyList SpecialistDutyList => specialistDutyList;
 
+        public IAdministratorList AdministratorList => administratorList;
+
+        public IAdministratorDutyList AdministratorDutyList => administratorDutyList;
+
 
         void Scheduler_DBobjects_Intefraces.IMainDataBase.AddReception(Scheduler_DBobjects_Intefraces.IEntity reception)
         {
@@ -153,14 +161,46 @@ namespace Scheduler_DBobjects
             errMsg = null;
         }
 
-        IEnumerable<ISpecialistDuty> IMainDataBase.SelectSpecialistDutyFromDate(DateTime date)
+        public IEnumerable<IDuty> SelectDutyFromDate<T>(DateTime date) where T : ICanNotWork
         {
-            return specialistDutyList.List.Where(x => x.Start.Date == date.Date);
+            if (typeof(T) == typeof(ISpecialist))
+                return specialistDutyList.List.Where(x => x.Start.Date == date.Date).Cast<IDuty>();
+            else
+                return administratorDutyList.List.Where(x => x.Start.Date == date.Date).Cast<IDuty>();
         }
 
-        public IEnumerable<DateTime> SelectSpecialistDutyDates(ISpecialist spec)
+        public IEnumerable<DateTime> SelectDutyDates<T>(T spec) where T : ICanNotWork
         {
-            return specialistDutyList.List.Where(x => x.Specialist == spec).Select(x => x.Start.Date);
+            if (typeof(ISpecialist).IsAssignableFrom(spec.GetType()))
+            {
+                ISpecialist s = (ISpecialist)spec;
+                return specialistDutyList.List.Where(x => x.Named == s).Select(x => x.Start.Date);
+            }
+            else
+            {
+                IAdministrator a = (IAdministrator)spec;
+                return administratorDutyList.List.Where(x => x.Named == a).Select(x => x.Start.Date);
+            }
+        }
+
+        public int SpecialistGetReceptionCount(ISpecialist spec)
+        {
+            return dbconnector.SpecialistGetReceptionCount(spec);
+        }
+
+        public int SpecialistGetClientCount(ISpecialist spec)
+        {
+            return dbconnector.SpecialistGetClientCount(spec);
+        }
+
+        public List<IReception> SpecialistGetReceptions(ISpecialist spec)
+        {
+            return dbconnector.SpecialistGetReceptions(spec);
+        }
+
+        public List<IClient> SpecialistGetClients(ISpecialist spec)
+        {
+            return dbconnector.SpecialistGetClients(spec);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Scheduler_Controls
         private IClient client;
 
         public event SaveChangesHandler<IClient> OnSaveChanges;
-        private bool DisableChangeDetection = false;
+        //private bool DisableChangeDetection = false;
 
         private IFactory entityFactory;
 
@@ -86,6 +86,7 @@ namespace Scheduler_Controls
             txtAdministrator.Text = client.Administrator;
             chkSMS.Checked = client.NeedSMS;
             numBalance.Value = client.Balance;
+            chkIsActive.Checked = client.Active;
 
             lstReceptions.Items.Clear();
             //btnLoadReceptions.PerformClick();
@@ -105,7 +106,8 @@ namespace Scheduler_Controls
                 client.GenerallyTime != dateGenerallyTime.Value.TimeOfDay ||
                 client.Administrator != txtAdministrator.Text ||
                 client.Balance != (int)numBalance.Value ||
-                client.NeedSMS != chkSMS.Checked
+                client.NeedSMS != chkSMS.Checked ||
+                client.Active != chkIsActive.Checked
                 ;
         }
 
@@ -177,6 +179,8 @@ namespace Scheduler_Controls
 
             client.Balance = (int)numBalance.Value;
             client.NeedSMS = chkSMS.Checked;
+
+            client.Active = chkIsActive.Checked;
 
             OnSaveChanges?.Invoke(this, new SaveChangesEventArgs<IClient>(client));
         }

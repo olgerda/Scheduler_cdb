@@ -30,13 +30,11 @@
         {
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.grpDateTime = new System.Windows.Forms.GroupBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.dateTimeStart = new System.Windows.Forms.DateTimePicker();
-            this.dateTimeEnd = new System.Windows.Forms.DateTimePicker();
-            this.grpSelectedSpecialists = new System.Windows.Forms.GroupBox();
+            this.radModeAdministrator = new System.Windows.Forms.RadioButton();
+            this.radModeSpecialist = new System.Windows.Forms.RadioButton();
+            this.grpSpecialistsOnDuty = new System.Windows.Forms.GroupBox();
             this.lstDuty = new System.Windows.Forms.ListBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.grpSpecialists = new System.Windows.Forms.GroupBox();
             this.lstSpecialists = new System.Windows.Forms.ListBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -44,8 +42,8 @@
             this.btnToSupplimentary = new System.Windows.Forms.Button();
             this.btnFromDuty = new System.Windows.Forms.Button();
             this.grpDateTime.SuspendLayout();
-            this.grpSelectedSpecialists.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.grpSpecialistsOnDuty.SuspendLayout();
+            this.grpSpecialists.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -59,11 +57,9 @@
             // 
             // grpDateTime
             // 
-            this.grpDateTime.Controls.Add(this.label10);
-            this.grpDateTime.Controls.Add(this.label9);
+            this.grpDateTime.Controls.Add(this.radModeAdministrator);
+            this.grpDateTime.Controls.Add(this.radModeSpecialist);
             this.grpDateTime.Controls.Add(this.monthCalendar1);
-            this.grpDateTime.Controls.Add(this.dateTimeStart);
-            this.grpDateTime.Controls.Add(this.dateTimeEnd);
             this.grpDateTime.Location = new System.Drawing.Point(351, 12);
             this.grpDateTime.Name = "grpDateTime";
             this.grpDateTime.Size = new System.Drawing.Size(177, 239);
@@ -71,60 +67,40 @@
             this.grpDateTime.TabStop = false;
             this.grpDateTime.Text = "Дата приёма";
             // 
-            // label10
+            // radModeAdministrator
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(95, 22);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(19, 13);
-            this.label10.TabIndex = 22;
-            this.label10.Text = "по";
-            this.label10.Visible = false;
+            this.radModeAdministrator.AutoSize = true;
+            this.radModeAdministrator.Location = new System.Drawing.Point(9, 42);
+            this.radModeAdministrator.Name = "radModeAdministrator";
+            this.radModeAdministrator.Size = new System.Drawing.Size(112, 17);
+            this.radModeAdministrator.TabIndex = 2;
+            this.radModeAdministrator.TabStop = true;
+            this.radModeAdministrator.Text = "Администраторы";
+            this.radModeAdministrator.UseVisualStyleBackColor = true;
+            this.radModeAdministrator.CheckedChanged += new System.EventHandler(this.radModeAdministrator_CheckedChanged);
             // 
-            // label9
+            // radModeSpecialist
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 22);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(13, 13);
-            this.label9.TabIndex = 21;
-            this.label9.Text = "с";
-            this.label9.Visible = false;
+            this.radModeSpecialist.AutoSize = true;
+            this.radModeSpecialist.Location = new System.Drawing.Point(9, 19);
+            this.radModeSpecialist.Name = "radModeSpecialist";
+            this.radModeSpecialist.Size = new System.Drawing.Size(93, 17);
+            this.radModeSpecialist.TabIndex = 1;
+            this.radModeSpecialist.TabStop = true;
+            this.radModeSpecialist.Text = "Специалисты";
+            this.radModeSpecialist.UseVisualStyleBackColor = true;
+            this.radModeSpecialist.CheckedChanged += new System.EventHandler(this.radModeAdministrator_CheckedChanged);
             // 
-            // dateTimeStart
+            // grpSpecialistsOnDuty
             // 
-            this.dateTimeStart.CustomFormat = "HH:mm";
-            this.dateTimeStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimeStart.Location = new System.Drawing.Point(25, 16);
-            this.dateTimeStart.Name = "dateTimeStart";
-            this.dateTimeStart.ShowUpDown = true;
-            this.dateTimeStart.Size = new System.Drawing.Size(51, 20);
-            this.dateTimeStart.TabIndex = 21;
-            this.dateTimeStart.Value = new System.DateTime(2014, 2, 2, 13, 51, 0, 0);
-            this.dateTimeStart.Visible = false;
-            // 
-            // dateTimeEnd
-            // 
-            this.dateTimeEnd.CustomFormat = "HH:mm";
-            this.dateTimeEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimeEnd.Location = new System.Drawing.Point(120, 16);
-            this.dateTimeEnd.Name = "dateTimeEnd";
-            this.dateTimeEnd.ShowUpDown = true;
-            this.dateTimeEnd.Size = new System.Drawing.Size(51, 20);
-            this.dateTimeEnd.TabIndex = 22;
-            this.dateTimeEnd.Value = new System.DateTime(2014, 2, 2, 13, 51, 0, 0);
-            this.dateTimeEnd.Visible = false;
-            // 
-            // grpSelectedSpecialists
-            // 
-            this.grpSelectedSpecialists.Controls.Add(this.lstDuty);
-            this.grpSelectedSpecialists.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSelectedSpecialists.Location = new System.Drawing.Point(3, 3);
-            this.grpSelectedSpecialists.Name = "grpSelectedSpecialists";
-            this.grpSelectedSpecialists.Size = new System.Drawing.Size(327, 93);
-            this.grpSelectedSpecialists.TabIndex = 33;
-            this.grpSelectedSpecialists.TabStop = false;
-            this.grpSelectedSpecialists.Text = "Специалисты на дежурстве";
+            this.grpSpecialistsOnDuty.Controls.Add(this.lstDuty);
+            this.grpSpecialistsOnDuty.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpSpecialistsOnDuty.Location = new System.Drawing.Point(3, 3);
+            this.grpSpecialistsOnDuty.Name = "grpSpecialistsOnDuty";
+            this.grpSpecialistsOnDuty.Size = new System.Drawing.Size(327, 93);
+            this.grpSpecialistsOnDuty.TabIndex = 33;
+            this.grpSpecialistsOnDuty.TabStop = false;
+            this.grpSpecialistsOnDuty.Text = "Специалисты на дежурстве";
             // 
             // lstDuty
             // 
@@ -138,16 +114,16 @@
             this.lstDuty.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstDuty_DrawItem);
             this.lstDuty.SelectedIndexChanged += new System.EventHandler(this.lstDuty_SelectedIndexChanged);
             // 
-            // groupBox1
+            // grpSpecialists
             // 
-            this.groupBox1.Controls.Add(this.lstSpecialists);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(3, 142);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(327, 94);
-            this.groupBox1.TabIndex = 34;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Специалисты";
+            this.grpSpecialists.Controls.Add(this.lstSpecialists);
+            this.grpSpecialists.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpSpecialists.Location = new System.Drawing.Point(3, 142);
+            this.grpSpecialists.Name = "grpSpecialists";
+            this.grpSpecialists.Size = new System.Drawing.Size(327, 94);
+            this.grpSpecialists.TabIndex = 34;
+            this.grpSpecialists.TabStop = false;
+            this.grpSpecialists.Text = "Специалисты";
             // 
             // lstSpecialists
             // 
@@ -163,8 +139,8 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.grpSelectedSpecialists, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.grpSpecialistsOnDuty, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.grpSpecialists, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -237,8 +213,8 @@
             this.Text = "Специалисты на дежурстве";
             this.grpDateTime.ResumeLayout(false);
             this.grpDateTime.PerformLayout();
-            this.grpSelectedSpecialists.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.grpSpecialistsOnDuty.ResumeLayout(false);
+            this.grpSpecialists.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -249,18 +225,16 @@
 
         private System.Windows.Forms.MonthCalendar monthCalendar1;
         private System.Windows.Forms.GroupBox grpDateTime;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.DateTimePicker dateTimeStart;
-        private System.Windows.Forms.DateTimePicker dateTimeEnd;
-        private System.Windows.Forms.GroupBox grpSelectedSpecialists;
+        private System.Windows.Forms.GroupBox grpSpecialistsOnDuty;
         private System.Windows.Forms.ListBox lstDuty;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox grpSpecialists;
         private System.Windows.Forms.ListBox lstSpecialists;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button btnToDuty;
         private System.Windows.Forms.Button btnToSupplimentary;
         private System.Windows.Forms.Button btnFromDuty;
+        private System.Windows.Forms.RadioButton radModeAdministrator;
+        private System.Windows.Forms.RadioButton radModeSpecialist;
     }
 }

@@ -32,19 +32,15 @@ namespace Scheduler
         }
 
         /// <summary>
-        /// глушилка действий, чтоб события друг-друга не закольцовывали
-        /// </summary>
-        private bool doNothing = false;
-
-        /// <summary>
         /// Таблица, хранящая в себе посещения на текущую дату
         /// </summary>
         ITable receptionEntitiesTable;
 
         IMainDataBase database;
-
+        private Scheduler_InterfacesRealisations.SortableList<IDuty> specsOnDuty = new Scheduler_InterfacesRealisations.SortableList<IDuty>();
+        Scheduler_InterfacesRealisations.SortableList<IDuty> adminsOnDuty = new Scheduler_InterfacesRealisations.SortableList<IDuty>();
         CalendarControl3.ColumnsView calendarControl;
-        private Scheduler.Main.ProgramSettings MainSettings;
+        List<int> columnOrder = new List<int>();
         public MainForm()
         {
             InitializeComponent();
@@ -63,39 +59,11 @@ namespace Scheduler
             {
                 Database = database;
             }
-
-
-        }
-
-        private void MainSettings_onSettingsChanged()
-        {
-            receptionEntitiesTable.WorkTimeInterval = MainSettings.TimeInterval;
-
-            receptionEntitiesTable.SetColumnColors(ColumnType.Cabinet,
-                MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Column]);
-
-            receptionEntitiesTable.SetColumnColors(ColumnType.Remarks,
-                MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Column]); //TODO
-
-            receptionEntitiesTable.SetEntityColors(EntityType.Client,
-                MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Entity1]);
-
-            receptionEntitiesTable.SetEntityColors(EntityType.Rent,
-                MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Entity2]);
-
-            receptionEntitiesTable.ColorMain = MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Table]
-                .ColorMain;
-            receptionEntitiesTable.ColorBorder = MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Table]
-                .ColorBorder;
-            receptionEntitiesTable.ColorBackground = MainSettings.ControlsColors[Forms.SettingsForm.ColorChangers.Table]
-                .ColorBackground;
-            calendarControl?.Refresh();
         }
 
         void Init()
         {
             FirstLoad();
-            dateTimePicker1.Value = schedule_date;
             calendarControl = new CalendarControl3.ColumnsView();
 
             calendarControl.Dock = DockStyle.Fill;
@@ -133,10 +101,6 @@ namespace Scheduler
                 return;
             using (ReceptionInfoEdit receptionEditForm = new ReceptionInfoEdit())
             {
-                //receptionEditForm.SetLists(cabinetList: database.CabinetList, specialistList: database.SpecialistList,
-                //    specializationList: database.SpecializationList,
-                //    entityFactory: database.EntityFactory, clientList: database.ClientList,
-                //    arendatorList: database.ArendatorList);
                 if (ent == null)
                 {
                     ent = database.EntityFactory.NewEntity();
@@ -196,14 +160,13 @@ namespace Scheduler
 
         void FirstLoad()
         {
+            columnOrder = Properties.Settings.Default.ColumnOrder.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+
             receptionEntitiesTable = database.EntityFactory.NewTable();
             ITimeInterval workday = database.EntityFactory.NewTimeInterval();
             workday.SetStartEnd(new DateTime(1, 1, 1, 9, 0, 0), new DateTime(1, 1, 1, 22, 0, 0));
             receptionEntitiesTable.WorkTimeInterval = workday;
-            MainSettings = new Main.ProgramSettings(workday);
-            MainSettings.onSettingsChanged += MainSettings_onSettingsChanged;
-            MainSettings.FromStrings(Properties.Settings.Default.LegacyColorSettings.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
-
+            Main.ProgramSettings2.FromStrings(Properties.Settings.Default.LegacyColorSettings.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
 
             Dictionary<DateTime, string> descriprions = new Dictionary<DateTime, string>(13);
             for (int i = 0; i <= 23; i++) //TODO: дикий хардкод, переписать на что-то вразумительное 
@@ -216,8 +179,11 @@ namespace Scheduler
 
             database.EntityFactory.NewEntity().SetDatabase(database);
 
-            ReloadColumns();
-            ReloadEntities();
+            lstAdministratorsOnDuty.DataSource = adminsOnDuty;
+            lstAdministratorsOnDuty.DisplayMember = "Name";
+            lstSpecialistsOnDuty.DataSource = specsOnDuty;
+            lstSpecialistsOnDuty.DisplayMember = "Name";
+            monthCalendar1.SetDate(DateTime.Now);            
         }
 
         void ReloadEntities()
@@ -230,19 +196,35 @@ namespace Scheduler
             {
                 receptionEntitiesTable.Columns.Find(x => x.Name == ent.Cabinet.Name).Entities.Add(ent);
             }
-            MainSettings_onSettingsChanged();
+
+            ResetColors();
             calendarControl?.Refresh();
         }
 
         void ReloadColumns()
         {
             receptionEntitiesTable.Columns.Clear();
-            foreach (var cabname in database.CabinetList.List.Where(c => c.Availability))
+
+            var cabs = database.CabinetList.List.Where(c => c.Availability).ToDictionary(x => x.ID, x =>
             {
                 var column = database.EntityFactory.NewColumn();
-                column.Name = cabname.Name;
-                receptionEntitiesTable.Columns.Add(column);
-            }
+                column.Name = x.Name;
+                column.OnlyComment = x.CommentOnly;
+                return column;
+            });
+
+            foreach (var id in columnOrder)
+                receptionEntitiesTable.Columns.Add(cabs[id]);
+            foreach (var cab in cabs.Where(x => !columnOrder.Contains(x.Key)).Select(x => x.Value))
+                receptionEntitiesTable.Columns.Add(cab);
+
+            //foreach (var cabname in database.CabinetList.List.Where(c => c.Availability))
+            //{
+            //    var column = database.EntityFactory.NewColumn();
+            //    column.Name = cabname.Name;
+            //    column.OnlyComment = cabname.CommentOnly;
+            //    receptionEntitiesTable.Columns.Add(column);
+            //}
         }
 
         private void сделатьРезервнуюКопиюToolStripMenuItem_Click(object sender, EventArgs e)
@@ -288,9 +270,12 @@ namespace Scheduler
 
         private void кабинетыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (CabinetListEdit cabinetForm = new CabinetListEdit(database.CabinetList, database.EntityFactory))
-            {
+            using (CabinetListEdit cabinetForm = new CabinetListEdit(database.CabinetList, database.EntityFactory, columnOrder))
+            {                
                 cabinetForm.ShowDialog();
+                columnOrder = cabinetForm.CabinetOrder;
+                Properties.Settings.Default.ColumnOrder = String.Join(" ", columnOrder);
+                Properties.Settings.Default.Save();
             }
             ReloadColumns();
             ReloadEntities();
@@ -315,16 +300,6 @@ namespace Scheduler
         private void закрытьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
-            doNothing = true;
-            ScheduleDate = dateTimePicker1.Value.Date;
-            monthCalendar1.SetDate(ScheduleDate);
-            doNothing = false;
-
         }
 
         private void сформироватьОтчетToolStripMenuItem_Click(object sender, EventArgs e)
@@ -358,8 +333,19 @@ namespace Scheduler
 
         private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
         {
-            if (!doNothing)
-                dateTimePicker1.Value = e.Start;
+            specsOnDuty.Clear();
+            foreach (var duty in database.SelectDutyFromDate<ISpecialist>(monthCalendar1.SelectionStart))
+                specsOnDuty.Add(duty);
+
+            adminsOnDuty.Clear();
+            foreach (var duty in database.SelectDutyFromDate<IAdministrator>(monthCalendar1.SelectionStart))
+                adminsOnDuty.Add(duty);
+
+            schedule_date = monthCalendar1.SelectionStart.Date;
+
+            ReloadColumns();
+            ReloadEntities();
+            calendarControl?.Refresh();
         }
 
         private void контактыToolStripMenuItem_Click(object sender, EventArgs e)
@@ -369,15 +355,20 @@ namespace Scheduler
 
         private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var settings = new Scheduler.Forms.SettingsForm())
+            using (var settings = new Scheduler.Forms.ColorSettings())
             {
-                settings.SelectedColorsDictionary = MainSettings.ControlsColors;
-                if (settings.ShowDialog() != DialogResult.OK)
-                    return;
-                MainSettings.ControlsColors = settings.SelectedColorsDictionary;
-                Properties.Settings.Default.LegacyColorSettings = String.Join(Environment.NewLine, MainSettings.ToStrings());
-                Properties.Settings.Default.Save();
+                settings.SetColors(Scheduler.Main.ProgramSettings2.ControlsColors);
+                settings.ShowDialog();
             }
+            ResetColors();
+            Properties.Settings.Default.LegacyColorSettings = String.Join(Environment.NewLine, Main.ProgramSettings2.ToStrings());
+            Properties.Settings.Default.Save();
+        }
+
+        private void ResetColors()
+        {
+            receptionEntitiesTable.SetColors(Main.ProgramSettings2.ControlsColors);
+            calendarControl?.Refresh();
         }
 
         private void арендаторыToolStripMenuItem_Click(object sender, EventArgs e)
@@ -395,6 +386,191 @@ namespace Scheduler
                 dutyForm.SetDatabase(database, database.EntityFactory);
                 dutyForm.ShowDialog();
             }
+
+            monthCalendar1_DateChanged(null, null);
+        }
+
+        private void администраторыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Scheduler.Forms.AdministratorListEdit specialistForm = new Scheduler.Forms.AdministratorListEdit(database.EntityFactory, database))
+            {
+                specialistForm.ShowDialog();
+            }
+        }
+
+        string GetSaveFile()
+        {
+            using (var dialog = new SaveFileDialog())
+            {
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                dialog.Filter = "CSV (*.csv)|*.csv|All files (*.*)|*.*";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                    return dialog.FileName;
+            }
+            return null;
+        }
+
+        void SaveFileWUTF8Preamble(string file, IEnumerable<string> lines)
+        {
+            using (var bw = new System.IO.BinaryWriter(System.IO.File.OpenWrite(file)))
+            {
+                bw.Write(System.Text.Encoding.UTF8.GetPreamble());
+                foreach (var line in lines)
+                {
+                    var data = System.Text.Encoding.UTF8.GetBytes(line + Environment.NewLine);
+                    bw.Write(data);
+                }
+            }
+        }
+
+        private string GenerateDelimitedString(params string[] data)
+        {
+            return String.Join(",", data);
+        }
+
+        private void GetClientsStatistics(object sender, EventArgs e)
+        {
+            var saveFile = GetSaveFile();
+
+            if (String.IsNullOrWhiteSpace(saveFile))
+                return;
+
+            List<string> result = new List<string>();
+            result.Add(GenerateDelimitedString("ФИО", "Контакты", "Последний приём", "Всего приёмов", "Специалисты"));
+
+            foreach (var cl in Database.ClientList.List)
+            {
+                var name = cl.Name;
+                var contacts = String.Join(" ", cl.Telephones.Concat(new string[] { cl.EMail }));
+                var receptions = cl.GetReceptions();
+                DateTime receptionLastDate = default(DateTime);
+                int receptionsCount = receptions.Count;
+
+                if (receptionsCount > 0)
+                {
+                    receptionLastDate = receptions.Max(x => x.ReceptionTimeInterval.Date).Date;
+                }
+
+                var specialists = String.Join(" ",
+                    receptions.Where(x => x.Specialist != null).Select(x => x.Specialist.Name).Distinct());
+                string record = GenerateDelimitedString(name, contacts, receptionLastDate.ToShortDateString(), receptionsCount.ToString(), specialists);
+                result.Add(record);
+            }
+
+            SaveFileWUTF8Preamble(saveFile, result);
+        }
+
+        private void GetArendatorsStatistics(object sender, EventArgs e)
+        {
+            var saveFile = GetSaveFile();
+
+            if (String.IsNullOrWhiteSpace(saveFile))
+                return;
+
+            List<string> result = new List<string>();
+            result.Add(GenerateDelimitedString("ФИО", "Контакты", "Всего аренд", "Последняя аренда"));
+
+            foreach (var ar in Database.ArendatorList.List)
+            {
+                var name = ar.Name;
+                var contacts = String.Join(" ", ar.Telephones.Concat(new string[] { ar.EMail }));
+                var receptions = ar.GetReceptions();
+                result.Add(GenerateDelimitedString(name, contacts, receptions.Count.ToString(), receptions.Count > 0 ? receptions.Max(x => x.ReceptionTimeInterval.StartDate).ToShortDateString() : default(DateTime).ToShortDateString()));
+            }
+
+            SaveFileWUTF8Preamble(saveFile, result);
+        }
+
+        private void GetSpecialistsStatistics(object sender, EventArgs e)
+        {
+            var saveFile = GetSaveFile();
+
+            if (String.IsNullOrWhiteSpace(saveFile))
+                return;
+
+            List<string> result = new List<string>();
+            result.Add(GenerateDelimitedString("ФИО", "Всего приёмов", "Всего различных клиентов"));
+
+            foreach (var sp in Database.SpecialistList.List)
+            {
+                var name = sp.Name;
+                var receptionCount = Database.SpecialistGetReceptionCount(sp);
+                var clientCount = Database.SpecialistGetClientCount(sp);
+                result.Add(GenerateDelimitedString(name, receptionCount.ToString(), clientCount.ToString()));
+            }
+
+            SaveFileWUTF8Preamble(saveFile, result);
+        }
+
+        private void GetClientsReport(object sender, EventArgs e)
+        {
+            var saveFile = GetSaveFile();
+
+            if (String.IsNullOrWhiteSpace(saveFile))
+                return;
+
+            List<string> result = new List<string>();
+            result.Add(GenerateDelimitedString("ФИО", "Контакты", "Дата приёма", "Время приёма", "Специалист", "Явка", "Порядковый номер"));
+
+            foreach (var cl in Database.ClientList.List)
+            {
+                var name = cl.Name;
+                var contacts = String.Join(" ", cl.Telephones.Concat(new string[] { cl.EMail }));
+                var receptions = cl.GetReceptions();
+                for (int i = 0; i < receptions.Count; i++)
+                {
+                    result.Add(GenerateDelimitedString(name, contacts,
+                        receptions[i].ReceptionTimeInterval.Date.ToShortDateString(),
+                        receptions[i].ReceptionTimeInterval.Interval(),
+                        receptions[i].Specialist.Name,
+                        receptions[i].ReceptionDidNotTakePlace ? "-" : "+",
+                        (i + 1).ToString()));
+                }
+            }
+
+            SaveFileWUTF8Preamble(saveFile, result);
+        }
+
+        private void GetArendatorsReport(object sender, EventArgs e)
+        {
+            var saveFile = GetSaveFile();
+
+            if (String.IsNullOrWhiteSpace(saveFile))
+                return;
+
+            List<string> result = new List<string>();
+            result.Add(GenerateDelimitedString("ФИО", "Контакты", "Дата аренды", "Время аренды"));
+
+            foreach (var ar in Database.ArendatorList.List)
+            {
+                var name = ar.Name;
+                var contacts = String.Join(" ", ar.Telephones.Concat(new string[] { ar.EMail }));
+                var receptions = ar.GetReceptions();
+                foreach (var rcptn in receptions)
+                    result.Add(GenerateDelimitedString(name, contacts, rcptn.ReceptionTimeInterval.Date.ToShortDateString(), rcptn.ReceptionTimeInterval.Interval()));
+            }
+
+            SaveFileWUTF8Preamble(saveFile, result);
+        }
+
+        private void GetSpecialistsReport(object sender, EventArgs e)
+        {
+            var saveFile = GetSaveFile();
+
+            if (String.IsNullOrWhiteSpace(saveFile))
+                return;
+
+            List<string> result = new List<string>();
+            result.Add(GenerateDelimitedString("ФИО", "Дата приёма", "Кабинет", "Время приёма", "Клиент"));
+
+            foreach (var sp in Database.SpecialistList.List)
+            {
+                var name = sp.Name;
+                foreach (var rcptn in Database.SpecialistGetReceptions(sp))
+                    result.Add(GenerateDelimitedString(name, rcptn.ReceptionTimeInterval.Date.ToShortDateString(), rcptn.Cabinet.Name, rcptn.ReceptionTimeInterval.Interval(), rcptn.Client.Name));
+            }
+
+            SaveFileWUTF8Preamble(saveFile, result);
         }
     }
 }

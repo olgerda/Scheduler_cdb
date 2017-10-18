@@ -144,11 +144,6 @@
             this.colorPicker4.Location = new System.Drawing.Point(3, 16);
             this.colorPicker4.MinimumSize = new System.Drawing.Size(55, 50);
             this.colorPicker4.Name = "colorPicker4";
-            controlsColors1.ColorBackground = System.Drawing.SystemColors.Control;
-            controlsColors1.ColorBorder = System.Drawing.SystemColors.Control;
-            controlsColors1.ColorMain = System.Drawing.SystemColors.Control;
-            controlsColors1.Font = null;
-            this.colorPicker4.SelectedColors = controlsColors1;
             this.colorPicker4.Size = new System.Drawing.Size(294, 101);
             this.colorPicker4.TabIndex = 1;
             // 
@@ -169,11 +164,6 @@
             this.colorPicker1.Location = new System.Drawing.Point(3, 16);
             this.colorPicker1.MinimumSize = new System.Drawing.Size(55, 50);
             this.colorPicker1.Name = "colorPicker1";
-            controlsColors2.ColorBackground = System.Drawing.SystemColors.Control;
-            controlsColors2.ColorBorder = System.Drawing.SystemColors.Control;
-            controlsColors2.ColorMain = System.Drawing.SystemColors.Control;
-            controlsColors2.Font = null;
-            this.colorPicker1.SelectedColors = controlsColors2;
             this.colorPicker1.Size = new System.Drawing.Size(294, 98);
             this.colorPicker1.TabIndex = 0;
             // 
@@ -194,11 +184,6 @@
             this.colorPicker2.Location = new System.Drawing.Point(3, 16);
             this.colorPicker2.MinimumSize = new System.Drawing.Size(55, 50);
             this.colorPicker2.Name = "colorPicker2";
-            controlsColors3.ColorBackground = System.Drawing.SystemColors.Control;
-            controlsColors3.ColorBorder = System.Drawing.SystemColors.Control;
-            controlsColors3.ColorMain = System.Drawing.SystemColors.Control;
-            controlsColors3.Font = null;
-            this.colorPicker2.SelectedColors = controlsColors3;
             this.colorPicker2.Size = new System.Drawing.Size(294, 98);
             this.colorPicker2.TabIndex = 1;
             // 
@@ -219,11 +204,6 @@
             this.colorPicker3.Location = new System.Drawing.Point(3, 16);
             this.colorPicker3.MinimumSize = new System.Drawing.Size(55, 50);
             this.colorPicker3.Name = "colorPicker3";
-            controlsColors4.ColorBackground = System.Drawing.SystemColors.Control;
-            controlsColors4.ColorBorder = System.Drawing.SystemColors.Control;
-            controlsColors4.ColorMain = System.Drawing.SystemColors.Control;
-            controlsColors4.Font = null;
-            this.colorPicker3.SelectedColors = controlsColors4;
             this.colorPicker3.Size = new System.Drawing.Size(294, 98);
             this.colorPicker3.TabIndex = 1;
             // 

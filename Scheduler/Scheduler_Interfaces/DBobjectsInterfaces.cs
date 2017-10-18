@@ -4,15 +4,38 @@ using CalendarControl3_Interfaces;
 using Scheduler_Common_Interfaces;
 using Scheduler_Controls_Interfaces;
 using Scheduler_Forms_Interfaces;
+using System.ComponentModel;
 
 namespace Scheduler_DBobjects_Intefraces
 {
-    public interface IMainDataBase
+    public enum ColorChangers
+    {
+        [Description("Обычный приём")]
+        ReceptionClient,
+        [Description("Аренда")]
+        ReceptionRent,
+        [Description("Аренда Песок")]
+        ReceptionSpecialRent,
+        [Description("Комментарий")]
+        ReceptionComment,
+        [Description("Не состоявшийся приём")]
+        ReceptionNotTakePlace,
+        [Description("Не состоявшийся приём (аренда)")]
+        ReceptionNotTakePlaceRent,
+        [Description("Кабинет для комментариев")]
+        ColumnCommentOnly,
+        [Description("Кабинет для приёмов")]
+        ColumnForReceptions,
+        [Description("Основная таблица")]
+        Table,
+    }
+
+    public interface IMainDataBase: ICanRequestStatistics
     {
         List<IEntity> SelectReceptionsFromDate(DateTime date);
         List<IEntity> SelectReceptionsBetweenDates(DateTime startDate, DateTime endDate);
-        IEnumerable<ISpecialistDuty> SelectSpecialistDutyFromDate(DateTime date);
-        IEnumerable<DateTime> SelectSpecialistDutyDates(ISpecialist spec);
+        IEnumerable<IDuty> SelectDutyFromDate<T>(DateTime date) where T : ICanNotWork;
+        IEnumerable<DateTime> SelectDutyDates<T>(T spec) where T: ICanNotWork;
 
         void AddReception(IEntity reception);
         void RemoveReception(IEntity reception);
@@ -22,17 +45,28 @@ namespace Scheduler_DBobjects_Intefraces
         void RestoreBackup(string filename);
 
         ISpecialistList SpecialistList { get; }
+        IAdministratorList AdministratorList { get; }
         IClientList ClientList { get; }
         IClientList ArendatorList { get; }
         ISpecializationList SpecializationList { get; }
         ICabinetList CabinetList { get; }
         ISpecialistDutyList SpecialistDutyList { get; }
+        IAdministratorDutyList AdministratorDutyList { get; }
         IFactory EntityFactory { get; }
 
         string ErrorString { get; }
         void ClearErrorString();
 
     }
+
+    public interface ICanRequestStatistics
+    {
+        int SpecialistGetReceptionCount(ISpecialist spec);
+        int SpecialistGetClientCount(ISpecialist spec);
+        List<IReception> SpecialistGetReceptions(ISpecialist spec);
+        List<IClient> SpecialistGetClients(ISpecialist spec);
+    }
+
 
     public interface ITable : ITable2ControlInterface
     {
@@ -43,8 +77,7 @@ namespace Scheduler_DBobjects_Intefraces
         DateTime ConvertLevelToTime(int level);
         int ConvertTimeToLevel(DateTime time);
 
-        void SetColumnColors(ColumnType columnType, ICanCustomizeLook colors);
-        void SetEntityColors(EntityType entityType, ICanCustomizeLook colors);
+        void SetColors(Dictionary<ColorChangers, IColorPalette> palette);
     }
 
     public interface IColumn : IColumn2ControlInterface
@@ -58,7 +91,7 @@ namespace Scheduler_DBobjects_Intefraces
         void SetDatabase(IMainDataBase db);
     }
 
-    public interface Scheduler_DBconnectorIntefrace
+    public interface Scheduler_DBconnectorIntefrace : ICanRequestStatistics
     {
         IFactory EntityFactory { get; set; }
         string ConnectionString { get; set; }
@@ -77,7 +110,9 @@ namespace Scheduler_DBobjects_Intefraces
         void AddSpecialization(string specialization);
         void RemoveSpecialization(string specialization);
         ISpecializationList AllSpecializations();
-        ISpecialistDutyList AllDuty();
+        ISpecialistDutyList AllSpecDuty();
+        IAdministratorDutyList AllAdmDuty();
+        IAdministratorList AllAdministrators();
 
         void AddCabinet(ICabinet cabinet);
         void UpdateCabinetData(ICabinet cabinet);
@@ -114,7 +149,10 @@ namespace Scheduler_DBobjects_Intefraces
     public enum EntityType
     {
         Client,
-        Rent
+        ClientSMS,
+        Rent,
+        RentSpecial,
+        ReceptionNotTakePlace
     }
 
     public abstract class Scheduler_DBconnector : Scheduler_DBconnectorIntefrace
@@ -123,8 +161,10 @@ namespace Scheduler_DBobjects_Intefraces
         protected IClientList clientList;
         protected IClientList arendatorList;
         protected ISpecialistList specialistList;
+        protected IAdministratorList administratorList;
         protected ICabinetList cabinetList;
-        protected ISpecialistDutyList dutyList;
+        protected ISpecialistDutyList dutySpecList;
+        protected IAdministratorDutyList dutyAdmList;
 
         protected Scheduler_DBconnector(IFactory factory)
         {
@@ -192,15 +232,37 @@ namespace Scheduler_DBobjects_Intefraces
         public abstract void RestoreBackup(string filename);
         public abstract bool CheckDBConnection(out string message);
 
-        public ISpecialistDutyList AllDuty()
+        public ISpecialistDutyList AllSpecDuty()
         {
-            return dutyList ?? (dutyList = AllDutyInternal());
+            return dutySpecList ?? (dutySpecList = AllSpecDutyInternal());
+        }
+
+        public IAdministratorDutyList AllAdmDuty()
+        {
+            return dutyAdmList ?? (dutyAdmList = AllAdmDutyInternal());
         }
 
         public abstract void AddSpecialistDuty(ISpecialistDuty dt);
         public abstract void RemoveSpecialistDuty(ISpecialistDuty dt);
         public abstract void UpdateSpecialistDuty(ISpecialistDuty dt);
 
-        protected abstract ISpecialistDutyList AllDutyInternal();
+        protected abstract ISpecialistDutyList AllSpecDutyInternal();
+
+        public IAdministratorList AllAdministrators()
+        {
+            return (administratorList ?? (administratorList = AllAdministratorsInternal()));
+        }
+
+
+        protected abstract IAdministratorList AllAdministratorsInternal();
+        public abstract void AddAdministratorDuty(IAdministratorDuty dt);
+        public abstract void RemoveAdministratorDuty(IAdministratorDuty dt);
+        public abstract void UpdateAdministratorDuty(IAdministratorDuty dt);
+
+        protected abstract IAdministratorDutyList AllAdmDutyInternal();
+        public abstract int SpecialistGetReceptionCount(ISpecialist spec);
+        public abstract int SpecialistGetClientCount(ISpecialist spec);
+        public abstract List<IReception> SpecialistGetReceptions(ISpecialist spec);
+        public abstract List<IClient> SpecialistGetClients(ISpecialist spec);
     }
 }

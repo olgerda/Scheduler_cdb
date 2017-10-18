@@ -53,21 +53,23 @@ namespace EF6Connector.Model
         public virtual DbSet<telephone> telephones { get; set; }
         public virtual DbSet<telephones2clients> telephones2clients { get; set; }
         public virtual DbSet<specialistDuty> specialistDuties { get; set; }
+        public virtual DbSet<administratorDuty> administratorDuties { get; set; }
+        public virtual DbSet<administrator> administrators { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<cabinet>()
                 .Property(e => e.name)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             modelBuilder.Entity<client>()
                 .Property(e => e.name)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             modelBuilder.Entity<client>()
                 .Property(e => e.comment)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             modelBuilder.Entity<client>()
                 .HasMany(e => e.telephones2clients)
@@ -77,7 +79,7 @@ namespace EF6Connector.Model
 
             modelBuilder.Entity<specialist>()
                 .Property(e => e.name)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             modelBuilder.Entity<specialist>()
                 .HasMany(e => e.specializations2specialist)
@@ -88,12 +90,21 @@ namespace EF6Connector.Model
             modelBuilder.Entity<specialist>()
                 .HasMany(e => e.specialistDuty)
                 .WithRequired(e => e.specialist)
-                .HasForeignKey(e => e.specialistid)
-                .WillCascadeOnDelete();
+                .HasForeignKey(e => e.specialistid);
+            //.WillCascadeOnDelete();
+
+            modelBuilder.Entity<administrator>()
+                .Property(e => e.name)
+                .IsUnicode(true);
+
+            modelBuilder.Entity<administrator>()
+                .HasMany(e => e.administratorDuty)
+                .WithRequired(e => e.administrator)
+                .HasForeignKey(e => e.administratorid);
 
             modelBuilder.Entity<specialization>()
                 .Property(e => e.name)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             modelBuilder.Entity<specialization>()
                 .HasMany(e => e.specializations2specialist)

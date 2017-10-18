@@ -62,10 +62,29 @@ namespace CalendarControl3_Interfaces
 
     public interface ICanCustomizeLook
     {
-        System.Drawing.Color ColorMain { get; set; }
-        System.Drawing.Color ColorBorder { get; set; }
-        System.Drawing.Color ColorBackground { get; set; }
+        IColorPalette Coloring { get; set; }
+    }
+
+    public interface IColorPalette : ICloneable
+    {
+        Dictionary<ColorPaletteSelectables, System.Drawing.Color> Colors { get; }
+        Dictionary<ColorPaletteSelectables, String> BrushNames { get; }
+        List<ColorPaletteSelectables> ActiveColorChangers { get; }
+
+        System.Drawing.Color GetColor(ColorPaletteSelectables selectable);
+        String GetBrushName(ColorPaletteSelectables selectable);
+        System.Drawing.Brush GetBrush(ColorPaletteSelectables selectable);
+        void SetColor(ColorPaletteSelectables selectable, System.Drawing.Color color);
+        void SetBrushName(ColorPaletteSelectables selectable, String name);
+
         System.Drawing.Font Font { get; set; }
+    }
+
+    public enum ColorPaletteSelectables
+    {
+        Main = 1,
+        Border = 2,
+        Background =3 
     }
 
 

@@ -20,7 +20,7 @@ namespace Scheduler_InterfacesRealisations
             specialisations = new HashSet<string>();
         }
 
-        bool Scheduler_Controls_Interfaces.ISpecialist.NotWorking
+        public bool NotWorking
         {
             get
             {
@@ -33,7 +33,7 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        HashSet<string> Scheduler_Controls_Interfaces.ISpecialist.Specialisations
+        public HashSet<string> Specialisations
         {
             get
             {
@@ -46,7 +46,7 @@ namespace Scheduler_InterfacesRealisations
             }
         }
 
-        string Scheduler_Controls_Interfaces.INamedEntity.Name
+        public string Name
         {
             get
             {
@@ -64,12 +64,12 @@ namespace Scheduler_InterfacesRealisations
             return name;
         }
 
-        Dictionary<int, int> Scheduler_Controls_Interfaces.ISpecialist.GetCosts()
+        public Dictionary<int, int> GetCosts()
         {
             return getCostsFunction == null ? new Dictionary<int, int>() : getCostsFunction(this);
         }
 
-        void Scheduler_Controls_Interfaces.ISpecialist.CostsFunction(Scheduler_Controls_Interfaces.GetCosts func)
+        public void CostsFunction(Scheduler_Controls_Interfaces.GetCosts func)
         {
             if (getCostsFunction == null)
                 getCostsFunction = func;

@@ -7,7 +7,7 @@ using CalendarControl3_Interfaces;
 
 namespace CalendarControl3
 {
-
+#if FALSE
     static public class TESTCASE
     {
         static public ITable2ControlInterface GetTestTable()
@@ -241,5 +241,5 @@ namespace CalendarControl3
     //         }
     //     }
 
-
+#endif
 }

@@ -8,7 +8,7 @@ using CalendarControl3_Interfaces;
 
 namespace Scheduler_InterfacesRealisations
 {
-    public class Column : IColumn
+    public class Column : ControlsColors, IColumn
     {
         string name;
         List<IEntity2ControlInterface> entities;
@@ -36,15 +36,6 @@ namespace Scheduler_InterfacesRealisations
         {
             get { return entities; }
         }
-
-
-        public Color ColorMain { get; set; }
-
-        public Color ColorBorder { get; set; }
-
-        public Color ColorBackground { get; set; }
-
-        public Font Font { get; set; }
 
         public bool OnlyComment { get; set; }
     }

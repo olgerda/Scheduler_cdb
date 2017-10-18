@@ -55,6 +55,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnCommit = new System.Windows.Forms.Button();
             this.txtFIO = new System.Windows.Forms.TextBox();
+            this.chkIsActive = new System.Windows.Forms.CheckBox();
             this.grpMain.SuspendLayout();
             this.grpReceptions.SuspendLayout();
             this.grpComment.SuspendLayout();
@@ -139,6 +140,7 @@
             // 
             // grpGeneralParams
             // 
+            this.grpGeneralParams.Controls.Add(this.chkIsActive);
             this.grpGeneralParams.Controls.Add(this.numGenerallyPrice);
             this.grpGeneralParams.Controls.Add(this.dateGenerallyTime);
             this.grpGeneralParams.Controls.Add(this.label8);
@@ -184,7 +186,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(252, 16);
+            this.label8.Location = new System.Drawing.Point(201, 16);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(47, 13);
             this.label8.TabIndex = 29;
@@ -201,7 +203,7 @@
             // 
             // numBalance
             // 
-            this.numBalance.Location = new System.Drawing.Point(305, 12);
+            this.numBalance.Location = new System.Drawing.Point(254, 12);
             this.numBalance.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -223,7 +225,7 @@
             // chkBlackList
             // 
             this.chkBlackList.AutoSize = true;
-            this.chkBlackList.Location = new System.Drawing.Point(255, 41);
+            this.chkBlackList.Location = new System.Drawing.Point(204, 41);
             this.chkBlackList.Name = "chkBlackList";
             this.chkBlackList.Size = new System.Drawing.Size(112, 17);
             this.chkBlackList.TabIndex = 12;
@@ -359,6 +361,16 @@
             this.txtFIO.Size = new System.Drawing.Size(308, 20);
             this.txtFIO.TabIndex = 1;
             // 
+            // chkIsActive
+            // 
+            this.chkIsActive.AutoSize = true;
+            this.chkIsActive.Location = new System.Drawing.Point(312, 41);
+            this.chkIsActive.Name = "chkIsActive";
+            this.chkIsActive.Size = new System.Drawing.Size(68, 17);
+            this.chkIsActive.TabIndex = 30;
+            this.chkIsActive.Text = "Рабочий";
+            this.chkIsActive.UseVisualStyleBackColor = true;
+            // 
             // ClientInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -415,5 +427,6 @@
         private System.Windows.Forms.GroupBox grpGeneralParams;
         private System.Windows.Forms.GroupBox grpContactsMail;
         private System.Windows.Forms.GroupBox grpContactsTelephones;
+        private System.Windows.Forms.CheckBox chkIsActive;
     }
 }

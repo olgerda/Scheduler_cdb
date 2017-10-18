@@ -78,7 +78,7 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>default apps.ico</ApplicationIcon>
+    <ApplicationIcon>Logo-aist-105х105-vert-2.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -113,6 +113,34 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Google.Apis, Version=1.29.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.29.2\lib\net45\Google.Apis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth, Version=1.29.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.29.2\lib\net45\Google.Apis.Auth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices, Version=1.29.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.29.2\lib\net45\Google.Apis.Auth.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Calendar.v3, Version=1.29.2.992, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Calendar.v3.1.29.2.992\lib\net45\Google.Apis.Calendar.v3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Core, Version=1.29.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Core.1.29.2\lib\net45\Google.Apis.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.PlatformServices, Version=1.29.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.29.2\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SQLite.CodeFirst, Version=1.3.2.19, Culture=neutral, PublicKeyToken=eb96ba0a78d831a7, processorArchitecture=MSIL">
       <HintPath>..\packages\SQLite.CodeFirst.1.3.2.19\lib\net45\SQLite.CodeFirst.dll</HintPath>
       <Private>True</Private>
@@ -136,6 +164,26 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.1\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net46\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net46\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
@@ -167,6 +215,12 @@
     <Compile Include="Controls\ClientInfo.Designer.cs">
       <DependentUpon>ClientInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ColorPicker2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorPicker2.Designer.cs">
+      <DependentUpon>ColorPicker2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ColorPicker.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -179,11 +233,20 @@
     <Compile Include="Controls\EditItemWithDescriptions.Designer.cs">
       <DependentUpon>EditItemWithDescriptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FontCombobox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ReceptionInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ReceptionInfo.Designer.cs">
       <DependentUpon>ReceptionInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SelectEndDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SelectEndDate.Designer.cs">
+      <DependentUpon>SelectEndDate.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SpecialistInfo.cs">
       <SubType>UserControl</SubType>
@@ -196,6 +259,18 @@
     </Compile>
     <Compile Include="Controls\SpecializationsInfo.Designer.cs">
       <DependentUpon>SpecializationsInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AdministratorListEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AdministratorListEdit.Designer.cs">
+      <DependentUpon>AdministratorListEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ColorSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ColorSettings.Designer.cs">
+      <DependentUpon>ColorSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Reports.cs">
       <SubType>Form</SubType>
@@ -215,6 +290,7 @@
     <Compile Include="Forms\SpecialistDutyForm.Designer.cs">
       <DependentUpon>SpecialistDutyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="InterfacesRealisations\Administrator.cs" />
     <Compile Include="InterfacesRealisations\Column.cs" />
     <Compile Include="DBobjects\MainDatabase.cs" />
     <Compile Include="InterfacesRealisations\CommonObjects.cs" />
@@ -258,6 +334,7 @@
     <Compile Include="InterfacesRealisations\SpecializationList.cs" />
     <Compile Include="InterfacesRealisations\Telephone.cs" />
     <Compile Include="InterfacesRealisations\TimeInterval.cs" />
+    <Compile Include="Main\GoogleSync.cs" />
     <Compile Include="Main\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -267,6 +344,11 @@
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\ProgramSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -286,11 +368,17 @@
     <EmbeddedResource Include="Controls\ClientInfo.resx">
       <DependentUpon>ClientInfo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ColorPicker2.resx">
+      <DependentUpon>ColorPicker2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ColorPicker.resx">
       <DependentUpon>ColorPicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ReceptionInfo.resx">
       <DependentUpon>ReceptionInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SelectEndDate.resx">
+      <DependentUpon>SelectEndDate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SpecialistInfo.resx">
       <DependentUpon>SpecialistInfo.cs</DependentUpon>
@@ -298,8 +386,14 @@
     <EmbeddedResource Include="Controls\SpecializationsInfo.resx">
       <DependentUpon>SpecializationsInfo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AdministratorListEdit.resx">
+      <DependentUpon>AdministratorListEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CabinetListEdit.resx">
       <DependentUpon>CabinetListEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ColorSettings.resx">
+      <DependentUpon>ColorSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FindClientCard.resx">
       <DependentUpon>FindClientCard.cs</DependentUpon>
@@ -324,6 +418,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -359,6 +457,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="default apps.ico" />
+    <Content Include="Logo-aist-105х105-vert-2.ico" />
     <Content Include="logo16_22.ico" />
   </ItemGroup>
   <ItemGroup />

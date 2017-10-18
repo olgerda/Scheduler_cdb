@@ -17,31 +17,29 @@ namespace Scheduler_Forms
         private ICabinetList cabList;
         private IFactory entityFactory;
         private ICabinet selectedCabinet;
-
+        List<int> cabinetOrder = new List<int>();
 
         public CabinetListEdit()
         {
             InitializeComponent();
         }
 
-        public CabinetListEdit(ICabinetList cabList, IFactory entityFactory)
+        public CabinetListEdit(ICabinetList cabList, IFactory entityFactory, List<int> order)
         {
             InitializeComponent();
 
             this.cabList = cabList;
             this.entityFactory = entityFactory;
-
+            this.cabinetOrder = order;
             Init();
         }
 
         void Init()
         {
-
             if (cabList == null)
                 return;
 
-            lstCabinets.DataSource = cabList.List;
-
+            UpdateList();
             cabinetInfoCard.OnSaveChanges += new SaveChangesHandler<ICabinet>(cabinetInfoCard_OnSaveChanges);
         }
 
@@ -58,6 +56,12 @@ namespace Scheduler_Forms
                 cabList = value;
                 Init();
             }
+        }
+
+        public List<int> CabinetOrder
+        {
+            get { return cabinetOrder; }
+            set { cabinetOrder = value; }
         }
 
         public IFactory EntityFactory
@@ -108,16 +112,14 @@ namespace Scheduler_Forms
 
             if (result != null) //если значение не установилось - пользователь отменил закрытие.
             {
-                //grpSelectSpecialist.Visible = true;
                 grpCabinetList.Enabled = true;
-                //grpEditMode.Visible = false;
                 cabinetInfoCard.Enabled = false;
 
                 if (!cabList.List.Contains(result))
                 {
                     cabList.Add(result);
                 }
-                lstCabinets.DataSource = cabList.List.Cast<INamedEntity>().ToList();
+                UpdateList();
                 lstCabinets.SelectedItem = result;
             }
             return result;
@@ -148,7 +150,8 @@ namespace Scheduler_Forms
                 try
                 {
                     CabinetList.Remove((ICabinet)lstCabinets.SelectedItem);
-                    lstCabinets.DataSource = CabinetList.List.Cast<INamedEntity>().ToList();
+                    UpdateList();
+                    //lstCabinets.DataSource = CabinetList.List.Cast<INamedEntity>().ToList();
                 }
                 catch (Exception ex)
                 {
@@ -157,9 +160,54 @@ namespace Scheduler_Forms
                     else
                         throw ex;
                 }
-                
-                
             }
+        }
+
+        void UpdateList()
+        {
+            lstCabinets.Items.Clear();
+            var oldOrder = cabinetOrder;
+            cabinetOrder = new List<int>();
+
+            int j = 0;
+            for (int i = 0; i < oldOrder.Count; i++)
+                if (CabinetList.List.Any(x => x.ID == oldOrder[i]))
+                    cabinetOrder.Add(oldOrder[i]);
+            foreach (var cab in cabList.List.Where(x => !cabinetOrder.Contains(x.ID)))
+            {
+                cabinetOrder.Add(cab.ID);
+            }
+
+            var cabListToOrder = CabinetList.List.ToDictionary(x => x.ID);
+
+            foreach (var id in cabinetOrder)
+                lstCabinets.Items.Add(cabListToOrder[id]);
+        }
+
+        private void btnMoveUp_Click(object sender, EventArgs e)
+        {
+            if (lstCabinets.SelectedIndex == -1 || lstCabinets.SelectedIndex == 0)
+                return;
+
+            var idToUp = (lstCabinets.Items[lstCabinets.SelectedIndex] as ICabinet).ID;
+            var i = cabinetOrder.IndexOf(idToUp);
+            cabinetOrder.RemoveAt(i);
+            cabinetOrder.Insert(i - 1, idToUp);
+            UpdateList();
+            lstCabinets.SelectedIndex = i - 1;
+        }
+
+        private void btnMoveDown_Click(object sender, EventArgs e)
+        {
+            if (lstCabinets.SelectedIndex == -1 || lstCabinets.SelectedIndex == lstCabinets.Items.Count - 1)
+                return;
+
+            var idToDown = (lstCabinets.Items[lstCabinets.SelectedIndex] as ICabinet).ID;
+            var i = cabinetOrder.IndexOf(idToDown);
+            cabinetOrder.RemoveAt(i);
+            cabinetOrder.Insert(i + 1, idToDown);
+            UpdateList();
+            lstCabinets.SelectedIndex = i + 1;
         }
     }
 }

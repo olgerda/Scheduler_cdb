@@ -70,7 +70,7 @@ namespace Scheduler_InterfacesRealisations
 
             if (receptionTimeInterval == null)
                 result += "Временной интервал не задан." + Environment.NewLine;
-            if (!CommentOnlyReception)
+            if (!(CommentOnlyReception || Rent))
             {
                 if (specialist == null)
                     result += "Специалист не задан." + Environment.NewLine;
@@ -102,25 +102,28 @@ namespace Scheduler_InterfacesRealisations
             get
             {
                 List<string> result = new List<string>();
-                if (CommentOnlyReception)
-                    result.Add(Comment);
-                else
+                if (!CommentOnlyReception)
                 {
-                    if (client != null)
+                    if (Rent)
+                    {
+                        result.Add("Аренда");
+                        if (SpecialRent)
+                            result.Add("Песок");
+                    }
+                    else
                     {
                         result.Add(client.Name);
-                        result.Add((client.NeedSMS ? "SMS " : "") + client.Telephones?.FirstOrDefault() ?? "");
+                        string tel = client.Telephones.FirstOrDefault();
+                        if (client.NeedSMS)
+                            tel = "SMS " + tel;
+                        result.Add(tel);
+                        if (client.Balance != 0)
+                            result.Add(client.Balance > 0 ? "+" + client.Balance : client.Balance.ToString());
+                        result.Add(specialist.Name);
                     }
-
-                    result.Add(specialist.Name);
-
                     result.Add(price + " руб.");
-                    if (specialisation != null)
-                    {
-                        result.Add(specialisation);
-                    }
                 }
-                result.Add(receptionTimeInterval.Interval());
+                result.Add(Comment);
                 return String.Join(Environment.NewLine, result);
             }
         }
@@ -172,7 +175,7 @@ namespace Scheduler_InterfacesRealisations
 
         public string DisplayString
         {
-            get { return String.Join(" ", receptionTimeInterval.Date.ToShortDateString(), receptionTimeInterval.Interval(), specialist.Name, specialisation, cabinet.Name); }
+            get { return String.Join(" ", receptionTimeInterval.Date.ToShortDateString(), receptionTimeInterval.Interval(), specialist?.Name, specialisation, cabinet.Name); }
         }
 
         public override string ToString()
@@ -212,6 +215,29 @@ namespace Scheduler_InterfacesRealisations
                     database.UpdateReception(this);
             }
 
+        }
+
+        public IReception Clone(DateTime dt)
+        {
+            var rcptNew = database.EntityFactory.NewEntity();
+
+            rcptNew.ReceptionTimeInterval = database.EntityFactory.NewTimeInterval();
+            rcptNew.ReceptionTimeInterval.SetStartEnd(dt.Date + this.ReceptionTimeInterval.StartDate.TimeOfDay,
+                dt.Date + this.ReceptionTimeInterval.EndDate.TimeOfDay);
+
+            rcptNew.Administrator = this.Administrator;
+            rcptNew.Cabinet = this.cabinet;
+            rcptNew.Client = this.Client;
+            rcptNew.Coloring = (Scheduler_InterfacesRealisations.ColorPalette)this.Coloring.Clone();
+            rcptNew.Comment = this.Comment;
+            rcptNew.CommentOnlyReception = this.CommentOnlyReception;
+            rcptNew.Price = this.Price;
+            rcptNew.Rent = this.Rent;
+            rcptNew.Specialist = this.Specialist;
+            rcptNew.Specialization = this.Specialization;
+            rcptNew.SpecialRent = this.SpecialRent;
+
+            return rcptNew;
         }
 
         private string _administrator;

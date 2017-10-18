@@ -35,6 +35,7 @@
             this.btnCommit = new System.Windows.Forms.Button();
             this.btnCancelReception = new System.Windows.Forms.Button();
             this.grpOther = new System.Windows.Forms.GroupBox();
+            this.cmbSpecialistsOnDuty = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cmbSpecialist = new System.Windows.Forms.ComboBox();
             this.numericPrice = new System.Windows.Forms.NumericUpDown();
@@ -61,7 +62,7 @@
             this.dateDate = new System.Windows.Forms.DateTimePicker();
             this.dateTimeStart = new System.Windows.Forms.DateTimePicker();
             this.dateTimeEnd = new System.Windows.Forms.DateTimePicker();
-            this.cmbSpecialistsOnDuty = new System.Windows.Forms.ComboBox();
+            this.btnCloneOnOtherDays = new System.Windows.Forms.Button();
             this.grpMain.SuspendLayout();
             this.grpActions.SuspendLayout();
             this.grpOther.SuspendLayout();
@@ -159,6 +160,17 @@
             this.grpOther.Size = new System.Drawing.Size(387, 121);
             this.grpOther.TabIndex = 34;
             this.grpOther.TabStop = false;
+            // 
+            // cmbSpecialistsOnDuty
+            // 
+            this.cmbSpecialistsOnDuty.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSpecialistsOnDuty.FormattingEnabled = true;
+            this.cmbSpecialistsOnDuty.Location = new System.Drawing.Point(98, 13);
+            this.cmbSpecialistsOnDuty.Name = "cmbSpecialistsOnDuty";
+            this.cmbSpecialistsOnDuty.Size = new System.Drawing.Size(283, 21);
+            this.cmbSpecialistsOnDuty.TabIndex = 30;
+            this.cmbSpecialistsOnDuty.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cmbSpecialistsOnDuty_DrawItem);
+            this.cmbSpecialistsOnDuty.SelectedIndexChanged += new System.EventHandler(this.cmbSpecialistsOnDuty_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -322,9 +334,9 @@
             this.grpClient.Controls.Add(this.txtTelephone);
             this.grpClient.Controls.Add(this.txtClientName);
             this.grpClient.Controls.Add(this.btnShowClientCard);
-            this.grpClient.Location = new System.Drawing.Point(180, 19);
+            this.grpClient.Location = new System.Drawing.Point(212, 19);
             this.grpClient.Name = "grpClient";
-            this.grpClient.Size = new System.Drawing.Size(289, 72);
+            this.grpClient.Size = new System.Drawing.Size(257, 72);
             this.grpClient.TabIndex = 31;
             this.grpClient.TabStop = false;
             this.grpClient.Text = "Клиент";
@@ -344,21 +356,22 @@
             this.txtClientName.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtClientName.Location = new System.Drawing.Point(3, 16);
             this.txtClientName.Name = "txtClientName";
-            this.txtClientName.Size = new System.Drawing.Size(283, 20);
+            this.txtClientName.Size = new System.Drawing.Size(251, 20);
             this.txtClientName.TabIndex = 5;
             // 
             // btnShowClientCard
             // 
             this.btnShowClientCard.Location = new System.Drawing.Point(111, 43);
             this.btnShowClientCard.Name = "btnShowClientCard";
-            this.btnShowClientCard.Size = new System.Drawing.Size(175, 23);
+            this.btnShowClientCard.Size = new System.Drawing.Size(140, 23);
             this.btnShowClientCard.TabIndex = 18;
-            this.btnShowClientCard.Text = "Показать/выбрать карту клиента";
+            this.btnShowClientCard.Text = "Выбрать клиента";
             this.btnShowClientCard.UseVisualStyleBackColor = true;
             this.btnShowClientCard.Click += new System.EventHandler(this.btnShowClientCard_Click);
             // 
             // grpDateTime
             // 
+            this.grpDateTime.Controls.Add(this.btnCloneOnOtherDays);
             this.grpDateTime.Controls.Add(this.label10);
             this.grpDateTime.Controls.Add(this.label9);
             this.grpDateTime.Controls.Add(this.dateDate);
@@ -366,7 +379,7 @@
             this.grpDateTime.Controls.Add(this.dateTimeEnd);
             this.grpDateTime.Location = new System.Drawing.Point(6, 19);
             this.grpDateTime.Name = "grpDateTime";
-            this.grpDateTime.Size = new System.Drawing.Size(168, 72);
+            this.grpDateTime.Size = new System.Drawing.Size(200, 72);
             this.grpDateTime.TabIndex = 30;
             this.grpDateTime.TabStop = false;
             this.grpDateTime.Text = "Дата и время приёма";
@@ -374,7 +387,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(89, 48);
+            this.label10.Location = new System.Drawing.Point(80, 48);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(19, 13);
             this.label10.TabIndex = 22;
@@ -396,7 +409,7 @@
             this.dateDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateDate.Location = new System.Drawing.Point(3, 16);
             this.dateDate.Name = "dateDate";
-            this.dateDate.Size = new System.Drawing.Size(162, 20);
+            this.dateDate.Size = new System.Drawing.Size(194, 20);
             this.dateDate.TabIndex = 20;
             this.dateDate.ValueChanged += new System.EventHandler(this.dateDate_ValueChanged);
             // 
@@ -415,23 +428,22 @@
             // 
             this.dateTimeEnd.CustomFormat = "HH:mm";
             this.dateTimeEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimeEnd.Location = new System.Drawing.Point(114, 45);
+            this.dateTimeEnd.Location = new System.Drawing.Point(105, 45);
             this.dateTimeEnd.Name = "dateTimeEnd";
             this.dateTimeEnd.ShowUpDown = true;
             this.dateTimeEnd.Size = new System.Drawing.Size(51, 20);
             this.dateTimeEnd.TabIndex = 22;
             this.dateTimeEnd.Value = new System.DateTime(2014, 2, 2, 13, 51, 0, 0);
             // 
-            // cmbSpecialistsOnDuty
+            // btnCloneOnOtherDays
             // 
-            this.cmbSpecialistsOnDuty.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbSpecialistsOnDuty.FormattingEnabled = true;
-            this.cmbSpecialistsOnDuty.Location = new System.Drawing.Point(98, 13);
-            this.cmbSpecialistsOnDuty.Name = "cmbSpecialistsOnDuty";
-            this.cmbSpecialistsOnDuty.Size = new System.Drawing.Size(283, 21);
-            this.cmbSpecialistsOnDuty.TabIndex = 30;
-            this.cmbSpecialistsOnDuty.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cmbSpecialistsOnDuty_DrawItem);
-            this.cmbSpecialistsOnDuty.SelectedIndexChanged += new System.EventHandler(this.cmbSpecialistsOnDuty_SelectedIndexChanged);
+            this.btnCloneOnOtherDays.Location = new System.Drawing.Point(162, 45);
+            this.btnCloneOnOtherDays.Name = "btnCloneOnOtherDays";
+            this.btnCloneOnOtherDays.Size = new System.Drawing.Size(35, 20);
+            this.btnCloneOnOtherDays.TabIndex = 23;
+            this.btnCloneOnOtherDays.Text = "+";
+            this.btnCloneOnOtherDays.UseVisualStyleBackColor = true;
+            this.btnCloneOnOtherDays.Click += new System.EventHandler(this.btnCloneOnOtherDays_Click);
             // 
             // ReceptionInfo
             // 
@@ -494,5 +506,6 @@
         private System.Windows.Forms.CheckBox chkReceptionDidNotTakePlace;
         private System.Windows.Forms.CheckBox chkArendatorsList;
         private System.Windows.Forms.ComboBox cmbSpecialistsOnDuty;
+        private System.Windows.Forms.Button btnCloneOnOtherDays;
     }
 }

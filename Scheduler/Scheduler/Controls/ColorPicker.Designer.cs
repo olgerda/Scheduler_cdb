@@ -50,7 +50,7 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(112, 50);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(137, 62);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // pnl1
@@ -58,25 +58,25 @@
             this.pnl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl1.Location = new System.Drawing.Point(3, 3);
             this.pnl1.Name = "pnl1";
-            this.pnl1.Size = new System.Drawing.Size(31, 44);
+            this.pnl1.Size = new System.Drawing.Size(39, 56);
             this.pnl1.TabIndex = 1;
             this.pnl1.Click += new System.EventHandler(this.btn_Click);
             // 
             // pnl2
             // 
             this.pnl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnl2.Location = new System.Drawing.Point(40, 3);
+            this.pnl2.Location = new System.Drawing.Point(48, 3);
             this.pnl2.Name = "pnl2";
-            this.pnl2.Size = new System.Drawing.Size(31, 44);
+            this.pnl2.Size = new System.Drawing.Size(39, 56);
             this.pnl2.TabIndex = 2;
             this.pnl2.Click += new System.EventHandler(this.btn_Click);
             // 
             // pnl3
             // 
             this.pnl3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnl3.Location = new System.Drawing.Point(77, 3);
+            this.pnl3.Location = new System.Drawing.Point(93, 3);
             this.pnl3.Name = "pnl3";
-            this.pnl3.Size = new System.Drawing.Size(32, 44);
+            this.pnl3.Size = new System.Drawing.Size(41, 56);
             this.pnl3.TabIndex = 3;
             this.pnl3.Click += new System.EventHandler(this.btn_Click);
             // 
@@ -87,7 +87,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.MinimumSize = new System.Drawing.Size(55, 50);
             this.Name = "ColorPicker";
-            this.Size = new System.Drawing.Size(112, 50);
+            this.Size = new System.Drawing.Size(137, 62);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

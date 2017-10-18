@@ -34,6 +34,8 @@
             this.btnReturn = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.lstCabinets = new System.Windows.Forms.ListBox();
+            this.btnMoveUp = new System.Windows.Forms.Button();
+            this.btnMoveDown = new System.Windows.Forms.Button();
             this.grpCabinetList.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,7 +54,7 @@
             // 
             this.btnAdd.Location = new System.Drawing.Point(6, 148);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnAdd.Size = new System.Drawing.Size(65, 23);
             this.btnAdd.TabIndex = 1;
             this.btnAdd.Text = "Добавить";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -60,6 +62,8 @@
             // 
             // grpCabinetList
             // 
+            this.grpCabinetList.Controls.Add(this.btnMoveDown);
+            this.grpCabinetList.Controls.Add(this.btnMoveUp);
             this.grpCabinetList.Controls.Add(this.btnReturn);
             this.grpCabinetList.Controls.Add(this.btnEdit);
             this.grpCabinetList.Controls.Add(this.lstCabinets);
@@ -73,9 +77,9 @@
             // 
             // btnReturn
             // 
-            this.btnReturn.Location = new System.Drawing.Point(239, 148);
+            this.btnReturn.Location = new System.Drawing.Point(255, 148);
             this.btnReturn.Name = "btnReturn";
-            this.btnReturn.Size = new System.Drawing.Size(75, 23);
+            this.btnReturn.Size = new System.Drawing.Size(59, 23);
             this.btnReturn.TabIndex = 4;
             this.btnReturn.Text = "Возврат";
             this.btnReturn.UseVisualStyleBackColor = true;
@@ -83,7 +87,7 @@
             // 
             // btnEdit
             // 
-            this.btnEdit.Location = new System.Drawing.Point(113, 148);
+            this.btnEdit.Location = new System.Drawing.Point(77, 148);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(93, 23);
             this.btnEdit.TabIndex = 3;
@@ -100,6 +104,26 @@
             this.lstCabinets.TabIndex = 2;
             this.lstCabinets.SelectedIndexChanged += new System.EventHandler(this.lstCabinets_SelectedIndexChanged);
             this.lstCabinets.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstCabinets_KeyDown);
+            // 
+            // btnMoveUp
+            // 
+            this.btnMoveUp.Location = new System.Drawing.Point(182, 148);
+            this.btnMoveUp.Name = "btnMoveUp";
+            this.btnMoveUp.Size = new System.Drawing.Size(28, 23);
+            this.btnMoveUp.TabIndex = 5;
+            this.btnMoveUp.Text = "^";
+            this.btnMoveUp.UseVisualStyleBackColor = true;
+            this.btnMoveUp.Click += new System.EventHandler(this.btnMoveUp_Click);
+            // 
+            // btnMoveDown
+            // 
+            this.btnMoveDown.Location = new System.Drawing.Point(210, 148);
+            this.btnMoveDown.Name = "btnMoveDown";
+            this.btnMoveDown.Size = new System.Drawing.Size(28, 23);
+            this.btnMoveDown.TabIndex = 6;
+            this.btnMoveDown.Text = "v";
+            this.btnMoveDown.UseVisualStyleBackColor = true;
+            this.btnMoveDown.Click += new System.EventHandler(this.btnMoveDown_Click);
             // 
             // CabinetListEdit
             // 
@@ -125,5 +149,7 @@
         private System.Windows.Forms.Button btnReturn;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.ListBox lstCabinets;
+        private System.Windows.Forms.Button btnMoveDown;
+        private System.Windows.Forms.Button btnMoveUp;
     }
 }

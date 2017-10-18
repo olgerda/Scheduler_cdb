@@ -15,30 +15,30 @@ namespace Scheduler.Controls
     
     public partial class ColorPicker : UserControl
     {
-        private ControlsColors _colors;
+        private ColorPalette _colors;
         public event Action onColorsChanged;
         public ColorPicker()
         {
             InitializeComponent();
-            _colors = new ControlsColors();
+            _colors = new ColorPalette();
         }
 
-        public ControlsColors SelectedColors
+        public ColorPalette SelectedColors
         {
             get
             {
-                _colors.ColorMain = pnl1.BackColor;
-                _colors.ColorBorder = pnl2.BackColor;
-                _colors.ColorBackground = pnl3.BackColor;
+                //_colors.ColorMain = pnl1.BackColor;
+                //_colors.ColorBorder = pnl2.BackColor;
+                //_colors.ColorBackground = pnl3.BackColor;
                 return _colors;
             }
             set
             {
-                _colors = value;
-                pnl1.BackColor = value.ColorMain;
-                pnl2.BackColor = value.ColorBorder;
-                pnl3.BackColor = value.ColorBackground;
-                onColorsChanged?.Invoke();
+                //_colors = value;
+                //pnl1.BackColor = value.ColorMain;
+                //pnl2.BackColor = value.ColorBorder;
+                //pnl3.BackColor = value.ColorBackground;
+                //onColorsChanged?.Invoke();
             }
         }
 

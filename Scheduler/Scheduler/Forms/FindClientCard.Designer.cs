@@ -40,6 +40,7 @@
             this.btnEditModeOff = new System.Windows.Forms.Button();
             this.txtTelephone = new System.Windows.Forms.TextBox();
             this.clientInfoCard = new Scheduler_Controls.ClientInfo();
+            this.chkInWorkPriority = new System.Windows.Forms.CheckBox();
             this.grpSelectClient.SuspendLayout();
             this.grpEditMode.SuspendLayout();
             this.SuspendLayout();
@@ -77,16 +78,17 @@
             // 
             this.lstClientList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.lstClientList.FormattingEnabled = true;
-            this.lstClientList.Location = new System.Drawing.Point(9, 100);
+            this.lstClientList.Location = new System.Drawing.Point(9, 126);
             this.lstClientList.Name = "lstClientList";
-            this.lstClientList.Size = new System.Drawing.Size(260, 420);
+            this.lstClientList.ScrollAlwaysVisible = true;
+            this.lstClientList.Size = new System.Drawing.Size(260, 394);
             this.lstClientList.TabIndex = 11;
             this.lstClientList.SelectedIndexChanged += new System.EventHandler(this.lstClientList_SelectedIndexChanged);
             this.lstClientList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstClientList_KeyDown);
             // 
             // btnAddClient
             // 
-            this.btnAddClient.Location = new System.Drawing.Point(9, 74);
+            this.btnAddClient.Location = new System.Drawing.Point(9, 97);
             this.btnAddClient.Name = "btnAddClient";
             this.btnAddClient.Size = new System.Drawing.Size(66, 23);
             this.btnAddClient.TabIndex = 13;
@@ -97,7 +99,7 @@
             // btnReturn
             // 
             this.btnReturn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnReturn.Location = new System.Drawing.Point(208, 74);
+            this.btnReturn.Location = new System.Drawing.Point(208, 97);
             this.btnReturn.Name = "btnReturn";
             this.btnReturn.Size = new System.Drawing.Size(61, 23);
             this.btnReturn.TabIndex = 14;
@@ -107,7 +109,7 @@
             // 
             // btnEditClient
             // 
-            this.btnEditClient.Location = new System.Drawing.Point(97, 74);
+            this.btnEditClient.Location = new System.Drawing.Point(97, 97);
             this.btnEditClient.Name = "btnEditClient";
             this.btnEditClient.Size = new System.Drawing.Size(92, 23);
             this.btnEditClient.TabIndex = 16;
@@ -117,6 +119,7 @@
             // 
             // grpSelectClient
             // 
+            this.grpSelectClient.Controls.Add(this.chkInWorkPriority);
             this.grpSelectClient.Controls.Add(this.btnReturn);
             this.grpSelectClient.Controls.Add(this.grpEditMode);
             this.grpSelectClient.Controls.Add(this.txtTelephone);
@@ -178,6 +181,17 @@
             this.clientInfoCard.Size = new System.Drawing.Size(400, 528);
             this.clientInfoCard.TabIndex = 0;
             // 
+            // chkInWorkPriority
+            // 
+            this.chkInWorkPriority.AutoSize = true;
+            this.chkInWorkPriority.Location = new System.Drawing.Point(9, 74);
+            this.chkInWorkPriority.Name = "chkInWorkPriority";
+            this.chkInWorkPriority.Size = new System.Drawing.Size(68, 17);
+            this.chkInWorkPriority.TabIndex = 19;
+            this.chkInWorkPriority.Text = "Рабочие";
+            this.chkInWorkPriority.UseVisualStyleBackColor = true;
+            this.chkInWorkPriority.CheckedChanged += new System.EventHandler(this.chkInWorkPriority_CheckedChanged);
+            // 
             // FindClientCard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -211,5 +225,6 @@
         private System.Windows.Forms.TextBox txtTelephone;
         private System.Windows.Forms.GroupBox grpEditMode;
         private System.Windows.Forms.Button btnEditModeOff;
+        private System.Windows.Forms.CheckBox chkInWorkPriority;
     }
 }

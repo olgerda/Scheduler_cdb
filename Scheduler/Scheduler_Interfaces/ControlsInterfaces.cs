@@ -61,6 +61,8 @@ namespace Scheduler_Controls_Interfaces
         [Description("Администратор")]
         string Administrator { get; set; }
 
+        bool Active { get; set; }
+
         int ClientType { get; set; }
 
         /// <summary>
@@ -86,18 +88,25 @@ namespace Scheduler_Controls_Interfaces
     /// <summary>
     /// Интерфейс специалиста.
     /// </summary>
-    public interface ISpecialist : INamedEntity, IDummy
+    public interface ISpecialist : ICanNotWork
     {
-        [Description("Не работает")]
-        bool NotWorking { get; set; }
-
         [Description("Специальности")]
         HashSet<string> Specialisations { get; set; }
 
         Dictionary<int, int> GetCosts();
 
         void CostsFunction(GetCosts func);
-        string ToString();
+
+    }
+
+    public interface IAdministrator : ICanNotWork
+    {
+    }
+
+    public interface ICanNotWork : INamedEntity, IDummy
+    {
+        [Description("Не работает")]
+        bool NotWorking { get; set; }
     }
 
     /// <summary>
@@ -167,6 +176,8 @@ namespace Scheduler_Controls_Interfaces
         /// Отобразить содержимое в виде максимально информативной строки.
         /// </summary>
         string DisplayString { get; }
+
+        IReception Clone(DateTime dt);
     }
 
     /// <summary>
@@ -193,13 +204,21 @@ namespace Scheduler_Controls_Interfaces
         event Scheduler_Forms_Interfaces.ItemRemovedHandler OnItemRemoved;
     }
 
-    public interface ISpecialistDuty : IHaveID, IDummy, IComparable<ISpecialistDuty>
+    public interface IDuty : IHaveID, IDummy, IComparable<IDuty>
     {
         DateTime Start { get; set; }
         DateTime End { get; set; }
-        ISpecialist Specialist { get; set; }
+        ICanNotWork Named { get; set; }
         bool Supplimentary { get; set; }
-        string ToString();
+    }
+
+    public interface ISpecialistDuty : IDuty
+    {
+
+    }
+
+    public interface IAdministratorDuty : IDuty
+    {
     }
 
     public interface ITelephone

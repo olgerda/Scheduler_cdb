@@ -26,6 +26,7 @@ namespace Scheduler_InterfacesRealisations
         private bool _needSms;
         private int _balance;
         private int _clientType;
+        private bool _active;
 
         static GetClientReceptionsList getreceptions;
 
@@ -185,6 +186,17 @@ namespace Scheduler_InterfacesRealisations
         {
             get { return _clientType; }
             set { _clientType = value; }
+        }
+
+        public bool Active
+        {
+            get { return _active; }
+            set { _active = value; }
+        }
+
+        public override string ToString()
+        {
+            return Name + "*" + BlackListed + "*" + Active;
         }
     }
 

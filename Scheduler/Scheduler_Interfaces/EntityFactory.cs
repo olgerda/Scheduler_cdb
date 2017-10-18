@@ -10,16 +10,22 @@ namespace Scheduler_Common_Interfaces
 {
     public interface IFactory
     {
+        T New<T>();
+
         IClient NewClient();
         IClientList NewClientList();
         ICabinet NewCabinet();
         ICabinetList NewCabinetList();
         ISpecialist NewSpecialist();
+        IAdministrator NewAdministrator();
         ISpecialistList NewSpecialistList();
+        IAdministratorList NewAdministratorList();
         ISpecialistDutyList NewSpecialistDutyList();
+        IAdministratorDutyList NewAdministratorDutyList();
         ISpecializationList NewSpecializationList();
 
         ISpecialistDuty NewSpecialistDuty();
+        IAdministratorDuty NewAdministratorDuty();
         //IReception NewReception();
 
         ITelephone NewTelephone();

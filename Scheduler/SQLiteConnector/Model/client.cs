@@ -33,6 +33,8 @@ namespace EF6Connector.Model
 
         public int balance { get; set; }
 
+        public bool isActive { get; set; }
+
         public int clientType { get; set; }
         //[Column(TypeName = "tinytext")]
         //[StringLength(255)]

@@ -17,8 +17,10 @@ namespace EF6Connector
         private EF6Connector.Model.EF6Model context;
         public Connector(IFactory factory) : base(factory)
         {
+            (new ContextMigration()).UpdateIfNeeded();
+
             context = new Model.EF6Model();
-            //MySQL need to ne UTF8!!!
+            //MySQL need to be UTF8!!!
             //https://stackoverflow.com/questions/1008287/illegal-mix-of-collations-mysql-error
             /*
              SET collation_connection = 'utf8_general_ci'
@@ -31,7 +33,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
              
              */
 #if DEBUG
-            context.Database.Log = s => Console.WriteLine(s);
+            //context.Database.Log = s => Console.WriteLine(s);
 #endif
         }
 
@@ -58,7 +60,9 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 email = client.EMail,
                 balance = client.Balance,
                 needSms = client.NeedSMS,
-                clientType = client.ClientType
+                clientType = client.ClientType,
+                isActive = client.Active
+
             };
 
             context.clients.Add(obj);
@@ -110,6 +114,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             cli.email = client.EMail;
             cli.balance = client.Balance;
             cli.clientType = client.ClientType;
+            cli.isActive = client.Active;
 
             var oldCliTelephones = context.telephones2clients.Include("client")
                 .Where(x => x.client.idclients == cli.idclients)
@@ -181,7 +186,8 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                     x.email,
                     x.needSms,
                     x.balance,
-                    x.clientType
+                    x.clientType,
+                    x.isActive
                 }))
             {
                 var generallParams = context.clientgenerallyparams
@@ -199,6 +205,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 client.NeedSMS = dbcli.needSms;
                 client.EMail = dbcli.email;
                 client.ClientType = dbcli.clientType;
+                client.Active = dbcli.isActive;
 
                 list.Add(client);
             };
@@ -476,7 +483,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             dbreception.clientid = reception.Client?.ID ?? DEFAULTCLIENTID;
             dbreception.isrented = reception.Rent;
             dbreception.isSpecialRent = reception.SpecialRent;
-            dbreception.specialistid = reception.Specialist?.ID ?? 0;
+            dbreception.specialistid = reception.Specialist?.ID ?? DEFAULTCLIENTID;
             var specid = 0;
             if (!reception.Rent)
             {
@@ -521,7 +528,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             dbreception.cabinetid = reception.Cabinet.ID;
             dbreception.isrented = reception.Rent;
             dbreception.isSpecialRent = reception.SpecialRent;
-            dbreception.specialistid = reception.Specialist.ID;
+            dbreception.specialistid = reception.Specialist?.ID ?? DEFAULTCLIENTID;
             var specid = 0;
 
             specid = context.specializations.First(x => x.name.Equals(reception.Specialization, StringComparison.OrdinalIgnoreCase)).idspecializations;
@@ -587,7 +594,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
         private T GetByID<T>(long id) where T : class, IDummy
         {
             T result = null;
-            if (id == 0)
+            if (id == 0 || id == DEFAULTCLIENTID)
                 return null;
             if (typeof(T) == typeof(IClient))
             {
@@ -601,6 +608,11 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             else if (typeof(T) == typeof(ICabinet))
             {
                 var list = AllCabinets();
+                result = (T)list.List.First(x => x.ID == id);
+            }
+            else if (typeof(T) == typeof(IAdministrator))
+            {
+                var list = AllAdministrators();
                 result = (T)list.List.First(x => x.ID == id);
             }
             return result;
@@ -629,11 +641,24 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 return;
             }
 
-            var dt = item as ISpecialistDuty;
-            if (dt != null)
+            var dts = item as ISpecialistDuty;
+            if (dts != null)
             {
-                AddSpecialistDuty(dt);
+                AddSpecialistDuty(dts);
                 return;
+            }
+
+            var dta = item as IAdministratorDuty;
+            if (dta != null)
+            {
+                AddAdministratorDuty(dta);
+                return;
+            }
+
+            var ad = item as IAdministrator;
+            if (ad != null)
+            {
+                AddAdministrator(ad);
             }
 
             string specialization = item as string;
@@ -674,6 +699,19 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 return;
             }
 
+            var dta = item as IAdministratorDuty;
+            if (dta != null)
+            {
+                RemoveAdministratorDuty(dta);
+                return;
+            }
+
+            var ad = item as IAdministrator;
+            if (ad != null)
+            {
+                RemoveAdministrator(ad);
+            }
+
             string specialization = item as string;
             if (specialization != null)
             {
@@ -711,6 +749,18 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 UpdateSpecialistDuty(dt);
                 return;
             }
+
+            var dta = item as IAdministratorDuty;
+            if (dta != null)
+            {
+                UpdateAdministratorDuty(dta);
+                return;
+            }
+            var ad = item as IAdministrator;
+            if (ad != null)
+            {
+                UpdateAdministratorData(ad);
+            }
         }
 
         private IEntity ConvertToEntity(reception dbreception)
@@ -718,7 +768,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             var ent = EntityFactory.NewEntity();
             ent.Administrator = dbreception.administrator;
             ent.Cabinet = GetByID<ICabinet>(dbreception.cabinetid);
-            ent.Client = dbreception.clientid == DEFAULTCLIENTID ? null : GetByID<IClient>(dbreception.clientid);
+            ent.Client = GetByID<IClient>(dbreception.clientid);
             ent.ID = dbreception.idreceptions;
             ent.Rent = dbreception.isrented;
             ent.Specialist = GetByID<ISpecialist>(dbreception.specialistid);
@@ -733,7 +783,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             //TODO: тут плохо пахнет
             if (ent.Price == 0)
             {
-                if (ent.Client == null)
+                if (ent.Client == null || ent.Specialist == null)
                     ent.Price = 0;
                 else
                     ent.Price = (int)(context.specialist2clientprice
@@ -745,7 +795,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             return ent;
         }
 
-        protected override ISpecialistDutyList AllDutyInternal()
+        protected override ISpecialistDutyList AllSpecDutyInternal()
         {
             var result = EntityFactory.NewSpecialistDutyList();
 
@@ -760,7 +810,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
                 }))
             {
                 var dt = EntityFactory.NewSpecialistDuty();
-                dt.Specialist = GetByID<ISpecialist>(dbdt.specialistid);
+                dt.Named = GetByID<ISpecialist>(dbdt.specialistid);
                 dt.Start = DateTime.FromBinary(dbdt.dutytimestart);
                 dt.End = DateTime.FromBinary(dbdt.dutytimeend);
                 dt.Supplimentary = dbdt.supplimentary;
@@ -786,7 +836,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
 
             var dbdt = new specialistDuty()
             {
-                specialistid = dt.Specialist.ID,
+                specialistid = dt.Named.ID,
                 dutytimestart = dt.Start.ToBinary(),
                 dutytimeend = dt.End.ToBinary(),
                 supplimentary = dt.Supplimentary
@@ -812,11 +862,189 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             var dbdt = context.specialistDuties.FirstOrDefault(x => x.idspecialistDuty == dt.ID);
             if (dbdt == null)
                 throw new NullReferenceException($"Cabinet with id <{dt.ID}> not found in db.");
-            dbdt.specialistid = dt.Specialist.ID;
+            dbdt.specialistid = dt.Named.ID;
             dbdt.supplimentary = dt.Supplimentary;
             dbdt.dutytimestart = dt.Start.ToBinary();
             dbdt.dutytimeend = dt.End.ToBinary();
             context.SaveChanges();
+        }
+
+        protected override IAdministratorDutyList AllAdmDutyInternal()
+        {
+            var result = EntityFactory.NewAdministratorDutyList();
+
+            foreach (var dbdt in context.administratorDuties.Select(
+                x => new
+                {
+                    x.idadministratorDuty,
+                    x.administratorid,
+                    x.dutytimestart,
+                    x.dutytimeend,
+                    x.supplimentary
+                }))
+            {
+                var dt = EntityFactory.NewAdministratorDuty();
+                dt.Named = GetByID<IAdministrator>(dbdt.administratorid);
+                dt.Start = DateTime.FromBinary(dbdt.dutytimestart);
+                dt.End = DateTime.FromBinary(dbdt.dutytimeend);
+                dt.Supplimentary = dbdt.supplimentary;
+                dt.ID = dbdt.idadministratorDuty;
+
+                result.List.Add(dt);
+            };
+
+            result.OnItemAdded += ListItemAddHandler;
+            result.OnItemChanged += ListItemChangedHandler;
+            result.OnItemRemoved += ListItemRemoveHandler;
+
+            return result;
+        }
+
+        public override void AddAdministratorDuty(IAdministratorDuty dt)
+        {
+            if (dt.ID > 0)
+            {
+                //throw new Exception($"При создании нового кабинета идентификатор не может быть положительным! (<{cabinet.ID}>)");
+                return; //this cab already in DB
+            }
+
+            var dbdt = new administratorDuty()
+            {
+                administratorid = dt.Named.ID,
+                dutytimestart = dt.Start.ToBinary(),
+                dutytimeend = dt.End.ToBinary(),
+                supplimentary = dt.Supplimentary
+            };
+
+            context.administratorDuties.Add(dbdt);
+
+            context.SaveChanges();
+            dt.ID = dbdt.idadministratorDuty;
+        }
+
+        public override void RemoveAdministratorDuty(IAdministratorDuty dt)
+        {
+            var dbdt = context.administratorDuties.FirstOrDefault(x => x.idadministratorDuty == dt.ID);
+            if (dbdt == null)
+                throw new NullReferenceException($"Cabinet with id <{dt.ID}> not found in db.");
+            context.administratorDuties.Remove(dbdt);
+            context.SaveChanges();
+        }
+
+        public override void UpdateAdministratorDuty(IAdministratorDuty dt)
+        {
+            var dbdt = context.administratorDuties.FirstOrDefault(x => x.idadministratorDuty == dt.ID);
+            if (dbdt == null)
+                throw new NullReferenceException($"Cabinet with id <{dt.ID}> not found in db.");
+            dbdt.administratorid = dt.Named.ID;
+            dbdt.supplimentary = dt.Supplimentary;
+            dbdt.dutytimestart = dt.Start.ToBinary();
+            dbdt.dutytimeend = dt.End.ToBinary();
+            context.SaveChanges();
+        }
+
+        protected override IAdministratorList AllAdministratorsInternal()
+        {
+            var result = EntityFactory.NewAdministratorList();
+
+            foreach (var dbsp in context.administrators.Select(
+                x => new
+                {
+                    x.idadministrators,
+                    x.name,
+                    x.notworking
+                }))
+            {
+                var spec = EntityFactory.NewAdministrator();
+                spec.ID = dbsp.idadministrators;
+                spec.Name = dbsp.name;
+                spec.NotWorking = dbsp.notworking;
+
+                result.List.Add(spec);
+            };
+
+            result.OnItemAdded += ListItemAddHandler;
+            result.OnItemChanged += ListItemChangedHandler;
+            result.OnItemRemoved += ListItemRemoveHandler;
+
+            return result;
+        }
+
+        public void AddAdministrator(IAdministrator specialist)
+        {
+            if (specialist.ID > 0)
+            {
+                //throw new Exception($"При создании нового специалиста идентификатор не может быть положительным! (<{specialist.ID}>)");
+                return;
+            }
+
+            var dbspec = new administrator();
+            dbspec.name = specialist.Name;
+            dbspec.notworking = specialist.NotWorking;
+
+            var specs = context.specializations.Select(x => new { x.name, dbSpecialization = x }).ToDictionary(x => x.name);
+
+            context.administrators.Add(dbspec);
+
+            context.SaveChanges();
+            specialist.ID = dbspec.idadministrators;
+        }
+
+        public void UpdateAdministratorData(IAdministrator specialist)
+        {
+            var dbspec = context.administrators.FirstOrDefault(x => x.idadministrators == specialist.ID);
+
+            if (dbspec == null)
+            {
+                throw new NullReferenceException($"Administrator with id <{specialist.ID}> not found.");
+            }
+
+            dbspec.name = specialist.Name;
+            dbspec.notworking = specialist.NotWorking;
+            context.SaveChanges();
+        }
+
+        public void RemoveAdministrator(IAdministrator specialist)
+        {
+            var dbspec = context.administrators.FirstOrDefault(x => x.idadministrators == specialist.ID);
+
+            if (dbspec == null)
+            {
+                throw new NullReferenceException($"Administrator with id <{specialist.ID}> not found.");
+            }
+
+            context.administrators.Remove(dbspec);
+
+            context.SaveChanges();
+        }
+
+        public override int SpecialistGetReceptionCount(ISpecialist spec)
+        {
+            return context.receptions.Count(x => x.specialistid == spec.ID);
+        }
+
+        public override int SpecialistGetClientCount(ISpecialist spec)
+        {
+            return context.receptions.Where(x => x.specialistid == spec.ID).Select(x => x.clientid).Distinct().Count();
+        }
+
+        public override List<IReception> SpecialistGetReceptions(ISpecialist spec)
+        {
+            return context.receptions.Where(x => x.specialistid == spec.ID)
+                .AsEnumerable()
+                .Select(x => ConvertToEntity(x))
+                .Cast<IReception>()
+                .ToList();
+        }
+
+        public override List<IClient> SpecialistGetClients(ISpecialist spec)
+        {
+            return context.receptions.Where(x => x.specialistid == spec.ID)
+                .Select(x => x.clientid)
+                .Distinct()
+                .AsEnumerable()
+                .Select(x => AllClients().List.First(y => x == y.ID))
+                .ToList();
         }
     }
 

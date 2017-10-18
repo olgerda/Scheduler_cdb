@@ -65,7 +65,21 @@ namespace Scheduler_Forms
             if (clientList == null)
                 return;
 
-            lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
+            chkInWorkPriority.Checked = true;
+
+            clientInfoCard.EntityFactory = entityFactory;
+        }
+
+        void RenewList(bool activeFirst = false)
+        {
+            if (!activeFirst)
+            {
+                lstClientList.DataSource = clientList.List.OrderBy(x => x.Name).ToList();
+            }
+            else
+            {
+                lstClientList.DataSource = clientList.List.OrderBy(x => !x.Active).ThenBy(x => x.Name).ToList();
+            }
             lstClientList.DisplayMember = "Name";
 
             var customAutoComplete = new AutoCompleteStringCollection();
@@ -75,9 +89,6 @@ namespace Scheduler_Forms
             customAutoComplete = new AutoCompleteStringCollection();
             customAutoComplete.AddRange(clientList.List.SelectMany(c => c.Telephones).ToArray());
             txtTelephone.AutoCompleteCustomSource = customAutoComplete;
-
-
-            clientInfoCard.EntityFactory = entityFactory;
         }
 
         void clientInfoCard_OnSaveChanges(object source, SaveChangesEventArgs<IClient> e)
@@ -188,8 +199,7 @@ namespace Scheduler_Forms
                             grpEditMode.Enabled = false;
                             clientInfoCard.Enabled = false;
 
-                            lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
-                            lstClientList.SelectedItem = result;
+                            RenewList();
                             return result;
                         }
                     }
@@ -202,8 +212,7 @@ namespace Scheduler_Forms
                     grpEditMode.Enabled = false;
                     clientInfoCard.Enabled = false;
 
-                    lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
-                    lstClientList.SelectedItem = result;
+                    RenewList();
                 }
 
                 if (!clientList.List.Contains(result))
@@ -216,8 +225,7 @@ namespace Scheduler_Forms
 
                     clientList.Add(result);
                 }
-                lstClientList.DataSource = clientList.List.Cast<INamedEntity>().ToList();
-                lstClientList.SelectedItem = result;
+                RenewList();
             }
             return result;
         }
@@ -287,7 +295,7 @@ namespace Scheduler_Forms
                     else
                         throw ex;
                 }
-                lstClientList.DataSource = ClientList.List.Cast<INamedEntity>().ToList();
+                RenewList();
             }
         }
 
@@ -309,8 +317,9 @@ namespace Scheduler_Forms
             }
         }
 
-
-
-
+        private void chkInWorkPriority_CheckedChanged(object sender, EventArgs e)
+        {
+            RenewList((sender as CheckBox).Checked);
+        }
     }
 }

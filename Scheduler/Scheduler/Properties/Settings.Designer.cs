@@ -46,5 +46,17 @@ namespace Scheduler.Properties {
                 this["LegacyColorSettings"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ColumnOrder {
+            get {
+                return ((string)(this["ColumnOrder"]));
+            }
+            set {
+                this["ColumnOrder"] = value;
+            }
+        }
     }
 }

@@ -85,12 +85,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContextHelper.cs" />
+    <Compile Include="ContextMigration.cs" />
     <Compile Include="EF6Connector.cs" />
+    <Compile Include="Model\administrator.cs" />
+    <Compile Include="Model\administratorsDuty.cs" />
     <Compile Include="Model\cabinet.cs" />
     <Compile Include="Model\client.cs" />
     <Compile Include="Model\clientgenerallyparam.cs" />
     <Compile Include="Model\EF6Model.cs" />
     <Compile Include="Model\reception.cs" />
+    <Compile Include="Model\SchemaInfo.cs" />
     <Compile Include="Model\specialist.cs" />
     <Compile Include="Model\specialist2clientprice.cs" />
     <Compile Include="Model\specialistDuty.cs" />

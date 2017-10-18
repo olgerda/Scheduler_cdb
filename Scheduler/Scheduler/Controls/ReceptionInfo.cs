@@ -160,7 +160,7 @@ namespace Scheduler_Controls
         {
             doNothing = false;
 
-            var controlsNotForCommentOnly = new Control[] { grpClient, grpOther, grpReceptionParams };
+            var controlsNotForCommentOnly = new Control[] { grpClient, grpOther, grpReceptionParams, btnCancelReception, chkReceptionDidNotTakePlace, btnCreateChildReception };
             foreach (var ctrl in controlsNotForCommentOnly)
                 ctrl.Enabled = true;
 
@@ -238,7 +238,7 @@ namespace Scheduler_Controls
                 //    }
                 //}
                 var spec = cmbSpecialistsOnDuty.Items.Cast<ISpecialistDuty>()
-                    .FirstOrDefault(x => x.Specialist == reception.Specialist);
+                    .FirstOrDefault(x => x.Named == reception.Specialist);
                 if (spec != null)
                     cmbSpecialistsOnDuty.SelectedItem = spec;
             }
@@ -268,7 +268,7 @@ namespace Scheduler_Controls
                 reception.Rent != chkRent.Checked ||
                 (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Cabinet != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)cmbCabinet.SelectedItem ||
                 //(Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Specialist != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)cmbSpecialist.SelectedItem ||
-                (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Specialist != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)(cmbSpecialistsOnDuty.SelectedItem as ISpecialistDuty).Specialist ||
+                (Scheduler_InterfacesRealisations.CommonObjectWithNotify)reception.Specialist != (Scheduler_InterfacesRealisations.CommonObjectWithNotify)(cmbSpecialistsOnDuty.SelectedItem as ISpecialistDuty).Named ||
                 reception.Price != Convert.ToInt32(numericPrice.Value) ||
                 reception.ReceptionTimeInterval.Date != dateDate.Value ||
                 reception.ReceptionTimeInterval.StartDate != dateTimeStart.Value ||
@@ -311,7 +311,7 @@ namespace Scheduler_Controls
 
             dummyReception.Cabinet = (ICabinet)cmbCabinet.SelectedItem;
             //dummyReception.Specialist = (ISpecialist)cmbSpecialist.SelectedItem;
-            dummyReception.Specialist = ((ISpecialistDuty)cmbSpecialistsOnDuty.SelectedItem)?.Specialist;
+            dummyReception.Specialist = ((ISpecialistDuty)cmbSpecialistsOnDuty.SelectedItem)?.Named as ISpecialist;
 
             dummyReception.ReceptionTimeInterval.StartDate = dateTimeStart.Value;
             dummyReception.ReceptionTimeInterval.EndDate = dateTimeEnd.Value;
@@ -360,16 +360,18 @@ namespace Scheduler_Controls
             if (Database != null)
             {
                 todaysSpecialists.Clear();
-                foreach (var duty in Database.SelectSpecialistDutyFromDate(dateDate.Value.Date))
+                foreach (var duty in Database.SelectDutyFromDate<ISpecialist>(dateDate.Value.Date).Cast<ISpecialistDuty>())
                     todaysSpecialists.Add(duty);
             }
         }
 
         private void chkRent_CheckedChanged(object sender, EventArgs e)
         {
+            var value = chkRent.Checked;
             //pnlClient.Enabled = !chkRent.Checked;
-            //btnShowClientCard.Enabled = !chkRent.Checked;
-            //ActualizePrice();
+            cmbSpecialistsOnDuty.Enabled = cmbSpecialisation.Enabled = cmbSpecialist.Enabled = !value;
+            ClientOnReception = null;
+            ActualizePrice();
         }
 
         private void btnShowClientCard_Click(object sender, EventArgs e)
@@ -452,7 +454,7 @@ namespace Scheduler_Controls
         {
             if (cmbSpecialistsOnDuty.SelectedIndex == -1)
                 return;
-            ISpecialist currentSpec = ((ISpecialistDuty)cmbSpecialistsOnDuty.SelectedItem).Specialist;
+            ISpecialist currentSpec = ((ISpecialistDuty)cmbSpecialistsOnDuty.SelectedItem).Named as ISpecialist;
             currentSpecialistCosts = currentSpec.GetCosts();
 
             cmbSpecialisation.DataSource = null;
@@ -474,6 +476,76 @@ namespace Scheduler_Controls
                 g.FillRectangle(Brushes.Aquamarine, e.Bounds);
             g.DrawString(cd.ToString(), e.Font, new SolidBrush(e.ForeColor), new PointF(e.Bounds.X, e.Bounds.Y));
             e.DrawFocusRectangle();
+        }
+
+        private void btnCloneOnOtherDays_Click(object sender, EventArgs e)
+        {
+            if (reception.ID == 0)
+            {
+                MessageBox.Show(this, "Формирование приёма не закончено. Автоматическое создание посещений доступно только для сформированных приёмов.", "Ошибка автоматического создания приёмов");
+                return;
+            }
+
+            DateTime selectedDateTime = this.dateDate.Value;
+            DateTime endDate = DateTime.Now;
+            int period = 7;
+            using (var dateSelection = new Scheduler.Forms.SelectEndDate())
+            {
+                dateSelection.monthCalendar1.SetDate(selectedDateTime);
+                dateSelection.ShowDialog();
+                endDate = dateSelection.monthCalendar1.SelectionStart;
+                if (dateSelection.radbtnTypeCustom.Checked)
+                    period = (int)dateSelection.numCustomDays.Value;
+            }
+
+            if (endDate.Date <= selectedDateTime.Date)
+                return;
+
+            List<IReception> clonedReceptions = new List<IReception>();
+            selectedDateTime = selectedDateTime.AddDays(period);
+            while (selectedDateTime <= endDate)
+            {
+                clonedReceptions.Add(reception.Clone(selectedDateTime));
+                selectedDateTime = selectedDateTime.AddDays(period);
+            }
+
+            List<Tuple<IReception, string>> errors = new List<Tuple<IReception, string>>();
+            foreach (var rcptn in clonedReceptions)
+            {
+                var err = rcptn.Validate();
+                if (String.IsNullOrWhiteSpace(err))
+                    continue;
+                errors.Add(Tuple.Create(rcptn, err));
+            }
+
+            if (errors.Any())
+            {
+                string errMessage = "";
+                foreach (var er in errors)
+                {
+                    errMessage += Environment.NewLine + er.Item2;
+                }
+                MessageBox.Show(errMessage, "Ошибки при автоматическом создании посещений", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            var specialist = this.Reception.Specialist;
+            
+            foreach (var rcptn in clonedReceptions)
+            {
+                if (specialist != null && Database
+                        .SelectDutyFromDate<ISpecialist>(rcptn.ReceptionTimeInterval.StartDate)
+                        .All(x => x.Named as ISpecialist != specialist))
+                {
+                    var newDuty = Database.EntityFactory.NewSpecialistDuty();
+                    newDuty.Named = specialist;
+                    newDuty.Start = rcptn.ReceptionTimeInterval.StartDate;
+                    newDuty.End = rcptn.ReceptionTimeInterval.EndDate;
+                    Database.SpecialistDutyList.Add(newDuty);
+                }
+
+                rcptn.CommitToDatabase();
+            }
         }
     }
 }

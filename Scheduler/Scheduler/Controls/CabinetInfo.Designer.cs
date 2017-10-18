@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.grpMain = new System.Windows.Forms.GroupBox();
+            this.chkCommentOnly = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.chkAvailable = new System.Windows.Forms.CheckBox();
-            this.chkCommentOnly = new System.Windows.Forms.CheckBox();
             this.grpMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,6 +51,16 @@
             this.grpMain.TabIndex = 0;
             this.grpMain.TabStop = false;
             this.grpMain.Text = "Карточка кабинета";
+            // 
+            // chkCommentOnly
+            // 
+            this.chkCommentOnly.AutoSize = true;
+            this.chkCommentOnly.Location = new System.Drawing.Point(80, 42);
+            this.chkCommentOnly.Name = "chkCommentOnly";
+            this.chkCommentOnly.Size = new System.Drawing.Size(92, 17);
+            this.chkCommentOnly.TabIndex = 4;
+            this.chkCommentOnly.Text = "Для записей";
+            this.chkCommentOnly.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
@@ -81,22 +91,14 @@
             // chkAvailable
             // 
             this.chkAvailable.AutoSize = true;
+            this.chkAvailable.Checked = true;
+            this.chkAvailable.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAvailable.Location = new System.Drawing.Point(6, 42);
             this.chkAvailable.Name = "chkAvailable";
             this.chkAvailable.Size = new System.Drawing.Size(75, 17);
             this.chkAvailable.TabIndex = 0;
             this.chkAvailable.Text = "Доступен";
             this.chkAvailable.UseVisualStyleBackColor = true;
-            // 
-            // chkCommentOnly
-            // 
-            this.chkCommentOnly.AutoSize = true;
-            this.chkCommentOnly.Location = new System.Drawing.Point(80, 42);
-            this.chkCommentOnly.Name = "chkCommentOnly";
-            this.chkCommentOnly.Size = new System.Drawing.Size(92, 17);
-            this.chkCommentOnly.TabIndex = 4;
-            this.chkCommentOnly.Text = "Для записей";
-            this.chkCommentOnly.UseVisualStyleBackColor = true;
             // 
             // CabinetInfo
             // 

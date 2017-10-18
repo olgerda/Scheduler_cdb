@@ -133,5 +133,30 @@ namespace Scheduler_InterfacesRealisations
         {
             return new SpecialistDutyList();
         }
+
+        public IAdministrator NewAdministrator()
+        {
+            return new Administrator();
+        }
+
+        public IAdministratorList NewAdministratorList()
+        {
+            return new AdministratorList();
+        }
+
+        public IAdministratorDutyList NewAdministratorDutyList()
+        {
+            return new AdministratorDutyList();
+        }
+
+        public IAdministratorDuty NewAdministratorDuty()
+        {
+            return new AdministratorDuty();
+        }
+
+        public T New<T>()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

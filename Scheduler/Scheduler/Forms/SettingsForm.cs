@@ -23,17 +23,17 @@ namespace Scheduler.Forms
         }
 
         //TODO: too ugly 
-        private static Scheduler.Main.ProgramSettings __defaultSettings
-        {
-            get
-            {
-                var defset = new Main.ProgramSettings(null);
-                defset.FromStrings(null);
-                return defset;
-            }
-        }
+        //private static Scheduler.Main.ProgramSettings __defaultSettings
+        //{
+        //    get
+        //    {
+        //        var defset = new Main.ProgramSettings(null);
+        //        defset.FromStrings(null);
+        //        return defset;
+        //    }
+        //}
 
-        public static Dictionary<ColorChangers, ControlsColors> DefaultColorsSet => __defaultSettings.ControlsColors;
+        //public static Dictionary<ColorChangers, ColorPalette> DefaultColorsSet => __defaultSettings.ControlsColors;
 
         public SettingsForm()
         {
@@ -41,7 +41,7 @@ namespace Scheduler.Forms
             InitTestData();
             columnsControl.Table = testTable;
 
-            Action<Scheduler.Controls.ColorPicker> init = (c) => c.SelectedColors = new ControlsColors();
+            Action<Scheduler.Controls.ColorPicker> init = (c) => c.SelectedColors = new ColorPalette();
             init(colorPicker1);
             init(colorPicker2);
             init(colorPicker3);
@@ -68,18 +68,18 @@ namespace Scheduler.Forms
                 };
         }
 
-        private Action<ControlsColors, ICanCustomizeLook> ChangeColors => (colors, control) =>
+        private Action<ColorPalette, ICanCustomizeLook> ChangeColors => (colors, control) =>
         {
-            control.ColorMain = colors.ColorMain;
-            control.ColorBorder = colors.ColorBorder;
-            control.ColorBackground = colors.ColorBackground;
-            control.Font = colors.Font;
+            //control.Coloring.ColorMain = colors.ColorMain;
+            //control.Coloring.ColorBorder = colors.ColorBorder;
+            //control.Coloring.ColorBackground = colors.ColorBackground;
+            //control.Coloring.Font = colors.Font;
             columnsControl.Refresh();
         };
 
-        private Dictionary<ColorChangers, ControlsColors> _allColors;
+        private Dictionary<ColorChangers, ColorPalette> _allColors;
 
-        private Action<ControlsColors, Controls.ColorPicker, bool> actualizeColors =
+        private Action<ColorPalette, Controls.ColorPicker, bool> actualizeColors =
             (colors, control, fromControl) =>
             {
                 if (!fromControl)
@@ -88,7 +88,7 @@ namespace Scheduler.Forms
                     colors = control.SelectedColors;
             };
 
-        public Dictionary<ColorChangers, ControlsColors> SelectedColorsDictionary
+        public Dictionary<ColorChangers, ColorPalette> SelectedColorsDictionary
         {
             get
             {
@@ -158,27 +158,20 @@ namespace Scheduler.Forms
 
         private void btnRestoreDefaults_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Восстановиьт настройки по умолчанию?", "Настройки по умолчанию", MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-                SelectedColorsDictionary = __defaultSettings.ControlsColors;
+            //if (MessageBox.Show("Восстановиьт настройки по умолчанию?", "Настройки по умолчанию", MessageBoxButtons.YesNo,
+            //    MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            //    SelectedColorsDictionary = __defaultSettings.ControlsColors;
         }
     }
 
-    class TestTable : CalendarControl3_Interfaces.ITable2ControlInterface
+    class TestTable : Scheduler_InterfacesRealisations.ControlsColors, CalendarControl3_Interfaces.ITable2ControlInterface
     {
         List<IColumn2ControlInterface> columns = new List<IColumn2ControlInterface>();
-        public Color ColorBackground { get; set; }
-
-        public Color ColorBorder { get; set; }
-
-        public Color ColorMain { get; set; }
 
         public int ColumnCount => columns.Count;
 
         public List<IColumn2ControlInterface> Columns => columns;
-
-        public Font Font { get; set; }
-
+        
         public int MaxValue => 500;
 
         public int MinValue { get; set; }
@@ -188,32 +181,17 @@ namespace Scheduler.Forms
             return new Dictionary<int, string>() { { 100, "10:00" }, { 300, "14:00" } };
         }
 
-        public class TestColumn : IColumn2ControlInterface
+        public class TestColumn : ControlsColors, IColumn2ControlInterface
         {
             private List<IEntity2ControlInterface> entities = new List<IEntity2ControlInterface>();
-            public Color ColorBackground { get; set; }
-
-            public Color ColorBorder { get; set; }
-
-            public Color ColorMain { get; set; }
 
             public List<IEntity2ControlInterface> Entities => entities;
 
-            public Font Font { get; set; }
-
             public string Name { get; set; }
 
-            public class TestEntity : IEntity2ControlInterface
+            public class TestEntity : ControlsColors, IEntity2ControlInterface
             {
                 public int BottomLevel { get; set; }
-
-                public Color ColorBackground { get; set; }
-
-                public Color ColorBorder { get; set; }
-
-                public Color ColorMain { get; set; }
-
-                public Font Font { get; set; }
 
                 public string StringToShow { get; set; }
 
