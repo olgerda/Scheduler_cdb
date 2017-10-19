@@ -41,6 +41,7 @@
             this.btnToDuty = new System.Windows.Forms.Button();
             this.btnToSupplimentary = new System.Windows.Forms.Button();
             this.btnFromDuty = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
             this.grpDateTime.SuspendLayout();
             this.grpSpecialistsOnDuty.SuspendLayout();
             this.grpSpecialists.SuspendLayout();
@@ -57,12 +58,13 @@
             // 
             // grpDateTime
             // 
+            this.grpDateTime.Controls.Add(this.btnOK);
             this.grpDateTime.Controls.Add(this.radModeAdministrator);
             this.grpDateTime.Controls.Add(this.radModeSpecialist);
             this.grpDateTime.Controls.Add(this.monthCalendar1);
             this.grpDateTime.Location = new System.Drawing.Point(351, 12);
             this.grpDateTime.Name = "grpDateTime";
-            this.grpDateTime.Size = new System.Drawing.Size(177, 239);
+            this.grpDateTime.Size = new System.Drawing.Size(177, 306);
             this.grpDateTime.TabIndex = 31;
             this.grpDateTime.TabStop = false;
             this.grpDateTime.Text = "Дата приёма";
@@ -97,7 +99,7 @@
             this.grpSpecialistsOnDuty.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSpecialistsOnDuty.Location = new System.Drawing.Point(3, 3);
             this.grpSpecialistsOnDuty.Name = "grpSpecialistsOnDuty";
-            this.grpSpecialistsOnDuty.Size = new System.Drawing.Size(327, 93);
+            this.grpSpecialistsOnDuty.Size = new System.Drawing.Size(327, 127);
             this.grpSpecialistsOnDuty.TabIndex = 33;
             this.grpSpecialistsOnDuty.TabStop = false;
             this.grpSpecialistsOnDuty.Text = "Специалисты на дежурстве";
@@ -109,7 +111,7 @@
             this.lstDuty.FormattingEnabled = true;
             this.lstDuty.Location = new System.Drawing.Point(3, 16);
             this.lstDuty.Name = "lstDuty";
-            this.lstDuty.Size = new System.Drawing.Size(321, 74);
+            this.lstDuty.Size = new System.Drawing.Size(321, 108);
             this.lstDuty.TabIndex = 0;
             this.lstDuty.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstDuty_DrawItem);
             this.lstDuty.SelectedIndexChanged += new System.EventHandler(this.lstDuty_SelectedIndexChanged);
@@ -118,9 +120,9 @@
             // 
             this.grpSpecialists.Controls.Add(this.lstSpecialists);
             this.grpSpecialists.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSpecialists.Location = new System.Drawing.Point(3, 142);
+            this.grpSpecialists.Location = new System.Drawing.Point(3, 176);
             this.grpSpecialists.Name = "grpSpecialists";
-            this.grpSpecialists.Size = new System.Drawing.Size(327, 94);
+            this.grpSpecialists.Size = new System.Drawing.Size(327, 127);
             this.grpSpecialists.TabIndex = 34;
             this.grpSpecialists.TabStop = false;
             this.grpSpecialists.Text = "Специалисты";
@@ -131,7 +133,7 @@
             this.lstSpecialists.FormattingEnabled = true;
             this.lstSpecialists.Location = new System.Drawing.Point(3, 16);
             this.lstSpecialists.Name = "lstSpecialists";
-            this.lstSpecialists.Size = new System.Drawing.Size(321, 75);
+            this.lstSpecialists.Size = new System.Drawing.Size(321, 108);
             this.lstSpecialists.TabIndex = 0;
             this.lstSpecialists.SelectedIndexChanged += new System.EventHandler(this.lstSpecialists_SelectedIndexChanged);
             // 
@@ -148,7 +150,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(333, 239);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(333, 306);
             this.tableLayoutPanel1.TabIndex = 35;
             // 
             // tableLayoutPanel2
@@ -161,7 +163,7 @@
             this.tableLayoutPanel2.Controls.Add(this.btnToSupplimentary, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnFromDuty, 2, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 102);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 136);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -201,11 +203,21 @@
             this.btnFromDuty.UseVisualStyleBackColor = true;
             this.btnFromDuty.Click += new System.EventHandler(this.btnFromDuty_Click);
             // 
+            // btnOK
+            // 
+            this.btnOK.Location = new System.Drawing.Point(9, 277);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(164, 23);
+            this.btnOK.TabIndex = 3;
+            this.btnOK.Text = "Закрыть";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            // 
             // SpecialistDutyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(535, 258);
+            this.ClientSize = new System.Drawing.Size(535, 330);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.grpDateTime);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -236,5 +248,6 @@
         private System.Windows.Forms.Button btnFromDuty;
         private System.Windows.Forms.RadioButton radModeAdministrator;
         private System.Windows.Forms.RadioButton radModeSpecialist;
+        private System.Windows.Forms.Button btnOK;
     }
 }

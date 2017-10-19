@@ -771,6 +771,7 @@ ALTER TABLE your_table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
             ent.Client = GetByID<IClient>(dbreception.clientid);
             ent.ID = dbreception.idreceptions;
             ent.Rent = dbreception.isrented;
+            ent.SpecialRent = dbreception.isSpecialRent;
             ent.Specialist = GetByID<ISpecialist>(dbreception.specialistid);
             ent.Specialization = context.specializations.FirstOrDefault(x => x.idspecializations == dbreception.specializationid)?.name ?? "NONE";
             ent.Comment = dbreception.comment ?? "";

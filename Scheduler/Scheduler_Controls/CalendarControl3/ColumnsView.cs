@@ -78,29 +78,7 @@ namespace CalendarControl3
         ITable2ControlInterface table;
 
         private Font _defaultFont = new Font("Arial", 10);
-
-        //class BrushPenPair
-        //{
-        //    public BrushPenPair(Color color)
-        //    {
-        //        Brush = new SolidBrush(color);
-        //        Pen = new Pen(color);
-        //    }
-        //    public Brush Brush { get; private set; }
-        //    public Pen Pen { get; private set; }
-        //}
-
-        //private Dictionary<Color, BrushPenPair> coloredCache =
-        //    new Dictionary<Color, BrushPenPair>();
-
-        //private BrushPenPair getBrushPenFromCache(Color color, Color defaultColor)
-        //{
-        //    if (color == default(Color))
-        //        color = defaultColor;
-        //    if (!coloredCache.ContainsKey(color))
-        //        coloredCache.Add(color, new BrushPenPair(color));
-        //    return coloredCache[color];
-        //}
+        
 
         public ITable2ControlInterface Table
         {
@@ -110,7 +88,7 @@ namespace CalendarControl3
                 if (value == null) return;
                 table = value;
                 descriptions = new SortedDictionary<int, string>(table.GetDescripptionsToValueLevels());
-                //MakeTableFromInput();
+
                 Refresh();
             }
         }
@@ -122,11 +100,9 @@ namespace CalendarControl3
             LastClick = new ClickCoords() { level = -1, column = -1 };
             InitializeComponent();
             this.MinimumSize = new Size(minimumColumnWidth + infoColumnWidth, 500);
-            //this.SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer |
-            //              ControlStyles.AllPaintingInWmPaint, true);
+
             tTooltip.Tick += (o, e) =>
             {
-                //var point = Cursor.Position;
                 MouseEventArgs args = new MouseEventArgs(MouseButtons.Right, 1, lastClickPoint.X, lastClickPoint.Y, 0);
                 MouseClickHandler(this, args);
                 tTooltip.Stop();
@@ -209,15 +185,10 @@ namespace CalendarControl3
 
             // если создали по правилам (вместе с таблицей) - отрисовываем.
             int currentLeft = infoColumnWidth;
-            //Font drawFont = table.Coloring.Font ?? _defaultFont;
-            //var drawTextBrush = getBrushPenFromCache(table.Coloring.ColorMain, Color.Black).Brush;
-            //var drawBordersPen = getBrushPenFromCache(table.Coloring.ColorBorder, Color.LightSeaGreen).Pen;
-            //var drawTableOuterBorderPen = getBrushPenFromCache(Color.Black, Color.Black).Pen;
+
             PointF drawPoint;
 
             //infocolumn
-            //var descriptions_ = table.GetDescripptionsToValueLevels();
-            //SortedDictionary<int, string> descriptions = new SortedDictionary<int, string>(descriptions_);
 
             using (var drawFont = (Font)table.Coloring.Font.Clone())
             using (var brush = table.Coloring.GetBrush(ColorPaletteSelectables.Main))
@@ -225,11 +196,6 @@ namespace CalendarControl3
                 foreach (var pair in descriptions)
                 {
                     var y = tableTop + ScaleLevelsToControl(pair.Key);
-                    //if (y >= tableTop && y <= tableBottom)
-                    //    e.Graphics.DrawLine(pen, 0f, y, RealTableWidth, y);
-                    //else
-                    //    continue;
-                    //if (y < tableTop) y = tableTop;
                     if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
                     drawPoint = new PointF(2f, y);
                     e.Graphics.DrawString(pair.Value, drawFont, brush, drawPoint);
@@ -291,10 +257,6 @@ namespace CalendarControl3
                         g.DrawLine(pen, leftside, y, leftside + width, y);
                     else
                         continue;
-                    //if (y < tableTop) y = tableTop;
-                    //if (y + drawFont.Height > tableBottom) y -= drawFont.Height;
-                    //drawPoint = new PointF(2f, y);
-                    //e.Graphics.DrawString(pair.Value, drawFont, brush, drawPoint);
                 }
 
             foreach (var entity in column.Entities)

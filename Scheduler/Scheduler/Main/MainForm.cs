@@ -217,14 +217,6 @@ namespace Scheduler
                 receptionEntitiesTable.Columns.Add(cabs[id]);
             foreach (var cab in cabs.Where(x => !columnOrder.Contains(x.Key)).Select(x => x.Value))
                 receptionEntitiesTable.Columns.Add(cab);
-
-            //foreach (var cabname in database.CabinetList.List.Where(c => c.Availability))
-            //{
-            //    var column = database.EntityFactory.NewColumn();
-            //    column.Name = cabname.Name;
-            //    column.OnlyComment = cabname.CommentOnly;
-            //    receptionEntitiesTable.Columns.Add(column);
-            //}
         }
 
         private void сделатьРезервнуюКопиюToolStripMenuItem_Click(object sender, EventArgs e)
@@ -262,7 +254,7 @@ namespace Scheduler
 
         private void клиентыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (FindClientCard clientsForm = new FindClientCard(database.ClientList, database.EntityFactory))
+            using (FindClientCard clientsForm = new FindClientCard(database.ClientList, database.EntityFactory, 0))
             {
                 clientsForm.ShowDialog();
             }

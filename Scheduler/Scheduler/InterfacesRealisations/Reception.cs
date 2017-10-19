@@ -103,10 +103,11 @@ namespace Scheduler_InterfacesRealisations
             {
                 List<string> result = new List<string>();
                 if (!CommentOnlyReception)
-                {
+                {                    
                     if (Rent)
                     {
                         result.Add("Аренда");
+                        result.Add(client?.Name);
                         if (SpecialRent)
                             result.Add("Песок");
                     }

@@ -227,5 +227,10 @@ namespace Scheduler.Forms
         {
             ModeSpecialistDuty = radModeSpecialist.Checked;
         }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

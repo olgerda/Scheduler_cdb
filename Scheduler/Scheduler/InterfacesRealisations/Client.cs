@@ -216,7 +216,7 @@ namespace Scheduler_InterfacesRealisations
         IClient Scheduler_Forms_Interfaces.IClientList.FindClientByPartialName(string partialName)
         {
             IClient result;
-            result = this.List.FirstOrDefault(c => c.Name.StartsWith(partialName));
+            result = this.List.FirstOrDefault(c => c.Name.Contains(partialName));
             return result;
         }
 

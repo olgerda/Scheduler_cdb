@@ -30,9 +30,10 @@
         {
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radbtnTypeEveryWeek = new System.Windows.Forms.RadioButton();
-            this.radbtnTypeCustom = new System.Windows.Forms.RadioButton();
             this.numCustomDays = new System.Windows.Forms.NumericUpDown();
+            this.radbtnTypeCustom = new System.Windows.Forms.RadioButton();
+            this.radbtnTypeEveryWeek = new System.Windows.Forms.RadioButton();
+            this.btnOK = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCustomDays)).BeginInit();
             this.SuspendLayout();
@@ -45,6 +46,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnOK);
             this.groupBox1.Controls.Add(this.numCustomDays);
             this.groupBox1.Controls.Add(this.radbtnTypeCustom);
             this.groupBox1.Controls.Add(this.radbtnTypeEveryWeek);
@@ -54,28 +56,6 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Тип автосоздания";
-            // 
-            // radbtnTypeEveryWeek
-            // 
-            this.radbtnTypeEveryWeek.AutoSize = true;
-            this.radbtnTypeEveryWeek.Location = new System.Drawing.Point(6, 19);
-            this.radbtnTypeEveryWeek.Name = "radbtnTypeEveryWeek";
-            this.radbtnTypeEveryWeek.Size = new System.Drawing.Size(94, 17);
-            this.radbtnTypeEveryWeek.TabIndex = 0;
-            this.radbtnTypeEveryWeek.TabStop = true;
-            this.radbtnTypeEveryWeek.Text = "Еженедельно";
-            this.radbtnTypeEveryWeek.UseVisualStyleBackColor = true;
-            // 
-            // radbtnTypeCustom
-            // 
-            this.radbtnTypeCustom.AutoSize = true;
-            this.radbtnTypeCustom.Location = new System.Drawing.Point(6, 42);
-            this.radbtnTypeCustom.Name = "radbtnTypeCustom";
-            this.radbtnTypeCustom.Size = new System.Drawing.Size(150, 17);
-            this.radbtnTypeCustom.TabIndex = 1;
-            this.radbtnTypeCustom.TabStop = true;
-            this.radbtnTypeCustom.Text = "Каждые несколько дней";
-            this.radbtnTypeCustom.UseVisualStyleBackColor = true;
             // 
             // numCustomDays
             // 
@@ -98,6 +78,38 @@
             0,
             0,
             0});
+            // 
+            // radbtnTypeCustom
+            // 
+            this.radbtnTypeCustom.AutoSize = true;
+            this.radbtnTypeCustom.Location = new System.Drawing.Point(6, 42);
+            this.radbtnTypeCustom.Name = "radbtnTypeCustom";
+            this.radbtnTypeCustom.Size = new System.Drawing.Size(150, 17);
+            this.radbtnTypeCustom.TabIndex = 1;
+            this.radbtnTypeCustom.TabStop = true;
+            this.radbtnTypeCustom.Text = "Каждые несколько дней";
+            this.radbtnTypeCustom.UseVisualStyleBackColor = true;
+            // 
+            // radbtnTypeEveryWeek
+            // 
+            this.radbtnTypeEveryWeek.AutoSize = true;
+            this.radbtnTypeEveryWeek.Location = new System.Drawing.Point(6, 19);
+            this.radbtnTypeEveryWeek.Name = "radbtnTypeEveryWeek";
+            this.radbtnTypeEveryWeek.Size = new System.Drawing.Size(94, 17);
+            this.radbtnTypeEveryWeek.TabIndex = 0;
+            this.radbtnTypeEveryWeek.TabStop = true;
+            this.radbtnTypeEveryWeek.Text = "Еженедельно";
+            this.radbtnTypeEveryWeek.UseVisualStyleBackColor = true;
+            // 
+            // btnOK
+            // 
+            this.btnOK.Location = new System.Drawing.Point(6, 133);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(188, 23);
+            this.btnOK.TabIndex = 4;
+            this.btnOK.Text = "Закрыть";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // SelectEndDate
             // 
@@ -123,5 +135,6 @@
         public System.Windows.Forms.NumericUpDown numCustomDays;
         public System.Windows.Forms.RadioButton radbtnTypeCustom;
         public System.Windows.Forms.RadioButton radbtnTypeEveryWeek;
+        private System.Windows.Forms.Button btnOK;
     }
 }

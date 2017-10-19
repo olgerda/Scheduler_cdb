@@ -33,7 +33,7 @@ namespace Scheduler_Forms
             Init();
         }
 
-        public FindClientCard(IClientList clientList, IFactory entityFactory, int clientType = 0)
+        public FindClientCard(IClientList clientList, IFactory entityFactory, int clientType)
         {
             InitializeComponent();
             usingClientType = clientType;
@@ -227,6 +227,9 @@ namespace Scheduler_Forms
                 }
                 RenewList();
             }
+
+            if (result != null && clientList.List.Contains(result))
+                lstClientList.SelectedItem = result;
             return result;
         }
 

@@ -35,6 +35,7 @@
             this.grpComment = new System.Windows.Forms.GroupBox();
             this.txtComment = new System.Windows.Forms.TextBox();
             this.grpGeneralParams = new System.Windows.Forms.GroupBox();
+            this.chkIsActive = new System.Windows.Forms.CheckBox();
             this.numGenerallyPrice = new System.Windows.Forms.NumericUpDown();
             this.dateGenerallyTime = new System.Windows.Forms.DateTimePicker();
             this.label8 = new System.Windows.Forms.Label();
@@ -55,7 +56,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnCommit = new System.Windows.Forms.Button();
             this.txtFIO = new System.Windows.Forms.TextBox();
-            this.chkIsActive = new System.Windows.Forms.CheckBox();
             this.grpMain.SuspendLayout();
             this.grpReceptions.SuspendLayout();
             this.grpComment.SuspendLayout();
@@ -81,7 +81,7 @@
             this.grpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpMain.Location = new System.Drawing.Point(0, 0);
             this.grpMain.Name = "grpMain";
-            this.grpMain.Size = new System.Drawing.Size(400, 539);
+            this.grpMain.Size = new System.Drawing.Size(400, 400);
             this.grpMain.TabIndex = 0;
             this.grpMain.TabStop = false;
             this.grpMain.Text = "Карточка клиента";
@@ -155,6 +155,16 @@
             this.grpGeneralParams.TabStop = false;
             this.grpGeneralParams.Text = "Основные параметры";
             // 
+            // chkIsActive
+            // 
+            this.chkIsActive.AutoSize = true;
+            this.chkIsActive.Location = new System.Drawing.Point(312, 41);
+            this.chkIsActive.Name = "chkIsActive";
+            this.chkIsActive.Size = new System.Drawing.Size(68, 17);
+            this.chkIsActive.TabIndex = 30;
+            this.chkIsActive.Text = "Рабочий";
+            this.chkIsActive.UseVisualStyleBackColor = true;
+            // 
             // numGenerallyPrice
             // 
             this.numGenerallyPrice.Location = new System.Drawing.Point(144, 38);
@@ -205,10 +215,15 @@
             // 
             this.numBalance.Location = new System.Drawing.Point(254, 12);
             this.numBalance.Maximum = new decimal(new int[] {
-            99999999,
+            999999999,
             0,
             0,
             0});
+            this.numBalance.Minimum = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            -2147483648});
             this.numBalance.Name = "numBalance";
             this.numBalance.Size = new System.Drawing.Size(75, 20);
             this.numBalance.TabIndex = 28;
@@ -361,16 +376,6 @@
             this.txtFIO.Size = new System.Drawing.Size(308, 20);
             this.txtFIO.TabIndex = 1;
             // 
-            // chkIsActive
-            // 
-            this.chkIsActive.AutoSize = true;
-            this.chkIsActive.Location = new System.Drawing.Point(312, 41);
-            this.chkIsActive.Name = "chkIsActive";
-            this.chkIsActive.Size = new System.Drawing.Size(68, 17);
-            this.chkIsActive.TabIndex = 30;
-            this.chkIsActive.Text = "Рабочий";
-            this.chkIsActive.UseVisualStyleBackColor = true;
-            // 
             // ClientInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -379,7 +384,7 @@
             this.MaximumSize = new System.Drawing.Size(400, 0);
             this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "ClientInfo";
-            this.Size = new System.Drawing.Size(400, 539);
+            this.Size = new System.Drawing.Size(400, 400);
             this.grpMain.ResumeLayout(false);
             this.grpMain.PerformLayout();
             this.grpReceptions.ResumeLayout(false);

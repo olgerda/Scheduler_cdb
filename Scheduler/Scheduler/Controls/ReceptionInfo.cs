@@ -149,7 +149,12 @@ namespace Scheduler_Controls
             {
                 clientOnReception = value;
                 if (clientOnReception == null)
+                {
+                    txtClientName.Text = "";
+                    txtTelephone.Text = "";
                     return;
+                }
+                    
                 txtClientName.Text = clientOnReception.Name;
                 txtTelephone.Text = clientOnReception.Telephones.FirstOrDefault() ?? String.Empty;
                 //txtAdministrator.Text = clientOnReception.Administrator;
@@ -368,6 +373,8 @@ namespace Scheduler_Controls
         private void chkRent_CheckedChanged(object sender, EventArgs e)
         {
             var value = chkRent.Checked;
+            btnShowClientCard.Text = "Выбрать " + (value ? "арендатора" : "клиента");
+            ClientOnReception = null;
             //pnlClient.Enabled = !chkRent.Checked;
             cmbSpecialistsOnDuty.Enabled = cmbSpecialisation.Enabled = cmbSpecialist.Enabled = !value;
             ClientOnReception = null;
